@@ -1,0 +1,229 @@
+/*create database Almacenes 
+create database SMP2*/
+
+use Almacenes
+
+create table T_USUARIO_CALL(
+COD_USUARIO char(3),
+NOM_USUARIO varchar(30),
+PDW_USUARIO char(6),
+ANEXO_USUARIO char(4),
+EST_USUARIO char(1),
+EST_INGRESO char(1),
+OFICINA char(30),
+COD_PERSONAL char(5),
+ZONA char(1)
+)
+
+select * from T_USUARIO_CALL where NOM_USUARIO ='admin' and PDW_USUARIO = '123' and EST_USUARIO != 'A'
+update T_USUARIO_CALL set ZONA = '7'
+where COD_USUARIO = 'adm'
+
+
+
+select * from T_CALL_CENTER
+insert into T_CALL_CENTER values(001,'0001','anonimo','','','1','1','001'
+,'12/02/2021','admin','DNI','002','26/03/2021','vacio','06',150,'productos',
+'desproductos',150.0,'26/03/2020','003','7','referencia','admin','27/03/2020',
+'215202515')
+
+
+ SELECT * FROM T_CALL_CENTER
+            WHERE COD_PERSONAL='admin' and 
+            OFICINA = '001' and COD_ZONA = '7' and
+            FEC_REGISTRO = (SELECT MAX(FEC_REGISTRO) FROM T_CALL_CENTER)
+
+
+create table T_CALL_CENTER(
+CODIGO numeric(18,0),
+NUM_CONTRATO char(9),
+NOMBRE varchar(100),
+DIRECCION varchar (100),
+TELEFONO char(9),
+EST_LLAMADA char(1),
+OK_CONTRATO char(1),
+OFICINA char(30),
+FEC_OK char(10),
+COD_PERSONAL char(5),
+IDENTIFICACION char(11),
+COD_REGISTRO char(5),
+FEC_REGISTRO datetime,
+EQUIPO varchar(50),
+COD_DISTRITO char(5),
+CUOTAS numeric,
+COMENTARIO varchar(200),
+DESPRODUCTOS varchar(200),
+MON_INICIAL numeric(7,2),
+FEC_GENERADO datetime,
+COD_VENDEDOR char(5),
+COD_ZONA char(5),
+REFERENCIA varchar(200),
+COD_CLIENTE char(7),
+FEC_COBRO datetime,
+TELEFONO2 char(9)
+)
+
+
+
+/*
+create table T_CALL_PERMISOS(
+COD_PERMISO char(9),
+COD_PERSONAL char(5),
+COD_AUTORIZO char(5),
+PERMISO char(1),
+ANEXO char(4),
+FECHA datetime
+)
+*/
+
+
+use SMP2
+create table T_PRODUCTO(
+COD_PRODUCTO char(6),
+COD_CATEGORIA char(5),
+DES_PRODUCTO varchar(50),
+UNI_MEDIDA char(10),
+STOCK_MINIMO numeric(7,2),
+ABR_PRODUCTO char(4),
+PRE_PRODUCTO numeric(7,3),
+EST_PRODUCTO char(1),
+USU_REGISTRO varchar(30),
+FEC_REGISTRO datetime,
+USU_MODIFICADO varchar(30),
+FEC_MODIFICADO datetime,
+MAQUINA varchar(50),
+COMPRA char(1),
+COD_EMPRESA char(5),
+EXTERNO char(1),
+COD_CONTABLE char(6),
+PRECIO_WEB numeric(7,2),
+PRECIO_NORTE numeric(7,2),
+PRECIO_SUR numeric(7,2),
+CANTIDAD int,
+)
+
+create table T_DEPARTAMENTO(
+COD_DEPARTAMENTO char(5),
+DES_DEPARTAMENTO varchar(50),
+COD_POSTAL char(5)
+)
+
+create table T_PROVINCIA(
+COD_DEPARTAMENTO char(5),
+COD_PROVINCIA char(5),
+DES_PROVINCIA varchar(50),
+COD_POSTAL char(5)
+)
+
+create table T_DISTRITO(
+COD_DEPARTAMETO char(5),
+COD_PROVINCIA char(5),
+COD_DISTRITO char(5),
+DES_DISTRITO varchar(70),
+COD_POSTAL char(5)
+)
+
+
+
+create table T_PPEDIDO(
+CODIGO numeric(18,0),
+FECHA datetime,
+COD_CLIENTE char(7),
+COD_VENDEDORA char(5),
+TIPO_DOCUMENTO char(3),
+IDENTIFICACION char(11),
+CLIENTE varchar(50),
+DIRECCION varchar(100),
+REFERENCIA varchar(200),
+CONTACTO varchar(50),
+TELEFONO char(9),
+ENTREGA char(1),
+FCANCELACION datetime,
+EST_PEDIDO char(1),
+OBSERVACION varchar(200),
+FREPARTO datetime,
+COD_REPARTO char(5),
+N_PRODUCTOS int,
+COD_DISTRITO char(5),
+NUM_CONTRATO char(9),
+COD_PROVINCIA char(5),
+FEC_DESPACHO datetime
+)
+
+create table T_PPEDIDO_CANTIDAD(
+CODIGO numeric(18,0),
+COD_PRODUCTO char(6),
+CANTIDAD int,
+BONO int,
+PRECIO int,
+CCAN int,
+CBON int
+)
+
+create table T_PERSONAL(
+COD_PERSONAL char(5),
+COD_AREA char(5),
+COD_CARGO char(5),
+TIP_AGRUPADO char(3),
+DNI_PERSONAL char(8),
+NOM_PERSONAL1 varchar(60),
+NOM_PERSONAL2 varchar(30),
+APE_PPERSONAL varchar(30),
+APE_MPERSONAL varchar(30),
+SAL_BASICO decimal(9,2),
+COMISIONES decimal(7,2),
+DIR_PERSONAL varchar(100),
+COD_DEPARTAMENTO char(5),
+COD_PROVINCIA char(5),
+COD_DISTRITO char(5),
+TEL_PERSONAL decimal(11,0),
+CEL_PERSONAL decimal(11,0),
+EST_PERSONAL char(1),
+COD_SUPERVISOR char(5),
+COD_ZONA char(5),
+FEC_INGRESO datetime,
+USU_REGISTRO varchar(30),
+FEC_REGISTRO datetime,
+USU_MODIFICO varchar(30),
+FEC_MODIFICO datetime,
+GRUPO char(1)
+)
+
+create table T_CLIENTE(
+COD_CLIENTE char(7),
+NOM_CLIENTE1 varchar(50),
+NOM_CLIENTE2 varchar(30),
+APP_CLIENTE varchar(20),
+APM_CLIENTE varchar(20),
+COD_DEPARTAMENTO char(5),
+COD_PROVINCIA char(5),
+COD_DISTRITO char(5),
+DIR_CLIENTE varchar(100),
+REF_CLIENTE varchar(200),
+NUM_RUC char(11),
+DNI_CLIENTE char(8),
+DCT_CLIENTE decimal(3,0),
+TEL_CLIENTE decimal(11,0),
+CEL_CLIENTE decimal(11,0),
+CAT_CLIENTE char(1),
+EST_CLIENTE char(1),
+COD_PERSONAL char(5),
+COD_ZONA char(5),
+EST_VERIFICACION char(1),
+USU_REGISTRO varchar(30),
+FEC_REGISTRO datetime,
+USU_MODIFICO varchar(30),
+FEC_MODIFICO varchar(30),
+SALDO decimal(7,2),
+ULT_PAGO datetime
+)
+
+create table T_POLITICA_PRECIOs(
+CODIGO char(3),
+CANTIDAD int,
+BONO int,
+COD_USUARIO char(5),
+FECHA datetime,
+ESTADO char(1),
+CANT_FIN int
+)
