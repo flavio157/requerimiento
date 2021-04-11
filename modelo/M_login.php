@@ -18,39 +18,48 @@ class M_Login
         $query->execute();
         $datosUsuario = $query->fetch(PDO::FETCH_ASSOC);
        
-        if(!$query){
-        }else{
-            $_SESSION['user_id'] = $datosUsuario['NOM_USUARIO'];
+        if($query){
+            $_SESSION['user_id'] = $datosUsuario['COD_PERSONAL'];
             return $datosUsuario;
         }
         
     }
 
     public function M_Cuotas($cod_personal,$oficina,$zona){
-
-        $query=$this->db->prepare("SELECT * FROM T_CALL_CENTER where COD_PERSONAL=:username  and 
-        OFICINA =:oficiona and COD_ZONA =:zona");
+  
+        $query=$this->db->prepare("SELECT * FROM T_CALL_CENTER WHERE COD_PERSONAL=:username 
+        and OFICINA =:oficinas and COD_ZONA =:zonas 
+        and FEC_REGISTRO = ".'('."SELECT MAX(FEC_REGISTRO) FROM T_CALL_CENTER".')'."");
         $query->bindParam("username", $cod_personal, PDO::PARAM_STR);
-        $query->bindParam("oficina", $oficina, PDO::PARAM_STR);
-        $query->bindParam("zona", $zona, PDO::PARAM_STR);
+        $query->bindParam("oficinas", $oficina, PDO::PARAM_STR);
+        $query->bindParam("zonas", $zona, PDO::PARAM_STR);
         $query->execute();
         $datosCuotas = $query->fetch(PDO::FETCH_ASSOC);
 
-
-      /*    SELECT *
-            FROM Almacenes.T_CALL_CENTER
-            WHERE COD_PERSONAL=:username and CUOTAS=:cuota and 
-            OFICINA =:oficiona and COD_ZONA =:zona
-            FEC_REGISTRO = (SELECT MAX(FEC_REGISTRO) FROM Almacenes.T_CALL_CENTER);*/
-
-        if(!$query){
-        }else{
-          return $datosCuotas;
+        if($query){
+            return $datosCuotas;
         }
 
     }
 
-    
+
+    public function M_ActualizarEstadoUsuario($NombreUsu,$oficiona,$zona,$estadoUsu){
+       
+       
+        $query=$this->db->prepare("UPDATE T_USUARIO_CALL set EST_USUARIO =:est_usuario where
+        COD_PERSONAL =:cod_persona and  OFICINA =:oficina and ZONA =:zona");
+        $query->bindParam("cod_persona",$NombreUsu,PDO::PARAM_STR);
+        $query->bindParam("oficina",$oficiona,PDO::PARAM_STR);
+        $query->bindParam("zona",$zona,PDO::PARAM_STR);
+        $query->bindParam("est_usuario",$estadoUsu,PDO::PARAM_STR);
+        $query->execute();
+        $actualuzarUsu = $query;
+        if($query){
+            return $actualuzarUsu;
+        }
+    }
+    /*update T_USUARIO_CALL set EST_USUARIO = 'P' where
+    COD_PERSONAL = 'admin' and  OFICINA = '0001' and ZONA = '7'*/
 
 }
 

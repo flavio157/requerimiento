@@ -2,7 +2,8 @@
 session_start();
 require_once("../controlador/C_Cuotas.php");
 $m_cuota = new C_Controlar_Cuotas();
-$estado = $m_cuota->boolean;
+$estado = $m_cuota->MensajeBloqueo;
+echo $estado;
 
 if(!isset($_SESSION['user_id'])){
     header('Location: index.php');
@@ -28,8 +29,8 @@ if(!isset($_SESSION['user_id'])){
     <div class="main">
         <form class="row g-3" >
               <?php
-
-                if($estado){
+                
+                if( $estado === false){
                     echo  '<div class="alert alert-danger alert-dismissible fade show" role="alert">
                     <strong>Advertencia</strong> Todavia no alcanza la cuota esperada.
                     <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
@@ -197,3 +198,4 @@ if(!isset($_SESSION['user_id'])){
         </div>
     </body>
 </html>
+
