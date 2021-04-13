@@ -1,29 +1,27 @@
 <?php
 
+
 class C_Controlar_Cuotas
 {
-    
-    public function C_Cuotas($cod_cliente ,$verificarcuotas)
+
+    public function C_Cuotas($verificarcuotas)
     {
-        $m_cuota = new M_Login();
-        $precioTotal = $m_cuota->M_Cuotas($cod_cliente);
-        $this->C_CalcularDias($verificarcuotas,$precioTotal['PRECIO'],$cod_cliente );
+       $this->C_CalcularDias($verificarcuotas);
     }
 
 
+    public function C_CalcularDias($verificarCuotas){
+        
+        $cuota = 10;
 
-    
-    
-    public function C_CalcularDias($verificarCuotas,$precioTotal,$cod_cliente){
-        $m_verificar = new M_Login();
         $cambiarEstadoclie = "A";
         $MensajeBloqueo = 0;
         $hoy = getdate();
-        
 
-        if($hoy['mday'] >= '12' && $verificarCuotas < $precioTotal && $verificarCuotas !=0)
+        
+        if($hoy['mday'] >= '12' && $cuota !== $verificarCuotas && $hoy['mday'] <= '26')
         {
-             if($hoy['mday']>='15'){
+             if($hoy['mday']>='15' &&  $cuota !== $verificarCuotas){
                
                 /*si pasado 3 dias sigue igual se invalida la sesion ,function de actualizar estado de usuario y enviar mensaje usuario bloqueado*/
                 /*$m_verificar->M_ActualizarEstadoUsuario($cod_cliente,$cambiarEstadoClie);*/
@@ -33,15 +31,16 @@ class C_Controlar_Cuotas
 
                /*se loguea y mensaje de advertencia */
                $MensajeBloqueo = 0;  
+               print_r("echo");
                return header("Location: http://localhost:8080/requerimiento/vista/ventana.php?enlace=".$MensajeBloqueo);
 
              }
-        }else if($hoy['mday'] >= '27' && $verificarCuotas < $precioTotal && $verificarCuotas !=0){
+        }else if($hoy['mday'] >= '27' &&  $cuota !== $verificarCuotas  && $hoy['mday'] <= '11'){
             
-             if($hoy['mday']>='30'){
+             if($hoy['mday']>='30' &&  $cuota !== $verificarCuotas){
 
-                 /*si pasado 3 dias sigue igual se invalida la sesion ,function de actualizar estado de usuario y enviar mensaje usuario bloqueado*/
-               /*$m_verificar->M_ActualizarEstadoUsuario($cod_cliente,$cambiarEstadoclie);*/
+                /*si pasado 3 dias sigue igual se invalida la sesion ,function de actualizar estado de usuario y enviar mensaje usuario bloqueado*/
+                /*$m_verificar->M_ActualizarEstadoUsuario($cod_cliente,$cambiarEstadoclie);*/
                  return header("Location: http://localhost:8080/requerimiento/vista/");
             
             }else{

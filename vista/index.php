@@ -12,7 +12,6 @@
     <body>
         <div class="main">
         <form method="POST" action="../controlador/C_login.php">
-             
             <div class="mb-2">
                 <label for="exampleInputEmail1" class="form-label">Usuario</label>
                 <input type="text" class="form-control" id="exampleInputEmail1" name="usuario" aria-describedby="emailHelp">

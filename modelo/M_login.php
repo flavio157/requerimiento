@@ -2,61 +2,61 @@
 require_once("../db/Contrato.php");
 class M_Login
 {
+    
     private $db;
     
-    public function __construct()
+    
+    public function __construct($basedatos)
     {
-        $this->db=ClassContrato::Contrato();
+        $this->db=ClassContrato::Contrato($basedatos);
     }
     
-    public function get_usuario($usu,$estado)
+    public function M_Login($cod_vendedor,$estado)
     {
-        
-        $query=$this->db->prepare("SELECT * FROM T_ClIENTE where COD_CLIENTE=:username  and EST_CLIENTE!=:estado");
-        $query->bindParam("username", $usu, PDO::PARAM_STR);
+        $hoy = getdate();
+        $mes = $hoy['mon'];
+        $ano = $hoy['year'];
+        $fechaActual = $hoy['mday'].'/'.$mes.'/'.$ano;
+
+        if($hoy['mday'] >= '12' && $hoy['mday']<='26'){
+
+           $quincenas = '12'.'/'.$mes.'/'.$ano;
+
+        }else if ($hoy['mday'] >= '27' && $hoy['mday']<='11'){
+
+            $quincenas = '27'.'/'.$mes.'/'.$ano;
+        }
+
+        $query=$this->db->prepare("SELECT p.COD_VENDEDORA, p.NUM_CONTRATO , 
+                                p.CODIGO ,p.FECHA, pc.CANTIDAD from T_PPEDIDO as p
+                                left join T_PPEDIDO_CANTIDAD pc
+                                on pc.CODIGO = p.CODIGO 
+                                where p.COD_VENDEDORA = :cod_vendedor and 
+                                p.Fecha >= :fechaquincena and p.Fecha <= :fechaActual
+                                and EST_PEDIDO != :estado");
+        $query->bindParam("cod_vendedor", $cod_vendedor, PDO::PARAM_STR);
+        $query->bindParam("fechaquincena", $quincenas, PDO::PARAM_STR);
+        $query->bindParam("fechaActual", $fechaActual, PDO::PARAM_STR);
+        $query->bindParam("cod_vendedor", $cod_vendedor, PDO::PARAM_STR);
         $query->bindParam("estado", $estado, PDO::PARAM_STR);
         $query->execute();
-        $datosUsuario = $query->fetch(PDO::FETCH_ASSOC);
        
         if($query){
-            $_SESSION['user_id'] = $datosUsuario['NOM_CLIENTE1'];
-            return $datosUsuario;
+            return $query;
             $query->closeCursor();
             $query = null;
         }
         
     }
-
-
-    
-
-    public function M_Cuotas($cod_cliente){  
-        $query = $this->db->prepare("SELECT * FROM T_PPEDIDO as pd 
-        left join T_PPEDIDO_CANTIDAD as pc
-        on pd.CODIGO = pc.CODIGO
-        where pd.COD_CLIENTE = :cod_cliente and EST_PEDIDO != 'A' and
-        pd.FEC_DESPACHO = (SELECT MAX(FEC_DESPACHO) FROM T_PPEDIDO)"); 
-    
-        $query->bindParam("cod_cliente", $cod_cliente, PDO::PARAM_STR);
-        $query->execute();
-        $datosCuotas = $query->fetch(PDO::FETCH_ASSOC);
-
-        if($query){
-            return $datosCuotas;
-            $query->closeCursor();
-            $query = null;
-        }
-    }
-
 
 
 
 /*desabilita al usuario actualizando el estado en A */
-    public function M_ActualizarEstadoUsuario($Cod_cliente,$estadoUsu){
-        $query=$this->db->prepare("UPDATE T_ClIENTE set EST_CLIENTE =:est_usuario where
+    public function M_ActualizarEstadoUsuario($cod_personal,$estadoPersona){
+        $query=$this->db->prepare("UPDATE T_PERSONAL set EST_PERSONAL =:est_personal where
         COD_PERSONAL =:cod_persona");
-        $query->bindParam("cod_persona",$Cod_cliente,PDO::PARAM_STR);
-        $query->bindParam("est_usuario",$estadoUsu,PDO::PARAM_STR);
+        $query->bindParam("cod_persona",$cod_personal,PDO::PARAM_STR);
+        $query->bindParam("est_personal",$estadoPersona,PDO::PARAM_STR);
         $query->execute();
         $actualuzarUsu = $query;
         if($query){
@@ -65,11 +65,6 @@ class M_Login
             $query = null;
         }
     }
-
-
-   
-    
- 
 }
 
 ?>

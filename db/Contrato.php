@@ -2,9 +2,11 @@
 /*Contrato.php */
 class ClassContrato
 {
-    public static  function Contrato(){
+ 
+    public static  function Contrato($database){
         try {
-            $base_de_datos = new PDO("sqlsrv:server=DESKTOP-PCSH8QU;database=SMP2", "", "sa");
+            $server = "DESKTOP-PCSH8QU";
+            $base_de_datos = new PDO("sqlsrv:server=$server;database=$database", "", "sa");
             $base_de_datos->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
             return $base_de_datos;
             } catch (Exception $e) {
