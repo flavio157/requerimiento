@@ -36,10 +36,7 @@ insert into T_CALL_CENTER values(001,'0001','anonimo','','','1','1','001'
 '215202515')
 
 
- SELECT * FROM T_CALL_CENTER
-            WHERE COD_PERSONAL='admin' and 
-            OFICINA = '001' and COD_ZONA = '7' and
-            FEC_REGISTRO = (SELECT MAX(FEC_REGISTRO) FROM T_CALL_CENTER)
+
 
 
 create table T_CALL_CENTER(
@@ -168,6 +165,40 @@ CONTACTO varchar(50),
 TELEFONO char(9),
 ENTREGA char(1),
 FCANCELACION datetime,
+EST_PEDIDO char(1), /* si es A el pedido esta anulado*/
+
+COD_PRODUCTO char(6),
+CAN_PRODUCTOS int,
+PROMOCION int,
+TOTAL int,
+
+
+FREPARTO datetime,
+COD_REPARTO char(5),
+COD_DISTRITO char(5),
+NUM_CONTRATO char(9),
+COD_PROVINCIA char(5),
+FEC_DESPACHO datetime,
+CUOTA numeric
+)
+
+
+
+/*
+create table T_PPEDIDO(
+CODIGO numeric(18,0),
+FECHA datetime,
+COD_CLIENTE char(7),
+COD_VENDEDORA char(5),
+TIPO_DOCUMENTO char(3),
+IDENTIFICACION char(11),
+CLIENTE varchar(50),
+DIRECCION varchar(100),
+REFERENCIA varchar(200),
+CONTACTO varchar(50),
+TELEFONO char(9),
+ENTREGA char(1),
+FCANCELACION datetime,
 EST_PEDIDO char(1),
 OBSERVACION varchar(200),
 FREPARTO datetime,
@@ -176,8 +207,21 @@ N_PRODUCTOS int,
 COD_DISTRITO char(5),
 NUM_CONTRATO char(9),
 COD_PROVINCIA char(5),
-FEC_DESPACHO datetime
+FEC_DESPACHO datetime,
+CUOTAS numeric
 )
+*/
+insert into T_PPEDIDO values('0002','19/04/2020','00001','0002','DNI','123265412','nombre',
+'direccion','referencia','123654789','984562','1','19/04/2020','P','este campo cambiara',
+'19/04/2020','0002',5,'01','0001','02','19/04/2020')
+
+
+            
+insert into T_PPEDIDO_CANTIDAD values ('2','00002',5,1,52,5,1)
+
+update T_PPEDIDO_CANTIDAD set PRECIO = 54
+where CODIGO = 2
+
 
 create table T_PPEDIDO_CANTIDAD(
 CODIGO numeric(18,0),
@@ -189,38 +233,10 @@ CCAN int,
 CBON int
 )
 
-create table T_PERSONAL(
-COD_PERSONAL char(5),
-COD_AREA char(5),
-COD_CARGO char(5),
-TIP_AGRUPADO char(3),
-DNI_PERSONAL char(8),
-NOM_PERSONAL1 varchar(60),
-NOM_PERSONAL2 varchar(30),
-APE_PPERSONAL varchar(30),
-APE_MPERSONAL varchar(30),
-SAL_BASICO decimal(9,2),
-COMISIONES decimal(7,2),
-DIR_PERSONAL varchar(100),
-COD_DEPARTAMENTO char(5),
-COD_PROVINCIA char(5),
-COD_DISTRITO char(5),
-TEL_PERSONAL decimal(11,0),
-CEL_PERSONAL decimal(11,0),
-EST_PERSONAL char(1),
-COD_SUPERVISOR char(5),
-COD_ZONA char(5),
-FEC_INGRESO datetime,
-USU_REGISTRO varchar(30),
-FEC_REGISTRO datetime,
-USU_MODIFICO varchar(30),
-FEC_MODIFICO datetime,
-GRUPO char(1)
-)
-
 
 
 /*select * from T_CLIENTE where COD_PERSONAL = 'COD_PERSONAL'*/
+select * from T_CLIENTE where COD_CLIENTE = '00001' and EST_CLIENTE!='A'
 
 
 create table T_CLIENTE(
@@ -252,10 +268,26 @@ SALDO decimal(7,2),
 ULT_PAGO datetime
 )
 
+update T_CLIENTE set SALDO = 0 where COD_CLIENTE = '00001'
+
+select * from T_ClIENTE
+select * from T_ClIENTE where COD_PERSONAL ='00001' and EST_CLIENTE != 'A'
+
+insert into T_ClIENTE values('00001','nombre','nombre2','APP','APM','01','01','01',
+'direcion','referencia','1022252521','87456123',1,9874563,7456321,'1','A','00001','7',
+'1','0003','01/12/2019','','',150.2,'01/12/2019')
+
+insert into T_ClIENTE values('00002','nombre','nombre2','APP','APM','01','01','01',
+'direcion','referencia','1022252521','87456123',1,9874563,7456321,'1','P','00001','7',
+'1','0003','01/12/2019','','',150.2,'01/12/2019')
 
 
 
-create table T_POLITICA_PRECIOs(
+
+select * from T_POLITICA_PRECIOS where CANTIDAD <= 5 and CANT_FIN >= 5
+
+
+/*create table T_POLITICA_PRECIOS(
 CODIGO char(3),
 CANTIDAD int,
 BONO int,
@@ -263,4 +295,34 @@ COD_USUARIO char(5),
 FECHA datetime,
 ESTADO char(1),
 CANT_FIN int
+)*/
+
+
+create table T_PERSONAL(
+COD_PERSONAL char(5),
+COD_AREA char(5),
+COD_CARGO char(5),
+TIP_AGRUPADO char(3),
+DNI_PERSONAL char(8),
+NOM_PERSONAL1 varchar(60),
+NOM_PERSONAL2 varchar(30),
+APE_PPERSONAL varchar(30),
+APE_MPERSONAL varchar(30),
+SAL_BASICO decimal(9,2),
+COMISIONES decimal(7,2),
+DIR_PERSONAL varchar(100),
+COD_DEPARTAMENTO char(5),
+COD_PROVINCIA char(5),
+COD_DISTRITO char(5),
+TEL_PERSONAL decimal(11,0),
+CEL_PERSONAL decimal(11,0),
+EST_PERSONAL char(1),
+COD_SUPERVISOR char(5),
+COD_ZONA char(5),
+FEC_INGRESO datetime,
+USU_REGISTRO varchar(30),
+FEC_REGISTRO datetime,
+USU_MODIFICO varchar(30),
+FEC_MODIFICO datetime,
+GRUPO char(1)
 )
