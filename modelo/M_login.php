@@ -1,25 +1,25 @@
 <?php
-require_once("../db/conexion.php");
+require_once("../db/Contrato.php");
 class M_Login
 {
     private $db;
     
     public function __construct()
     {
-        $this->db=ClassConexion::conexionAlmacenes();
+        $this->db=ClassContrato::Contrato();
     }
     
-    public function get_usuario($usu,$pass,$estado)
+    public function get_usuario($usu,$estado)
     {
-        $query=$this->db->prepare("SELECT * FROM T_USUARIO_CALL where COD_PERSONAL=:username and PDW_USUARIO=:pass and EST_USUARIO!=:est");
+        
+        $query=$this->db->prepare("SELECT * FROM T_ClIENTE where COD_CLIENTE=:username  and EST_CLIENTE!=:estado");
         $query->bindParam("username", $usu, PDO::PARAM_STR);
-        $query->bindParam("pass", $pass, PDO::PARAM_STR);
-        $query->bindParam("est", $estado, PDO::PARAM_STR);
+        $query->bindParam("estado", $estado, PDO::PARAM_STR);
         $query->execute();
         $datosUsuario = $query->fetch(PDO::FETCH_ASSOC);
        
         if($query){
-            $_SESSION['user_id'] = $datosUsuario['COD_PERSONAL'];
+            $_SESSION['user_id'] = $datosUsuario['NOM_CLIENTE1'];
             return $datosUsuario;
             $query->closeCursor();
             $query = null;
@@ -27,14 +27,19 @@ class M_Login
         
     }
 
-    public function M_Cuotas($cod_personal,$oficina,$zona){
-  
-        $query=$this->db->prepare("SELECT * FROM T_CALL_CENTER WHERE COD_PERSONAL=:username 
-        and OFICINA =:oficinas and COD_ZONA =:zonas 
-        and FEC_REGISTRO = ".'('."SELECT MAX(FEC_REGISTRO) FROM T_CALL_CENTER".')'."");
-        $query->bindParam("username", $cod_personal, PDO::PARAM_STR);
-        $query->bindParam("oficinas", $oficina, PDO::PARAM_STR);
-        $query->bindParam("zonas", $zona, PDO::PARAM_STR);
+
+    
+    /*llama a el ultimo pedido que ingreso del usuario  a travez del 
+    la fecha de despacho*/
+    /*ademas de traer el precio de la tabla T_PPEDIDO_CANTIDAD */
+    public function M_Cuotas($cod_cliente){  
+        $query = $this->db->prepare("SELECT * FROM T_PPEDIDO as pd 
+        left join T_PPEDIDO_CANTIDAD as pc
+        on pd.CODIGO = pc.CODIGO
+        where pd.COD_CLIENTE = :cod_cliente and EST_PEDIDO != 'A' and
+        pd.FEC_DESPACHO = (SELECT MAX(FEC_DESPACHO) FROM T_PPEDIDO)"); 
+    
+        $query->bindParam("cod_cliente", $cod_cliente, PDO::PARAM_STR);
         $query->execute();
         $datosCuotas = $query->fetch(PDO::FETCH_ASSOC);
 
@@ -43,18 +48,16 @@ class M_Login
             $query->closeCursor();
             $query = null;
         }
-
     }
 
 
-    public function M_ActualizarEstadoUsuario($NombreUsu,$oficiona,$zona,$estadoUsu){
-       
-       
-        $query=$this->db->prepare("UPDATE T_USUARIO_CALL set EST_USUARIO =:est_usuario where
-        COD_PERSONAL =:cod_persona and  OFICINA =:oficina and ZONA =:zona");
-        $query->bindParam("cod_persona",$NombreUsu,PDO::PARAM_STR);
-        $query->bindParam("oficina",$oficiona,PDO::PARAM_STR);
-        $query->bindParam("zona",$zona,PDO::PARAM_STR);
+
+
+/*desabilita al usuario actualizando el estado en A */
+    public function M_ActualizarEstadoUsuario($Cod_cliente,$estadoUsu){
+        $query=$this->db->prepare("UPDATE T_ClIENTE set EST_CLIENTE =:est_usuario where
+        COD_PERSONAL =:cod_persona");
+        $query->bindParam("cod_persona",$Cod_cliente,PDO::PARAM_STR);
         $query->bindParam("est_usuario",$estadoUsu,PDO::PARAM_STR);
         $query->execute();
         $actualuzarUsu = $query;
@@ -64,9 +67,11 @@ class M_Login
             $query = null;
         }
     }
-    /*update T_USUARIO_CALL set EST_USUARIO = 'P' where
-    COD_PERSONAL = 'admin' and  OFICINA = '0001' and ZONA = '7'*/
 
+
+   
+    
+ 
 }
 
 ?>
