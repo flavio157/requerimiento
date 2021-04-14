@@ -1,5 +1,5 @@
 <?php
-
+require_once("../db/conexion.php");
 class M_Login
 {
     private $db;
@@ -12,21 +12,17 @@ class M_Login
     
     public function get_usuario($usu,$pass)
     {
-        $query=$this->db->query("SELECT * FROM $this->table where usuario=");
+        $query=$this->db->prepare("SELECT * FROM T_USUARIO_CALL where NOM_USUARIO=:username and PDW_USUARIO=:pass");
+        $query->bindParam("username", $usu, PDO::PARAM_STR);
+        $query->bindParam("pass", $pass, PDO::PARAM_STR);
+        $query->execute();
+        $datosUsuario = $query->fetch(PDO::FETCH_ASSOC);
         if(!$query){
-            echo '<p class="error">Username password combination is wrong!</p>';
+           
         }else{
-            if (password_verify($pass, $query['pass el campo del array'])) {
-                $_SESSION['user_id'] = $query['ID el campo del array'];
-               /* echo '<p class="success">Congratulations, you are logged in!</p>';*/
-            } else {
-                echo "error";
-            } 
+               $_SESSION['user_id'] = $datosUsuario['NOM_USUARIO'];
         }
-           /* if($row = $query->fetchObject()) {
-                $resultSet=$row;
-            }
-            return $resultSet;*/
+        return $datosUsuario;
     }
 
 }
