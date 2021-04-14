@@ -1,6 +1,9 @@
 <?php
 session_start();
- 
+require_once("../controlador/C_Cuotas.php");
+$m_cuota = new C_Controlar_Cuotas();
+$estado = $m_cuota->boolean;
+
 if(!isset($_SESSION['user_id'])){
     header('Location: index.php');
     exit;
@@ -24,11 +27,15 @@ if(!isset($_SESSION['user_id'])){
     <body>
     <div class="main">
         <form class="row g-3" >
-                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+              <?php
+
+                if($estado){
+                    echo  '<div class="alert alert-danger alert-dismissible fade show" role="alert">
                     <strong>Advertencia</strong> Todavia no alcanza la cuota esperada.
                     <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                </div>
-
+                    </div>';
+                }
+              ?>
                 <div class="col-12">
                     <label for="formTipo" class="form-label">TIPO</label>
                     <select class="form-select" aria-label="Default select example">
@@ -158,7 +165,7 @@ if(!isset($_SESSION['user_id'])){
                             <form>
                                 <div class="row g-2">
                                     <div class="col">
-                                        <label for="formentrega" class="form-label">CODIGO PRODUCTO</label>
+                                        <label for="formentrega" class="form-label">COD. PRODUCTO</label>
                                         <input type="text" class="form-control">
                                     </div>
                                     <div class="col">
