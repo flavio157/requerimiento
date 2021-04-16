@@ -21,6 +21,8 @@ class M_Login
         if($query){
             $_SESSION['user_id'] = $datosUsuario['COD_PERSONAL'];
             return $datosUsuario;
+            $query->closeCursor();
+            $query = null;
         }
         
     }
@@ -38,6 +40,8 @@ class M_Login
 
         if($query){
             return $datosCuotas;
+            $query->closeCursor();
+            $query = null;
         }
 
     }
@@ -56,6 +60,8 @@ class M_Login
         $actualuzarUsu = $query;
         if($query){
             return $actualuzarUsu;
+            $query->closeCursor();
+            $query = null;
         }
     }
     /*update T_USUARIO_CALL set EST_USUARIO = 'P' where
@@ -64,3 +70,4 @@ class M_Login
 }
 
 ?>
+
