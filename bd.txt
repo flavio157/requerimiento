@@ -19,12 +19,20 @@ select * from T_USUARIO_CALL where NOM_USUARIO ='admin' and PDW_USUARIO = '123' 
 update T_USUARIO_CALL set ZONA = '7'
 where COD_USUARIO = 'adm'
 
+update T_CALL_CENTER set CUOTAS = 155
+where CODIGO = '2'
+
 
 
 select * from T_CALL_CENTER
-insert into T_CALL_CENTER values(001,'0001','anonimo','','','1','1','001'
-,'12/02/2021','admin','DNI','002','26/03/2021','vacio','06',150,'productos',
+insert into T_CALL_CENTER values(002,'0002','anonimo','','','1','1','001'
+,'12/03/2021','admin','DNI','002','26/03/2021','vacio','06',150,'productos',
 'desproductos',150.0,'26/03/2020','003','7','referencia','admin','27/03/2020',
+'215202515')
+
+insert into T_CALL_CENTER values(001,'0001','anonimo','','','1','1','001'
+,'12/02/2021','admin','DNI','002','26/02/2021','vacio','06',150,'productos',
+'desproductos',150.0,'26/03/2020','003','7','referencia','admin','27/02/2020',
 '215202515')
 
 
@@ -78,6 +86,8 @@ FECHA datetime
 
 
 use SMP2
+
+select * from T_PRODUCTO where COD_PRODUCTO = ''
 create table T_PRODUCTO(
 COD_PRODUCTO char(6),
 COD_CATEGORIA char(5),
@@ -108,12 +118,23 @@ DES_DEPARTAMENTO varchar(50),
 COD_POSTAL char(5)
 )
 
+
+/*insert into T_PROVINCIA values ('01','01','Chachapoyas','')
+insert into T_PROVINCIA values ('01','02','Bagua','')
+insert into T_PROVINCIA values ('01','03','Bongará','')
+insert into T_PROVINCIA values ('01','04','Condorcanqui','')
+insert into T_PROVINCIA values ('01','05','Luya','')*/
+
+select * from T_PROVINCIA
+
 create table T_PROVINCIA(
 COD_DEPARTAMENTO char(5),
 COD_PROVINCIA char(5),
 DES_PROVINCIA varchar(50),
 COD_POSTAL char(5)
 )
+
+select * from T_DISTRITO
 
 create table T_DISTRITO(
 COD_DEPARTAMETO char(5),
@@ -122,6 +143,14 @@ COD_DISTRITO char(5),
 DES_DISTRITO varchar(70),
 COD_POSTAL char(5)
 )
+
+/*insert into T_DISTRITO values('01','01','01','CHACHAPOYAS','')
+insert into T_DISTRITO values('01','02','01','Bagua','')
+insert into T_DISTRITO values('01','03','01','JUMBILLA','')
+insert into T_DISTRITO values('01','04','01','NIEVA','')
+insert into T_DISTRITO values('01','05','01','LAMUD','')*/
+
+
 
 
 
@@ -189,6 +218,11 @@ FEC_MODIFICO datetime,
 GRUPO char(1)
 )
 
+
+
+/*select * from T_CLIENTE where COD_PERSONAL = 'COD_PERSONAL'*/
+
+
 create table T_CLIENTE(
 COD_CLIENTE char(7),
 NOM_CLIENTE1 varchar(50),
@@ -217,6 +251,9 @@ FEC_MODIFICO varchar(30),
 SALDO decimal(7,2),
 ULT_PAGO datetime
 )
+
+
+
 
 create table T_POLITICA_PRECIOs(
 CODIGO char(3),
