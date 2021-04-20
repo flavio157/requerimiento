@@ -11,14 +11,14 @@ require_once("../modelo/M_BuscarProductos.php");
         $c_CodProducto->BuscaProducto($codproducto);
 
     }else if($accion === "obtener"){
-
+        $cod_producto = $_POST['Cod_producto'];
         $producto = $_POST['producto'];
         $cantidad = $_POST['cantidad'];
         $precio = $_POST['precio'];
         $promocion = $_POST['promocion'];
         $total = $_POST['total'];
         
-        $c_CodProducto->ObtenerProducto($producto,$cantidad,$precio,$promocion,$total);
+        $c_CodProducto->ObtenerProducto($cod_producto,$producto,$cantidad,$precio,$promocion,$total);
     }
    
  
@@ -35,24 +35,29 @@ class C_BuscarProducto
        
         if($c_cod > 0){
             print_r("ok"."/".$c_cod['DES_PRODUCTO'] . "/" . $c_cod['PRE_PRODUCTO']);
+        }else{
+            print_r('<div class="alert alert-warning alert-dismissible fade show" role="alert" id="">
+                    <strong>Error: </strong> El codigo del producto no existe.
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>');
         }
     }
 
-    public function ObtenerProducto($producto,$cantidad,$precio,$promocion,$total)
+    public function ObtenerProducto($cod_producto,$producto,$cantidad,$precio,$promocion,$total)
     {
-        
-       /* echo "obtener";*/
-        /*<th scope="row">1</th>*/
         echo   '<tr>
-                <th scope="row"></th>
-                <td>"' .$producto.'"</td>
-                <td>"'.$cantidad.'"</td>
-                <td>"'.$precio.'"</td>
-                <td>"'.$promocion.'"</td>
-                <td>"'.$total.'"</td>
+                <th scope="row">1</th>
+                <td id = "cod_Prodcuto" style="display:none;" >"' .$cod_producto.'"</td>
+                <td id = "producto">"' .$producto.'"</td>
+                <td  id = "cantidad">"'.$cantidad.'"</td>
+                <td  id = "precio">"'.$precio.'"</td>
+                <td  id = "promocion">"'.$promocion.'"</td>
+                <td  id = "total">"'.$total.'"</td>
               </tr>' ;  
     }
 
 }
+
+?>
 
 ?>
