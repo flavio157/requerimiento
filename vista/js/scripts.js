@@ -1,6 +1,6 @@
 var valorproducto;
 $(document).ready(function(){
-    obtenerprovincia();
+   /* obtenerprovincia();*/
     $("#btnModiDescr").hide();
     $("#tablaproductos").hide();
 
