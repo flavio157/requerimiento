@@ -3,6 +3,13 @@ $(document).ready(function(){
    /* obtenerprovincia();*/
     $("#btnModiDescr").hide();
     $("#tablaproductos").hide();
+    
+    /*desabilita la tecla enter para evitar que se actualize la pagina */
+    $("form").keypress(function(e) {
+        if (e.which == 13) {
+            return false;
+        }
+    });
 
     /* obtiene el valor de los input y los agrega a la tabla de pedidos */
     $("#agregar").click(function() { 
