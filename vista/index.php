@@ -12,14 +12,12 @@
     <body>
         <div class="main">
         <form method="POST" action="../controlador/C_login.php">
+             
             <div class="mb-2">
                 <label for="exampleInputEmail1" class="form-label">Usuario</label>
                 <input type="text" class="form-control" id="exampleInputEmail1" name="usuario" aria-describedby="emailHelp">
             </div>
-            <div class="mb-2">
-                <label for="exampleInputPassword1" class="form-label">CLAVE</label>
-                <input type="password" class="form-control" id="exampleInputPassword1" name="clave">
-            </div>
+            
             <div class="col text-center">
                 <button class="btn btn-primary" type="submit" id="btnlogin">Aceptar</button>
             </div>
