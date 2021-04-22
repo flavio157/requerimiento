@@ -1,13 +1,14 @@
 <?php
-    require_once("../db/conexionSMP2.php");
+    require_once("../db/Contrato.php");
 
 class M_BuscarProductos{
 
+        
         private $db;
     
         public function __construct()
         {
-            $this->db=ClassConexionSMP2::conexionSMP2();
+            $this->db=ClassContrato::Contrato();
         }
         
         public function M_BuscarProducto($cod_producto)
