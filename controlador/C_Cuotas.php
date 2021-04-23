@@ -13,12 +13,7 @@ class C_Controlar_Cuotas
 
 
     
-    /*$verificarCuotas es igual al saldo del cliente tabla cliente */
-    /*$precioTotal es igual al precio total del pedido tabla T_PPEDIDO_CANTIDAD */
-
-    /*funcion para verificar si cumplio la cuota en quincena,  
-    verifica si el dia 12 no cumplio para a dar mensaje de advertencia hasta el dia 14
-    el dia quince pasa a bloquear al cliente actualizando el EST_CLIENTE*/
+    
     public function C_CalcularDias($verificarCuotas,$precioTotal,$cod_cliente){
         $m_verificar = new M_Login();
         $cambiarEstadoclie = "A";

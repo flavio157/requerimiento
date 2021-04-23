@@ -29,9 +29,7 @@ class M_Login
 
 
     
-    /*llama a el ultimo pedido que ingreso del usuario  a travez del 
-    la fecha de despacho*/
-    /*ademas de traer el precio de la tabla T_PPEDIDO_CANTIDAD */
+
     public function M_Cuotas($cod_cliente){  
         $query = $this->db->prepare("SELECT * FROM T_PPEDIDO as pd 
         left join T_PPEDIDO_CANTIDAD as pc

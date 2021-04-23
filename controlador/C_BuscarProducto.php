@@ -1,8 +1,7 @@
 <?php
 require_once("../modelo/M_BuscarProductos.php");
     $c_CodProducto= new C_BuscarProducto();
-    
-   
+
     $accion = $_POST["accion"];
     
     if($accion === "buscar"){
@@ -19,34 +18,79 @@ require_once("../modelo/M_BuscarProductos.php");
         $total = $_POST['total'];
         
         $c_CodProducto->ObtenerProducto($cod_producto,$producto,$cantidad,$precio,$promocion,$total);
+    
+    }else if ($accion = "politicaprecios"){
+        $cantidad = $_POST['cantidad'];
+        $c_CodProducto->PoliticaPrecios($cantidad);
     }
    
- 
 
 class C_BuscarProducto
 {
+    
     public function BuscaProducto($cod_producto)
     {
         $M_buscarproducto = new M_BuscarProductos();
        
-        if($cod_producto != ""){
+        if($cod_producto !== ""){
             $c_cod = $M_buscarproducto->M_BuscarProducto($cod_producto);
-        }
-       
-        if($c_cod > 0){
-            print_r("ok"."/".$c_cod['DES_PRODUCTO'] . "/" . $c_cod['PRE_PRODUCTO']);
+
+            if($c_cod > 0){
+                $buscarProducto = array(
+                    'estado' => 'ok',
+                    'descripcion'=> $c_cod['DES_PRODUCTO'],
+                    'precio'=> $c_cod['PRE_PRODUCTO']
+                );
+                echo json_encode($buscarProducto,JSON_FORCE_OBJECT);
+                
+            }
+            else{
+                print_r('<div class="alert alert-warning alert-dismissible fade show" role="alert" id="">
+                        <strong>Error: </strong> El codigo del producto no existe.
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>');
+            }
         }else{
-            print_r('<div class="alert alert-warning alert-dismissible fade show" role="alert" id="">
+             print_r('<div class="alert alert-warning alert-dismissible fade show" role="alert" id="">
                     <strong>Error: </strong> El codigo del producto no existe.
                     <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                     </div>');
         }
+       
     }
+
+
+    public function PoliticaPrecios($cantidad){
+        $M_politicaPrecio = new M_BuscarProductos();
+        if($cantidad != ""){
+            $Bono = $M_politicaPrecio->M_PoliticaProductos($cantidad);
+            if($Bono > 0){
+                $datos  = array(
+                    'estado' => 'ok',
+                    'bono' => $Bono['BONO'],
+                    );
+                    echo json_encode($datos,JSON_FORCE_OBJECT);
+            }else{
+                /*print_r('<div class="alert alert-warning alert-dismissible fade show" role="alert" id="">
+                        <strong>Error: </strong> El BONO NO COINCIDE CON LA CANTIDAD INGRESADA
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>');*/
+            }
+        }else{
+                /*print_r('<div class="alert alert-warning alert-dismissible fade show" role="alert" id="">
+                        <strong>Error: </strong> El BONO NO COINCIDE CON LA CANTIDAD INGRESADA
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>');*/
+        } 
+
+    }
+
 
     public function ObtenerProducto($cod_producto,$producto,$cantidad,$precio,$promocion,$total)
     {
+        
         echo   '<tr>
-                <th scope="row">1</th>
+                <th scope="row"></th>
                 <td id = "cod_Prodcuto" style="display:none;" >"' .$cod_producto.'"</td>
                 <td id = "producto">"' .$producto.'"</td>
                 <td  id = "cantidad">"'.$cantidad.'"</td>
@@ -57,7 +101,5 @@ class C_BuscarProducto
     }
 
 }
-
-?>
 
 ?>

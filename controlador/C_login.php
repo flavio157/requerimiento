@@ -22,6 +22,7 @@ class C_Login
         $m_count = $m_login->get_usuario($usu,"A");
 
         if(sizeof($m_count) > 0){
+            
             $m_lista = $m_cuotas->C_Cuotas($m_count['COD_CLIENTE'],$m_count["SALDO"]);
         }
         
