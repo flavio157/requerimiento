@@ -16,27 +16,47 @@ session_start();
     }
 class C_Login
 {
-    
 
     public function C_usuario($cod_vendedor)
     {
+        $dia = getdate();
         $basedate = "SMP2";
-        $C_cuotas = new C_Controlar_Cuotas();
         $m_login = new M_Login($basedate);
-        $m_count = $m_login->M_Login($cod_vendedor,"A");
-        $cuota = 0;  
+        $m_count = "";
         
-
-         if($m_count){
-            while($row = $m_count->fetch(PDO::FETCH_ASSOC)){
-                $cuota += intval($row["CANTIDAD"]);
-              
-            }
-             print_r($cuota);
-            $C_cuotas->C_Cuotas($cuota);
+        
+        if($dia['mday']>='12' && $dia['mday']<='16'){
+           $m_count = $m_login->PasadoQuincena($cod_vendedor,"A");
+            $this->Controlar_Cuotas($m_count);
+           
+        }else if($dia['mday']>='27' && $dia['mday']<='30')    {
+            $m_count = $m_login->PasadoQuincena($cod_vendedor,"A");
+            $this->Controlar_Cuotas($m_count);
+        }else{
+            $m_count = $m_login->Login($cod_vendedor,"A");
+            $this->ingresoNormal(0);
         }
-        
     }
 
+    public function Controlar_Cuotas($m_count)
+    {
+        $C_cuotas = new C_Controlar_Cuotas();
+        
+        if($m_count){
+            $cuota = 0; 
+                while($row = $m_count->fetch(PDO::FETCH_ASSOC)){
+                    $cuota += intval($row["CANTIDAD"]);
+                }
+               
+                $C_cuotas->C_Cuotas($cuota);
+            }
+    }
+    
+    public function ingresoNormal($cuota)
+    {
+        $C_cuotas = new C_Controlar_Cuotas();
+        $C_cuotas->C_Cuotas($cuota);
+    }
 }
+
 ?>
