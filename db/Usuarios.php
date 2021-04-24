@@ -1,4 +1,5 @@
 <?php
+
 /*usuarios.php*/
 class ClassUsuario
 {

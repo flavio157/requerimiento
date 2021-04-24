@@ -5,6 +5,7 @@ class ClassContrato
  
     public static  function Contrato($database){
         try {
+           
             $server = "DESKTOP-PCSH8QU";
             $base_de_datos = new PDO("sqlsrv:server=$server;database=$database", "", "sa");
             $base_de_datos->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
