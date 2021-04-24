@@ -10,7 +10,6 @@ session_start();
         $usu = new C_Login();
         $usu->C_usuario($cod_vendedor);
     }else{
-        print_r($cod_vendedor);
         return header("Location: http://localhost:8080/requerimiento/vista/");
        
     }

@@ -20,8 +20,8 @@ class C_Controlar_Cuotas
             if($hoy['mday'] == '16'){
                 /*$m_verificar->M_ActualizarEstadoUsuario($cod_personal,$cambiarEstadoPerso);*/
                 /*return header("Location: http://localhost:8080/requerimiento/vista/");*/
-                print_r($verificarCuotas);
-                echo "bloqueo";
+             
+            
                 
             }else{
                 $MensajeBloqueo = 0;  
@@ -34,7 +34,7 @@ class C_Controlar_Cuotas
                 /*return header("Location: http://localhost:8080/requerimiento/vista/");*/
             }else{
                 $MensajeBloqueo = 0;  
-                print_r("echo");
+             
                 return header("Location: http://localhost:8080/requerimiento/vista/ventana.php?enlace=".$MensajeBloqueo);
             }
         }else{
