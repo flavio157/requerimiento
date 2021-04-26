@@ -26,8 +26,9 @@ if($estado == 0){
         <link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.0.1/css/toastr.css" rel="stylesheet"/>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.0.1/js/toastr.js"></script>
         
-
+        
         <script type="text/javascript" src="../vista/js/scripts.js"></script>
+        <script type="text/javascript" src="../vista/js/jsproducto.js"></script>
 
         <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
         <meta name="viewport" content="width=device-width, initial-scale=1.0 ,user-scalable=no">
@@ -36,11 +37,12 @@ if($estado == 0){
     <body>
     <div class="main">
         <form class="row g-3"  id="frmpedidos">
+        
         <?php
                 if($estado === "0"){
                     echo  '<div class="alert alert-danger alert-dismissible fade show" role="alert">
                     <strong>Advertencia</strong> Todavia no alcanza la cuota esperada.'.'
-                    Actualmente Usted esta en '.$cantidad .'
+                    Actualmente Usted esta en '. $cantidad .'
                     <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                     </div>';
                 }
@@ -226,6 +228,33 @@ if($estado == 0){
                                         <input type="text" class="form-control" id="G_total" name="G_total" disabled=true>
                                     </div>
                                 </div>
+                                <div class="row g-1">
+                                    <div class="col">
+                                    </div>
+                                    <div class="col">
+                                        <button type="button" class="btn btn-secondary" id="agregarProdcuto">+</button>
+                                    </div>
+                                </div>
+
+                                <div class="table-responsive" id="tablaproductos">
+                                    <table class="table" id="productosMomento">
+                                        <caption>Lista de Productos</caption>
+                                        <thead>
+                                            <tr>
+                                            <th scope="col">#</th>
+                                            <th scope="col" style="display: none;">COD_PRODUCTO</th>
+                                            <th scope="col">PRODUCTO</th>
+                                            <th scope="col">CANTIDAD</th>
+                                            <th scope="col">PRECIO</th>
+                                            <th scope="col">PROMOCIÓN</th>
+                                            <th scope="col">TOTAL</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody  id="tabla">
+                                                                
+                                        </tbody>
+                                    </table>
+                </div>
                             </form>
                         </div>
                         <div class="modal-footer">
