@@ -1,23 +1,22 @@
 <?php
-require_once("../db/Contrato.php");
+require_once("../db/Usuarios.php");
+
 class M_Login
 {
     
     private $db;
     
     
-    public function __construct($basedatos)
+    public function __construct()
     {
-        $this->db=ClassContrato::Contrato($basedatos);
+        $this->db=ClassUsuario::Usuario();
     }
     
-    public function Login($cod_vendedor,$estado)
+    public function Login($cod_usuario)
     {
 
-        $query=$this->db->prepare("SELECT * FROM T_PERSONAL WHERE COD_PERSONAL = :cod_personal
-                                  and EST_PERSONAL != :estado");
-            $query->bindParam("cod_personal", $cod_vendedor, PDO::PARAM_STR);
-            $query->bindParam("estado", $estado, PDO::PARAM_STR);
+            $query=$this->db->prepare("SELECT * FROM V_Login WHERE COD_USUARIO = :cod_usuario");
+            $query->bindParam("cod_usuario", $cod_usuario, PDO::PARAM_STR);
             $query->execute();
             $cod_usuario = $query->fetch(PDO::FETCH_ASSOC);
             if($query){
@@ -28,42 +27,34 @@ class M_Login
     }
 
 
-    public function PasadoQuincena($cod_vendedor,$estado)
+    public function VerificarCallCenter($cod_vendedor)
     {
         $hoy = getdate();
         $mes = $hoy['mon'];
         $ano = $hoy['year'];
         $m = intval($mes) - intval(1); 
-
-        
-        /* primer if se cuenta la quincena del 27 al 11  pero como el mensaje sale durante de tres dias
-        es decir desde el 12 al 15 se verifica cuanto a echo desde el 27 hasta el dia actual
-        que es menor o igual a 15*/
-        if($hoy['mday'] >= '12' && $hoy['mday'] <= '16'){
+        /* el mensaje sale a los tres dias de iniciar la quincena (estos dias pueden variar)
+        a partir del 15 para el primero*/
+        if($hoy['mday'] >= '12' && $hoy['mday'] <= '27'){
            
-           $quincenas = '27'.'/'. $m .'/'.$ano;
-           $fechaActual = $hoy['mday'].'/'.$mes.'/'.$ano;
+            if($hoy['mday']>= '15' && $hoy['mday']<='27'){
+                $fechainicial = '12'.'/'. $mes .'/'.$ano;
+                $fechafinal = $hoy['mday'].'/'.$mes.'/'.$ano;
+            }
           
-        }else if ($hoy['mday'] >= '27' && $hoy['mday']<='30'){
-            /*este if se cuenta la quincena del 12 al 26 pero como el mensaje sale durante de tres dias 
-            es decir desde el 27 al 30 se verifica cuanto a echo desde el 12 hasta el dia actual 
-            que es menor o igual a 30*/
-            $quincenas = '12'.'/' . $mes .'/'.$ano;
-            $fechaActual = $hoy['mday'].'/'.$mes.'/'.$ano;
-
+        }else if ($hoy['mday'] >= '27' && $hoy['mday']<='12'){
+            if($hoy['mday']>= '30' && $hoy['mday']<='12'){
+                $fechainicial = '27'.'/' . $m .'/'.$ano;
+                $fechafinal = $hoy['mday'].'/'.$mes.'/'.$ano;
+            }
         }
 
-        $query=$this->db->prepare("SELECT p.COD_VENDEDORA, p.NUM_CONTRATO , 
-                                p.CODIGO ,p.FECHA, pc.CANTIDAD FROM T_PPEDIDO as p
-                                LEFT JOIN T_PPEDIDO_CANTIDAD pc
-                                ON pc.CODIGO = p.CODIGO 
-                                WHERE p.COD_VENDEDORA = :cod_vendedor AND 
-                                p.Fecha >= :fechaquincena AND p.Fecha <= :fechaActual
-                                AND EST_PEDIDO != :estado");
-        $query->bindParam("fechaquincena", $quincenas, PDO::PARAM_STR);
-        $query->bindParam("fechaActual", $fechaActual, PDO::PARAM_STR);
-        $query->bindParam("cod_vendedor", $cod_vendedor, PDO::PARAM_STR);
-        $query->bindParam("estado", $estado, PDO::PARAM_STR);
+        $query=$this->db->prepare("SELECT * FROM V_call_center  
+        WHERE vendedor = cod_vendedor AND fecha_generado >= :fechaInical 
+        AND fecha_generado <= :fechaFinal");
+        $query->bindParam("cod_vendedora", $cod_vendedor, PDO::PARAM_STR);
+        $query->bindParam("fechaquincena", $fechainicial, PDO::PARAM_STR);
+        $query->bindParam("fechaActual", $fechafinal, PDO::PARAM_STR);
         $query->execute();
        if($query){
             return $query;
@@ -76,20 +67,6 @@ class M_Login
 
 
 
-/*desabilita al usuario actualizando el estado en A */
-    public function M_ActualizarEstadoUsuario($cod_personal,$estadoPersona){
-        $query=$this->db->prepare("UPDATE T_PERSONAL SET EST_PERSONAL =:est_personal WHERE
-        COD_PERSONAL =:cod_persona");
-        $query->bindParam("cod_persona",$cod_personal,PDO::PARAM_STR);
-        $query->bindParam("est_personal",$estadoPersona,PDO::PARAM_STR);
-        $query->execute();
-        $actualuzarUsu = $query;
-        if($query){
-            return $actualuzarUsu;
-            $query->closeCursor();
-            $query = null;
-        }
-    }
-}
 
+}
 ?>
