@@ -60,7 +60,6 @@ class M_Login
                                 WHERE p.COD_VENDEDORA = :cod_vendedor AND 
                                 p.Fecha >= :fechaquincena AND p.Fecha <= :fechaActual
                                 AND EST_PEDIDO != :estado");
-        $query->bindParam("cod_vendedor", $cod_vendedor, PDO::PARAM_STR);
         $query->bindParam("fechaquincena", $quincenas, PDO::PARAM_STR);
         $query->bindParam("fechaActual", $fechaActual, PDO::PARAM_STR);
         $query->bindParam("cod_vendedor", $cod_vendedor, PDO::PARAM_STR);
