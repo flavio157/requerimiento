@@ -1,6 +1,7 @@
 <?php
 date_default_timezone_set('America/Lima');
 require_once("../db/Contrato.php");
+require_once("../controlador/C_Fechas.php");
 class M_VerificarCuota
 {
     
@@ -13,34 +14,16 @@ class M_VerificarCuota
        
     }
 
-    public function VerificandoQuincena($cod_vendedor)
-    {
-        $fecha_actual = date("d-m-Y");
-        $fecha = getdate();
-        $dia = date("d-m-Y",strtotime($fecha_actual."- 1 days"));
-        $mes = $fecha['mon'];
-        $ano = $fecha['year'];
-        $m = intval($mes) - intval(1); 
-
-            if($fecha['mday']>= '15' && $fecha['mday'] <='27'){
-                if($mes <= '9'){
-                    $mes = '0'.$mes;
-                }
-                $fechainicial = '12'.'/'. $mes .'/'.$ano;
-                $fechafinal =  $dia;
-            }
-           
-
-            if($fecha['mday'] >= '01' && $fecha['mday']<='12'){
-                    $fechainicial = '27'.'/' . $m .'/'.$ano;
-                    $fechafinal =  $dia;
-            }
+    public function VerificandoQuincena($cod_vendedor,$diasprimeraquincena,$diassegundaquincena)
+    {   $c_fechas = new RangoFechas();
+        $fechas = $c_fechas->fechas($diasprimeraquincena,$diassegundaquincena);
+        $separarFechas = explode(" ",$fechas);
 
          $query=$this->db->prepare("SELECT * FROM V_PEDIDO_MONTO WHERE VENDEDOR = :cod_vendedor and
          FECHA >= :fecha_inicial and FECHA < :fecha_final");
          $query->bindParam("cod_vendedor", $cod_vendedor, PDO::PARAM_STR);
-         $query->bindParam("fecha_inicial", $fechainicial, PDO::PARAM_STR);
-         $query->bindParam("fecha_final", $fechafinal, PDO::PARAM_STR);
+         $query->bindParam("fecha_inicial", $separarFechas[0], PDO::PARAM_STR);
+         $query->bindParam("fecha_final", $separarFechas[1], PDO::PARAM_STR);
          $query->execute();
          $montoTotal= 0;
          while ($result = $query->fetch()) {
@@ -50,13 +33,18 @@ class M_VerificarCuota
         }
          
        if($query){
-            return $fechainicial . $fechafinal ;
+              /*  return $separarFechas[0] ." ".$separarFechas[1]; */
+         return $montoTotal;
             $query->closeCursor();
             $query = null;
         } 
     }
 
+   
+   
+    
+
+
 }
 
 ?>
-

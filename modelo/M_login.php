@@ -1,5 +1,6 @@
 <?php
 require_once("../db/Usuarios.php");
+require_once("../controlador/C_Fechas.php");
 
 class M_Login
 {
@@ -14,7 +15,7 @@ class M_Login
     
     public function Login($cod_usuario)
     {
-            $query=$this->db->prepare("SELECT * FROM V_Login WHERE COD_USUARIO = :cod_usuario");
+            $query=$this->db->prepare("SELECT * FROM V_Login WHERE COD_PERSONAL = :cod_usuario");
             $query->bindParam("cod_usuario", $cod_usuario, PDO::PARAM_STR);
             $query->execute();
             $cod_usuario = $query->fetch(PDO::FETCH_ASSOC);
@@ -25,44 +26,30 @@ class M_Login
             }
     }
 
-
-
-    public function VerificarCallCenter($cod_vendedor)
+    public function VerificarCallCenter($cod_vendedor,$diasprimeraquincena,$diassegundaquincena)
     {
-        $fecha_actual = date("d-m-Y");
-        $fecha = getdate();
-        $dia = date("d-m-Y",strtotime($fecha_actual."- 1 days"));
-        $mes = $fecha['mon'];
-        $ano = $fecha['year'];
-        $m = intval($mes) - intval(1); 
-
-        if($fecha['mday']>= '15' && $fecha['mday'] <='27'){
-                $fechainicial = '12'.'/'. $mes .'/'.$ano;
-                $fechafinal =  $dia;
-        }
-          
-        if($fecha['mday'] >= '01' && $fecha['mday']<='12'){
-            $fechainicial = '27'.'/' . $m .'/'.$ano;
-            $fechafinal =  $dia;
-        }
+        $c_fechas = new RangoFechas();
+        $fechas = $c_fechas->fechas($diasprimeraquincena,$diassegundaquincena);
+        $separarFechas = explode(" ",$fechas);
 
         $query=$this->db->prepare("SELECT * FROM V_CALL_CENTER  
         WHERE VENDEDOR = :cod_vendedor AND FECHA_GENERADO >= :fechaInical 
         AND FECHA_GENERADO < :fechaFinal");
         $query->bindParam("cod_vendedor", $cod_vendedor, PDO::PARAM_STR);
-        $query->bindParam("fechaInical", $fechainicial, PDO::PARAM_STR);
-        $query->bindParam("fechaFinal", $fechafinal, PDO::PARAM_STR);
+        $query->bindParam("fechaInical", $separarFechas[0], PDO::PARAM_STR);
+        $query->bindParam("fechaFinal",  $separarFechas[1], PDO::PARAM_STR);
         $query->execute();
-        $montoTotal= 0;
-
-         while ($result = $query->fetch()) {
-                if($result['MONTO'] != ""){
-                    $montoTotal += $result['MONTO'];
-                }
+        $montoTotal=0;
+        
+        while ($result = $query->fetch()) {
+            if($result['MONTO'] != ""){
+               $montoTotal += $result['MONTO'];
             }
+        }
             
        if($query){
-            return $montoTotal;
+            /* return $separarFechas[0] .'  '. $separarFechas[1];*/
+           return $montoTotal;
             $query->closeCursor();
             $query = null;
         } 
@@ -86,5 +73,3 @@ class M_Login
 
 }
 ?>
-
-
