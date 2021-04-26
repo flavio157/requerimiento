@@ -5,7 +5,10 @@ require_once("C_Cuotas.php");
 session_start();
 
     $cod_vendedor = $_POST['usuario'];
-
+    $Tipo = $_POST['selecciontipo'];
+    
+    print($Tipo);
+   
     if ($cod_vendedor!="") {
         $usu = new C_Login();
         $usu->C_usuario($cod_vendedor);
@@ -14,13 +17,14 @@ session_start();
        
     }
 class C_Login
-{
+{   
+    public $basedato = "SMP2";
 
     public function C_usuario($cod_vendedor)
     {
         $dia = getdate();
-        $basedate = "SMP2";
-        $m_login = new M_Login($basedate);
+        /*$this->basedato = "SMP2";*/
+        $m_login = new M_Login($this->basedato);
         $m_count = "";
         
         
@@ -47,14 +51,14 @@ class C_Login
                     $cuota += intval($row["CANTIDAD"]);
                 }
                
-                $C_cuotas->C_Cuotas($cuota);
+                $C_cuotas->C_Cuotas($cuota,$this->basedato);
             }
     }
     
     public function ingresoNormal($cuota)
     {
         $C_cuotas = new C_Controlar_Cuotas();
-        $C_cuotas->C_Cuotas($cuota);
+        $C_cuotas->C_Cuotas($cuota,$this->basedato);
     }
 }
 
