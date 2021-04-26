@@ -5,9 +5,9 @@ class M_BuscarProductos{
 
         private $db;
     
-        public function __construct()
+        public function __construct($database)
         {
-            $this->db=ClassContrato::Contrato();
+            $this->db=ClassContrato::Contrato($database);
         }
         
         public function M_BuscarProducto($cod_producto)

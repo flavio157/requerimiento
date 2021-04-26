@@ -1,13 +1,13 @@
 <?php
 require_once("../modelo/M_BuscarProductos.php");
+    $db = "SMP2";
     $c_CodProducto= new C_BuscarProducto();
-
     $accion = $_POST["accion"];
     
     if($accion === "buscar"){
 
         $codproducto = $_POST['Codproducto'];
-        $c_CodProducto->BuscaProducto($codproducto);
+        $c_CodProducto->BuscaProducto($codproducto,$db);
 
     }else if($accion === "obtener"){
         $cod_producto = $_POST['Cod_producto'];
@@ -21,16 +21,16 @@ require_once("../modelo/M_BuscarProductos.php");
     
     }else if ($accion = "politicaprecios"){
         $cantidad = $_POST['cantidad'];
-        $c_CodProducto->PoliticaPrecios($cantidad);
+        $c_CodProducto->PoliticaPrecios($cantidad,$db);
     }
    
 
 class C_BuscarProducto
 {
     
-    public function BuscaProducto($cod_producto)
+    public function BuscaProducto($cod_producto,$db)
     {
-        $M_buscarproducto = new M_BuscarProductos();
+        $M_buscarproducto = new M_BuscarProductos($db);
        
         if($cod_producto !== ""){
             $c_cod = $M_buscarproducto->M_BuscarProducto($cod_producto);
@@ -60,8 +60,8 @@ class C_BuscarProducto
     }
 
 
-    public function PoliticaPrecios($cantidad){
-        $M_politicaPrecio = new M_BuscarProductos();
+    public function PoliticaPrecios($cantidad,$db){
+        $M_politicaPrecio = new M_BuscarProductos($db);
         if($cantidad != ""){
             $Bono = $M_politicaPrecio->M_PoliticaProductos($cantidad);
             if($Bono > 0){
