@@ -26,44 +26,65 @@ class M_Login
     }
 
 
-    
+
     public function VerificarCallCenter($cod_vendedor)
     {
+        $fecha_actual = date("d-m-Y");
         $fecha = getdate();
-        $dia = $fecha['mday'];
+        $dia = date("d-m-Y",strtotime($fecha_actual."- 1 days"));
         $mes = $fecha['mon'];
         $ano = $fecha['year'];
         $m = intval($mes) - intval(1); 
-        $d = intval($dia) - intval(1);
 
-        if($dia['mday'] >= '12' && $dia['mday'] <= '27'){
-           
-            if($dia['mday']>= '15' && $dia['mday']<='27'){
+        if($fecha['mday']>= '15' && $fecha['mday'] <='27'){
                 $fechainicial = '12'.'/'. $mes .'/'.$ano;
-                $fechafinal = $d.'/'.$mes.'/'.$ano;
-            }
+                $fechafinal =  $dia;
+        }
           
-        }else if ($dia['mday'] >= '27' && $dia['mday']<='12'){
-            if($dia['mday']>= '30' && $dia['mday']<='12'){
-                $fechainicial = '27'.'/' . $m .'/'.$ano;
-                $fechafinal = $d.'/'.$mes.'/'.$ano;
-            }
+        if($fecha['mday'] >= '01' && $fecha['mday']<='12'){
+            $fechainicial = '27'.'/' . $m .'/'.$ano;
+            $fechafinal =  $dia;
         }
 
-        $query=$this->db->prepare("SELECT * FROM V_call_center  
-        WHERE vendedor = cod_vendedor AND fecha_generado >= :fechaInical 
-        AND fecha_generado <= :fechaFinal");
-        $query->bindParam("cod_vendedora", $cod_vendedor, PDO::PARAM_STR);
-        $query->bindParam("fechaquincena", $fechainicial, PDO::PARAM_STR);
-        $query->bindParam("fechaActual", $fechafinal, PDO::PARAM_STR);
+        $query=$this->db->prepare("SELECT * FROM V_CALL_CENTER  
+        WHERE VENDEDOR = :cod_vendedor AND FECHA_GENERADO >= :fechaInical 
+        AND FECHA_GENERADO < :fechaFinal");
+        $query->bindParam("cod_vendedor", $cod_vendedor, PDO::PARAM_STR);
+        $query->bindParam("fechaInical", $fechainicial, PDO::PARAM_STR);
+        $query->bindParam("fechaFinal", $fechafinal, PDO::PARAM_STR);
         $query->execute();
+        $montoTotal= 0;
+
+         while ($result = $query->fetch()) {
+                if($result['MONTO'] != ""){
+                    $montoTotal += $result['MONTO'];
+                }
+            }
+            
        if($query){
-            return $query;
+            return $montoTotal;
             $query->closeCursor();
             $query = null;
         } 
     }
 
+
+    /*desabilita al usuario actualizando el estado en A */
+    public function M_ActualizarEstadoUsuario($cod_personal,$estadoPersona){
+        $query=$this->db->prepare("UPDATE V_ActCodVendedor SET EST_USUARIO =:est_usuario WHERE
+        COD_USUARIO =:cod_usuario");
+        $query->bindParam("cod_persona",$cod_personal,PDO::PARAM_STR);
+        $query->bindParam("est_personal",$estadoPersona,PDO::PARAM_STR);
+        $query->execute();
+        $actualuzarUsu = $query;
+        if($query){
+            return $actualuzarUsu;
+            $query->closeCursor();
+            $query = null;
+        }
+    }
+
 }
 ?>
+
 

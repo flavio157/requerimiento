@@ -1,4 +1,5 @@
 <?php
+date_default_timezone_set('America/Lima');
 require_once("../db/Contrato.php");
 class M_VerificarCuota
 {
@@ -11,7 +12,6 @@ class M_VerificarCuota
         $this->db=ClassContrato::Contrato($basedatos);
        
     }
-    
 
     public function VerificandoQuincena($cod_vendedor)
     {
@@ -23,58 +23,40 @@ class M_VerificarCuota
         $m = intval($mes) - intval(1); 
 
             if($fecha['mday']>= '15' && $fecha['mday'] <='27'){
+                if($mes <= '9'){
+                    $mes = '0'.$mes;
+                }
                 $fechainicial = '12'.'/'. $mes .'/'.$ano;
                 $fechafinal =  $dia;
             }
-          
-            if($fecha['mday']>= '30' && $fecha['mday']<='12'){
-                if($fecha['mday'] == '30' || $fecha['mday'] == '31'){
-                    $fechainicial = '27'.'/' . $mes .'/'.$ano;
-                    $fechafinal = $dia;
-                }else{
+           
+
+            if($fecha['mday'] >= '01' && $fecha['mday']<='12'){
                     $fechainicial = '27'.'/' . $m .'/'.$ano;
                     $fechafinal =  $dia;
-                }
-                
             }
 
-         $query=$this->db->prepare("{CALL P_PEDIDO_MONTO(?,?,?)}");
-         $query->bindParam(1, $cod_vendedor, PDO::PARAM_STR);
-         $query->bindParam(2, $fechainicial, PDO::PARAM_STR);
-         $query->bindParam(3, $fechafinal, PDO::PARAM_STR);
+         $query=$this->db->prepare("SELECT * FROM V_PEDIDO_MONTO WHERE VENDEDOR = :cod_vendedor and
+         FECHA >= :fecha_inicial and FECHA < :fecha_final");
+         $query->bindParam("cod_vendedor", $cod_vendedor, PDO::PARAM_STR);
+         $query->bindParam("fecha_inicial", $fechainicial, PDO::PARAM_STR);
+         $query->bindParam("fecha_final", $fechafinal, PDO::PARAM_STR);
          $query->execute();
-         $cod_usuario = $query->fetch(PDO::FETCH_ASSOC);
+         $montoTotal= 0;
+         while ($result = $query->fetch()) {
+             if($result['CANTIDAD'] != ""){
+                $montoTotal += $result['CANTIDAD'];
+             }
+        }
+         
        if($query){
-            return $cod_usuario;
+            return $fechainicial . $fechafinal ;
             $query->closeCursor();
             $query = null;
         } 
     }
 
-
-
-
-
-
-
-
-
-
-
-/*desabilita al usuario actualizando el estado en A */
-    public function M_ActualizarEstadoUsuario($cod_personal,$estadoPersona){
-        $query=$this->db->prepare("UPDATE T_PERSONAL SET EST_PERSONAL =:est_personal WHERE
-        COD_PERSONAL =:cod_persona");
-        $query->bindParam("cod_persona",$cod_personal,PDO::PARAM_STR);
-        $query->bindParam("est_personal",$estadoPersona,PDO::PARAM_STR);
-        $query->execute();
-        $actualuzarUsu = $query;
-        if($query){
-            return $actualuzarUsu;
-            $query->closeCursor();
-            $query = null;
-        }
-    }
 }
 
 ?>
+

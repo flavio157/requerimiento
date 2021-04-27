@@ -16,7 +16,6 @@
                 <label for="exampleInputEmail1" class="form-label">Usuario</label>
                 <input type="text" class="form-control" id="exampleInputEmail1" name="usuario" aria-describedby="emailHelp">
             </div>
-            
             <div class="col text-center">
                 <button class="btn btn-primary" type="submit" id="btnlogin">Aceptar</button>
             </div>
