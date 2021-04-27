@@ -14,7 +14,6 @@ class M_Login
     
     public function Login($cod_usuario)
     {
-
             $query=$this->db->prepare("SELECT * FROM V_Login WHERE COD_USUARIO = :cod_usuario");
             $query->bindParam("cod_usuario", $cod_usuario, PDO::PARAM_STR);
             $query->execute();
@@ -27,25 +26,27 @@ class M_Login
     }
 
 
+    
     public function VerificarCallCenter($cod_vendedor)
     {
-        $hoy = getdate();
-        $mes = $hoy['mon'];
-        $ano = $hoy['year'];
+        $fecha = getdate();
+        $dia = $fecha['mday'];
+        $mes = $fecha['mon'];
+        $ano = $fecha['year'];
         $m = intval($mes) - intval(1); 
-        /* el mensaje sale a los tres dias de iniciar la quincena (estos dias pueden variar)
-        a partir del 15 para el primero*/
-        if($hoy['mday'] >= '12' && $hoy['mday'] <= '27'){
+        $d = intval($dia) - intval(1);
+
+        if($dia['mday'] >= '12' && $dia['mday'] <= '27'){
            
-            if($hoy['mday']>= '15' && $hoy['mday']<='27'){
+            if($dia['mday']>= '15' && $dia['mday']<='27'){
                 $fechainicial = '12'.'/'. $mes .'/'.$ano;
-                $fechafinal = $hoy['mday'].'/'.$mes.'/'.$ano;
+                $fechafinal = $d.'/'.$mes.'/'.$ano;
             }
           
-        }else if ($hoy['mday'] >= '27' && $hoy['mday']<='12'){
-            if($hoy['mday']>= '30' && $hoy['mday']<='12'){
+        }else if ($dia['mday'] >= '27' && $dia['mday']<='12'){
+            if($dia['mday']>= '30' && $dia['mday']<='12'){
                 $fechainicial = '27'.'/' . $m .'/'.$ano;
-                $fechafinal = $hoy['mday'].'/'.$mes.'/'.$ano;
+                $fechafinal = $d.'/'.$mes.'/'.$ano;
             }
         }
 
@@ -63,10 +64,6 @@ class M_Login
         } 
     }
 
-
-
-
-
-
 }
 ?>
+

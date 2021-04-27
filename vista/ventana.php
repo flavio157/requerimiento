@@ -1,15 +1,18 @@
 <?php
-if (session_status() == PHP_SESSION_NONE) {
+/*if (session_status() == PHP_SESSION_NONE) {
     session_start();
-}
+    $_SESSION['cod_vendedora'];
+}*/
 require_once("../controlador/C_Cuotas.php");
 $m_cuota = new C_Controlar_Cuotas();
 $estado = $_GET['enlace'];
-
-if(!isset($_SESSION['user_id'])){
+if($estado == 0){
+    $cantidad = $_GET['cantidad'];
+}
+/*if(!isset($_SESSION['user_id'])){
     header('Location: index.php');
     exit;
-} 
+} */
 ?>
 
 <html>
@@ -36,10 +39,12 @@ if(!isset($_SESSION['user_id'])){
         <?php
                 if($estado === "0"){
                     echo  '<div class="alert alert-danger alert-dismissible fade show" role="alert">
-                    <strong>Advertencia</strong> Todavia no alcanza la cuota esperada.
+                    <strong>Advertencia</strong> Todavia no alcanza la cuota esperada.'.'
+                    Actualmente Usted esta en '.$cantidad .'
                     <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                     </div>';
                 }
+           
               ?>
                 <div class="col-12">
                     <label for="formTipo" class="form-label">TIPO</label>

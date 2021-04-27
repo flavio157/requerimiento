@@ -27,12 +27,17 @@ class C_Login
        
 
        if($datosUsuario){
-           
+       
             $_cuota = new M_VerificarCuota($datosUsuario['OFICINA']);
             $verificar = $_cuota->VerificandoQuincena($datosUsuario['COD_USUARIO']);
-            if($verificar){
+           
+           if($verificar){
                 $C_cuotas = new C_Controlar_Cuotas();
-                $C_cuotas->C_Cuotas($verificar['MONTO'],$datosUsuario['OFICINA']);
+                $C_cuotas->C_Cuotas($verificar['cantidad'],$datosUsuario['OFICINA']);
+            }else{
+             
+                $C_cuotas = new C_Controlar_Cuotas();
+                $C_cuotas->C_Cuotas(0,$datosUsuario['OFICINA']);
             }
        }
 

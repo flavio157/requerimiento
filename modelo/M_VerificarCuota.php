@@ -15,33 +15,33 @@ class M_VerificarCuota
 
     public function VerificandoQuincena($cod_vendedor)
     {
-        
-        $hoy = getdate();
-        $mes = $hoy['mon'];
-        $ano = $hoy['year'];
+        $fecha_actual = date("d-m-Y");
+        $fecha = getdate();
+        $dia = date("d-m-Y",strtotime($fecha_actual."- 1 days"));
+        $mes = $fecha['mon'];
+        $ano = $fecha['year'];
         $m = intval($mes) - intval(1); 
-        /* el mensaje sale a los tres dias de iniciar la quincena (estos dias pueden variar)
-        a partir del 15 para el primero*/
-        if($hoy['mday'] >= '12' && $hoy['mday'] <= '27'){
-           
-            if($hoy['mday']>= '15' && $hoy['mday']<='27'){
+
+            if($fecha['mday']>= '15' && $fecha['mday'] <='27'){
                 $fechainicial = '12'.'/'. $mes .'/'.$ano;
-                $fechafinal = $hoy['mday'].'/'.$mes.'/'.$ano;
+                $fechafinal =  $dia;
             }
           
-        }else if ($hoy['mday'] >= '27' && $hoy['mday']<='12'){
-
-            if($hoy['mday']>= '30' && $hoy['mday']<='12'){
-                $fechainicial = '27'.'/' . $m .'/'.$ano;
-                $fechafinal = $hoy['mday'].'/'.$mes.'/'.$ano;
+            if($fecha['mday']>= '30' && $fecha['mday']<='12'){
+                if($fecha['mday'] == '30' || $fecha['mday'] == '31'){
+                    $fechainicial = '27'.'/' . $mes .'/'.$ano;
+                    $fechafinal = $dia;
+                }else{
+                    $fechainicial = '27'.'/' . $m .'/'.$ano;
+                    $fechafinal =  $dia;
+                }
+                
             }
-        }
 
-        $query=$this->db->prepare("SELECT * FROM V_PEDIDO_MONTO WHERE COD_VENDEDORA = :cod_vendedora AND
-        FECHA >= :fechaincial AND FECHA <= :fechafinal");
-         $query->bindParam("cod_vendedora", $cod_vendedor, PDO::PARAM_STR);
-         $query->bindParam("fechaincial", $fechainicial, PDO::PARAM_STR);
-         $query->bindParam("fechafinal", $fechafinal, PDO::PARAM_STR);
+         $query=$this->db->prepare("{CALL P_PEDIDO_MONTO(?,?,?)}");
+         $query->bindParam(1, $cod_vendedor, PDO::PARAM_STR);
+         $query->bindParam(2, $fechainicial, PDO::PARAM_STR);
+         $query->bindParam(3, $fechafinal, PDO::PARAM_STR);
          $query->execute();
          $cod_usuario = $query->fetch(PDO::FETCH_ASSOC);
        if($query){
@@ -50,4 +50,31 @@ class M_VerificarCuota
             $query = null;
         } 
     }
+
+
+
+
+
+
+
+
+
+
+
+/*desabilita al usuario actualizando el estado en A */
+    public function M_ActualizarEstadoUsuario($cod_personal,$estadoPersona){
+        $query=$this->db->prepare("UPDATE T_PERSONAL SET EST_PERSONAL =:est_personal WHERE
+        COD_PERSONAL =:cod_persona");
+        $query->bindParam("cod_persona",$cod_personal,PDO::PARAM_STR);
+        $query->bindParam("est_personal",$estadoPersona,PDO::PARAM_STR);
+        $query->execute();
+        $actualuzarUsu = $query;
+        if($query){
+            return $actualuzarUsu;
+            $query->closeCursor();
+            $query = null;
+        }
+    }
 }
+
+?>
