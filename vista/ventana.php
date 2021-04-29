@@ -27,7 +27,7 @@ if($estado == 0){
         <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.0.1/js/toastr.js"></script>
         
         
-        <script type="text/javascript" src="../vista/js/scripts.js"></script>
+        <!--<script type="text/javascript" src="../vista/js/scripts.js"></script>-->
         <script type="text/javascript" src="../vista/js/jsproducto.js"></script>
 
         <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
@@ -94,22 +94,22 @@ if($estado == 0){
                     <button type="button" id="DescrPedido" class="btn btn-primary mb-1" data-bs-toggle="modal" data-bs-target="#ModalProducto">
                         INGRESAR
                     </button>
-                    <button type="button" id="btnModiDescr" class="btn btn-primary mb-1" data-bs-toggle="modal" data-bs-target="#ModalProductoModificar">
+                   <!-- <button type="button" id="btnModiDescr" class="btn btn-primary mb-1" data-bs-toggle="modal" data-bs-target="#ModalProductoModificar">
                         MODIFICAR
-                    </button>
+                    </button>-->
                 </div>
                 <div class="table-responsive" id="tablaproductos">
                     <table class="table" id="tabladelProducto">
                         <caption>Lista de Productos</caption>
                         <thead>
                             <tr>
-                            <th scope="col">#</th>
                             <th scope="col" style="display: none;">COD_PRODUCTO</th>
                             <th scope="col">PRODUCTO</th>
                             <th scope="col">CANTIDAD</th>
                             <th scope="col">PRECIO</th>
                             <th scope="col">PROMOCIÓN</th>
                             <th scope="col">TOTAL</th>
+                            <th scope="col">ACCIONES</th>
                             </tr>
                         </thead>
                         <tbody  id="tabla">
@@ -190,27 +190,30 @@ if($estado == 0){
                         <div class="modal-content">
                         <div class="modal-header">
                             <h6 class="modal-title" id="exampleModalLabel">DESCRIPCION DEL PEDIDO</h6>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            <button type="button" id="closemodal" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
                         <div class="modal-body">
                             <form id="frmagregarProducto">
                                   <div id="mensaje">
                                    
                                    </div>
+                                <div class="col">
+                                    <label for="formfpago" class="form-label">PRODUCTO</label>
+                                    <input type="text" class="form-control" name="nombreproducto" id="nombreproducto" autocomplete="off">
+                                </div>
+                                <div id="sugerencias"></div>
+                                
+                               
                                 <div class="row g-2">
                                     <div class="col">
                                         <label  for="formentrega" class="form-label">COD. PRODUCTO</label>
-                                        <input type="number" class="form-control" id="cod_producto" >
-                                    </div>
-                                    <div class="col">
-                                        <label for="formfpago" class="form-label">PRODUCTO</label>
-                                        <input type="text" class="form-control" name="Nombreproducto" id="Nombreproducto" disabled=true>
+                                        <input type="text" class="form-control"  id="cod_producto"  disabled=true>
                                     </div>
                                 </div>
                                 <div class="row g-2">
                                     <div class="col">
                                         <label for="formentrega" class="form-label">CANTIDAD</label>
-                                        <input type="text" class="form-control"  name="G_cantidad" id="G_cantidad">
+                                        <input type="text" class="form-control"  name="G_cantidad" id="G_cantidad" autocomplete="off">
                                     </div>
                                     <div class="col">
                                         <label for="formfpago" class="form-label">PRECIO</label>
@@ -221,36 +224,33 @@ if($estado == 0){
                                 <div class="row g-2">
                                     <div class="col">
                                         <label for="formentrega" class="form-label">PROMOCION</label>
-                                        <input type="text" class="form-control" name="G_promocion"  id="G_promocion">
+                                        <input type="text" class="form-control" name="G_promocion" autocomplete="off" id="G_promocion">
                                     </div>
                                     <div class="col">
                                         <label for="formfpago" class="form-label">TOTAL</label>
                                         <input type="text" class="form-control" id="G_total" name="G_total" disabled=true>
                                     </div>
                                 </div>
-                                <div class="row g-1">
-                                    <div class="col">
-                                    </div>
-                                    <div class="col">
-                                        <button type="button" class="btn btn-secondary" id="agregarProdcuto">+</button>
-                                    </div>
+                                <div class="card-body d-flex justify-content-between align-items-center">
+                                        Lista de Productos
+                                        <a id="agregarProdcuto" class="btn btn-primary btn-sm">+</a>
                                 </div>
 
                                 <div class="table-responsive" id="tablaproductos">
-                                    <table class="table" id="productosMomento">
+                                    <table class="table  table-striped  table-sm" id="productosMomento">
                                         <caption>Lista de Productos</caption>
                                         <thead>
                                             <tr>
-                                            <th scope="col">#</th>
                                             <th scope="col" style="display: none;">COD_PRODUCTO</th>
                                             <th scope="col">PRODUCTO</th>
                                             <th scope="col">CANTIDAD</th>
                                             <th scope="col">PRECIO</th>
                                             <th scope="col">PROMOCIÓN</th>
                                             <th scope="col">TOTAL</th>
+                                            <th scope="col">ACCIONES</th>
                                             </tr>
                                         </thead>
-                                        <tbody  id="tabla">
+                                        <tbody  id="tablaModal">
                                                                 
                                         </tbody>
                                     </table>
@@ -258,7 +258,6 @@ if($estado == 0){
                             </form>
                         </div>
                         <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
                             <button type="button" class="btn btn-primary" id="agregar">Agregar</button>
                         </div>
                         </div>

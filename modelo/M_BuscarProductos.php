@@ -1,32 +1,38 @@
 <?php
-    require_once("../db/Contrato.php");
+    require_once("../db/Usuarios.php");
 
 class M_BuscarProductos{
 
         private $db;
     
-        public function __construct($database)
+        public function __construct()
         {
-            $this->db=ClassContrato::Contrato($database);
+            $this->db=ClassUsuario::Usuario();
         }
         
-        public function M_BuscarProducto($cod_producto)
+        public function M_BuscarProducto($nom_producto)
         {
-            $query=$this->db->prepare("SELECT * from T_PRODUCTO where COD_PRODUCTO =:cod_producto");
-            $query->bindParam("cod_producto", $cod_producto, PDO::PARAM_STR);
+            $producto = strip_tags($nom_producto);
+            $query=$this->db->prepare("SELECT * FROM V_BUSCAR_PRODUCTO WHERE DES_PRODUCTO LIKE '%$nom_producto%'");
             $query->execute();
-            $datosproducto = $query->fetch(PDO::FETCH_ASSOC);
-            if($query){
-                return $datosproducto;
+            /* ABR_PRODUCTO*/
+           if ($query) {
+               $html = "";
+                while ($row = $query->fetch()) {                
+                    $html .= '<div><a class="suggest-element" data-="'.$row['DES_PRODUCTO'].'&'.$row['PRE_PRODUCTO'].'"  
+                    id="'.$row['COD_PRODUCTO'].'">'.$row['DES_PRODUCTO'].'</a></div>';
+                }
+                return $html ;
                 $query->closeCursor();
                 $query = null;
             }
+
+           
         } 
       
         public function M_PoliticaProductos($cantidad)
         {
-           
-            $query=$this->db->prepare("SELECT * FROM T_POLITICA_PRECIOS WHERE CANTIDAD <= :pcantidad and CANT_FIN >= :pcantidadfin");
+            $query=$this->db->prepare("SELECT * FROM V_POLITICA_PRECIOS WHERE CANTIDAD <= :pcantidad and CANT_FIN >= :pcantidadfin");
             $query->bindParam("pcantidad", intval($cantidad)  , PDO::PARAM_INT);
             $query->bindParam("pcantidadfin", intval($cantidad) , PDO::PARAM_INT);
             
