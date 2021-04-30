@@ -1,13 +1,20 @@
 var valorproducto = 0;
 var valorPromocion = 0;
-var otratabla = "";
-var buscartabla = [];
-var buscartablaModal = [];
+var arrayproductos = [];
+var contador = 0;
+var arraycodigos = [];
 $(document).ready(function(){
     $("#tablaproductos").hide();
 
-    $("#agregarProdcuto").on('click',function(){
-        agregarProductos();
+    $('#ModalProducto').on('shown.bs.modal', function (e) {
+        $('#nombreproducto').focus();
+    })
+
+    $("#agregarProducto").on('click',function(){
+        agregarproductos();
+        document.getElementById("frmagregarProducto").reset();
+        arraycodigos = [];
+       
     });
 
     $("#nombreproducto").on('keyup',function () {
@@ -18,14 +25,27 @@ $(document).ready(function(){
     $("#G_cantidad").blur(function(){
         cantidad = $("#G_cantidad").val();
         calcularTotal(cantidad,"ingresar");
-        if(cantidad != ""){
+        if(cantidad != "" && cantidad != 0){
             politicaprecios(cantidad);
         }
         
       });
 
     $("#agregar").on('click',function() {
-        $("#tabla").html(otratabla);
+        $('#tabladelProducto').find("tr:gt(0)").remove();
+        for (let i = 0; i < arrayproductos.length; i++) {
+            if (arrayproductos[i] != undefined) {
+                var fila="<tr><td>"+arrayproductos[i]['cod_producto']+
+                    "</td><td>"+arrayproductos[i]['nombre']+ "</td><td>"+arrayproductos[i]['cantidad']+
+                    "</td><td>"+arrayproductos[i]['precio']+"</td><td>"+arrayproductos[i]['promocion']+"</td><td>"+
+                    arrayproductos[i]['total'] +"</td>"
+                    +"<td><button type='button' id='btneliminar' class='btn btn-primary btn-sm'>ELIMINAR</button></td></tr>";
+                    var btn = document.createElement("TR");
+                    btn.innerHTML=fila;
+                    document.getElementById("tabla").appendChild(btn);
+            }   
+        }
+
         $("#tablaproductos").show("slow");
         $("#ModalProducto").modal("hide");
         document.getElementById("frmagregarProducto").reset();
@@ -35,98 +55,52 @@ $(document).ready(function(){
     $("#closemodal").on('click',function(){
         document.getElementById("frmagregarProducto").reset();
         $('#productosMomento').find("tr:gt(0)").remove();
+
+        $("#ModalProducto").modal("hide");
+
+        for (let i = 0; i < arrayproductos.length; i++) {
+            for (let l = 0; l < arraycodigos.length; l++) {
+                if (arrayproductos[i] != undefined) {
+                    if (arrayproductos[i]['cod_producto'] === arraycodigos[l]) {
+                       delete(arrayproductos[i]);
+                    }
+                   }  
+                
+            }
+            
+        }
+
     });
 
-    $("#btneliminar").on('click',function() {
-        $(this).closest('tr').remove();
-        console.log("eliminar");
-    })
+    $(document).on('click', '#btneliminar',function (e) {
+        var valores = $(this).parents("tr").find("td")[0].innerHTML;
+        for (let i = 0; i < arrayproductos.length; i++) {
+            if (arrayproductos[i] != undefined) {
+             if (arrayproductos[i]['cod_producto'] === valores) {
+                delete(arrayproductos[i]);
+                $(this).closest('tr').remove();
+             }
+            }   
+        }
+    }); 
 
+    $("#G_cantidad").keydown(function(e){
+        if(e.which == 8) {
+           $("#G_promocion").val('');
+           $("#G_total").val('');
+          }
+    });
+
+    $("#nombreproducto").keydown(function(e){
+        if(e.which == 8) {
+            $("#cod_producto").val('')
+            $("#G_cantidad").val('');
+            $("#G_promocion").val('');
+            $("#precioproducto").val(''); 
+            $("#G_total").val('');
+          }
+    });
 })
-
-
-    function agregarProductos() {
-        var buscarcodigo = "";
-        var cod_producto =$("#cod_producto").val();
-        var nombre = $("#nombreproducto").val();
-        var cantidad = $("#G_cantidad").val();
-        var promocion = $("#G_promocion").val();
-        var precio =$("#precioproducto").val();
-        var total = $("#G_total").val();
-
-        if(promocion <= valorPromocion ){
-            tabladatos = document.getElementById('tabla');
-            if(tabladatos.rows.length > 0){
-                for (let i = 0; i < tabladatos.rows.length; i++) {
-                    cellsrows = tabladatos.rows[i].getElementsByTagName('td');
-                    buscartabla.push(cellsrows[0].innerHTML.toLowerCase()); 
-                }
-
-                buscarcodigo =  buscartabla.find(function name(element) {
-                    return element === cod_producto;
-                } );
-
-                if(buscarcodigo === undefined){
-                    var fila="<tr><td style='display:none;'>"+cod_producto+"</td><td>"+nombre+
-                    "</td><td>"+cantidad +"</td><td>"+precio+"</td><td>"+promocion+"</td><td>"
-                    +total +"</td><td><a id='btneliminar' class='btn btn-primary btn-sm'>ELIMINAR</a></td></tr>";
-                    var btn = document.createElement("TR");
-                    btn.innerHTML=fila;
-                    document.getElementById("tablaModal").appendChild(btn);
-
-                    otratabla +=fila; 
-                }else{
-                    toastr.warning('Ya existe el producto');
-                }
-            }else{
-                var obtener = verificaDescripcion(cod_producto);
-               
-                if(obtener === "sinigualdad" || obtener === "sindatos"){
-                    var fila="<tr><td style='display:none;'>"+cod_producto+"</td><td>"+nombre+"</td><td>"+cantidad +
-                    "</td><td>"+precio+"</td><td>"+promocion+
-                    "</td><td>"+total +"</td><td><a id='btneliminar' class='btn btn-primary btn-sm'>ELIMINAR</a></td></tr>";
-
-                    var btn = document.createElement("TR");
-                    btn.innerHTML=fila;
-                    document.getElementById("tablaModal").appendChild(btn);
-                }else{
-                    toastr.warning('Ya existe el Producto en la tabla');
-                }
-                otratabla +=fila;
-            }
-
-            document.getElementById("frmagregarProducto").reset();
-
-        }else{
-            toastr.warning('La Promoción es mayor a lo indicado por esa cantidad corresponde  ' + valorPromocion);
-        }
-    }
-
-
-
-
-    function verificaDescripcion(cod_producto) {
-        buscarcodigomodal = "";
-        tablamodal = document.getElementById('tablaModal');
-     
-        if(tablamodal.rows.length > 0){
-            for (let i = 0; i < tablamodal.rows.length; i++) {
-                cellsrows = tablamodal.rows[i].getElementsByTagName('td');
-                buscartablaModal.push(cellsrows[0].innerHTML.toLowerCase()); 
-            }
-            buscarcodigomodal =  buscartablaModal.find(function name(element) {
-                return element === cod_producto;
-            } );
-
-            if(buscarcodigomodal === undefined){
-               return "sinigualdad"
-            }else{
-                return "igualdad"
-            }
-        }else{
-            return "sindatos";
-        }
-    }
 
 
     function buscarProducto(nombreproducto) {
@@ -140,7 +114,17 @@ $(document).ready(function(){
             } ,
             success: function(response){
                 $('#sugerencias').fadeIn(0).html(response)
+                
                 var altura = $("#sugerencias").height();   
+               
+                    if(response !== ""){
+                        $("#sugerencias").height(300);
+                        $("#sugerencias").css('overflow','scroll');;
+                        console.log(altura);
+                    }else{
+                        $("#sugerencias").height(0);
+                    }
+            
                 $('.suggest-element').on('click', function(){
                     //Obtenemos la id unica de la sugerencia pulsada
                     var id =  $(this).attr('id');
@@ -162,10 +146,13 @@ $(document).ready(function(){
 
     function calcularTotal(cantidad,accion){
         if(accion === "ingresar"){
-            if(valorproducto !== "" && cantidad !== ""){
+            if(valorproducto !== "" && cantidad !== "" && cantidad != 0){
                 var total = Number(cantidad) * Number(valorproducto);
                 $("#G_total").val(total.toFixed(3)); 
+            }else{
+                toastr.warning('Ingrese una cantidad valida');
             }
+        
         }
     }
 
@@ -187,3 +174,49 @@ $(document).ready(function(){
                 }
         });
     }
+
+    function agregarproductos() {
+        var cod_producto =$("#cod_producto").val();
+        var nombre = $("#nombreproducto").val();
+        var cantidad = $("#G_cantidad").val();
+        var promocion = $("#G_promocion").val();
+        var precio =$("#precioproducto").val();
+        var total = $("#G_total").val();
+        
+        if(nombre !== '' & cantidad !== '' && promocion !== ''){
+            var estado = 1;
+            if (contador >= 0) {
+                for (let j = 0; j < arrayproductos.length; j++) {
+                    if (arrayproductos[j] != undefined) {
+                        if (arrayproductos[j]['cod_producto'] === cod_producto) {
+                            toastr.warning('Ya existe el Producto en la tabla');
+                            return estado = 0;
+                            break;
+                        }else{
+                            estado = 1
+                        }  
+                    }
+                }
+                if (estado === 1) {
+                    arrayproductos[contador] = {cod_producto,nombre,cantidad,promocion,precio,total};
+                    var fila="<tr><td>"+cod_producto+
+                        "</td><td>"+nombre+ "</td><td>"+cantidad+
+                        "</td><td>"+precio+"</td><td>"+promocion+"</td><td>"+
+                        total +"</td>"
+                        +"<td><button type='button' id='btneliminar' class='btn btn-primary btn-sm'>ELIMINAR</button></td></tr>";
+                        var btn = document.createElement("TR");
+                        btn.innerHTML=fila;
+                        document.getElementById("tablaModal").appendChild(btn);
+                        contador++;
+                    arraycodigos.push(cod_producto);   
+                }
+            }
+        }else{
+            toastr.warning('Ingrese los datos correctamente');
+        }
+
+
+
+    }
+
+   
