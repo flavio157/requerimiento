@@ -1,7 +1,7 @@
 <?php
 require_once("../db/Usuarios.php");
 require_once("../controlador/C_Funciones.php");
-
+session_start();
 class M_Login
 {
     
@@ -15,12 +15,14 @@ class M_Login
     
     public function Login($cod_usuario)
     {
-        session_start();
+        
             $query=$this->db->prepare("SELECT * FROM V_Login WHERE COD_PERSONAL = :cod_usuario");
             $query->bindParam("cod_usuario", $cod_usuario, PDO::PARAM_STR);
             $query->execute();
             $cod_usuario = $query->fetch(PDO::FETCH_ASSOC);
-            $_SESSION['zona']= $cod_usuario['ZONA'];
+
+            $_SESSION['zona'] = $cod_usuario['ZONA'];
+            
             if($query){
                 return $cod_usuario;
                 $query->closeCursor();
