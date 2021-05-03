@@ -119,7 +119,7 @@ $(document).ready(function(){
     });
 })
 
-
+ 
     function buscarProducto(nombreproducto) {
         $.ajax({
             dataType:'text',
