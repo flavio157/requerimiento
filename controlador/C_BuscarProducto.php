@@ -53,7 +53,7 @@ class C_BuscarProducto
             }
         }
     }
-
+        
 
     public function PoliticaBonos($cantidad,$cod_producto)
     {
