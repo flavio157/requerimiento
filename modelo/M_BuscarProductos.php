@@ -10,39 +10,87 @@ class M_BuscarProductos{
             $this->db=ClassUsuario::Usuario();
         }
         
-        public function M_BuscarProducto($nom_producto)
+        public function M_BuscarProducto($zona,$nom_producto)
         {
             $producto = strip_tags($nom_producto);
-            $query=$this->db->prepare("SELECT * FROM V_BUSCAR_PRODUCTO WHERE DES_PRODUCTO LIKE '%$nom_producto%'");
+            $query=$this->db->prepare("SELECT * FROM V_BUSCAR_PRODUCTO WHERE ZONA = :zona AND DES_PRODUCTO LIKE '%$nom_producto%'");
+            $query->bindParam("zona",$zona, PDO::PARAM_INT);
             $query->execute();
-            /* ABR_PRODUCTO*/
            if ($query) {
                $html = "";
                 while ($row = $query->fetch()) {                
-                    $html .= '<div><a class="suggest-element" data-="'.$row['DES_PRODUCTO'].'&'.$row['PRE_PRODUCTO'].'"  
-                    id="'.$row['COD_PRODUCTO'].'">'.$row['DES_PRODUCTO'].'</a></div>';
+                    $html .= '<div><a class="suggest-element" data-="'.$row['DES_PRODUCTO'].'&'.$row['PRECIO'].'"  
+                    id="'.$row['CODIGO'].'">'.$row['DES_PRODUCTO'].'</a></div>';
                 }
                 return $html ;
                 $query->closeCursor();
                 $query = null;
             }
-
-           
         } 
+
       
-        public function M_PoliticaProductos($cantidad)
-        {
-            $query=$this->db->prepare("SELECT * FROM V_POLITICA_PRECIOS WHERE CANTIDAD <= :pcantidad and CANT_FIN >= :pcantidadfin");
-            $query->bindParam("pcantidad", intval($cantidad)  , PDO::PARAM_INT);
-            $query->bindParam("pcantidadfin", intval($cantidad) , PDO::PARAM_INT);
+        public function M_PoliticaPrecios($zona,$cantidad,$codproducto)
+        {   
+            $consulta = "";
             
+            if($cantidad < '10'){
+                $consulta = "SELECT * FROM V_POLITICA_PRECIOS WHERE ZONA = :zona AND CANTIDAD < 10
+                AND COD_PRODUCTO = :cod_producto";
+                
+            }else if($cantidad > '9' && $cantidad <= '19')
+            {
+                $consulta = "SELECT * FROM V_POLITICA_PRECIOS WHERE ZONA = :zona AND CANTIDAD > 9
+                AND CANTIDAD < 19 AND COD_PRODUCTO = :cod_producto";
+
+            }else if($cantidad >= '20'){
+                $consulta = "SELECT * FROM V_POLITICA_PRECIOS WHERE ZONA = :zona AND CANTIDAD = 20
+                             AND COD_PRODUCTO = :cod_producto";
+            }
+
+            $query=$this->db->prepare($consulta);
+            $query->bindParam("zona",$zona,PDO::PARAM_STR);
+            $query->bindParam("cod_producto", $codproducto, PDO::PARAM_INT); 
             $query->execute();
             $datosproducto = $query->fetch(PDO::FETCH_ASSOC);
+            if($query){
+                return  $datosproducto;
+                $query->closeCursor();
+                $query = null;
+            }
+        } 
+
+
+        public function M_PoliticaBono($zona,$cantidad,$codproducto)
+        {   
+            $consulta = "";
+            if($cantidad >= '6' && $cantidad <= '9'){
+                $consulta = "SELECT * FROM V_POLITICA_BONOS WHERE ZONA = :zona AND CANTIDAD <= 9
+                AND COD_PRODUCTO = :cod_producto";
+                
+            }else if($cantidad >= '10' && $cantidad <='19'){
+                $consulta = "SELECT * FROM V_POLITICA_BONOS WHERE ZONA = :zona AND CANTIDAD >= 10
+                AND CANTIDAD <= 19 AND COD_PRODUCTO = :cod_producto";
+
+            }else if($cantidad >= '20'){
+                $consulta = "SELECT * FROM V_POLITICA_BONOS WHERE ZONA = :zona AND CANTIDAD = 20
+                AND COD_PRODUCTO = :cod_producto";
+            }
+
+            if($consulta == ""){return 0;}
+
+            $query=$this->db->prepare($consulta);
+            $query->bindParam("zona",$zona,PDO::PARAM_STR);
+            $query->bindParam("cod_producto", $codproducto, PDO::PARAM_INT); 
+            $query->execute();
+            $datosproducto = $query->fetch(PDO::FETCH_ASSOC);
+          
             if($query){
                 return $datosproducto;
                 $query->closeCursor();
                 $query = null;
             }
-        } 
+        }
+
+
 }
 ?>
