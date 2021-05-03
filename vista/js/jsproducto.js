@@ -1,8 +1,9 @@
 var valorproducto = 0;
-var valorPromocion = 0;
+var precioproducto = 0;
 var arrayproductos = [];
 var contador = 0;
 var arraycodigos = [];
+var arraytemporal = [];
 $(document).ready(function(){
     $("#tablaproductos").hide();
 
@@ -24,9 +25,11 @@ $(document).ready(function(){
 
     $("#G_cantidad").blur(function(){
         cantidad = $("#G_cantidad").val();
+        codproducto = $("#cod_producto").val();
         calcularTotal(cantidad,"ingresar");
         if(cantidad != "" && cantidad != 0){
-            politicaprecios(cantidad);
+           politicaprecios(cantidad,codproducto);
+            politicabonos(cantidad,codproducto);
         }
         
       });
@@ -50,26 +53,40 @@ $(document).ready(function(){
         $("#ModalProducto").modal("hide");
         document.getElementById("frmagregarProducto").reset();
         $('#productosMomento').find("tr:gt(0)").remove();
+        arraytemporal =[];
     });  
 
-    $("#closemodal").on('click',function(){
+   $("#closemodal").on('click',function(){
+        $("#ModalProducto").modal("hide");
         document.getElementById("frmagregarProducto").reset();
         $('#productosMomento').find("tr:gt(0)").remove();
+        /*console.log(arraycodigos);
+        $("#modaladvertencia").modal("show");
 
-        $("#ModalProducto").modal("hide");
-
-        for (let i = 0; i < arrayproductos.length; i++) {
-            for (let l = 0; l < arraycodigos.length; l++) {
-                if (arrayproductos[i] != undefined) {
-                    if (arrayproductos[i]['cod_producto'] === arraycodigos[l]) {
-                       delete(arrayproductos[i]);
-                    }
-                   }  
-                
-            }
+        $("#cancelar").on('click',function() {
+            $("#modaladvertencia").modal("hide");
             
-        }
+        })*/
 
+        /* $("#aceptar").on('click',function() {})*/
+            /*document.getElementById("frmagregarProducto").reset();*/
+            
+            /*$("#modaladvertencia").modal("hide");
+            $("#ModalProducto").modal("hide");*/
+            for (let i = 0; i < arrayproductos.length; i++) {
+                for (let l = 0; l <= arraytemporal.length; l++) {
+                    console.log(arraytemporal[0]);
+                        if (arrayproductos[i]!= undefined) {
+                            if (arrayproductos[i]['cod_producto'] === arraytemporal[l]) {
+                                delete(arrayproductos[i]);
+                             }
+                        }
+                        
+                }
+            }
+            arraytemporal =[];
+        arraycodigos = [];
+        
     });
 
     $(document).on('click', '#btneliminar',function (e) {
@@ -120,7 +137,7 @@ $(document).ready(function(){
                     if(response !== ""){
                         $("#sugerencias").height(300);
                         $("#sugerencias").css('overflow','scroll');;
-                        console.log(altura);
+                      
                     }else{
                         $("#sugerencias").height(0);
                     }
@@ -150,30 +167,64 @@ $(document).ready(function(){
                 var total = Number(cantidad) * Number(valorproducto);
                 $("#G_total").val(total.toFixed(3)); 
             }else{
-                toastr.warning('Ingrese una cantidad valida');
+                mensajes('Ingrese una cantidad valida');
             }
         
         }
     }
 
 
-    function politicaprecios(cantidad) {
-        $.ajax({
-            dataType:'text',
-                type: 'POST', 
-                url:  '../controlador/C_BuscarProducto.php',
-                data:{
-                    "accion" : "politicaprecios",
-                    "cantidad" : cantidad,
-                } , 
-                success: function(response){
-                    var obj = JSON.parse(response);
-                    if(obj["estado"] === "ok"){
-                        valorPromocion = obj['bono'];   
+    function politicaprecios(cantidad,codproducto) {
+        if(cantidad != 0){
+            $.ajax({
+                dataType:'text',
+                    type: 'POST', 
+                    url:  '../controlador/C_BuscarProducto.php',
+                    data:{
+                        "accion" : "politicaprecios",
+                        "cantidad" : cantidad,
+                        "codproducto" : codproducto,
+                    } , 
+                    success: function(response){ 
+                        console.log(response);
+                        var obj = JSON.parse(response);
+                        if(obj["estado"] === "ok"){
+                            precioproducto = obj['precio'];  
+                            $("#precioproducto").val(precioproducto);
+                        }
                     }
-                }
-        });
+            });
+        }else{
+            mensajes("Ingrese una cantidad validad");
+        }
     }
+
+
+    function politicabonos(cantidad,codproducto) { 
+        if(cantidad != 0){
+            $.ajax({
+                dataType:'text',
+                    type: 'POST', 
+                    url:  '../controlador/C_BuscarProducto.php',
+                    data:{
+                        "accion" : "politicabonos",
+                        "cantidad" : cantidad,
+                        "codproducto" : codproducto,
+                    } , 
+                    success: function(response){ 
+                        var obj = JSON.parse(response);
+                        if(obj["estado"] === "ok"){
+                            bono = obj['bono'];  
+                            $("#G_promocion").val(bono);
+                        }
+                       
+                    }
+            });
+        }else{
+            mensajes("Ingrese una cantidad validad");
+        }
+    }
+
 
     function agregarproductos() {
         var cod_producto =$("#cod_producto").val();
@@ -189,7 +240,7 @@ $(document).ready(function(){
                 for (let j = 0; j < arrayproductos.length; j++) {
                     if (arrayproductos[j] != undefined) {
                         if (arrayproductos[j]['cod_producto'] === cod_producto) {
-                            toastr.warning('Ya existe el Producto en la tabla');
+                            mensajes('Ya existe el Producto en la tabla');
                             return estado = 0;
                             break;
                         }else{
@@ -208,14 +259,23 @@ $(document).ready(function(){
                         btn.innerHTML=fila;
                         document.getElementById("tablaModal").appendChild(btn);
                         contador++;
-                    arraycodigos.push(cod_producto);   
+                    arraycodigos.push(cod_producto); 
+                    arraytemporal.push(cod_producto);
                 }
             }
         }else{
-            toastr.warning('Ingrese los datos correctamente');
+            mensajes('Ingrese los datos correctamente');
         }
+    }
 
 
+    function mensajes(texto) {
+       mensaje = '<div class="alert alert-warning alert-dismissible fade show" role="alert" id="">'+
+       '<strong>Error: </strong>'+texto+
+       '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>'+
+       '</div>';
+
+        $('#mensaje').html(mensaje);
 
     }
 
