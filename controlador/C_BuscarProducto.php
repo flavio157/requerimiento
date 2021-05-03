@@ -1,16 +1,27 @@
 <?php
+session_start();
 require_once("../modelo/M_BuscarProductos.php");
+/* */
+
     $db = "SMP2";
-    $c_CodProducto= new C_BuscarProducto();
+    $c_Producto= new C_BuscarProducto();
     $accion = $_POST["accion"];
     
     if($accion === "buscar"){
         $nomproducto = $_POST['producto'];
-        $c_CodProducto->BuscaProducto($nomproducto);
+        $c_Producto->BuscaProducto($nomproducto);
 
-    }else if ($accion = "politicaprecios"){
+    }else if ($accion == "politicaprecios"){
         $cantidad = $_POST['cantidad'];
-        $c_CodProducto->PoliticaPrecios($cantidad,$db);
+        $cod_producto = $_POST['codproducto'];
+        $c_Producto->PoliticaPrecios($cantidad,$cod_producto);
+      
+
+    }else if($accion == "politicabonos"){
+        $cantidad = $_POST['cantidad'];
+        $cod_producto = $_POST['codproducto'];
+        $c_Producto->PoliticaBonos($cantidad,$cod_producto);
+       
     }
    
 
@@ -22,31 +33,56 @@ class C_BuscarProducto
         $M_buscarproducto = new M_BuscarProductos();
        
         if($nomproducto !== ""){
-            $c_cod = $M_buscarproducto->M_BuscarProducto($nomproducto);
+            $c_cod = $M_buscarproducto->M_BuscarProducto($_SESSION['zona'],$nomproducto);
             echo $c_cod;
             }
     }
 
 
-    public function PoliticaPrecios($cantidad,$db){
-        $M_politicaPrecio = new M_BuscarProductos($db);
+    public function PoliticaPrecios($cantidad,$cod_producto){
+        $M_politicaPrecio = new M_BuscarProductos();
         if($cantidad != ""){
-            $Bono = $M_politicaPrecio->M_PoliticaProductos($cantidad);
-            if($Bono > 0){
+            $precio = $M_politicaPrecio->M_PoliticaPrecios($_SESSION['zona'],$cantidad,$cod_producto);
+           
+            if($precio['PRECIO'] != null){
                 $datos  = array(
                     'estado' => 'ok',
-                    'bono' => $Bono['BONO'],
+                    'precio' => $precio['PRECIO'],
                     );
                     echo json_encode($datos,JSON_FORCE_OBJECT);
-            }else{
-                /*print_r('<div class="alert alert-warning alert-dismissible fade show" role="alert" id="">
-                        <strong>Error: </strong> El BONO NO COINCIDE CON LA CANTIDAD INGRESADA
-                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                        </div>');*/
             }
-        
-
         }
+    }
+
+
+    public function PoliticaBonos($cantidad,$cod_producto)
+    {
+        $M_politicaBono = new M_BuscarProductos();
+        $dato = "";
+        if($cantidad != ""){
+            $Bono = $M_politicaBono->M_PoliticaBono($_SESSION['zona'],$cantidad,$cod_producto);
+            $dato = $Bono['BONO'];
+            if($Bono!= 0){
+                if($cantidad >= 20){
+                    if(strlen($cantidad) == 2)
+                    {
+                        $dato = $Bono['BONO'] * ($cantidad[0]-1);
+                    }else{
+                        $dosCifras = $cantidad[0].''.$cantidad[1];
+                        $dato = $Bono['BONO'] * ($dosCifras-1);
+                    }
+                }
+            }else{
+                $dato = 0;
+            }
+
+            $array  = array(
+                'estado' => 'ok',
+                'bono' =>  $dato,
+                );
+            echo json_encode($array,JSON_FORCE_OBJECT);
+        }
+
     }
 }
 
