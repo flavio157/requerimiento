@@ -24,7 +24,7 @@ require_once("../modelo/M_BuscarProductos.php");
 
 class C_BuscarProducto
 {
-    /*Buscar el producto por la descripcion */
+    
     public function BuscaProducto($nomproducto)
     {
         $M_buscarproducto = new M_BuscarProductos();
@@ -34,7 +34,7 @@ class C_BuscarProducto
         }
     }
 
-/*busca el precio por cantidad y zona del producto  */
+
     public function PoliticaPrecios($cantidad,$cod_producto){
         $M_politicaPrecio = new M_BuscarProductos();
         if($cantidad != ""){
@@ -51,25 +51,23 @@ class C_BuscarProducto
     }
 
 
-    /*busca el bono del producto por cantidad y si es mayor a 20 pone el bono segun es el monto de la cantidad*/
+   
     public function PoliticaBonos($cantidad,$cod_producto)
     {
-        $M_politicaBono = new M_BuscarProductos();
-        $dato = "";
-        if($cantidad != ""){
+            $M_politicaBono = new M_BuscarProductos();
+
             $Bono = $M_politicaBono->M_PoliticaBono($_SESSION['zona'],$cantidad,$cod_producto);
             $dato = $Bono['BONO'];
             if($Bono!= 0){
                 if($cantidad >= 20){
                     if(strlen($cantidad) == 2){
-                        $dato = $Bono['BONO'] * ($cantidad[0]-1);
+                        $cifra = $cantidad[0]; 
                     }else if (strlen($cantidad) == 3){
-                        $dosCifras = $cantidad[0].''.$cantidad[1];
-                        $dato = $Bono['BONO'] * ($dosCifras-1);
+                        $cifra = $cantidad[0].''.$cantidad[1];
                     }else if(strlen($cantidad) == 4){
-                        $tresCifras = $cantidad[0].''.$cantidad[1].''.$cantidad[2];
-                        $dato = $Bono['BONO'] * ($tresCifras-1);
+                        $cifra = $cantidad[0].''.$cantidad[1].''.$cantidad[2];
                     }
+                    $dato = $Bono['BONO'] * ($cifra-1);
                 }
             }else{
                 $dato = 0;
@@ -79,7 +77,7 @@ class C_BuscarProducto
                 'bono' =>  $dato,
                 );
             echo json_encode($array,JSON_FORCE_OBJECT);
-        }
-
     }
 }
+
+?>
