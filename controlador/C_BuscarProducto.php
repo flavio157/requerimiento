@@ -1,9 +1,8 @@
 <?php
 session_start();
 require_once("../modelo/M_BuscarProductos.php");
-/* */
 
-    $db = "SMP2";
+
     $c_Producto= new C_BuscarProducto();
     $accion = $_POST["accion"];
     
@@ -31,11 +30,10 @@ class C_BuscarProducto
     public function BuscaProducto($nomproducto)
     {
         $M_buscarproducto = new M_BuscarProductos();
-       
         if($nomproducto !== ""){
             $c_cod = $M_buscarproducto->M_BuscarProducto($_SESSION['zona'],$nomproducto);
             echo $c_cod;
-            }
+        }
     }
 
 
@@ -53,7 +51,7 @@ class C_BuscarProducto
             }
         }
     }
-        
+
 
     public function PoliticaBonos($cantidad,$cod_producto)
     {
@@ -64,18 +62,19 @@ class C_BuscarProducto
             $dato = $Bono['BONO'];
             if($Bono!= 0){
                 if($cantidad >= 20){
-                    if(strlen($cantidad) == 2)
-                    {
+                    if(strlen($cantidad) == 2){
                         $dato = $Bono['BONO'] * ($cantidad[0]-1);
-                    }else{
+                    }else if (strlen($cantidad) == 3){
                         $dosCifras = $cantidad[0].''.$cantidad[1];
                         $dato = $Bono['BONO'] * ($dosCifras-1);
+                    }else if(strlen($cantidad) == 4){
+                        $tresCifras = $cantidad[0].''.$cantidad[1].''.$cantidad[2];
+                        $dato = $Bono['BONO'] * ($tresCifras-1);
                     }
                 }
             }else{
                 $dato = 0;
             }
-
             $array  = array(
                 'estado' => 'ok',
                 'bono' =>  $dato,
