@@ -1,18 +1,12 @@
 <?php
-/*if (session_status() == PHP_SESSION_NONE) {
+if (session_status() == PHP_SESSION_NONE) {
     session_start();
-    $_SESSION['cod_vendedora'];
-}*/
-require_once("../controlador/C_Cuotas.php");
-$m_cuota = new C_Controlar_Cuotas();
-$estado = $_GET['enlace'];
-if($estado == 0){
-    $cantidad = $_GET['cantidad'];
 }
-/*if(!isset($_SESSION['user_id'])){
+
+if(!isset($_SESSION['zona'])){
     header('Location: index.php');
     exit;
-} */
+} 
 ?>
 
 <html>
@@ -26,7 +20,6 @@ if($estado == 0){
         <link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.0.1/css/toastr.css" rel="stylesheet"/>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.0.1/js/toastr.js"></script>
         
-        
         <!--<script type="text/javascript" src="../vista/js/scripts.js"></script>-->
         <script type="text/javascript" src="../vista/js/jsproducto.js"></script>
 
@@ -37,17 +30,6 @@ if($estado == 0){
     <body>
     <div class="main">
         <form class="row g-3"  id="frmpedidos">
-        
-        <?php
-                if($estado === "0"){
-                    echo  '<div class="alert alert-danger alert-dismissible fade show" role="alert">
-                    <strong>Advertencia</strong> Todavia no alcanza la cuota esperada.'.'
-                    Actualmente Usted esta en '. $cantidad .'
-                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                    </div>';
-                }
-           
-              ?>
                 <div class="col-12">
                     <label for="formTipo" class="form-label">TIPO</label>
                     <select class="form-select" name="slcdocumento" aria-label="Default select example">
@@ -58,11 +40,11 @@ if($estado == 0){
                 </div>
                 <div class="col-12">
                     <label for="formNumero" class="form-label">NUMERO</label>
-                    <input type="text" class="form-control" name="txtnumero" id="formnumero" placeholder="Another input placeholder">
+                    <input type="text" class="form-control" name="txtnumero" id="formnumero">
                 </div>
                 <div class="col-12">
                     <label for="formcliente" class="form-label">CLIENTE</label>
-                    <input type="text" class="form-control" name="txtcliente" id="formcliente" placeholder="Another input placeholder">
+                    <input type="text" class="form-control" name="txtcliente" id="formcliente" >
                 </div>
                 <div class="col-12">
                     <label for="formciudad" class="form-label">CIUDAD</label>
@@ -79,12 +61,12 @@ if($estado == 0){
                 </div>
                 <div class="col-12">
                     <label for="formdireccion" class="form-label">DIRECCIÓN</label>
-                    <input type="text" class="form-control" name="txtdireccion" id="formdireccion" placeholder="Another input placeholder">
+                    <input type="text" class="form-control" name="txtdireccion" id="formdireccion" >
                 </div>
                 
                 <div class="col-12">
                     <label for="formreferencia" class="form-label">REFERENCIA</label>
-                    <input type="text" class="form-control" name="txtreferencia" id="formreferencia" placeholder="Another input placeholder">
+                    <input type="text" class="form-control" name="txtreferencia" id="formreferencia" >
                 </div>
 
                 <!-- cambie el campo descripcion del formulario original 
@@ -98,12 +80,12 @@ if($estado == 0){
                         MODIFICAR
                     </button>-->
                 </div>
-                <div class="table-responsive" id="tablaproductos">
+                <div class="table-responsive tablafrmpedidos" id="tablaproductos">
                     <table class="table" id="tabladelProducto">
                         <caption>Lista de Productos</caption>
                         <thead>
                             <tr>
-                            <th scope="col" style="display: none;">COD_PRODUCTO</th>
+                            <th scope="col">COD_PRODUCTO</th>
                             <th scope="col">PRODUCTO</th>
                             <th scope="col">CANTIDAD</th>
                             <th scope="col">PRECIO</th>
@@ -121,12 +103,12 @@ if($estado == 0){
 
                 <div class="col-12">
                     <label for="formcontacto" class="form-label">CONTACTO</label>
-                    <input type="text" class="form-control" name="txtcontacto" id="formGroupExampleInput2" placeholder="Another input placeholder">
+                    <input type="text" class="form-control" name="txtcontacto" id="formGroupExampleInput2" >
                 </div>
                 <div class="row g-2">
                     <div class="col">
                         <label for="formtelefono" class="form-label">TELEFONO</label>
-                        <input type="text" class="form-control" name="txttelefono" placeholder="First name" >
+                        <input type="text" class="form-control" name="txttelefono" >
                     </div>
                     <div class="col">
                         <label for="formcondicion" class="form-label">CONDICIÓN</label>
@@ -155,7 +137,7 @@ if($estado == 0){
                 <div class="row g-2">
                     <div class="col">
                         <label for="formentrega" class="form-label">N° CONTRATO</label>
-                        <input type="text" name="txtcontrato" class="form-control" placeholder="First name">
+                        <input type="text" name="txtcontrato" class="form-control">
                     </div>
                     <div class="col">
                         <label for="formfpago" class="form-label">TELEFONO 2</label>
@@ -190,7 +172,7 @@ if($estado == 0){
                         <div class="modal-content">
                         <div class="modal-header">
                             <h6 class="modal-title" id="exampleModalLabel">DESCRIPCION DEL PEDIDO</h6>
-                            <button type="button" id="closemodal" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            <button type="button"  id="closemodal" class="btn-close" aria-label="Close"></button>
                         </div>
                         <div class="modal-body">
                             <form id="frmagregarProducto">
@@ -212,36 +194,36 @@ if($estado == 0){
                                 </div>
                                 <div class="row g-2">
                                     <div class="col">
-                                        <label for="formentrega" class="form-label">CANTIDAD</label>
-                                        <input type="text" class="form-control"  name="G_cantidad" id="G_cantidad" autocomplete="off">
+                                        <label for="formcantidad" class="form-label">CANTIDAD</label>
+                                        <input type="number" class="form-control"  name="G_cantidad" id="G_cantidad" autocomplete="off">
                                     </div>
                                     <div class="col">
                                         <label for="formfpago" class="form-label">PRECIO</label>
-                                        <input type="text" class="form-control" name="precioproducto" id="precioproducto" disabled=true>
+                                        <input type="number" class="form-control" name="precioproducto" id="precioproducto" disabled=true>
                                     </div>
                                 </div>
 
                                 <div class="row g-2">
                                     <div class="col">
-                                        <label for="formentrega" class="form-label">PROMOCION</label>
-                                        <input type="text" class="form-control" name="G_promocion" autocomplete="off" id="G_promocion">
+                                        <label for="formpromocion" class="form-label">PROMOCION</label>
+                                        <input type="number" class="form-control" name="G_promocion" autocomplete="off" id="G_promocion">
                                     </div>
                                     <div class="col">
                                         <label for="formfpago" class="form-label">TOTAL</label>
-                                        <input type="text" class="form-control" id="G_total" name="G_total" disabled=true>
+                                        <input type="number" class="form-control" id="G_total" name="G_total" disabled=true>
                                     </div>
                                 </div>
                                 <div class="card-body d-flex justify-content-between align-items-center">
                                         Lista de Productos
-                                        <a id="agregarProdcuto" class="btn btn-primary btn-sm">+</a>
+                                        <a id="agregarProducto" class="btn btn-primary btn-sm">+</a>
                                 </div>
 
-                                <div class="table-responsive" id="tablaproductos">
+                                <div class="table-responsive tablafrmpedidos" id="tablaproductos">
                                     <table class="table  table-striped  table-sm" id="productosMomento">
                                         <caption>Lista de Productos</caption>
                                         <thead>
                                             <tr>
-                                            <th scope="col" style="display: none;">COD_PRODUCTO</th>
+                                            <th scope="col">COD_PRODUCTO</th>
                                             <th scope="col">PRODUCTO</th>
                                             <th scope="col">CANTIDAD</th>
                                             <th scope="col">PRECIO</th>
@@ -324,7 +306,23 @@ if($estado == 0){
                 <!--  -->
 
 
-
+                <!-- modal de advertencia usuario-->
+                <div class="modal fade" id="modaladvertencia" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered" role="document">
+                    <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLongTitle">Modal title</h5>
+                    </div>
+                    <div class="modal-body">
+                        Desea cerrar el modal sin guardar los datos ingresados
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" id="cancelar" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                        <button type="button" id="aceptar" class="btn btn-primary">Aceptar</button>
+                    </div>
+                    </div>
+                </div>
+                </div>
         </div>
     </body>
 </html>
