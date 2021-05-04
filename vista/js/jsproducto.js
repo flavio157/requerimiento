@@ -4,6 +4,7 @@ var arrayproductos = [];
 var contador = 0;
 var arraycodigos = [];
 var arraytemporal = [];
+var bono = 0;
 $(document).ready(function(){
     $("#tablaproductos").hide();
 
@@ -12,10 +13,13 @@ $(document).ready(function(){
     })
 
     $("#agregarProducto").on('click',function(){
-        agregarproductos();
-        document.getElementById("frmagregarProducto").reset();
-        arraycodigos = [];
-       
+        var promocion = $("#G_promocion").val();
+        if (promocion <= bono) {  
+            agregarproductos();
+            arraycodigos = [];
+        }else{
+            mensajes('El bono no puede ser mayor a lo indicado: ' + bono);
+        }
     });
 
     $("#nombreproducto").on('keyup',function () {
@@ -28,7 +32,6 @@ $(document).ready(function(){
         codproducto = $("#cod_producto").val();
         calcularTotal(cantidad,"ingresar");
         if(cantidad != "" && cantidad != 0){
-           politicaprecios(cantidad,codproducto);
             politicabonos(cantidad,codproducto);
         }
         
@@ -60,7 +63,7 @@ $(document).ready(function(){
         $("#ModalProducto").modal("hide");
         document.getElementById("frmagregarProducto").reset();
         $('#productosMomento').find("tr:gt(0)").remove();
-        /*console.log(arraycodigos);
+        /*
         $("#modaladvertencia").modal("show");
 
         $("#cancelar").on('click',function() {
@@ -75,7 +78,6 @@ $(document).ready(function(){
             $("#ModalProducto").modal("hide");*/
             for (let i = 0; i < arrayproductos.length; i++) {
                 for (let l = 0; l <= arraytemporal.length; l++) {
-                    console.log(arraytemporal[0]);
                         if (arrayproductos[i]!= undefined) {
                             if (arrayproductos[i]['cod_producto'] === arraytemporal[l]) {
                                 delete(arrayproductos[i]);
@@ -108,6 +110,15 @@ $(document).ready(function(){
           }
     });
 
+    $("#G_cantidad").on('keyup',function(){
+        cantidad = $("#G_cantidad").val();
+        codproducto = $("#cod_producto").val();
+        if(cantidad != "" && cantidad != 0){ 
+             politicaprecios(cantidad,codproducto);
+        }
+        $("#precioproducto").val('');
+    });
+
     $("#nombreproducto").keydown(function(e){
         if(e.which == 8) {
             $("#cod_producto").val('')
@@ -119,7 +130,7 @@ $(document).ready(function(){
     });
 })
 
- 
+
     function buscarProducto(nombreproducto) {
         $.ajax({
             dataType:'text',
@@ -154,7 +165,7 @@ $(document).ready(function(){
                     $("#cod_producto").val(id);
                     //Hacemos desaparecer el resto de sugerencias
                     $('#sugerencias').fadeOut(0);
-                    valorproducto = array[1];    
+                    
             });
             }
         });
@@ -165,11 +176,8 @@ $(document).ready(function(){
         if(accion === "ingresar"){
             if(valorproducto !== "" && cantidad !== "" && cantidad != 0){
                 var total = Number(cantidad) * Number(valorproducto);
-                $("#G_total").val(total.toFixed(3)); 
-            }else{
-                mensajes('Ingrese una cantidad valida');
+                $("#G_total").val(total.toFixed(2)); 
             }
-        
         }
     }
 
@@ -186,11 +194,11 @@ $(document).ready(function(){
                         "codproducto" : codproducto,
                     } , 
                     success: function(response){ 
-                        console.log(response);
                         var obj = JSON.parse(response);
                         if(obj["estado"] === "ok"){
                             precioproducto = obj['precio'];  
                             $("#precioproducto").val(precioproducto);
+                            valorproducto = precioproducto;
                         }
                     }
             });
@@ -235,37 +243,39 @@ $(document).ready(function(){
         var total = $("#G_total").val();
         
         if(nombre !== '' & cantidad !== '' && promocion !== ''){
-            var estado = 1;
-            if (contador >= 0) {
-                for (let j = 0; j < arrayproductos.length; j++) {
-                    if (arrayproductos[j] != undefined) {
-                        if (arrayproductos[j]['cod_producto'] === cod_producto) {
-                            mensajes('Ya existe el Producto en la tabla');
-                            return estado = 0;
-                            break;
-                        }else{
-                            estado = 1
-                        }  
+                    var estado = 1;
+                    if (contador >= 0) {
+                        for (let j = 0; j < arrayproductos.length; j++) {
+                            if (arrayproductos[j] != undefined) {
+                                if (arrayproductos[j]['cod_producto'] === cod_producto) {
+                                    mensajes('Ya existe el Producto en la tabla');
+                                    return estado = 0;
+                                    break;
+                                }else{
+                                    estado = 1
+                                }  
+                            }
+                        }
+                        if (estado === 1) {
+                            arrayproductos[contador] = {cod_producto,nombre,cantidad,promocion,precio,total};
+                            var fila="<tr><td>"+cod_producto+
+                                "</td><td>"+nombre+ "</td><td>"+cantidad+
+                                "</td><td>"+precio+"</td><td>"+promocion+"</td><td>"+
+                                total +"</td>"
+                                +"<td><button type='button' id='btneliminar' class='btn btn-primary btn-sm'>ELIMINAR</button></td></tr>";
+                                var btn = document.createElement("TR");
+                                btn.innerHTML=fila;
+                                document.getElementById("tablaModal").appendChild(btn);
+                                contador++;
+                            arraycodigos.push(cod_producto); 
+                            arraytemporal.push(cod_producto);
+                            document.getElementById("frmagregarProducto").reset();
+                        }
                     }
-                }
-                if (estado === 1) {
-                    arrayproductos[contador] = {cod_producto,nombre,cantidad,promocion,precio,total};
-                    var fila="<tr><td>"+cod_producto+
-                        "</td><td>"+nombre+ "</td><td>"+cantidad+
-                        "</td><td>"+precio+"</td><td>"+promocion+"</td><td>"+
-                        total +"</td>"
-                        +"<td><button type='button' id='btneliminar' class='btn btn-primary btn-sm'>ELIMINAR</button></td></tr>";
-                        var btn = document.createElement("TR");
-                        btn.innerHTML=fila;
-                        document.getElementById("tablaModal").appendChild(btn);
-                        contador++;
-                    arraycodigos.push(cod_producto); 
-                    arraytemporal.push(cod_producto);
-                }
+            }else{
+                mensajes('Ingrese los datos correctamente');
             }
-        }else{
-            mensajes('Ingrese los datos correctamente');
-        }
+           
     }
 
 
