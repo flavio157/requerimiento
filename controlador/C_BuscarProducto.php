@@ -15,18 +15,16 @@ require_once("../modelo/M_BuscarProductos.php");
         $cod_producto = $_POST['codproducto'];
         $c_Producto->PoliticaPrecios($cantidad,$cod_producto);
       
-
     }else if($accion == "politicabonos"){
         $cantidad = $_POST['cantidad'];
         $cod_producto = $_POST['codproducto'];
         $c_Producto->PoliticaBonos($cantidad,$cod_producto);
-       
     }
    
 
 class C_BuscarProducto
 {
-    
+    /*Buscar el producto por la descripcion */
     public function BuscaProducto($nomproducto)
     {
         $M_buscarproducto = new M_BuscarProductos();
@@ -36,7 +34,7 @@ class C_BuscarProducto
         }
     }
 
-
+/*busca el precio por cantidad y zona del producto  */
     public function PoliticaPrecios($cantidad,$cod_producto){
         $M_politicaPrecio = new M_BuscarProductos();
         if($cantidad != ""){
@@ -53,6 +51,7 @@ class C_BuscarProducto
     }
 
 
+    /*busca el bono del producto por cantidad y si es mayor a 20 pone el bono segun es el monto de la cantidad*/
     public function PoliticaBonos($cantidad,$cod_producto)
     {
         $M_politicaBono = new M_BuscarProductos();
@@ -84,5 +83,3 @@ class C_BuscarProducto
 
     }
 }
-
-?>
