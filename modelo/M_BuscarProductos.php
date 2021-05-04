@@ -10,6 +10,7 @@ class M_BuscarProductos{
             $this->db=ClassUsuario::Usuario();
         }
         
+        /*sentencia para buscar el producto */
         public function M_BuscarProducto($zona,$nom_producto)
         {
             $producto = strip_tags($nom_producto);
@@ -29,6 +30,7 @@ class M_BuscarProductos{
         } 
 
       
+         /*sentencia para buscar el precio del producto segun la cantidad */
         public function M_PoliticaPrecios($zona,$cantidad,$codproducto)
         {   
             $consulta = "";
@@ -60,6 +62,7 @@ class M_BuscarProductos{
         } 
 
 
+         /*sentencia para buscar el bono segun la cantidad del producto*/
         public function M_PoliticaBono($zona,$cantidad,$codproducto)
         {   
             $consulta = "";
