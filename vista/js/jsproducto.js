@@ -7,7 +7,7 @@ var arraytemporal = [];
 var bono = 0;
 $(document).ready(function(){
     $("#tablaproductos").hide();
-
+    
     $('#ModalProducto').on('shown.bs.modal', function (e) {
         $('#nombreproducto').focus();
     })
