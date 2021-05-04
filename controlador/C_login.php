@@ -18,9 +18,9 @@ class C_Login
 {
 
     public function C_usuario($cod_usuario){   
-        $montoSMP = 700;
-        $diasprimeraquincena =array("15","26");
-        $diassegundaquincena =array("05","11");
+        $montoSMP = 700; /*el monto al que debe llegar*/
+        $diasprimeraquincena =array("15","26"); /*fecha de la primera quincena cuando comienza y termina */
+        $diassegundaquincena =array("05","11"); /*fecha de la segunda quincena cuando comienza y termina*/
         
         $m_login = new M_Login();
         $datosUsuario = $m_login->Login($cod_usuario);
