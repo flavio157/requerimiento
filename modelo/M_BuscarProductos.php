@@ -10,10 +10,8 @@ class M_BuscarProductos{
             $this->db=ClassUsuario::Usuario();
         }
         
-        /*sentencia para buscar el producto */
         public function M_BuscarProducto($zona,$nom_producto)
         {
-            $producto = strip_tags($nom_producto);
             $query=$this->db->prepare("SELECT * FROM V_BUSCAR_PRODUCTO WHERE ZONA = :zona AND DES_PRODUCTO LIKE '%$nom_producto%'");
             $query->bindParam("zona",$zona, PDO::PARAM_INT);
             $query->execute();
@@ -30,7 +28,6 @@ class M_BuscarProductos{
         } 
 
       
-         /*sentencia para buscar el precio del producto segun la cantidad */
         public function M_PoliticaPrecios($zona,$cantidad,$codproducto)
         {   
             $consulta = "";
@@ -42,7 +39,7 @@ class M_BuscarProductos{
             }else if($cantidad > '9' && $cantidad <= '19')
             {
                 $consulta = "SELECT * FROM V_POLITICA_PRECIOS WHERE ZONA = :zona AND CANTIDAD > 9
-                AND CANTIDAD < 19 AND COD_PRODUCTO = :cod_producto";
+                AND CANTIDAD <= 19 AND COD_PRODUCTO = :cod_producto";
 
             }else if($cantidad >= '20'){
                 $consulta = "SELECT * FROM V_POLITICA_PRECIOS WHERE ZONA = :zona AND CANTIDAD = 20
@@ -60,9 +57,8 @@ class M_BuscarProductos{
                 $query = null;
             }
         } 
+                
 
-
-         /*sentencia para buscar el bono segun la cantidad del producto*/
         public function M_PoliticaBono($zona,$cantidad,$codproducto)
         {   
             $consulta = "";
