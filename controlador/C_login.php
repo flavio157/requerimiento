@@ -2,7 +2,7 @@
 date_default_timezone_set('America/Lima');
 require_once("../modelo/M_VerificarCuota.php");
 require_once("../modelo/M_Login.php");
-session_start();
+
 
    $cod_usuario = $_POST['usuario'];
  
@@ -16,10 +16,11 @@ session_start();
     }
 class C_Login
 {
-    public function C_usuario($cod_usuario)
-    {   $montoSMP = 700;
+
+    public function C_usuario($cod_usuario){   
+        $montoSMP = 700;
         $diasprimeraquincena =array("15","26");
-        $diassegundaquincena =array("01","11");
+        $diassegundaquincena =array("05","11");
         
         $m_login = new M_Login();
         $datosUsuario = $m_login->Login($cod_usuario);
@@ -35,7 +36,7 @@ class C_Login
         f_Cuotas($montoTotal,$montoSMP, $diasprimeraquincena,$diassegundaquincena);
 
        }else{
-            return header("Location: http://localhost:8080/requerimiento/vista/");
+         return header("Location: http://localhost:8080/requerimiento/vista/");
         }
 
     }
