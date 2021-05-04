@@ -43,7 +43,6 @@ date_default_timezone_set('America/Lima');
                 return header("Location:http://localhost:8080/requerimiento/vista/bloqueo.php");
             } 
         }else{
-            /*$_SESSION['user_id'] = $cod_usuario["COD_PERSONAL"];*/
             return header("Location: http://localhost:8080/requerimiento/vista/ventana.php");
         }
     }
