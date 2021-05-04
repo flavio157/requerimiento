@@ -7,7 +7,6 @@ class M_Login
     
     private $db;
     
-    
     public function __construct()
     {
         $this->db=ClassUsuario::Usuario();
@@ -15,7 +14,6 @@ class M_Login
     
     public function Login($cod_usuario)
     {
-        
             $query=$this->db->prepare("SELECT * FROM V_Login WHERE COD_PERSONAL = :cod_usuario");
             $query->bindParam("cod_usuario", $cod_usuario, PDO::PARAM_STR);
             $query->execute();
@@ -34,14 +32,13 @@ class M_Login
     {
         
         $fechas = fechas($diasprimeraquincena,$diassegundaquincena);
-        $separarFechas = explode(" ",$fechas);
 
         $query=$this->db->prepare("SELECT * FROM V_CALL_CENTER  
         WHERE VENDEDOR = :cod_vendedor AND FECHA_GENERADO >= :fechaInical 
         AND FECHA_GENERADO < :fechaFinal");
         $query->bindParam("cod_vendedor", $cod_vendedor, PDO::PARAM_STR);
-        $query->bindParam("fechaInical", $separarFechas[0], PDO::PARAM_STR);
-        $query->bindParam("fechaFinal",  $separarFechas[1], PDO::PARAM_STR);
+        $query->bindParam("fechaInical", $fechas[0], PDO::PARAM_STR);
+        $query->bindParam("fechaFinal",  $fechas[1], PDO::PARAM_STR);
         $query->execute();
         $montoTotal=0;
         
@@ -52,8 +49,8 @@ class M_Login
         }
             
        if($query){
-           /*  return $separarFechas[0] .'  '. $separarFechas[1];*/
-           return $montoTotal;
+           /*  return $fechas[0] .'  '. $fechas[1];*/
+            return $montoTotal;
             $query->closeCursor();
             $query = null;
         } 
