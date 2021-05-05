@@ -7,6 +7,8 @@ if(!isset($_SESSION['zona'])){
     header('Location: index.php');
     exit;
 } 
+
+$fcha = date("Y-m-d");
 ?>
 
 <html>
@@ -20,7 +22,7 @@ if(!isset($_SESSION['zona'])){
         <link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.0.1/css/toastr.css" rel="stylesheet"/>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.0.1/js/toastr.js"></script>
         
-       
+        <!--<script type="text/javascript" src="../vista/js/scripts.js"></script>-->
         <script type="text/javascript" src="../vista/js/jsproducto.js"></script>
 
         <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
@@ -30,21 +32,24 @@ if(!isset($_SESSION['zona'])){
     <body>
     <div class="main">
         <form class="row g-3"  id="frmpedidos">
+                <div id="guardadoexitoso">
+                                   
+                </div>
                 <div class="col-12">
                     <label for="formTipo" class="form-label">TIPO</label>
-                    <select class="form-select" name="slcdocumento" aria-label="Default select example">
+                    <select class="form-select" name="slcdocumento" id="slcdocumento" aria-label="Default select example">
                         <option selected>TIPO DE DOCUMENTO</option>
-                        <option value="1">DNI</option>
-                        <option value="2">RUC</option>                    
+                        <option value="DNI">DNI</option>
+                        <option value="RUC">RUC</option>                    
                     </select>
                 </div>
                 <div class="col-12">
                     <label for="formNumero" class="form-label">NUMERO</label>
-                    <input type="text" class="form-control" name="txtnumero" id="formnumero">
+                    <input type="text" class="form-control" name="txtnumero" id="txtnumero">
                 </div>
                 <div class="col-12">
                     <label for="formcliente" class="form-label">CLIENTE</label>
-                    <input type="text" class="form-control" name="txtcliente" id="formcliente" >
+                    <input type="text" class="form-control" name="txtcliente" id="txtcliente" >
                 </div>
                 <div class="col-12">
                     <label for="formciudad" class="form-label">CIUDAD</label>
@@ -81,16 +86,16 @@ if(!isset($_SESSION['zona'])){
                     </button>-->
                 </div>
                 <div class="table-responsive tablafrmpedidos" id="tablaproductos">
-                    <table class="table" id="tabladelProducto">
+                    <table class="table tabladelProducto" id="tabladelProducto">
                         <caption>Lista de Productos</caption>
                         <thead>
                             <tr>
-                            <th scope="col">COD_PRODUCTO</th>
+                            <th scope="col" style="display: none;">COD_PRODUCTO</th>
                             <th scope="col">PRODUCTO</th>
                             <th scope="col">CANTIDAD</th>
                             <th scope="col">PRECIO</th>
-                            <th scope="col">PROMOCIÓN</th>
-                            <th scope="col">TOTAL</th>
+                            <th scope="col">PROMO</th>
+                            <th scope="col" style='display: none;'>TOTAL</th>
                             <th scope="col">ACCIONES</th>
                             </tr>
                         </thead>
@@ -108,7 +113,8 @@ if(!isset($_SESSION['zona'])){
                 <div class="row g-2">
                     <div class="col">
                         <label for="formtelefono" class="form-label">TELEFONO</label>
-                        <input type="text" class="form-control" name="txttelefono" >
+                        <input type="text" class="form-control" name="txttelefono" id="txttelefono"
+                        min="9" max="9">
                     </div>
                     <div class="col">
                         <label for="formcondicion" class="form-label">CONDICIÓN</label>
@@ -130,25 +136,26 @@ if(!isset($_SESSION['zona'])){
                     </div>
                     <div class="col">
                         <label for="formfpago" class="form-label">F.PAGO</label>
-                        <input type="date" name="dtfechapago" id="dtfechapago" class="form-control">
+                        <input type="date" name="dtfechapago" id="dtfechapago" value="<?php echo $fcha;?>" class="form-control">
                     </div>
                 </div>
 
                 <div class="row g-2">
                     <div class="col">
                         <label for="formentrega" class="form-label">N° CONTRATO</label>
-                        <input type="text" name="txtcontrato" class="form-control">
+                        <input type="text" name="txtcontrato" id="txtcontrato" class="form-control">
                     </div>
                     <div class="col">
                         <label for="formfpago" class="form-label">TELEFONO 2</label>
-                        <input type="text" name="txtTelefono2" class="form-control">
+                        <input type="text" name="txtTelefono2" id="txtTelefono2" class="form-control"
+                        min="9" max="9">
                     </div>
                 </div>
 
                 <div class="row g-2">
                     <div class="col">
                         <label for="formentrega" class="form-label">CODIGO</label>
-                        <input type="text" name="txtcodigo" class="form-control">
+                        <input type="text" name="txtcodigo" id="txtcodigo" class="form-control">
                     </div>
                     <div class="col">
                         <label for="formfpago" class="form-label">GENERADO</label>
@@ -219,16 +226,16 @@ if(!isset($_SESSION['zona'])){
                                 </div>
 
                                 <div class="table-responsive tablafrmpedidos" id="tablaproductos">
-                                    <table class="table  table-striped  table-sm" id="productosMomento">
+                                    <table class="table  table-striped  table-sm productosMomento" id="productosMomento">
                                         <caption>Lista de Productos</caption>
                                         <thead>
                                             <tr>
-                                            <th scope="col">COD_PRODUCTO</th>
+                                            <th scope="col" style="display: none;">COD_PRODUCTO</th>
                                             <th scope="col">PRODUCTO</th>
                                             <th scope="col">CANTIDAD</th>
                                             <th scope="col">PRECIO</th>
-                                            <th scope="col">PROMOCIÓN</th>
-                                            <th scope="col">TOTAL</th>
+                                            <th scope="col">PROMO</th>
+                                            <th scope="col" style="display: none;">TOTAL</th>
                                             <th scope="col">ACCIONES</th>
                                             </tr>
                                         </thead>
@@ -244,84 +251,6 @@ if(!isset($_SESSION['zona'])){
                         </div>
                         </div>
                     </div>
-                </div>
-                <!--  -->
-
-
-
-
-                <!-- Modal2 para modificar el pedido del producto -->
-                <div class="modal fade " id="ModalProductoModificar" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                    <div class="modal-dialog modal-x2">
-                        <div class="modal-content">
-                        <div class="modal-header">
-                            <h6 class="modal-title" id="exampleModalLabel">DESCRIPCION DEL PEDIDO</h6>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                        </div>
-                        <div class="modal-body">
-                            <form id="frmactualizarproducto">
-                                    <div id="mensaje2">
-                                   
-                                    </div>
-                                <div class="row g-2">
-                                    <div class="col">
-                                        <label  for="formentrega" class="form-label">COD. PRODUCTO</label>
-                                        <input type="text" class="form-control" id="M_cod_producto" >
-                                    </div>
-                                    <div class="col">
-                                        <label for="formfpago" class="form-label">PRODUCTO</label>
-                                        <input type="text" class="form-control" name="M_Nombreproducto" id="M_Nombreproducto" disabled=true>
-                                    </div>
-                                </div>
-                                <div class="row g-2">
-                                    <div class="col">
-                                        <label for="formentrega" class="form-label">CANTIDAD</label>
-                                        <input type="text" class="form-control" name="M_cantidad" id="M_cantidad">
-                                    </div>
-                                    <div class="col">
-                                        <label for="formfpago" class="form-label">PRECIO</label>
-                                        <input type="text" class="form-control" name="M_precioproducto" id="M_precioproducto" disabled=true>
-                                    </div>
-                                </div>
-
-                                <div class="row g-2">
-                                    <div class="col">
-                                        <label for="formentrega" class="form-label">PROMOCION</label>
-                                        <input type="text" class="form-control" name="M_promocion" id="M_promocion">
-                                    </div>
-                                    <div class="col">
-                                        <label for="formfpago" class="form-label">TOTAL</label>
-                                        <input type="text" class="form-control" id="M_total" name="M_total" disabled=true>
-                                    </div>
-                                </div>
-                            </form>
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-bs-dismiss="M_modal">Cerrar</button>
-                            <button type="button" class="btn btn-primary" id="M_agregar">Agregar</button>
-                        </div>
-                        </div>
-                    </div>
-                </div>
-                <!--  -->
-
-
-                <!-- modal de advertencia usuario-->
-                <div class="modal fade" id="modaladvertencia" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-                <div class="modal-dialog modal-dialog-centered" role="document">
-                    <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalLongTitle">Modal title</h5>
-                    </div>
-                    <div class="modal-body">
-                        Desea cerrar el modal sin guardar los datos ingresados
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" id="cancelar" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
-                        <button type="button" id="aceptar" class="btn btn-primary">Aceptar</button>
-                    </div>
-                    </div>
-                </div>
                 </div>
         </div>
     </body>
