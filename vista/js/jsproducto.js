@@ -6,6 +6,7 @@ var arraycodigos = [];
 var arraytemporal = [];
 var bono = 0;
 $(document).ready(function(){
+    obtenerprovincia();
     $("#tablaproductos").hide();
 
     $('#ModalProducto').on('shown.bs.modal', function (e) {
@@ -18,7 +19,7 @@ $(document).ready(function(){
             agregarproductos();
             arraycodigos = [];
         }else{
-            mensajes('El bono no puede ser mayor a lo indicado: ' + bono);
+            mensajes('La Promoción no puede ser mayor a lo indicado: ' + bono);
         }
     });
 
@@ -41,11 +42,11 @@ $(document).ready(function(){
         $('#tabladelProducto').find("tr:gt(0)").remove();
         for (let i = 0; i < arrayproductos.length; i++) {
             if (arrayproductos[i] != undefined) {
-                var fila="<tr><td>"+arrayproductos[i]['cod_producto']+
+                var fila="<tr><td style='display: none;'>"+arrayproductos[i]['cod_producto']+
                     "</td><td>"+arrayproductos[i]['nombre']+ "</td><td>"+arrayproductos[i]['cantidad']+
-                    "</td><td>"+arrayproductos[i]['precio']+"</td><td>"+arrayproductos[i]['promocion']+"</td><td>"+
+                    "</td><td>"+arrayproductos[i]['precio']+"</td><td>"+arrayproductos[i]['promocion']+"</td><td style='display: none;'>"+
                     arrayproductos[i]['total'] +"</td>"
-                    +"<td><button type='button' id='btneliminar' class='btn btn-primary btn-sm'>ELIMINAR</button></td></tr>";
+                    +"<td><button type='button' id='btneliminar' class='btn btn-primary btn-sm'>-</button></td></tr>";
                     var btn = document.createElement("TR");
                     btn.innerHTML=fila;
                     document.getElementById("tabla").appendChild(btn);
@@ -115,9 +116,15 @@ $(document).ready(function(){
           }
     });
 
+
     $("#grabar").on('click',function(e) {
         guardarPedido();
+       
     })
+
+    $("#nuevo").on('click',function() {
+        reiniciarFrm();
+    });
 
 })
 
@@ -243,11 +250,11 @@ $(document).ready(function(){
                         }
                         if (estado === 1) {
                             arrayproductos[contador] = {cod_producto,nombre,cantidad,promocion,precio,total};
-                            var fila="<tr><td>"+cod_producto+
+                            var fila="<tr><td style='display: none;'>"+cod_producto+
                                 "</td><td>"+nombre+ "</td><td>"+cantidad+
-                                "</td><td>"+precio+"</td><td>"+promocion+"</td><td>"+
+                                "</td><td>"+precio+"</td><td>"+promocion+"</td><td style='display: none;'>"+
                                 total +"</td>"
-                                +"<td><button type='button' id='btneliminar' class='btn btn-primary btn-sm'>ELIMINAR</button></td></tr>";
+                                +"<td><button type='button' id='btneliminar' class='btn btn-primary btn-sm'>-</button></td></tr>";
                                 var btn = document.createElement("TR");
                                 btn.innerHTML=fila;
                                 document.getElementById("tablaModal").appendChild(btn);
@@ -273,18 +280,65 @@ $(document).ready(function(){
     }
 
     function guardarPedido() {
-        var datosproductos ={arrayproductos}
-        var data = $("#frmpedidos");
-          $.ajax({
-            dataType:'text',
-            type: 'POST', 
-            url:  '../controlador/C_Pedido.php',
-            data:data.serialize()+"&accion=guardar&array="+JSON.stringify(datosproductos), 
-            success: function(response){
-                console.log(response);
-            }
-        });
+        if($("#txttelefono").length == 9 && $("#txtcontrato").length >= 6 && arrayproductos.length < 0
+            && $("#txtcodigo").length != 0){
+            var datosproductos ={arrayproductos}
+            var data = $("#frmpedidos");
+              $.ajax({
+                dataType:'text',
+                type: 'POST', 
+                url:  '../controlador/C_Pedido.php',
+                data:data.serialize()+"&accion=guardar&array="+JSON.stringify(datosproductos), 
+                success: function(response){
+                }
+            });
+            reiniciarFrm();
+        }else{
+            console.log("telefono ");
+        }
     } 
 
 
+    function reiniciarFrm() {
+        arrayproductos = [];
+        arraycodigos = [];
+        arraytemporal = [];
+        document.getElementById("frmpedidos").reset();
+        $('#tablaproductos').find("tr:gt(0)").remove();
+        $("#tablaproductos").hide();
+    }
+
+
+    function obtenerDistrito(departamento,provincia){
+        var accion = "distrito";        
+    
+        $.ajax({
+            dataType:'text',
+            type: 'POST', 
+            url:  '../controlador/C_ListarCiudades.php',
+            data: {
+               "accion" : tipo ,
+               "departamento" : departamento , 
+               "provincia" : provincia,
+            },
+            success: function(response){
+                $('#Selectdistro').append(response);
+            }
+        });
+    }
+    
+    
+    
+    function obtenerprovincia(){
+        var accion = "provincia";
+        $.ajax({
+            dataType:'text',
+            type: 'POST', 
+            url:  '../controlador/C_ListarCiudades.php',
+            data: "accion=" + accion,
+            success: function(response){
+                $('#Selectprovincia').append(response);
+            }
+        });
+    }
 
