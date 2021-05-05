@@ -1,106 +1,97 @@
 <?php
     require_once("../modelo/M_Pedido.php");
+    session_start();
    
 
-    /*$accion = $_POST["accion"];
-    $codigo = "5";
-    $cod_cliente = "0001" ;
-    $cod_vendedora ='0002';
+    $accion = $_POST["accion"];
     $tipo_documento = $_POST["slcdocumento"];
     $identificacion = $_POST["txtnumero"];
-    $cliente = $_POST["txtcliente"];
-    $direccion = $_POST["txtdireccion"];
-    $referencia = $_POST["txtreferencia"];
-    $contacto = $_POST["txtcontacto"] ;
-    $condicion = $_POST["slccondicion"];
-    $telefono = $_POST["txttelefono"];
-    $entrega = $_POST["slcentrega"];
-    $fcancelacion =  $_POST["dtfechapago"];
-    $est_pedido = "A";
-    $freparto = "19/04/2020";
-    $cod_reparto = "0002";
-    $cod_distrito = $_POST["slcdistrito"];
-    $num_contrato = $_POST["txtcontrato"]; 
-    $cod_provincia=$_POST["slcciudad"];  
-    $fec_despacho= "19/04/2020";
 
+    if($accion == "guardar"){
+        $cod_cliente = "0001" ;
+        $cliente = $_POST["txtcliente"];
+        $direccion = $_POST["txtdireccion"];
+        $referencia = $_POST["txtreferencia"];
+        $contacto = $_POST["txtcontacto"] ;
+        $condicion = $_POST["slccondicion"];
+        $telefono = $_POST["txttelefono"];
+        $entrega = $_POST["slcentrega"];
+        $fcancelacion =  $_POST["dtfechapago"];
+        $est_pedido = "P";
+        $cod_distrito = $_POST["slcdistrito"];
+        $num_contrato = $_POST["txtcontrato"]; 
+        $cod_provincia=$_POST["slcciudad"];  
+        $telefono2=$_POST["txtTelefono2"];  
+        
+        $dataproductos = json_decode($_POST['array']);
 
-    $cod_producto = $_POST["cod_producto"];
-    $can_productos = $_POST["cantidad"];
-    $promocion = $_POST["promocion"];
-    $total = $_POST["total"];*/
-
-
-    $data = json_decode($_POST['array']);
-    print_r($data);
-  
-    foreach ($data->arrayproductos as $k){
-        if(isset($k->cod_producto)){
-           echo "\t".$k->cod_producto." - ".$k->nombre.PHP_EOL;
-         }         
-    }
-
-   
-
-
-    if($accion = "guardar"){
-
-
-
-
-
-       /* $date = date_create($fcancelacion);
-        $fechaNueva = date_format($date,"d/m/Y H:i:s");
-        $c_guardarpedido = new guardarpedidos();
-        $c_guardarpedido->guardarpedido(trim($codigo),trim($cod_cliente),trim($cod_vendedora),
+       
+        guardarPedidos::guardarpedido(trim($cod_cliente),
         trim($tipo_documento),trim($identificacion),trim($cliente),trim($direccion),trim($referencia),
-        trim($contacto),trim($telefono),trim($entrega),trim($fechaNueva),trim($est_pedido),
-        trim($freparto),trim($cod_reparto),trim($cod_distrito),trim($num_contrato),
-        trim($cod_provincia),trim($fec_despacho),trim($cod_producto),trim($can_productos)
-        ,trim($promocion),trim($total));*/
+        trim($contacto),trim($telefono),trim($entrega),trim($fcancelacion) ,trim($est_pedido),
+        trim($cod_distrito),trim($num_contrato),
+        trim($cod_provincia),trim($telefono2),$dataproductos);
 
     }
 
 
     class guardarPedidos
     { 
-        public function guardarpedido($codigo,$cod_cliente,$cod_vendedora,$tipo_documento,
+        static function guardarpedido($cod_cliente,$tipo_documento,
         $identificacion,$cliente,$direccion,$referencia,$contacto,$telefono,$entrega,
-        $fcancelacion,$est_pedido,$freparto,$cod_reparto,$cod_distrito,$num_contrato,
-        $cod_provincia,$fec_despacho,$cod_producto,$can_productos,$promocion,$total)
-        {
+        $fcancelacion,$est_pedido,$cod_distrito,$num_contrato,
+        $cod_provincia,$telefono2,$dataproductos){
+            $observacion = "";
+            $producto = 0;
+            $promocion = 0;
             $bd = 'SMP2';
-           
             $c_guardar = new M_Pedidos($bd);
 
-            $c_pedido = $c_guardar->guardarpedido($codigo,$cod_cliente,$cod_vendedora,$tipo_documento,
-            $identificacion,$cliente,$direccion,$referencia,$contacto,$telefono,$entrega,$fcancelacion,$est_pedido,
-            $freparto,$cod_reparto,$cod_distrito,$num_contrato,
-            $cod_provincia,$fec_despacho);
-    
+            foreach ($dataproductos->arrayproductos as $dato){
+                if(isset($dato->cod_producto)){
+                    $observacion.= $dato->nombre."/ ";
+                    $producto += intval($dato->cantidad);
+                    $promocion += intval($dato->promocion);
+                  }  
+            }  
+
+            $total = $producto + $promocion;
+
+            $c_pedido = $c_guardar->guardarpedido(date("d-m-Y"),$cod_cliente,$_SESSION['cod_personal'],$tipo_documento,
+            $identificacion,$cliente,$direccion,$referencia,$contacto,$telefono,$entrega,$fcancelacion,
+            $est_pedido,$observacion,$total,'01',$num_contrato,'01',$telefono2);
+            
             if($c_pedido){
-               $this->guardarpedidocantidad($codigo,$cod_producto,$can_productos,$promocion,$total,
-                                            $can_productos,$promocion,$bd);
+                $cod_pedido = $c_guardar->UltimoRegistro();
+               
+                foreach ($dataproductos->arrayproductos as $dato){
+                    if(isset($dato->cod_producto)){
+                       guardarPedidos::guardarpedidocantidad($cod_pedido['CODIGO'],$dato->cod_producto,$dato->cantidad,$dato->promocion,
+                                        $dato->precio,$dato->cantidad,$dato->promocion);
+                    }         
+                }
             }
         }
 
 
-        public function guardarpedidocantidad($codigo,$cod_producto,$cantidad,$bono,$precio,$bd){
-            $bd = 'SMP2';
+        static function guardarpedidocantidad($cod_pedido,$cod_producto,$cantidad,$bono,$precio){
+            $bd = "SMP2";
             $c_guardar = new M_Pedidos($bd);
-            echo $bd;
-            $precioTotal =number_format(floatval($precio), 2, '.', ' ');
-            $c_pedidocantidad = $c_guardar->guardarpedidocantidad($codigo,$cod_producto,$cantidad,
-                                                                  $bono,$precioTotal,$cantidad,$bono);
+            $c_pedidocantidad = $c_guardar->guardarpedidocantidad($cod_pedido,$cod_producto,$cantidad,
+                                                                  $bono,round($precio,2),$cantidad,$bono);
+            print_r($c_pedidocantidad);
             if($c_pedidocantidad){
                 $buscarProducto = array(
                     'estado' => 'ok'
                 );
                 echo json_encode($buscarProducto,JSON_FORCE_OBJECT);
             }
-
         }
+
+
+     
     }
+
     
 
 
