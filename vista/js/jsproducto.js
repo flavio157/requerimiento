@@ -7,6 +7,7 @@ var arraytemporal = [];
 var bono = 0;
 $(document).ready(function(){
     obtenerprovincia();
+
     $("#tablaproductos").hide();
 
     $('#ModalProducto').on('shown.bs.modal', function (e) {
@@ -19,7 +20,7 @@ $(document).ready(function(){
             agregarproductos();
             arraycodigos = [];
         }else{
-            mensajes('La Promoción no puede ser mayor a lo indicado: ' + bono);
+            mensajes("La Promoción no puede ser mayor a lo indicado: " + bono,"mensaje");
         }
     });
 
@@ -116,15 +117,44 @@ $(document).ready(function(){
           }
     });
 
+    $("#txtnumero").keydown(function(e){
+        tipo = $("#slcdocumento").val();
+        var txt= document.getElementById('txtnumero'); 
+       
+       if(tipo === "DNI"){
+             txt.addEventListener('input',function(){
+            if (this.value.length > 8) 
+                this.value = this.value.slice(0,8); 
+            })
+       }
+        
+       if(tipo === "RUC"){
+            txt.addEventListener('input',function(){
+            if (this.value.length > 8) 
+                this.value = this.value.slice(0,8); 
+            })
+       }
+
+        
+    });
+
 
     $("#grabar").on('click',function(e) {
-        guardarPedido();
+     
+       validacionFrm();
        
     })
 
     $("#nuevo").on('click',function() {
         reiniciarFrm();
     });
+
+    $("#Selectprovincia").change(function(){
+        $('#Selectdistro').find('option').remove().end();
+        var id = $('#Selectprovincia').val().split("/");;
+
+        obtenerDistrito(id[0],id[1]);
+});
 
 })
 
@@ -196,7 +226,7 @@ $(document).ready(function(){
                     }
             });
         }else{
-            mensajes("Ingrese una cantidad validad");
+            mensajes("Ingrese una cantidad validad","mensaje");
         }
     }
 
@@ -221,7 +251,7 @@ $(document).ready(function(){
                     }
             });
         }else{
-            mensajes("Ingrese una cantidad validad");
+            mensajes("Ingrese una cantidad validad","mensaje");
         }
     }
 
@@ -240,7 +270,7 @@ $(document).ready(function(){
                         for (let j = 0; j < arrayproductos.length; j++) {
                             if (arrayproductos[j] != undefined) {
                                 if (arrayproductos[j]['cod_producto'] === cod_producto) {
-                                    mensajes('Ya existe el Producto en la tabla');
+                                    mensajes("Ya existe el Producto en la tabla","mensaje");
                                     return estado = 0;
                                     break;
                                 }else{
@@ -265,38 +295,19 @@ $(document).ready(function(){
                         }
                     }
             }else{
-                mensajes('Ingrese los datos correctamente');
+                mensajes("Ingrese los datos correctamente","mensaje");
             }
            
     }
 
 
-    function mensajes(texto) {
+    function mensajes(texto,id) {
        mensaje = '<div class="alert alert-warning alert-dismissible fade show" role="alert" id="">'+
-       '<strong>Error: </strong>'+texto+
+       '<strong>Advertencia: </strong>'+texto+
        '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>'+
        '</div>';
-        $('#mensaje').html(mensaje);
+        $('#'+id).html(mensaje);
     }
-
-    function guardarPedido() {
-        if($("#txttelefono").length == 9 && $("#txtcontrato").length >= 6 && arrayproductos.length < 0
-            && $("#txtcodigo").length != 0){
-            var datosproductos ={arrayproductos}
-            var data = $("#frmpedidos");
-              $.ajax({
-                dataType:'text',
-                type: 'POST', 
-                url:  '../controlador/C_Pedido.php',
-                data:data.serialize()+"&accion=guardar&array="+JSON.stringify(datosproductos), 
-                success: function(response){
-                }
-            });
-            reiniciarFrm();
-        }else{
-            console.log("telefono ");
-        }
-    } 
 
 
     function reiniciarFrm() {
@@ -309,7 +320,9 @@ $(document).ready(function(){
     }
 
 
-    function obtenerDistrito(departamento,provincia){
+    
+
+    function obtenerDistrito(provincia,departamento){
         var accion = "distrito";        
     
         $.ajax({
@@ -317,12 +330,13 @@ $(document).ready(function(){
             type: 'POST', 
             url:  '../controlador/C_ListarCiudades.php',
             data: {
-               "accion" : tipo ,
+               "accion" : accion ,
                "departamento" : departamento , 
                "provincia" : provincia,
             },
             success: function(response){
                 $('#Selectdistro').append(response);
+               
             }
         });
     }
@@ -342,3 +356,54 @@ $(document).ready(function(){
         });
     }
 
+    
+    function validacionFrm() {
+   
+        if($("#txtcliente").val().length == 0){
+            $('#txtcliente').focus();
+        }else if ($("#txtdireccion").val().length == 0){
+            console.log("error direccion");
+            $('#txtdireccion').focus();
+        }else if($("#txtreferencia").val().length == 0){
+            console.log("error referencia");
+            $('#txtreferencia').focus();
+        }else if($("#txtcontacto").val().length == 0){
+            console.log("error txtcontacto");
+            $('#txtcontacto').focus();
+        }else if($("#txttelefono").val().length < 9 || $("#txttelefono").val().length > 9  ){
+            console.log("error telefono");
+            $('#txttelefono').focus();
+        }else if($("#txtcontrato").val().length < 6){
+            console.log("error contrato");
+            $('#txtcontrato').focus();
+        }else if(arrayproductos.length == 0){
+            console.log("No puede guardar sin seleccionar un producto");
+        }else if (Object.keys(arrayproductos) == "") {
+            console.log("vuelva a seleccionar un producto");
+        }else if($("#txtcliente").val().length > 0){
+            verificar = $("#txtcliente").val().split(" ");
+            if(verificar.length < 3){
+              console.log("se necesita un nombre y los dos apellidos");
+              $('#txtcliente').focus();
+            }
+        }
+        
+        
+    }
+    
+    
+
+    function guardarPedido() {
+            var datosproductos ={arrayproductos}
+            var data = $("#frmpedidos");
+              $.ajax({
+                dataType:'text',
+                type: 'POST', 
+                url:  '../controlador/C_Pedido.php',
+                data:data.serialize()+"&accion=guardar&array="+JSON.stringify(datosproductos), 
+                success: function(response){
+                }
+            });
+            reiniciarFrm();
+    }
+    
