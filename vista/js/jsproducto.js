@@ -20,7 +20,7 @@ $(document).ready(function(){
             agregarproductos();
             arraycodigos = [];
         }else{
-            mensajes("La Promoción no puede ser mayor a lo indicado: " + bono,"mensaje");
+            mensajesError("La Promoción no puede ser mayor a lo indicado: " + bono,"mensaje");
         }
     });
 
@@ -117,32 +117,10 @@ $(document).ready(function(){
           }
     });
 
-    $("#txtnumero").keydown(function(e){
-        tipo = $("#slcdocumento").val();
-        var txt= document.getElementById('txtnumero'); 
-       
-       if(tipo === "DNI"){
-             txt.addEventListener('input',function(){
-            if (this.value.length > 8) 
-                this.value = this.value.slice(0,8); 
-            })
-       }
-        
-       if(tipo === "RUC"){
-            txt.addEventListener('input',function(){
-            if (this.value.length > 8) 
-                this.value = this.value.slice(0,8); 
-            })
-       }
-
-        
-    });
 
 
     $("#grabar").on('click',function(e) {
-     
        validacionFrm();
-       
     })
 
     $("#nuevo").on('click',function() {
@@ -226,7 +204,7 @@ $(document).ready(function(){
                     }
             });
         }else{
-            mensajes("Ingrese una cantidad validad","mensaje");
+            mensajesError("Ingrese una cantidad validad","mensaje");
         }
     }
 
@@ -251,7 +229,7 @@ $(document).ready(function(){
                     }
             });
         }else{
-            mensajes("Ingrese una cantidad validad","mensaje");
+            mensajesError("Ingrese una cantidad validad","mensaje");
         }
     }
 
@@ -270,7 +248,7 @@ $(document).ready(function(){
                         for (let j = 0; j < arrayproductos.length; j++) {
                             if (arrayproductos[j] != undefined) {
                                 if (arrayproductos[j]['cod_producto'] === cod_producto) {
-                                    mensajes("Ya existe el Producto en la tabla","mensaje");
+                                    mensajesError("Ya existe el Producto en la tabla","mensaje");
                                     return estado = 0;
                                     break;
                                 }else{
@@ -295,18 +273,28 @@ $(document).ready(function(){
                         }
                     }
             }else{
-                mensajes("Ingrese los datos correctamente","mensaje");
+                mensajesError("Ingrese los datos correctamente","mensaje");
             }
            
     }
 
 
-    function mensajes(texto,id) {
+    function mensajesError(texto,id) {
        mensaje = '<div class="alert alert-warning alert-dismissible fade show" role="alert" id="">'+
        '<strong>Advertencia: </strong>'+texto+
        '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>'+
        '</div>';
         $('#'+id).html(mensaje);
+        window.scrollTo(0, 0);
+    }
+
+    function mensajeSuccess(texto,id) {
+        mensaje = '<div class="alert alert-success alert-dismissible fade show" role="alert" id="">'+
+        '<strong>Exito: </strong>'+texto+
+        '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>'+
+        '</div>';
+         $('#'+id).html(mensaje);
+         window.scrollTo(0, 0);
     }
 
 
@@ -356,35 +344,41 @@ $(document).ready(function(){
         });
     }
 
-    
+
+
     function validacionFrm() {
-   
         if($("#txtcliente").val().length == 0){
+            mensajesError("Ingrese nombre del Cliente","mensajesgenerales");
             $('#txtcliente').focus();
         }else if ($("#txtdireccion").val().length == 0){
-            console.log("error direccion");
+            mensajesError("Ingrese una Direccion","mensajesgenerales");
+           
             $('#txtdireccion').focus();
         }else if($("#txtreferencia").val().length == 0){
-            console.log("error referencia");
+            mensajesError("Ingrese una Referencia","mensajesgenerales");
+            
             $('#txtreferencia').focus();
         }else if($("#txtcontacto").val().length == 0){
-            console.log("error txtcontacto");
+            mensajesError("Ingrese un contacto","mensajesgenerales");
+            
             $('#txtcontacto').focus();
         }else if($("#txttelefono").val().length < 9 || $("#txttelefono").val().length > 9  ){
-            console.log("error telefono");
+            mensajesError("El telefono no puede ser mayor o menor de 9 digitos","mensajesgenerales");
+            
             $('#txttelefono').focus();
-        }else if($("#txtcontrato").val().length < 6){
-            console.log("error contrato");
-            $('#txtcontrato').focus();
         }else if(arrayproductos.length == 0){
-            console.log("No puede guardar sin seleccionar un producto");
+            mensajesError("No puede guardar sin seleccionar un producto");
+           
         }else if (Object.keys(arrayproductos) == "") {
-            console.log("vuelva a seleccionar un producto");
+            mensajesError("vuelva a seleccionar un producto");
         }else if($("#txtcliente").val().length > 0){
             verificar = $("#txtcliente").val().split(" ");
             if(verificar.length < 3){
-              console.log("se necesita un nombre y los dos apellidos");
+                mensajesError("se necesita un nombre y los dos apellidos");
               $('#txtcliente').focus();
+
+            }else{
+                guardarPedido();
             }
         }
         
@@ -402,8 +396,19 @@ $(document).ready(function(){
                 url:  '../controlador/C_Pedido.php',
                 data:data.serialize()+"&accion=guardar&array="+JSON.stringify(datosproductos), 
                 success: function(response){
+                    console.log(response);
+                    var obj = JSON.parse(response);
+                   
+                    if(obj["estado"] === "error"){
+                        mensajesError(obj['mensaje'],"mensajesgenerales")
+                      
+                    }else{
+                        mensajeSuccess(obj['mensaje'],"mensajesgenerales")
+                        
+                        reiniciarFrm();
+                    }
                 }
             });
-            reiniciarFrm();
+           
     }
     
