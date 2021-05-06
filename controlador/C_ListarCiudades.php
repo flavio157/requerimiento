@@ -3,14 +3,13 @@
     
 
     
-    $accion = isset($_POST['accion']);
- 
+    $accion = $_POST['accion'];
+
     if($accion == "provincia"){
         C_ListarCiudades::Listar_Provincia();
-    }else{
+    }else if ($accion == "distrito"){
         $departamento = $_POST['departamento'];
         $provincia = $_POST['provincia'];
-        $distrito = $_POST['distrito'];
         C_ListarCiudades::Listar_Distrito($departamento,$provincia);
     }
 
@@ -28,7 +27,7 @@
                 $provincia="";
                 
                 foreach ($C_codProvincia as $descripcion){
-                    $provincia = $provincia . '<option  value="'.$descripcion['COD_PROVINCIA'].'">' . $descripcion['DES_PROVINCIA']  . '</option>';
+                    $provincia = $provincia . '<option  value="'.$descripcion['COD_PROVINCIA']."/".$descripcion['COD_DEPARTAMENTO'].'">' . $descripcion['DES_PROVINCIA']  . '</option>';
                 }
                 echo $provincia;  
             }
@@ -40,7 +39,7 @@
             $bd="SMP2";
             $M_listarDistrito = new M_ListarCiudades($bd);
             $C_codDistrito = $M_listarDistrito->M_Distrito($departamento,$Provincia);
-            if($C_codDistrito > 0){
+           if($C_codDistrito > 0){
                 $Distrito="";
                 foreach ($C_codDistrito as $descripcion){
                     $Distrito = $Distrito . '<option selected>SELECCIONE</option>
