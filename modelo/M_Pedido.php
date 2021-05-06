@@ -77,12 +77,31 @@
     }
 
 
+
     public function UltimoRegistro()
     {
         $query = $this->bd->prepare("SELECT * FROM V_ULTIMO_REGISTRO");
         $query->execute();
         $ultimoregistro =  $query->fetch(PDO::FETCH_ASSOC);
         return $ultimoregistro;
+    }
+
+
+    public function verificar($dni)
+    {
+        
+        $query = $this->bd->prepare("SELECT * FROM V_REGISTRAR_PEDIDO WHERE IDENTIFICACION = :dni and (EST_PEDIDO = 'P'
+        or EST_PEDIDO = 'R')"); 
+        $query->bindParam("dni",$dni,PDO::PARAM_STR); 
+        $query->execute();
+        $verificar = $query->fetch(PDO::FETCH_ASSOC);
+       
+        if($verificar){
+            return $verificar;
+            $query->closeCursor();
+            $query = null;
+        }
+        
     }
 
 
