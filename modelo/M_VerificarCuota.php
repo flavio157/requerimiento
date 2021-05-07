@@ -14,7 +14,7 @@ class M_VerificarCuota
     public function VerificandoQuincena($cod_vendedor,$diasprimeraquincena,$diassegundaquincena)
     {  
         $fechas = fechas($diasprimeraquincena,$diassegundaquincena);
-       /* $separarFechas = explode(" ",$fechas);*/
+
         
          $query=$this->db->prepare("SELECT * FROM V_PEDIDO_MONTO WHERE VENDEDOR = :cod_vendedor and
          FECHA >= :fecha_inicial and FECHA < :fecha_final");
