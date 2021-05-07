@@ -8,7 +8,7 @@ if(!isset($_SESSION['zona'])){
     exit;
 } 
 
-$fcha = date("Y-m-d");
+$fcha = date("Y-m-d",strtotime(date("Y-m-d")."+ 1 days"));
 ?>
 
 <html>
@@ -32,7 +32,7 @@ $fcha = date("Y-m-d");
     <body>
     <div class="main">
         <form class="row g-3"  id="frmpedidos">
-                <div id="guardadoexitoso">
+                <div id="mensajesgenerales">
                                    
                 </div>
                 <div class="col-12">
@@ -45,7 +45,7 @@ $fcha = date("Y-m-d");
                 </div>
                 <div class="col-12">
                     <label for="formNumero" class="form-label">NUMERO</label>
-                    <input type="text" class="form-control" name="txtnumero" id="txtnumero">
+                    <input type="number" class="form-control" name="txtnumero" id="txtnumero" >
                 </div>
                 <div class="col-12">
                     <label for="formcliente" class="form-label">CLIENTE</label>
@@ -66,12 +66,12 @@ $fcha = date("Y-m-d");
                 </div>
                 <div class="col-12">
                     <label for="formdireccion" class="form-label">DIRECCIÓN</label>
-                    <input type="text" class="form-control" name="txtdireccion" id="formdireccion" >
+                    <input type="text" class="form-control" name="txtdireccion" id="txtdireccion" >
                 </div>
                 
                 <div class="col-12">
                     <label for="formreferencia" class="form-label">REFERENCIA</label>
-                    <input type="text" class="form-control" name="txtreferencia" id="formreferencia" >
+                    <input type="text" class="form-control" name="txtreferencia" id="txtreferencia" >
                 </div>
 
                 <!-- cambie el campo descripcion del formulario original 
@@ -108,13 +108,12 @@ $fcha = date("Y-m-d");
 
                 <div class="col-12">
                     <label for="formcontacto" class="form-label">CONTACTO</label>
-                    <input type="text" class="form-control" name="txtcontacto" id="formGroupExampleInput2" >
+                    <input type="text" class="form-control" name="txtcontacto" id="txtcontacto" >
                 </div>
                 <div class="row g-2">
                     <div class="col">
                         <label for="formtelefono" class="form-label">TELEFONO</label>
-                        <input type="text" class="form-control" name="txttelefono" id="txttelefono"
-                        min="9" max="9">
+                        <input type="number" class="form-control" name="txttelefono" id="txttelefono">
                     </div>
                     <div class="col">
                         <label for="formcondicion" class="form-label">CONDICIÓN</label>
@@ -130,13 +129,15 @@ $fcha = date("Y-m-d");
                         <label for="formentrega" class="form-label">ENTREGA</label>
                         <select class="form-select" name="slcentrega" aria-label="Default select example">
                             <option selected>Seleccion Turno</option>
-                            <option value="1">Mañana</option>
-                            <option value="2">Tarde</option>
+                            <option value="M">Mañana</option>
+                            <option value="T">Tarde</option>
                         </select>
                     </div>
                     <div class="col">
                         <label for="formfpago" class="form-label">F.PAGO</label>
-                        <input type="date" name="dtfechapago" id="dtfechapago" value="<?php echo $fcha;?>" class="form-control">
+                        <input type="date" name="dtfechapago" id="dtfechapago" value="<?php echo $fcha;?>"
+                         class="form-control" min = "<?php echo date("Y-m-d",strtotime(date("Y-m-d")."+ 1 days"));?>"
+                         max = "<?php echo date("Y-m-d",strtotime(date("Y-m-d")."+ 30 days"));?>">
                     </div>
                 </div>
 
@@ -147,8 +148,7 @@ $fcha = date("Y-m-d");
                     </div>
                     <div class="col">
                         <label for="formfpago" class="form-label">TELEFONO 2</label>
-                        <input type="text" name="txtTelefono2" id="txtTelefono2" class="form-control"
-                        min="9" max="9">
+                        <input type="text" name="txtTelefono2" id="txtTelefono2" class="form-control" maxlength=9>
                     </div>
                 </div>
 
