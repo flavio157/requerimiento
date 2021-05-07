@@ -3,39 +3,58 @@ session_start();
 require_once("../modelo/M_BuscarProductos.php");
 
 
-    $c_Producto= new C_BuscarProducto();
     $accion = $_POST["accion"];
     
     if($accion === "buscar"){
         $nomproducto = $_POST['producto'];
-        $c_Producto->BuscaProducto($nomproducto);
+        C_BuscarProducto::BuscaProducto($nomproducto);
 
     }else if ($accion == "politicaprecios"){
         $cantidad = $_POST['cantidad'];
         $cod_producto = $_POST['codproducto'];
-        $c_Producto->PoliticaPrecios($cantidad,$cod_producto);
+        C_BuscarProducto::PoliticaPrecios($cantidad,$cod_producto);
       
     }else if($accion == "politicabonos"){
         $cantidad = $_POST['cantidad'];
         $cod_producto = $_POST['codproducto'];
-        $c_Producto->PoliticaBonos($cantidad,$cod_producto);
+        C_BuscarProducto::PoliticaBonos($cantidad,$cod_producto);
+    }else if($accion == "bonoitem"){
+        $cod_bono = $_POST['codbono'];
+        C_BuscarProducto::comboitem($cod_bono);
+    }else if($accion == "productobono"){
+        $cod_bono = $_POST['codbono'];
+        C_BuscarProducto::comboProducto($cod_bono);
     }
    
 
 class C_BuscarProducto
 {
     
-    public function BuscaProducto($nomproducto)
-    {
+    static function BuscaProducto($nomproducto)
+    {   
         $M_buscarproducto = new M_BuscarProductos();
         if($nomproducto !== ""){
-            $c_cod = $M_buscarproducto->M_BuscarProducto($_SESSION['zona'],$nomproducto);
-            echo $c_cod;
+            if($nomproducto == "cm"){
+                $c_cod = $M_buscarproducto->M_Combo($nomproducto);
+                $datos  = array(
+                    'estado' => 'combo',
+                    'combo' => $c_cod,
+                    );
+                    echo json_encode($datos,JSON_FORCE_OBJECT);
+            }else{
+                $c_cod = $M_buscarproducto->M_BuscarProducto($_SESSION['zona'],$nomproducto);
+                $datos  = array(
+                    'estado' => 'productos',
+                    'producto' => $c_cod,
+                    );
+                    echo json_encode($datos,JSON_FORCE_OBJECT);
+            }
+           
         }
     }
 
 
-    public function PoliticaPrecios($cantidad,$cod_producto){
+    static function PoliticaPrecios($cantidad,$cod_producto){
         $M_politicaPrecio = new M_BuscarProductos();
         if($cantidad != ""){
             $precio = $M_politicaPrecio->M_PoliticaPrecios($_SESSION['zona'],$cantidad,$cod_producto);
@@ -52,7 +71,7 @@ class C_BuscarProducto
 
 
    
-    public function PoliticaBonos($cantidad,$cod_producto)
+    static function PoliticaBonos($cantidad,$cod_producto)
     {
             $M_politicaBono = new M_BuscarProductos();
 
@@ -78,6 +97,28 @@ class C_BuscarProducto
                 );
             echo json_encode($array,JSON_FORCE_OBJECT);
     }
+
+
+    static function comboitem($cod_combo)
+    {
+        $M_politicaPrecio = new M_BuscarProductos();
+        $codigosProducto =   $M_politicaPrecio->M_ComboItem($cod_combo);
+        print_r($codigosProducto);
+       
+    }
+
+    static function comboProducto($cod_combo)
+    {
+        $M_politicaPrecio = new M_BuscarProductos();
+        $codigosProducto =   $M_politicaPrecio->M_ComboProducto($cod_combo);
+        $datos  = array(
+            'estado' => 'ok',
+            'datos' => $codigosProducto,
+            );
+            echo json_encode($datos,JSON_FORCE_OBJECT);
+    }
+
+
 }
 
 ?>
