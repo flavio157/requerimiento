@@ -62,21 +62,15 @@
     
                 $c_pedido = $c_guardar->guardarpedido(date("d-m-Y"),$cod_cliente,$_SESSION['cod_personal'],$tipo_documento,
                 $identificacion,$cliente,$direccion,$referencia,$contacto,$telefono,$entrega,$fcancelacion,
-                $est_pedido,$observacion,$total,'01',$num_contrato,'01',$telefono2);
+                $est_pedido,$observacion,$total,'01',$num_contrato,'01',$telefono2,$dataproductos);
                 
                 if($c_pedido){
-                    $cod_pedido = $c_guardar->UltimoRegistro();
-                    foreach ($dataproductos->arrayproductos as $dato){
-                        if(isset($dato->cod_producto)){
-                           guardarPedidos::guardarpedidocantidad($cod_pedido['CODIGO'],$dato->cod_producto,$dato->cantidad,$dato->promocion,
-                                            $dato->precio,$dato->cantidad,$dato->promocion);
-                        }         
-                    }
+                    $buscarProducto = array(
+                        'estado' => 'echo',
+                        'mensaje' => 'Se registro el Pedido'
+                    );
                 }
-                $buscarProducto = array(
-                    'estado' => 'echo',
-                    'mensaje' => 'Se registro el Pedido'
-                );
+                
             }else{
                 $buscarProducto = array(
                     'estado' => 'error',
@@ -86,29 +80,7 @@
             }
 
             echo json_encode($buscarProducto,JSON_FORCE_OBJECT);
-        }
-
-
-
-
-
-
-        static function guardarpedidocantidad($cod_pedido,$cod_producto,$cantidad,$bono,$precio){
-            $bd = "SMP2";
-            $c_guardar = new M_Pedidos($bd);
-            $c_pedidocantidad = $c_guardar->guardarpedidocantidad($cod_pedido,$cod_producto,$cantidad,
-                                                                  $bono,round($precio,2),$cantidad,$bono);
-            
-            if($c_pedidocantidad){
-                $buscarProducto = array(
-                    'estado' => 'ok'
-                );
-                echo json_encode($buscarProducto,JSON_FORCE_OBJECT);
-            }
-        }
-
-
-       
+        }      
     }
     
 
