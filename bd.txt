@@ -1,7 +1,4 @@
-/*create database Almacenes 
-create database SMP2*/
-
-use Almacenes
+bd Almacenes
 
 create table T_USUARIO_CALL(
 COD_USUARIO char(3),
@@ -15,25 +12,14 @@ COD_PERSONAL char(5),
 ZONA char(1)
 )
 
-select * from T_USUARIO_CALL where NOM_USUARIO ='admin' and PDW_USUARIO = '123' and EST_USUARIO != 'A'
-update T_USUARIO_CALL set ZONA = '7'
-where COD_USUARIO = 'adm'
-
-update T_CALL_CENTER set CUOTAS = 155
-where CODIGO = '2'
-
-
-
-select * from T_CALL_CENTER
-insert into T_CALL_CENTER values(002,'0002','anonimo','','','1','1','001'
-,'12/03/2021','admin','DNI','002','26/03/2021','vacio','06',150,'productos',
-'desproductos',150.0,'26/03/2020','003','7','referencia','admin','27/03/2020',
-'215202515')
-
-insert into T_CALL_CENTER values(001,'0001','anonimo','','','1','1','001'
-,'12/02/2021','admin','DNI','002','26/02/2021','vacio','06',150,'productos',
-'desproductos',150.0,'26/03/2020','003','7','referencia','admin','27/02/2020',
-'215202515')
+CREATE table T_CALL_CENTER_ITEM(
+CODIGO numeric(18,0),
+NUM_CONTRATO char(9),
+COD_PRODUCTO char(6),
+NUM_LOTE char(6), 
+PRECIO numeric(7,2),   
+OFICINA char(30)
+)
 
 
 
@@ -49,7 +35,7 @@ EST_LLAMADA char(1),
 OK_CONTRATO char(1),
 OFICINA char(30),
 FEC_OK char(10),
-COD_PERSONAL char(5),
+COD_PERSONAL char(5),			
 IDENTIFICACION char(11),
 COD_REGISTRO char(5),
 FEC_REGISTRO datetime,
@@ -60,7 +46,7 @@ COMENTARIO varchar(200),
 DESPRODUCTOS varchar(200),
 MON_INICIAL numeric(7,2),
 FEC_GENERADO datetime,
-COD_VENDEDOR char(5),
+COD_VENDEDOR char(5),		/*cod vendedor*/
 COD_ZONA char(5),
 REFERENCIA varchar(200),
 COD_CLIENTE char(7),
@@ -70,7 +56,7 @@ TELEFONO2 char(9)
 
 
 
-/*
+
 create table T_CALL_PERMISOS(
 COD_PERMISO char(9),
 COD_PERSONAL char(5),
@@ -79,12 +65,20 @@ PERMISO char(1),
 ANEXO char(4),
 FECHA datetime
 )
-*/
+ 
+create Table T_COMBO(
+ COD_COMBO char(6),
+ USU_REGISTRO char(5),
+ PRECIO numeric(7,2),
+ CANTIDAD int,
+)
+ 
+create table T_COMBO_ITEM (
+COD_COMBO char(6),
+COD_PRODUCTO char(6),
+PRECIO numeric(7,2)
+)
 
-
-use SMP2
-
-select * from T_PRODUCTO where COD_PRODUCTO = ''
 create table T_PRODUCTO(
 COD_PRODUCTO char(6),
 COD_CATEGORIA char(5),
@@ -109,6 +103,28 @@ PRECIO_SUR numeric(7,2),
 CANTIDAD int,
 )
 
+T_PRODUCTO_PRECIO(
+COD_PRODUCTO char(6),
+ZONA char(1),
+CANTIDAD int,
+BONO int,
+PRECIO numeric(7,2)
+)
+
+
+
+
+
+
+
+
+
+
+bd SMP2
+
+select * from T_PRODUCTO
+
+
 create table T_DEPARTAMENTO(
 COD_DEPARTAMENTO char(5),
 DES_DEPARTAMENTO varchar(50),
@@ -122,7 +138,7 @@ insert into T_PROVINCIA values ('01','03','Bongará','')
 insert into T_PROVINCIA values ('01','04','Condorcanqui','')
 insert into T_PROVINCIA values ('01','05','Luya','')*/
 
-select * from T_PROVINCIA
+
 
 create table T_PROVINCIA(
 COD_DEPARTAMENTO char(5),
@@ -131,7 +147,7 @@ DES_PROVINCIA varchar(50),
 COD_POSTAL char(5)
 )
 
-select * from T_DISTRITO
+
 
 create table T_DISTRITO(
 COD_DEPARTAMETO char(5),
@@ -149,78 +165,31 @@ insert into T_DISTRITO values('01','05','01','LAMUD','')*/
 
 
 
-
-
-create table T_PPEDIDO(
+create table T_PPEDIDO( 
 CODIGO numeric(18,0),
-FECHA datetime,
-COD_CLIENTE char(7),
-COD_VENDEDORA char(5),
-TIPO_DOCUMENTO char(3),
-IDENTIFICACION char(11),
-CLIENTE varchar(50),
-DIRECCION varchar(100),
-REFERENCIA varchar(200),
-CONTACTO varchar(50),
-TELEFONO char(9),
-ENTREGA char(1),
-FCANCELACION datetime,
-EST_PEDIDO char(1), /* si es A el pedido esta anulado*/
-
-COD_PRODUCTO char(6),
-CAN_PRODUCTOS int,
-PROMOCION int,
-TOTAL int,
-
-
-FREPARTO datetime,
-COD_REPARTO char(5),
-COD_DISTRITO char(5),
-NUM_CONTRATO char(9),
-COD_PROVINCIA char(5),
+FECHA datetime,			  /*fecha del sistema*/	
+COD_CLIENTE char(7),      /*se guardan codigo cliente*/
+COD_VENDEDORA char(5),		/*codigo vendedora*/
+TIPO_DOCUMENTO char(3),		/*tipo documento campo tipo*/
+IDENTIFICACION char(11),	/*numero documento campo numero*/
+CLIENTE varchar(50),		/*el nombre del cliente campo cliente*/
+DIRECCION varchar(100),		/*campo direccion*/
+REFERENCIA varchar(200),	/*campo referencia*/
+CONTACTO varchar(50),		/*campo contacto*/
+TELEFONO char(9),			/*campo telefono*/
+ENTREGA char(1),			/*campo entrega*/
+FCANCELACION datetime,		/*campo F. Pago*/		
+EST_PEDIDO char(1),			
+OBSERVACION varchar(200),	/*campo descripcion del pedido*/
+N_PRODUCTOS int,			/*campo descripcion del pedido*/
+FREPARTO datetime,			
+COD_REPARTO char(5),			
+COD_DISTRITO char(5),		/*campo distrito*/
+NUM_CONTRATO char(9),		/*campo numero deo contrato*/
+COD_PROVINCIA char(5),		/*campo ciudad*/
 FEC_DESPACHO datetime,
-CUOTA numeric
 )
 
-
-
-/*
-create table T_PPEDIDO(
-CODIGO numeric(18,0),
-FECHA datetime,
-COD_CLIENTE char(7),
-COD_VENDEDORA char(5),
-TIPO_DOCUMENTO char(3),
-IDENTIFICACION char(11),
-CLIENTE varchar(50),
-DIRECCION varchar(100),
-REFERENCIA varchar(200),
-CONTACTO varchar(50),
-TELEFONO char(9),
-ENTREGA char(1),
-FCANCELACION datetime,
-EST_PEDIDO char(1),
-OBSERVACION varchar(200),
-FREPARTO datetime,
-COD_REPARTO char(5),
-N_PRODUCTOS int,
-COD_DISTRITO char(5),
-NUM_CONTRATO char(9),
-COD_PROVINCIA char(5),
-FEC_DESPACHO datetime,
-CUOTAS numeric
-)
-*/
-insert into T_PPEDIDO values('0002','19/04/2020','00001','0002','DNI','123265412','nombre',
-'direccion','referencia','123654789','984562','1','19/04/2020','P','este campo cambiara',
-'19/04/2020','0002',5,'01','0001','02','19/04/2020')
-
-
-            
-insert into T_PPEDIDO_CANTIDAD values ('2','00002',5,1,52,5,1)
-
-update T_PPEDIDO_CANTIDAD set PRECIO = 54
-where CODIGO = 2
 
 
 create table T_PPEDIDO_CANTIDAD(
@@ -228,15 +197,12 @@ CODIGO numeric(18,0),
 COD_PRODUCTO char(6),
 CANTIDAD int,
 BONO int,
-PRECIO int,
+PRECIO numeric(7,2),
 CCAN int,
 CBON int
 )
 
 
-
-/*select * from T_CLIENTE where COD_PERSONAL = 'COD_PERSONAL'*/
-select * from T_CLIENTE where COD_CLIENTE = '00001' and EST_CLIENTE!='A'
 
 
 create table T_CLIENTE(
@@ -268,61 +234,158 @@ SALDO decimal(7,2),
 ULT_PAGO datetime
 )
 
-update T_CLIENTE set SALDO = 0 where COD_CLIENTE = '00001'
 
-select * from T_ClIENTE
-select * from T_ClIENTE where COD_PERSONAL ='00001' and EST_CLIENTE != 'A'
-
-insert into T_ClIENTE values('00001','nombre','nombre2','APP','APM','01','01','01',
-'direcion','referencia','1022252521','87456123',1,9874563,7456321,'1','A','00001','7',
-'1','0003','01/12/2019','','',150.2,'01/12/2019')
-
-insert into T_ClIENTE values('00002','nombre','nombre2','APP','APM','01','01','01',
-'direcion','referencia','1022252521','87456123',1,9874563,7456321,'1','P','00001','7',
-'1','0003','01/12/2019','','',150.2,'01/12/2019')
-
-
-
-
-select * from T_POLITICA_PRECIOS where CANTIDAD <= 5 and CANT_FIN >= 5
-
-
-/*create table T_POLITICA_PRECIOS(
-CODIGO char(3),
-CANTIDAD int,
-BONO int,
-COD_USUARIO char(5),
-FECHA datetime,
-ESTADO char(1),
-CANT_FIN int
-)*/
-
-
-create table T_PERSONAL(
-COD_PERSONAL char(5),
-COD_AREA char(5),
-COD_CARGO char(5),
-TIP_AGRUPADO char(3),
-DNI_PERSONAL char(8),
-NOM_PERSONAL1 varchar(60),
-NOM_PERSONAL2 varchar(30),
-APE_PPERSONAL varchar(30),
-APE_MPERSONAL varchar(30),
-SAL_BASICO decimal(9,2),
-COMISIONES decimal(7,2),
-DIR_PERSONAL varchar(100),
-COD_DEPARTAMENTO char(5),
-COD_PROVINCIA char(5),
-COD_DISTRITO char(5),
-TEL_PERSONAL decimal(11,0),
-CEL_PERSONAL decimal(11,0),
-EST_PERSONAL char(1),
-COD_SUPERVISOR char(5),
-COD_ZONA char(5),
-FEC_INGRESO datetime,
-USU_REGISTRO varchar(30),
+create table T_CALL_CENTER(
+CODIGO char(20),
+NUM_CONTRATO char(9),
+NOMBRE varchar(100),
+DIRECCION varchar (100),
+TELEFONO char(9),
+EST_LLAMADA char(1),
+OK_CONTRATO char(1),
+OFICINA char(30),
+FEC_OK char(10),
+COD_PERSONAL char(5),			
+IDENTIFICACION char(11),
+COD_REGISTRO char(5),
 FEC_REGISTRO datetime,
-USU_MODIFICO varchar(30),
-FEC_MODIFICO datetime,
-GRUPO char(1)
+EQUIPO varchar(50),
+COD_DISTRITO char(5),
+CUOTAS numeric,
+COMENTARIO varchar(200),
+DESPRODUCTOS varchar(200),
+MON_INICIAL numeric(7,2),
+FEC_GENERADO datetime,
+COD_VENDEDOR char(5),		/*cod vendedor*/
+COD_ZONA char(5),
+REFERENCIA varchar(200),
+COD_CLIENTE char(7),
+FEC_COBRO datetime,
+TELEFONO2 char(9)
 )
+
+
+VISTAS Almacenes
+
+/*buscar producto por zona y categoria 00004*/
+ create View [dbo].[V_BUSCAR_PRODUCTO]  
+ as
+	select p.COD_PRODUCTO as CODIGO ,MAX(c.COD_CATEGORIA) as CATEGORIA,
+	MAX(c.DES_PRODUCTO) as DES_PRODUCTO , p.ZONA as ZONA ,
+	MAX(p.CANTIDAD) as cantidad, MAX(p.BONO) as BONO, MAX(p.PRECIO) as PRECIO
+	from T_PRODUCTO_PRECIO as p
+	inner join T_PRODUCTO as c
+	on p.COD_PRODUCTO = c.COD_PRODUCTO where c.COD_CATEGORIA = '00004'
+	group by p.COD_PRODUCTO , ZONA
+
+GO
+
+
+ /*verificar cuota del vendedro almacenes*/
+
+create view [dbo].[V_CALL_CENTER]  
+as
+select c.NUM_CONTRATO, MAX(c.COD_VENDEDOR)as VENDEDOR,
+MAX(c.FEC_GENERADO)as FECHA_GENERADO,SUM(ci.PRECIO) as MONTO from T_CALL_CENTER as c
+inner join T_CALL_CENTER_ITEM as ci on
+c.NUM_CONTRATO = ci.NUM_CONTRATO
+Group by c.NUM_CONTRATO 
+
+
+
+/*para el login */
+
+create view [dbo].[V_LOGIN]  
+as
+SELECT COD_USUARIO, NOM_USUARIO, 
+PDW_USUARIO, ANEXO_USUARIO, 
+EST_USUARIO, EST_INGRESO, 
+OFICINA, COD_PERSONAL, ZONA
+FROM dbo.T_USUARIO_CALL where EST_USUARIO != 'A'
+
+
+
+ /*para buscar los bonos del producto*/
+
+create VIEW [dbo].[V_POLITICA_BONOS]
+as
+select * from T_PRODUCTO_PRECIO
+
+
+/*para buscar los precios del producto*/
+
+create view [dbo].[V_POLITICA_PRECIOS]
+as
+SELECT * FROM T_PRODUCTO_PRECIO 
+
+
+/*para buscar los combos al momento de escribir el codigo */
+
+create view [dbo].[V_COMBO]
+as
+select c.COD_COMBO,c.PRECIO
+from T_COMBO as c
+GO
+
+
+/*para buscar los los codigos de los productos segun su combo */
+
+create view [dbo].[V_COMBOITEM]
+as
+select *
+from T_COMBO_ITEM 
+GO
+
+
+
+/*para mostrar los productos asociados al comboitem*/
+
+create view [dbo].[V_COMBOPRODUCTO]
+as 
+select c.COD_COMBO as combo,p.COD_PRODUCTO as cod_producto,p.DES_PRODUCTO as nombre,c.PRECIO as precio from T_PRODUCTO as p
+inner join T_COMBO_ITEM as c on 
+p.COD_PRODUCTO = c.COD_PRODUCTO
+GO
+
+
+/*para mostrar las provincias*/
+
+create view [dbo].[V_PROVINCIA]
+as 
+select * from T_PROVINCIA 
+
+
+
+
+
+
+/*para mostrar los distritos*/
+
+create view [dbo].[V_DISTRITO]
+as
+select * from T_DISTRITO 
+
+
+
+/* trae el ultimo registro para poder guardar el peddido segun el vendedor*/
+create view [dbo].[V_ULTIMO_REGISTRO]
+as
+SELECT TOP 1 * FROM T_PPEDIDO ORDER BY CODIGO DESC
+
+
+
+/*para verificar si cumplio con el monto a llegar cuado inicia sesion*/
+
+ALTER view [dbo].[V_PEDIDO_MONTO]
+as
+select p.CODIGO, MAX(p.COD_VENDEDORA) as VENDEDOR, MAX(p.FECHA) as FECHA , 
+SUM(pc.CANTIDAD * pc.PRECIO) as CANTIDAD 
+FROM T_PPEDIDO as p
+inner JOIN T_PPEDIDO_CANTIDAD pc
+ON p.CODIGO = pc.CODIGO 
+WHERE  p.EST_PEDIDO != 'A'  
+Group by p.CODIGO
+
+
+
+
