@@ -91,5 +91,56 @@ class M_BuscarProductos{
         }
 
 
+        public function M_Combo($cod_combo){
+            $query=$this->db->prepare("SELECT * FROM V_COMBO WHERE COD_COMBO LIKE '%$cod_combo%'");
+            $query->execute();
+           if ($query) {
+               $html = "";
+                while ($row = $query->fetch()) {                
+                    $html .= '<div><a class="suggest-element" data-="'.$row['PRECIO'].'"
+                    id="'.$row['COD_COMBO'].'">'.$row['COD_COMBO'].'</a></div>';
+                }
+                return $html ;
+                $query->closeCursor();
+                $query = null;
+            }
+        }
+
+        public function M_ComboItem($cod_combo){
+            $query=$this->db->prepare("SELECT * FROM V_COMBOITEM WHERE COD_COMBO = :cod_combo");
+            $query->bindParam("cod_combo",$cod_combo,PDO::PARAM_STR);
+            $query->execute();
+            $cod_productos = "";
+            if($query){
+                while ($row = $query->fetch()) {
+                    if( $cod_productos != ""){
+                        $cod_productos .= " - ".$row['COD_PRODUCTO'];
+                    }else{
+                        $cod_productos .=$row['COD_PRODUCTO'];
+                    }
+                   
+                }
+                return  $cod_productos;
+                $query->closeCursor();
+                $query = null;
+            }
+
+        }
+
+        public function M_ComboProducto($cod_combo){
+            $query=$this->db->prepare("SELECT * FROM V_COMBOPRODUCTO WHERE combo = :cod_combo");
+            $query->bindParam("cod_combo",$cod_combo,PDO::PARAM_STR);
+            $query->execute();
+            $productos = $query->fetchAll();
+            if($query){
+                return  $productos;
+                $query->closeCursor();
+                $query = null;
+            }
+
+        }
+
+
+
 }
 ?>
