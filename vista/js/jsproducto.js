@@ -22,10 +22,14 @@ $(document).ready(function(){
                     this.value = this.value.slice(0,11); 
                 }else if(dato === "DNI"){
                         this.value = this.value.slice(0,9); 
+                }else{
+                    if(e.which != 8) {
+                        this.value = this.value.slice(0,0); 
+                        mensajesError("Seleccione tipo de documento","mensajesgenerales");
+                    }
                 }   
             })
     })
-
 
 
     $("#tablaproductos").hide();
