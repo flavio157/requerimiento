@@ -14,6 +14,20 @@ $(document).ready(function(){
         $('#sugerencias').fadeOut(0); 
     });
 
+    $("#txtnumero").keyup(function(e) {
+        var input=  document.getElementById('txtnumero');
+            input.addEventListener('input',function(){
+                var dato = $("#slcdocumento").val();
+                if(dato === "RUC"){
+                    this.value = this.value.slice(0,11); 
+                }else if(dato === "DNI"){
+                        this.value = this.value.slice(0,9); 
+                }   
+            })
+    })
+
+
+
     $("#tablaproductos").hide();
 
     $('#ModalProducto').on('shown.bs.modal', function (e) {
