@@ -146,9 +146,17 @@ $(document).ready(function(){
     $("#G_cantidad").keyup(function(e) {
         precio = $("#precioproducto").val();
         cantidad = $("#G_cantidad").val();
-        total = precio * cantidad;
-        $("#G_total").val(total.toFixed(2));
+        if(tipodeproducto === "CM"){
+            total = precio * cantidad;
+            $("#G_total").val(total.toFixed(2));
+            if(e.which == 8) {
+                $("#G_promocion").val('');
+                $("#G_total").val('');
+             }
+        }
+       
     })
+
 
     $("#G_cantidad").keydown(function(e){
         precio = $("#precioproducto").val();
