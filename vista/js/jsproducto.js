@@ -295,6 +295,7 @@ $(document).ready(function(){
 
     function agregarcombos(dato) {
         var cantidad = $("#G_cantidad").val();
+        var nombreproducto = $("#nombreproducto").val();
         var promocion = 0;
         var total = 0;
         var combo = "";
@@ -303,8 +304,8 @@ $(document).ready(function(){
             if (contador >= 0) {
                 for (let j = 0; j < arrayproductos.length; j++) {
                     if (arrayproductos[j] != undefined) {
-                        if (arrayproductos[j]['cod_producto'] === cod_producto) {
-                            mensajesError("Ya existe el Producto en la tabla","mensaje");
+                        if (arrayproductos[j]['combo'] === nombreproducto) {
+                            mensajesError("Ya existe el Combo en la tabla","mensaje");
                             return estado = 0;
                             break;
                         }else{
