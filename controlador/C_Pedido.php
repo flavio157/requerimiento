@@ -8,7 +8,6 @@
     $identificacion = $_POST["txtnumero"];
 
     if($accion == "guardar"){
-        $cod_cliente = '0001';
         $cliente = $_POST["txtcliente"];
         $direccion = $_POST["txtdireccion"];
         $referencia = $_POST["txtreferencia"];
@@ -21,26 +20,27 @@
         $cod_distrito = $_POST["slcdistrito"];
         $num_contrato = $_POST["txtcontrato"]; 
         $cod_provincia=$_POST["slcciudad"];  
-        $telefono2=$_POST["txtTelefono2"];  
+        $telefono2=$_POST["txtTelefono2"]; 
+        $condicion = $_POST["slccondicion"]; 
         
         $dataproductos = json_decode($_POST['array']);
-
+        $provincia = explode("/", $cod_provincia);
        
-        guardarPedidos::guardarpedido(trim($cod_cliente),
-        trim($tipo_documento),trim($identificacion),trim($cliente),trim($direccion),trim($referencia),
+        guardarPedidos::guardarpedido(trim($tipo_documento),
+        trim($identificacion),trim($cliente),trim($direccion),trim($referencia),
         trim($contacto),trim($telefono),trim($entrega),trim($fcancelacion) ,trim($est_pedido),
         trim($cod_distrito),trim($num_contrato),
-        trim($cod_provincia),trim($telefono2),$dataproductos);
+        trim($provincia[1]),trim($telefono2),trim($condicion),$dataproductos);
 
     }
 
 
     class guardarPedidos
     { 
-        static function guardarpedido($cod_cliente,$tipo_documento,
+        static function guardarpedido($tipo_documento,
         $identificacion,$cliente,$direccion,$referencia,$contacto,$telefono,$entrega,
         $fcancelacion,$est_pedido,$cod_distrito,$num_contrato,
-        $cod_provincia,$telefono2,$dataproductos){
+        $cod_provincia,$telefono2,$condicion,$dataproductos){
             
             $observacion = "";
             $producto = 0;
@@ -60,9 +60,9 @@
     
                 $total = $producto + $promocion;
     
-                $c_pedido = $c_guardar->guardarpedido(date("d-m-Y"),$cod_cliente,$_SESSION['cod_personal'],$tipo_documento,
+                $c_pedido = $c_guardar->guardarpedido(date("d-m-Y"),$_SESSION['cod_personal'],$tipo_documento,
                 $identificacion,$cliente,$direccion,$referencia,$contacto,$telefono,$entrega,$fcancelacion,
-                $est_pedido,$observacion,$total,'01',$num_contrato,'01',$telefono2,$dataproductos);
+                $est_pedido,$observacion,$total,$cod_distrito,$num_contrato,$cod_provincia,$telefono2,$condicion,$dataproductos);
              
                 if($c_pedido){
                     $buscarProducto = array(
