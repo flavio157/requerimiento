@@ -13,64 +13,73 @@
     public function GuardarPedido($fecha,$cod_cliente,$cod_vendedora,$tipo_documento,$identificacion,
     $cliente,$direccion,$referencia,$contacto,$telefono,$entrega,$fcancelacion,$est_pedido,$observacion,
     $n_productos,$cod_distrito,$num_contrato,$cod_provincia,$telefono2,$dataproductos){
+        
+        try { 
+            $this->bd->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+            $this->bd->beginTransaction();
+            $query1=$this->bd->prepare("INSERT INTO T_PPEDIDO(FECHA,COD_CLIENTE,COD_VENDEDORA,
+            TIPO_DOCUMENTO,IDENTIFICACION,CLIENTE,DIRECCION,REFERENCIA,CONTACTO,TELEFONO,ENTREGA,
+            FCANCELACION,EST_PEDIDO,OBSERVACION,N_PRODUCTOS,
+            COD_DISTRITO,NUM_CONTRATO,COD_PROVINCIA,TELEFONO2) values 
+            
+            (:fecha,:cod_cliente,:cod_vendedora,:tipo_documento,:identificacion,:cliente,:direccion,
+            :referencia,:contacto,:telefono,:entrega,:fcancelacion,:est_pedido,:observacion,:n_productos,
+            :cod_distrito,:num_contrato,:cod_provincia,:telefono2)");
+
+            $query1->bindParam("fecha",$fecha,PDO::PARAM_STR);
+            $query1->bindParam("cod_cliente",$cod_cliente,PDO::PARAM_STR);        
+            $query1->bindParam("cod_vendedora",$cod_vendedora,PDO::PARAM_STR);
+            $query1->bindParam("tipo_documento",$tipo_documento,PDO::PARAM_STR);
+            $query1->bindParam("identificacion",$identificacion,PDO::PARAM_STR);
+            $query1->bindParam("cliente",$cliente,PDO::PARAM_STR);
+            $query1->bindParam("direccion",$direccion,PDO::PARAM_STR);
+            $query1->bindParam("referencia",$referencia,PDO::PARAM_STR);
+            $query1->bindParam("contacto",$contacto,PDO::PARAM_STR);
+            $query1->bindParam("telefono",$telefono,PDO::PARAM_STR);
+            $query1->bindParam("entrega",$entrega,PDO::PARAM_STR);
+            $query1->bindParam("fcancelacion",$fcancelacion,PDO::PARAM_STR);
+            $query1->bindParam("est_pedido",$est_pedido,PDO::PARAM_STR);
+            $query1->bindParam("observacion",$observacion,PDO::PARAM_STR);
+            $query1->bindParam("n_productos",$n_productos,PDO::PARAM_INT);
+            $query1->bindParam("cod_distrito",$cod_distrito,PDO::PARAM_STR);
+            $query1->bindParam("num_contrato",$num_contrato,PDO::PARAM_STR);
+            $query1->bindParam("cod_provincia",$cod_provincia,PDO::PARAM_STR);
+            $query1->bindParam("telefono2",$telefono2,PDO::PARAM_STR);
+            
+            $query1->execute();
+           
     
+            $ultimocodigo = $this->UltimoRegistro($cod_vendedora);
+    
+            $query2 = $this->bd->prepare("INSERT INTO T_PPEDIDO_CANTIDAD(CODIGO,COD_PRODUCTO,
+                                        CANTIDAD,BONO,PRECIO,CCAN,CBON) 
+                                        VALUES(:codigo,:cod_producto,:cantidad,:bono,:precio,:ccan,:cbon)");
+            foreach ($dataproductos->arrayproductos as $dato){
+                if(isset($dato->cod_producto)){
+                    $query2->bindParam("codigo",$ultimocodigo['CODIGO'],PDO::PARAM_STR); 
+                    $query2->bindParam("cod_producto",$dato->cod_producto,PDO::PARAM_STR);
+                    $query2->bindParam("cantidad",$dato->cantidad,PDO::PARAM_STR);
+                    $query2->bindParam("bono",$dato->promocion,PDO::PARAM_STR);
+                    $query2->bindParam("precio", $dato->precio,PDO::PARAM_INT);
+                    $query2->bindParam("ccan",$dato->cantidad,PDO::PARAM_INT);
+                    $query2->bindParam("cbon",$dato->promocion,PDO::PARAM_INT);
+                    $query2->execute(); 
+                             if($query2->errorCode()>0){	
+                                $this->bd->rollBack();
+                                return 0;
+                                    break;
+                                }
+                }         
+            }
+    
+          $guardado = $this->bd->commit();
 
+          return $guardado;
 
-       $query1=$this->bd->prepare("INSERT INTO T_PPEDIDO(FECHA,COD_CLIENTE,COD_VENDEDORA,
-        TIPO_DOCUMENTO,IDENTIFICACION,CLIENTE,DIRECCION,REFERENCIA,CONTACTO,TELEFONO,ENTREGA,
-        FCANCELACION,EST_PEDIDO,OBSERVACION,N_PRODUCTOS,
-        COD_DISTRITO,NUM_CONTRATO,COD_PROVINCIA,TELEFONO2) values 
-        
-        (:fecha,:cod_cliente,:cod_vendedora,:tipo_documento,:identificacion,:cliente,:direccion,
-        :referencia,:contacto,:telefono,:entrega,:fcancelacion,:est_pedido,:observacion,:n_productos,
-        :cod_distrito,:num_contrato,:cod_provincia,:telefono2)");
-
-        $query1->bindParam("fecha",$fecha,PDO::PARAM_STR);
-        $query1->bindParam("cod_cliente",$cod_cliente,PDO::PARAM_STR);        
-        $query1->bindParam("cod_vendedora",$cod_vendedora,PDO::PARAM_STR);
-        $query1->bindParam("tipo_documento",$tipo_documento,PDO::PARAM_STR);
-        $query1->bindParam("identificacion",$identificacion,PDO::PARAM_STR);
-        $query1->bindParam("cliente",$cliente,PDO::PARAM_STR);
-        $query1->bindParam("direccion",$direccion,PDO::PARAM_STR);
-        $query1->bindParam("referencia",$referencia,PDO::PARAM_STR);
-        $query1->bindParam("contacto",$contacto,PDO::PARAM_STR);
-        $query1->bindParam("telefono",$telefono,PDO::PARAM_STR);
-        $query1->bindParam("entrega",$entrega,PDO::PARAM_STR);
-        $query1->bindParam("fcancelacion",$fcancelacion,PDO::PARAM_STR);
-        $query1->bindParam("est_pedido",$est_pedido,PDO::PARAM_STR);
-        $query1->bindParam("observacion",$observacion,PDO::PARAM_STR);
-        $query1->bindParam("n_productos",$n_productos,PDO::PARAM_INT);
-        $query1->bindParam("cod_distrito",$cod_distrito,PDO::PARAM_STR);
-        $query1->bindParam("num_contrato",$num_contrato,PDO::PARAM_STR);
-        $query1->bindParam("cod_provincia",$cod_provincia,PDO::PARAM_STR);
-        $query1->bindParam("telefono2",$telefono2,PDO::PARAM_STR);
-        
-        $guardarpedido = $query1->execute();
-       
-
-        $ultimocodigo = $this->UltimoRegistro($cod_vendedora);
-
-        $query2 = $this->bd->prepare("INSERT INTO T_PPEDIDO_CANTIDAD(CODIGO,COD_PRODUCTO,
-                                    CANTIDAD,BONO,PRECIO,CCAN,CBON) 
-                                    VALUES(:codigo,:cod_producto,:cantidad,:bono,:precio,:ccan,:cbon)");
-        foreach ($dataproductos->arrayproductos as $dato){
-            if(isset($dato->cod_producto)){
-                $query2->bindParam("codigo",$ultimocodigo['CODIGO'],PDO::PARAM_STR); 
-                $query2->bindParam("cod_producto",$dato->cod_producto,PDO::PARAM_STR);
-                $query2->bindParam("cantidad",$dato->cantidad,PDO::PARAM_STR);
-                $query2->bindParam("bono",$dato->promocion,PDO::PARAM_STR);
-                $query2->bindParam("precio", $dato->precio,PDO::PARAM_INT);
-                $query2->bindParam("ccan",$dato->cantidad,PDO::PARAM_INT);
-                $query2->bindParam("cbon",$dato->promocion,PDO::PARAM_INT);
-                $guardarPecantidad = $query2->execute();         
-            }         
+        } catch (Exception $e) {
+            echo $e;
+            $this->bd->rollBack();
         }
-
-        if($guardarPecantidad){
-            return $guardarPecantidad;
-            $query2->closeCursor();
-            $query2 = null;
-         }
     }
 
 
@@ -102,9 +111,4 @@
         
     }
    }
-   
-
-
-
-
 ?>
