@@ -42,8 +42,7 @@
            if($C_codDistrito > 0){
                 $Distrito="";
                 foreach ($C_codDistrito as $descripcion){
-                    $Distrito = $Distrito . '<option selected>SELECCIONE</option>
-                    <option  value="'.$descripcion['COD_DISTRITO'].'">' . $descripcion['DES_DISTRITO']  . '</option>';
+                    $Distrito = $Distrito .'<option  value="'.$descripcion['COD_DISTRITO'].'">' . $descripcion['DES_DISTRITO']  . '</option>';
                 }
               echo $Distrito;   
             }
