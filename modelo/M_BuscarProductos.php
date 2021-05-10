@@ -12,7 +12,7 @@ class M_BuscarProductos{
         
         public function M_BuscarProducto($zona,$nom_producto)
         {
-            $query=$this->db->prepare("SELECT * FROM V_BUSCAR_PRODUCTO WHERE ZONA = :zona AND DES_PRODUCTO LIKE '%$nom_producto%'");
+            $query=$this->db->prepare("SELECT * FROM V_BUSCAR_PRODUCTO WHERE ZONA = :zona AND ABREVIATURA LIKE '%$nom_producto%'");
             $query->bindParam("zona",$zona, PDO::PARAM_INT);
             $query->execute();
            if ($query) {
@@ -92,19 +92,20 @@ class M_BuscarProductos{
 
 
         public function M_Combo($cod_combo){
-            $query=$this->db->prepare("SELECT * FROM V_COMBO WHERE COD_COMBO LIKE '%$cod_combo%'");
+            $query=$this->db->prepare("SELECT * FROM V_COMBO WHERE ABR_PRODUCTO LIKE '%$cod_combo%'");
             $query->execute();
            if ($query) {
                $html = "";
                 while ($row = $query->fetch()) {                
                     $html .= '<div><a class="suggest-element" data-="'.$row['PRECIO'].'"
-                    id="'.$row['COD_COMBO'].'">'.$row['COD_COMBO'].'</a></div>';
+                    class ="'.$row['COD_COMBO'].'" id="'.$row['NOM_COMPLETO'].'">'.$row['NOM_COMPLETO'].'</a></div>';
                 }
                 return $html ;
                 $query->closeCursor();
                 $query = null;
             }
         }
+
 
         public function M_ComboItem($cod_combo){
             $query=$this->db->prepare("SELECT * FROM V_COMBOITEM WHERE COD_COMBO = :cod_combo");
