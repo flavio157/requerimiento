@@ -63,12 +63,17 @@
                 $c_pedido = $c_guardar->guardarpedido(date("d-m-Y"),$cod_cliente,$_SESSION['cod_personal'],$tipo_documento,
                 $identificacion,$cliente,$direccion,$referencia,$contacto,$telefono,$entrega,$fcancelacion,
                 $est_pedido,$observacion,$total,'01',$num_contrato,'01',$telefono2,$dataproductos);
-                
+             
                 if($c_pedido){
                     $buscarProducto = array(
                         'estado' => 'echo',
                         'mensaje' => 'Se registro el Pedido'
                     );
+                }else{
+                    $buscarProducto = array(
+                        'estado' => 'error',
+                        'mensaje' => 'Error al registrar el pedido'
+                    ); 
                 }
                 
             }else{
@@ -78,12 +83,8 @@
                 );
                 
             }
-
+           
             echo json_encode($buscarProducto,JSON_FORCE_OBJECT);
         }      
     }
-    
-
-
-
 ?>
