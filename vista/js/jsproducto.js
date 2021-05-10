@@ -10,6 +10,8 @@ var tipodeproducto = "";
 $(document).ready(function(){
     obtenerprovincia();
 
+
+
     $("html").click(function(){
         $('#sugerencias').fadeOut(0); 
     });
@@ -21,7 +23,7 @@ $(document).ready(function(){
                 if(dato === "RUC"){
                     this.value = this.value.slice(0,11); 
                 }else if(dato === "DNI"){
-                        this.value = this.value.slice(0,9); 
+                        this.value = this.value.slice(0,8); 
                 }else{
                     if(e.which != 8) {
                         this.value = this.value.slice(0,0); 
@@ -31,6 +33,21 @@ $(document).ready(function(){
             })
     })
 
+    $("#txttelefono").keyup(function (e) {
+        var input=  document.getElementById('txttelefono');
+        input.addEventListener('input',function(){
+            this.value = this.value.slice(0,9);
+        });
+        
+    })
+
+    $("#txttelefono").keyup(function (e) {
+        var input=  document.getElementById('txtTelefono2');
+        input.addEventListener('input',function(){
+            this.value = this.value.slice(0,9);
+        });
+        
+    })
 
     $("#tablaproductos").hide();
 
@@ -39,9 +56,10 @@ $(document).ready(function(){
     })
 
     $("#agregarProducto").on('click',function(){
+        var cod = $("#nombreproducto").val().split("-")
         if(tipodeproducto === "CM"){
             if($("#nombreproducto").val() != ""){
-                ProductosCombo($("#nombreproducto").val());
+                ProductosCombo(cod[0]);
             }
         }else{
             var promocion = $("#G_promocion").val();
@@ -56,9 +74,15 @@ $(document).ready(function(){
     });
 
     $("#nombreproducto").on('keyup',function () {
-        var nombreproducto = $("#nombreproducto").val();
-        tipodeproducto = nombreproducto.substring(3,0).toUpperCase();
-        buscarProducto(nombreproducto);
+        var nombreproducto = $("#nombreproducto").val().toUpperCase();
+        tipodeproducto = nombreproducto.substring(2,0).toUpperCase();
+       
+        if(tipodeproducto === "CM"){
+            buscarProducto(nombreproducto);
+        }else{
+            buscarProducto(nombreproducto);
+        }
+        
      
     });
 
@@ -122,13 +146,12 @@ $(document).ready(function(){
                                 if(arrayproductos[i]['combo'] !== undefined){
                                     if (arrayproductos[i]['combo'] === arraytemporal[l]) {
                                         delete(arrayproductos[i]);
-                                     }
+                                    }
                                 }else{
                                     if (arrayproductos[i]['cod_producto'] === arraytemporal[l]) {
                                         delete(arrayproductos[i]);
                                      }
                                 }
-                            
                         }
                 }
             }
@@ -172,9 +195,7 @@ $(document).ready(function(){
                 $("#G_total").val('');
              }
         }
-       
     })
-
 
     $("#G_cantidad").keydown(function(e){
         precio = $("#precioproducto").val();
@@ -183,7 +204,7 @@ $(document).ready(function(){
             if(e.which == 8) {
                 $("#G_promocion").val('');
                 $("#G_total").val('');
-             }
+            }
         }
     });
 
@@ -228,61 +249,74 @@ $(document).ready(function(){
 
 
     function buscarProducto(nombreproducto) {
-        $.ajax({
-            dataType:'text',
-            type: 'POST', 
-            url:  '../controlador/C_BuscarProducto.php',
-            data:{
-                "accion" : "buscar",
-                "producto" : nombreproducto,
-            } ,
-            success: function(response){
-                if(response != ""){
-                    var obj = JSON.parse(response);
-
-                     if(obj['combo'] !== "" || obj['producto'] !== "" ){
-                        $("#sugerencias").height(300);
-                        $("#sugerencias").css('overflow','scroll');
-                    }else{
-                        $("#sugerencias").height(0);
+        if(nombreproducto.substring(2,0) === "CM"){
+            $.ajax({
+                dataType:'text',
+                type: 'POST', 
+                url:  '../controlador/C_BuscarProducto.php',
+                data:{
+                    "accion" : "buscar",
+                    "producto" : nombreproducto,
+                } ,
+                success:  function(response){
+                   if(response != ""){
+                        var obj = JSON.parse(response);
+                         if(obj['combo'] !== ""){
+                            $("#sugerencias").height(300);
+                            $("#sugerencias").css('overflow','scroll');
+                        }else{
+                            $("#sugerencias").height(0);
+                        }
                     }
 
-                     if(obj['estado'] === "combo"){
-                        $('#sugerencias').fadeIn(0).html(obj['combo']);
-                        $('.suggest-element').on('click', function(){
-                            var id =  $(this).attr('id');
-                            var datos = $('#'+id).attr('data-');
-                            $("#nombreproducto").val(id);
-                            $("#precioproducto").val(datos)
-                            valorproducto = datos;
-                            $('#sugerencias').fadeOut(0); 
-                            $("#G_promocion").attr('disabled','true');
-                             
-                                BuscarBonoItem(id);
-                        });
+                    $('#sugerencias').fadeIn(0).html(obj['combo']);
+                    $('.suggest-element').on('click', function(){
+                        var id =  $(this).attr('id');
+                        var precio =$(this).attr('data-')
+                        $("#nombreproducto").val(id);
+                        $("#precioproducto").val(precio)
+                        valorproducto = precio;
+                        $('#sugerencias').fadeOut(0); 
+                        $("#G_promocion").attr('disabled','true');
+                        var l = id.split("-");
+                            BuscarBonoItem(l[0]);
+                    });
+                }
+            });
 
-                        
-                     }else if(obj['estado'] === "productos"){
+        }else if(nombreproducto != ""){
+            $.ajax({
+                dataType:'text',
+                type: 'POST', 
+                url:  '../controlador/C_BuscarProducto.php',
+                data:{
+                    "accion" : "buscar",
+                    "producto" : nombreproducto,
+                } ,
+                success: function name(response) {
+                    if(response != ""){
+                        var obj = JSON.parse(response);
+                         if(obj['producto'] !== "" ){
+                            $("#sugerencias").height(300);
+                            $("#sugerencias").css('overflow','scroll');
+                        }else{
+                            $("#sugerencias").height(0);
+                        }
+                    }
                         $('#sugerencias').fadeIn(0).html(obj['producto']);
                         $('.suggest-element').on('click', function(){
-                            //Obtenemos la id unica de la sugerencia pulsada
                             var id =  $(this).attr('id');
                             var datos = $('#'+id).attr('data-');
                             array = datos.split("&");
-                            //Editamos el valor del input con data de la sugerencia pulsada
                             $('#nombreproducto').val(array[0]);
                             $("#precioproducto").val(array[1]);
                             $('#sugerencias').fadeOut(0); 
                             $("#cod_producto").val(id);
                             $("#G_promocion").removeAttr('disabled');
                         });
-                     }
-                    
                 }
-               
-                    
-            }
-        });
+            });
+        }
 
     }
 
@@ -565,7 +599,7 @@ $(document).ready(function(){
             mensajesError("Ingrese un contacto","mensajesgenerales");
             
             $('#txtcontacto').focus();
-        }else if($("#txttelefono").val().length < 9 || $("#txttelefono").val().length > 9  ){
+        }else if($("#txttelefono").val().length < 9 ){
             mensajesError("El telefono no puede ser mayor o menor de 9 digitos","mensajesgenerales");
             
             $('#txttelefono').focus();
@@ -599,7 +633,7 @@ $(document).ready(function(){
                 url:  '../controlador/C_Pedido.php',
                 data:data.serialize()+"&accion=guardar&array="+JSON.stringify(datosproductos), 
                 success: function(response){
-                  console.log(response);
+                    console.log(response);
                     var obj = JSON.parse(response);
                    
                     if(obj["estado"] === "error"){
