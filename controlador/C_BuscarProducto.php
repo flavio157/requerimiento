@@ -34,7 +34,7 @@ class C_BuscarProducto
     {   
         $M_buscarproducto = new M_BuscarProductos();
         if($nomproducto !== ""){
-            if($nomproducto == "cm"){
+            if(substr($nomproducto, 0, 2) == "CM"){
                 $c_cod = $M_buscarproducto->M_Combo($nomproducto);
                 $datos  = array(
                     'estado' => 'combo',
@@ -70,7 +70,7 @@ class C_BuscarProducto
     }
 
 
-   
+    
     static function PoliticaBonos($cantidad,$cod_producto)
     {
             $M_politicaBono = new M_BuscarProductos();
