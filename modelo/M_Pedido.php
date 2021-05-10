@@ -10,24 +10,24 @@
         $this->bd=ClassContrato::Contrato($bd);
     }
 
-    public function GuardarPedido($fecha,$cod_cliente,$cod_vendedora,$tipo_documento,$identificacion,
+    public function GuardarPedido($fecha,$cod_vendedora,$tipo_documento,$identificacion,
     $cliente,$direccion,$referencia,$contacto,$telefono,$entrega,$fcancelacion,$est_pedido,$observacion,
-    $n_productos,$cod_distrito,$num_contrato,$cod_provincia,$telefono2,$dataproductos){
+    $n_productos,$cod_distrito,$num_contrato,$cod_provincia,$telefono2,$contado,$dataproductos){
+    
         
         try { 
             $this->bd->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
             $this->bd->beginTransaction();
-            $query1=$this->bd->prepare("INSERT INTO T_PPEDIDO(FECHA,COD_CLIENTE,COD_VENDEDORA,
+            $query1=$this->bd->prepare("INSERT INTO T_PPEDIDO(FECHA,COD_VENDEDORA,
             TIPO_DOCUMENTO,IDENTIFICACION,CLIENTE,DIRECCION,REFERENCIA,CONTACTO,TELEFONO,ENTREGA,
             FCANCELACION,EST_PEDIDO,OBSERVACION,N_PRODUCTOS,
-            COD_DISTRITO,NUM_CONTRATO,COD_PROVINCIA,TELEFONO2) values 
+            COD_DISTRITO,NUM_CONTRATO,COD_PROVINCIA,TELEFONO2,CONTADO) values 
             
-            (:fecha,:cod_cliente,:cod_vendedora,:tipo_documento,:identificacion,:cliente,:direccion,
+            (:fecha,:cod_vendedora,:tipo_documento,:identificacion,:cliente,:direccion,
             :referencia,:contacto,:telefono,:entrega,:fcancelacion,:est_pedido,:observacion,:n_productos,
-            :cod_distrito,:num_contrato,:cod_provincia,:telefono2)");
+            :cod_distrito,:num_contrato,:cod_provincia,:telefono2,:contado)");
 
             $query1->bindParam("fecha",$fecha,PDO::PARAM_STR);
-            $query1->bindParam("cod_cliente",$cod_cliente,PDO::PARAM_STR);        
             $query1->bindParam("cod_vendedora",$cod_vendedora,PDO::PARAM_STR);
             $query1->bindParam("tipo_documento",$tipo_documento,PDO::PARAM_STR);
             $query1->bindParam("identificacion",$identificacion,PDO::PARAM_STR);
@@ -45,6 +45,7 @@
             $query1->bindParam("num_contrato",$num_contrato,PDO::PARAM_STR);
             $query1->bindParam("cod_provincia",$cod_provincia,PDO::PARAM_STR);
             $query1->bindParam("telefono2",$telefono2,PDO::PARAM_STR);
+            $query1->bindParam("contado",$contado,PDO::PARAM_STR);
             
             $query1->execute();
            
@@ -71,11 +72,11 @@
                                 }
                 }         
             }
-    
+
           $guardado = $this->bd->commit();
 
           return $guardado;
-
+          
         } catch (Exception $e) {
             echo $e;
             $this->bd->rollBack();
@@ -111,4 +112,9 @@
         
     }
    }
+   
+
+
+
+
 ?>
