@@ -1,13 +1,15 @@
 <?php
     require_once("../modelo/M_Pedido.php");
+    require_once("../controlador/C_Funciones.php");
     session_start();
    
 
     $accion = $_POST["accion"];
-    $tipo_documento = $_POST["slcdocumento"];
-    $identificacion = $_POST["txtnumero"];
+      
 
     if($accion == "guardar"){
+        $tipo_documento = $_POST["slcdocumento"];
+        $identificacion = $_POST["txtnumero"]; 
         $cliente = $_POST["txtcliente"];
         $direccion = $_POST["txtdireccion"];
         $referencia = $_POST["txtreferencia"];
@@ -42,23 +44,13 @@
         $fcancelacion,$est_pedido,$cod_distrito,$num_contrato,
         $cod_provincia,$telefono2,$condicion,$dataproductos){
             
-            $observacion = "";
-            $producto = 0;
-            $promocion = 0;
             $bd = 'SMP2';
             $c_guardar = new M_Pedidos($bd);
             $verificar = $c_guardar->verificar($identificacion);
      
             if($verificar == ""){
-                foreach ($dataproductos->arrayproductos as $dato){
-                    if(isset($dato->cod_producto)){
-                        $observacion.= $dato->nombre."/ ";
-                        $producto += intval($dato->cantidad);
-                        $promocion += intval($dato->promocion);
-                      }  
-                }  
-    
-                $total = $producto + $promocion;
+                $observacion = observacionProducto($dataproductos);
+                $total = TotalProducto($dataproductos);
     
                 $c_pedido = $c_guardar->guardarpedido(date("d-m-Y"),$_SESSION['cod_personal'],$tipo_documento,
                 $identificacion,$cliente,$direccion,$referencia,$contacto,$telefono,$entrega,$fcancelacion,
@@ -75,15 +67,12 @@
                         'mensaje' => 'Error al registrar el pedido'
                     ); 
                 }
-                
             }else{
                 $buscarProducto = array(
                     'estado' => 'error',
                     'mensaje' => 'Existe un pedido pendiente con la misma Identificación '
                 );
-                
             }
-           
             echo json_encode($buscarProducto,JSON_FORCE_OBJECT);
         }      
     }
