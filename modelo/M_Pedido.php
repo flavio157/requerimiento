@@ -13,7 +13,7 @@
     public function GuardarPedido($fecha,$cod_vendedora,$tipo_documento,$identificacion,
     $cliente,$direccion,$referencia,$contacto,$telefono,$entrega,$fcancelacion,$est_pedido,$observacion,
     $n_productos,$cod_distrito,$num_contrato,$cod_provincia,$telefono2,$contado,$dataproductos){
-    
+    $nuevaFecha = date("d-m-Y", strtotime($fcancelacion));
         
         try { 
             $this->bd->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
@@ -37,7 +37,7 @@
             $query1->bindParam("contacto",$contacto,PDO::PARAM_STR);
             $query1->bindParam("telefono",$telefono,PDO::PARAM_STR);
             $query1->bindParam("entrega",$entrega,PDO::PARAM_STR);
-            $query1->bindParam("fcancelacion",$fcancelacion,PDO::PARAM_STR);
+            $query1->bindParam("fcancelacion",$nuevaFecha,PDO::PARAM_STR);
             $query1->bindParam("est_pedido",$est_pedido,PDO::PARAM_STR);
             $query1->bindParam("observacion",$observacion,PDO::PARAM_STR);
             $query1->bindParam("n_productos",$n_productos,PDO::PARAM_INT);
