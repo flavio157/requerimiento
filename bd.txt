@@ -321,7 +321,7 @@ SELECT * FROM T_PRODUCTO_PRECIO
 
 /*para buscar los combos al momento de escribir el codigo */
 
-create view [dbo].[V_COMBO]
+create view [dbo].[V_BUSCAR_COMBO]
 as
 select c.COD_COMBO,c.PRECIO
 from T_COMBO as c
