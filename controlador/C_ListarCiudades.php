@@ -8,9 +8,8 @@
     if($accion == "provincia"){
         C_ListarCiudades::Listar_Provincia();
     }else if ($accion == "distrito"){
-        $departamento = $_POST['departamento'];
         $provincia = $_POST['provincia'];
-        C_ListarCiudades::Listar_Distrito($departamento,$provincia);
+        C_ListarCiudades::Listar_Distrito($provincia);
     }
 
 
@@ -25,7 +24,7 @@
             if($C_codProvincia > 0){
                 $provincia="";
                 foreach ($C_codProvincia as $descripcion){
-                    $provincia .= '<option  value="'.$descripcion['COD_PROVINCIA']."/".$descripcion['COD_DEPARTAMENTO'].'">' . $descripcion['DES_PROVINCIA']  . '</option>';
+                    $provincia .= '<option  value="'.$descripcion['COD_PROVINCIA'].'">' . $descripcion['DES_PROVINCIA']  . '</option>';
                 }
                 echo $provincia;  
             }
@@ -33,10 +32,10 @@
 
     
 
-        static function Listar_Distrito($departamento,$Provincia){
+        static function Listar_Distrito($Provincia){
             $bd="SMP2";
             $M_listarDistrito = new M_ListarCiudades($bd);
-            $C_codDistrito = $M_listarDistrito->M_Distrito($departamento,$Provincia);
+            $C_codDistrito = $M_listarDistrito->M_Distrito($Provincia);
            if($C_codDistrito > 0){
                 $Distrito="";
                 foreach ($C_codDistrito as $descripcion){
