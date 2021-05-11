@@ -21,10 +21,8 @@ class M_ListarCiudades{
 
     }
 
-    public function M_Distrito($id_departamento,$id_provincia){
-        $query=$this->db->prepare("SELECT * from V_DISTRITO where COD_DEPARTAMENTO = :departamento  
-                                  and  COD_PROVINCIA = :provincia");
-        $query->bindParam("departamento", $id_departamento, PDO::PARAM_STR);
+    public function M_Distrito($id_provincia){
+        $query=$this->db->prepare("SELECT * from V_DISTRITO WHERE COD_PROVINCIA = :provincia");
         $query->bindParam("provincia", $id_provincia, PDO::PARAM_STR);
         $query->execute();
         $datosDistrito = $query->fetchAll();
