@@ -18,9 +18,11 @@ require_once("../modelo/M_BuscarProductos.php");
         $cantidad = $_POST['cantidad'];
         $cod_producto = $_POST['codproducto'];
         C_BuscarProducto::PoliticaBonos($cantidad,$cod_producto);
+
     }else if($accion == "bonoitem"){
         $cod_bono = $_POST['codbono'];
         C_BuscarProducto::comboitem($cod_bono);
+
     }else if($accion == "productobono"){
         $cod_bono = $_POST['codbono'];
         C_BuscarProducto::comboProducto($cod_bono);
@@ -33,32 +35,27 @@ class C_BuscarProducto
     static function BuscaProducto($nomproducto)
     {   
         $M_buscarproducto = new M_BuscarProductos();
-        if($nomproducto !== ""){
             if(substr($nomproducto, 0, 2) == "CM"){
                 $c_cod = $M_buscarproducto->M_Combo($nomproducto);
                 $datos  = array(
-                    'estado' => 'combo',
+                    'estado' => "combo",
                     'combo' => $c_cod,
                     );
-                    echo json_encode($datos,JSON_FORCE_OBJECT);
             }else{
                 $c_cod = $M_buscarproducto->M_BuscarProducto($_SESSION['zona'],$nomproducto);
                 $datos  = array(
                     'estado' => 'productos',
                     'producto' => $c_cod,
                     );
-                    echo json_encode($datos,JSON_FORCE_OBJECT);
             }
-           
-        }
+            echo json_encode($datos,JSON_FORCE_OBJECT);
+        
     }
 
 
     static function PoliticaPrecios($cantidad,$cod_producto){
-        $M_politicaPrecio = new M_BuscarProductos();
-        if($cantidad != ""){
+            $M_politicaPrecio = new M_BuscarProductos();
             $precio = $M_politicaPrecio->M_PoliticaPrecios($_SESSION['zona'],$cantidad,$cod_producto);
-           
             if($precio['PRECIO'] != null){
                 $datos  = array(
                     'estado' => 'ok',
@@ -66,7 +63,7 @@ class C_BuscarProducto
                     );
                     echo json_encode($datos,JSON_FORCE_OBJECT);
             }
-        }
+        
     }
 
 
@@ -74,7 +71,6 @@ class C_BuscarProducto
     static function PoliticaBonos($cantidad,$cod_producto)
     {
             $M_politicaBono = new M_BuscarProductos();
-
             $Bono = $M_politicaBono->M_PoliticaBono($_SESSION['zona'],$cantidad,$cod_producto);
             $dato = $Bono['BONO'];
             if($Bono!= 0){
