@@ -8,7 +8,7 @@ date_default_timezone_set('America/Lima');
         $mes = $fecha['mon'];
         $ano = $fecha['year'];
         $m = intval($mes) - intval(1); 
-            if($fecha['mday']>= $diasprimeraquincena[0] && $fecha['mday'] <= '26'){
+            if($fecha['mday'] >= $diasprimeraquincena[0] && $fecha['mday'] <= '26'){
                 if($mes <= '9'){$mes = '0'.$mes; }
                     $fechainicial = '12'.'-'. $mes .'-'.$ano;
                     $fechafinal =  $dia;
@@ -18,9 +18,7 @@ date_default_timezone_set('America/Lima');
                     $fechainicial = '27'.'-'. $m .'-'.$ano;
                     $fechafinal =  $dia;
             }
-
             return array($fechainicial,$fechafinal);
-     
     }
 
 
@@ -42,5 +40,34 @@ date_default_timezone_set('America/Lima');
             return header("Location: http://localhost:8080/requerimiento/vista/ventana.php");
         }
     }
+
+
+    function observacionProducto($dataproductos)
+    {
+        $observacion = "";
+        foreach ($dataproductos->arrayproductos as $dato){
+            if(isset($dato->cod_producto)){
+                $observacion.= $dato->nombre."/ ";
+              }  
+        }
+        return $observacion;  
+    }
+
+    function TotalProducto($dataproductos)
+    {
+        $producto = 0;
+        $promocion = 0;
+        foreach ($dataproductos->arrayproductos as $dato){
+            if(isset($dato->cod_producto)){
+                $producto += intval($dato->cantidad);
+                $promocion += intval($dato->promocion);
+              }  
+        }
+        $total = $producto + $promocion;
+        return $total; 
+
+    }
+
+
 
 ?>
