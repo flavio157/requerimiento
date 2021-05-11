@@ -109,8 +109,8 @@ function agregarcombos(dato) {
     var promocion = 0;
     var total = 0;
     var combo = "";
+    var estado = 1;
      if(cantidad !== ''){
-        var estado = 1;
         if (contador >= 0) {
             for (let j = 0; j < arrayproductos.length; j++) {
                 if (arrayproductos[j] != undefined) {
@@ -295,7 +295,7 @@ function reiniciarFrm() {
 }
 
 
-function obtenerDistrito(provincia,departamento){
+function obtenerDistrito(provincia){
     var accion = "distrito";        
 
     $.ajax({
@@ -304,7 +304,6 @@ function obtenerDistrito(provincia,departamento){
         url:  '../controlador/C_ListarCiudades.php',
         data: {
            "accion" : accion ,
-           "departamento" : departamento , 
            "provincia" : provincia,
         },
         success: function(response){
@@ -332,16 +331,19 @@ function obtenerprovincia(){
 
 
 function validacionFrm() {
+    telefono = document.getElementById("txttelefono").value
+
     if($("#txtnumero").val().length == 0){
         mensajesError("Ingrese el DNI del cliente");
         $('#txtcliente').focus();
     }else if($("#txtcliente").val().length == 0){
         mensajesError("Ingrese nombre del Cliente","mensajesgenerales");
         $('#txtcliente').focus();
-    }else if ($("#txtdireccion").val().length == 0){
-        mensajesError("Ingrese una Direccion","mensajesgenerales");
-       
+    }else if($("#txtdireccion").val().length == 0){
+
+        mensajesError("Ingrese una Dirección","mensajesgenerales");
         $('#txtdireccion').focus();
+
     }else if($("#Selectprovincia").val() === "s"){
         mensajesError("Seleccione una Ciudad","mensajesgenerales");
 
@@ -351,12 +353,12 @@ function validacionFrm() {
         $('#txtreferencia').focus();
     }else if($("#txtcontacto").val().length == 0){
         mensajesError("Ingrese un contacto","mensajesgenerales");
-        
         $('#txtcontacto').focus();
-    }else if($("#txttelefono").val().length < 9 ){
-        mensajesError("El telefono no puede ser mayor o menor de 9 digitos","mensajesgenerales");
-        
+
+    }else if(telefono.length < 9){
+        mensajesError("El telefono no puede menor de 9 digitos","mensajesgenerales");
         $('#txttelefono').focus();
+
     }else if($("#condicion").val() === "n"){
         console.log($("#condicion").val() );
         mensajesError("Seleccione una condicion","mensajesgenerales");
@@ -371,16 +373,22 @@ function validacionFrm() {
         mensajesError("vuelva a seleccionar un producto","mensajesgenerales");
     }else if($("#txtcliente").val().length > 0){
         verificar = $("#txtcliente").val().split(" ");
-        if(verificar.length < 3){
+        if( verificar[2] === undefined || verificar[2].length === 0 ) {
             mensajesError("se necesita un nombre y los dos apellidos","mensajesgenerales");
           $('#txtcliente').focus();
 
-        }else{
+        }else if ($("#txtdireccion").val().length > 0){
+                verificar = $("#txtdireccion").val().split(" ");
+                if( verificar[1] === undefined || verificar[1].length === 0 ) {
+                   mensajesError("se necesitan mas datos en la dirección","mensajesgenerales");
+                   $('#txtdireccion').focus();
+                }else{
+            /*console.log("se registro ");*/
             guardarPedido();
+            }
+            
         }
     }
-    
-    
 }
 
 
@@ -394,15 +402,12 @@ function guardarPedido() {
             url:  '../controlador/C_Pedido.php',
             data:data.serialize()+"&accion=guardar&array="+JSON.stringify(datosproductos), 
             success: function(response){
-                console.log(response);
+              
                 var obj = JSON.parse(response);
-               
                 if(obj["estado"] === "error"){
                     mensajesError(obj['mensaje'],"mensajesgenerales")
-                  
                 }else{
                     mensajeSuccess(obj['mensaje'],"mensajesgenerales")
-                    
                     reiniciarFrm();
                 }
             }
