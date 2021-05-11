@@ -7,7 +7,7 @@ if(!isset($_SESSION['zona'])){
     header('Location: index.php');
     exit;
 } 
-
+date_default_timezone_set('America/Lima');
 $fcha = date("Y-m-d",strtotime(date("Y-m-d")."+ 1 days"));
 ?>
 
@@ -22,10 +22,11 @@ $fcha = date("Y-m-d",strtotime(date("Y-m-d")."+ 1 days"));
         <link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.0.1/css/toastr.css" rel="stylesheet"/>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.0.1/js/toastr.js"></script>
         
-        <!--<script type="text/javascript" src="../vista/js/scripts.js"></script>-->
         <script type="text/javascript" src="../vista/js/jsproducto.js"></script>
+        <script type="text/javascript" src="../vista/js/jsfuncionesProducto.js"></script>
 
         <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+        <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
         <meta name="viewport" content="width=device-width, initial-scale=1.0 ,user-scalable=no">
         
     </head>
@@ -54,7 +55,7 @@ $fcha = date("Y-m-d",strtotime(date("Y-m-d")."+ 1 days"));
                 <div class="col-12">
                     <label for="formciudad" class="form-label">CIUDAD</label>
                     <select class="form-select" name="slcciudad" aria-label="Default select example" id="Selectprovincia">
-                        <option selected>SELECCIONE</option>
+                        <option selected value="s">SELECCIONE</option>
                         
                     </select>
                 </div>
@@ -79,7 +80,7 @@ $fcha = date("Y-m-d",strtotime(date("Y-m-d")."+ 1 days"));
                 <div class="col-12">
                     <label for="formdescripcion" class="form-label">DESCRIPCIÓN DEL PEDIDO</label>
                     <button type="button" id="DescrPedido" class="btn btn-primary mb-1" data-bs-toggle="modal" data-bs-target="#ModalProducto">
-                        INGRESAR
+                        +
                     </button>
                    <!-- <button type="button" id="btnModiDescr" class="btn btn-primary mb-1" data-bs-toggle="modal" data-bs-target="#ModalProductoModificar">
                         MODIFICAR
@@ -117,8 +118,8 @@ $fcha = date("Y-m-d",strtotime(date("Y-m-d")."+ 1 days"));
                     </div>
                     <div class="col">
                         <label for="formcondicion" class="form-label">CONDICIÓN</label>
-                        <select class="form-select" name="slccondicion" aria-label="Default select example">
-                            <option selected>Condicion</option>
+                        <select class="form-select" name="slccondicion" aria-label="Default select example" id="condicion">
+                            <option selected value="n">Condicion</option>
                             <option value="1">Credito</option>
                             <option value="2">Contado</option>
                         </select>
@@ -127,8 +128,8 @@ $fcha = date("Y-m-d",strtotime(date("Y-m-d")."+ 1 days"));
                 <div class="row g-2">
                     <div class="col">
                         <label for="formentrega" class="form-label">ENTREGA</label>
-                        <select class="form-select" name="slcentrega" aria-label="Default select example">
-                            <option selected>Seleccion Turno</option>
+                        <select class="form-select" name="slcentrega" aria-label="Default select example" id="turno">
+                            <option selected value="n">Seleccion Turno</option>
                             <option value="M">Mañana</option>
                             <option value="T">Tarde</option>
                         </select>
@@ -165,10 +166,19 @@ $fcha = date("Y-m-d",strtotime(date("Y-m-d")."+ 1 days"));
 
                 <div class="row g-2">
                     <div class="col text-center ">
-                        <button type="button" id="grabar" class="btn btn-primary mb-3">GRABAR</button>
-                    </div>
+                    <a class="btn btn-primary btn-lg" id="grabar" >
+                        <i class="fas fa-file-alt" title="Align Right"></i>
+                    </a>
+                   
+                         <!--<button type="button" id="grabar" class="btn btn-primary mb-3">Guardar
+                        
+                        </button>-->
+                        </div>
                     <div class="col text-center">
-                        <button type="button" id="nuevo" class="btn btn-primary mb-3">NUEVO</button>
+                        <a class="btn btn-primary btn-lg" id="nuevo" >
+                            <i class="fas fa-file" title="Align Right"></i>
+                        </a>
+                        <!--<button type="button" id="nuevo" class="btn btn-primary mb-3">NUEVO</button>-->
                     </div>
                 </div>
         </form>
@@ -188,7 +198,7 @@ $fcha = date("Y-m-d",strtotime(date("Y-m-d")."+ 1 days"));
                                    </div>
                                 <div class="col">
                                     <label for="formfpago" class="form-label">PRODUCTO</label>
-                                    <input type="text" class="form-control" name="nombreproducto" id="nombreproducto" autocomplete="off">
+                                    <input type="text" style="text-transform:uppercase" class="form-control" name="nombreproducto" id="nombreproducto" autocomplete="off">
                                 </div>
                                 <div id="sugerencias"></div>
                                 
