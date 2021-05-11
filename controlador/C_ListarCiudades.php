@@ -22,12 +22,10 @@
             $bd="SMP2";
             $M_listarProvincia = new M_ListarCiudades($bd);
             $C_codProvincia = $M_listarProvincia->M_Provincia();
-           
             if($C_codProvincia > 0){
                 $provincia="";
-                
                 foreach ($C_codProvincia as $descripcion){
-                    $provincia = $provincia . '<option  value="'.$descripcion['COD_PROVINCIA']."/".$descripcion['COD_DEPARTAMENTO'].'">' . $descripcion['DES_PROVINCIA']  . '</option>';
+                    $provincia .= '<option  value="'.$descripcion['COD_PROVINCIA']."/".$descripcion['COD_DEPARTAMENTO'].'">' . $descripcion['DES_PROVINCIA']  . '</option>';
                 }
                 echo $provincia;  
             }
@@ -42,7 +40,7 @@
            if($C_codDistrito > 0){
                 $Distrito="";
                 foreach ($C_codDistrito as $descripcion){
-                    $Distrito = $Distrito .'<option  value="'.$descripcion['COD_DISTRITO'].'">' . $descripcion['DES_DISTRITO']  . '</option>';
+                    $Distrito .='<option  value="'.$descripcion['COD_DISTRITO'].'">' . $descripcion['DES_DISTRITO']  . '</option>';
                 }
               echo $Distrito;   
             }
