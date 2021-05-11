@@ -9,6 +9,12 @@ var tipodeproducto = "";
 
 $(document).ready(function(){
     obtenerprovincia();
+    $('body').on('keydown', function(e){
+        if( e.which == 38 ||  e.which == 40) {
+        return false;
+        }
+    });
+
     $('#ModalProducto').modal({
         backdrop: 'static', keyboard: false
     })
@@ -245,10 +251,10 @@ $(document).ready(function(){
 
     $("#Selectprovincia").change(function(){
         $('#Selectdistro').find('option').remove().end();
-        var id = $('#Selectprovincia').val().split("/");;
-
-        obtenerDistrito(id[0],id[1]);
+        var id = $('#Selectprovincia').val();
+        obtenerDistrito(id);
 });
 
 })
+
 
