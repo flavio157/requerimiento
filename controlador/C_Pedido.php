@@ -26,14 +26,19 @@
         $condicion = $_POST["slccondicion"]; 
         
         $dataproductos = json_decode($_POST['array']);
-        $provincia = explode("/", $cod_provincia);
+        $provincia = $_POST["slcciudad"];
        
         guardarPedidos::guardarpedido(trim($tipo_documento),
         trim($identificacion),trim($cliente),trim($direccion),trim($referencia),
         trim($contacto),trim($telefono),trim($entrega),trim($fcancelacion) ,trim($est_pedido),
         trim($cod_distrito),trim($num_contrato),
-        trim($provincia[1]),trim($telefono2),trim($condicion),$dataproductos);
+        trim($provincia),trim($telefono2),trim($condicion),$dataproductos);
 
+    }else if($accion == "mostrarPedidos"){
+        guardarPedidos::mostrarPedido($_SESSION['cod_personal']);
+    }else if($accion == "pedidoItem"){
+        $idpedido =$_POST['idpedido'];
+        guardarPedidos::mostrarPedidoItem($idpedido);
     }
 
 
@@ -74,6 +79,26 @@
                 );
             }
             echo json_encode($buscarProducto,JSON_FORCE_OBJECT);
-        }      
+        }  
+        
+       
+
+
+
+        static function mostrarPedido($cod_vendedor){
+            $bd = 'SMP2';
+            $c_mostrarpedido = new M_Pedidos($bd);
+            $datos = $c_mostrarpedido->mostrarPedido($cod_vendedor,date("d-m-Y"));
+            print_r($datos) ;
+        }
+
+        static function mostrarPedidoItem($idPedido){
+            $bd = 'SMP2';
+            $c_mostrarpedido = new M_Pedidos($bd);
+            $datos = $c_mostrarpedido->mostrarPedidoItems($idPedido);
+            print_r($datos) ;
+        }
+
     }
+
 ?>
