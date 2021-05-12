@@ -145,18 +145,18 @@ $fcha = date("Y-m-d",strtotime(date("Y-m-d")."+ 1 days"));
                 <div class="row g-2">
                     <div class="col">
                         <label for="formentrega" class="form-label">N° CONTRATO</label>
-                        <input type="text" name="txtcontrato" id="txtcontrato" class="form-control">
+                        <input type="number" name="txtcontrato" id="txtcontrato" class="form-control">
                     </div>
                     <div class="col">
                         <label for="formfpago" class="form-label">TELEFONO 2</label>
-                        <input type="text" name="txtTelefono2" id="txtTelefono2" class="form-control" maxlength=9>
+                        <input type="number" name="txtTelefono2" id="txtTelefono2" class="form-control" maxlength=9>
                     </div>
                 </div>
 
                 <div class="row g-2">
                     <div class="col">
                         <label for="formentrega" class="form-label">CODIGO</label>
-                        <input type="text" name="txtcodigo" id="txtcodigo" class="form-control">
+                        <input type="number" name="txtcodigo" id="txtcodigo" class="form-control">
                     </div>
                     <div class="col">
                         <label for="formfpago" class="form-label">GENERADO</label>
@@ -174,6 +174,19 @@ $fcha = date("Y-m-d",strtotime(date("Y-m-d")."+ 1 days"));
                         
                         </button>-->
                         </div>
+
+                        <div class="col text-center responsive">
+                            <a class="btn btn-primary btn-lg " id="verPedidos">
+                                <i class="fas fa-file-alt" title="Align Right"></i>
+                            </a>
+                        </div>
+
+                        <div class="col text-center noresposive">
+                            <a class="btn btn-primary btn-lg " id="verPedidos2">
+                                <i class="fas fa-file-alt" title="Align Right"></i>
+                            </a>  
+                        </div>
+
                     <div class="col text-center">
                         <a class="btn btn-primary btn-lg" id="nuevo" >
                             <i class="fas fa-file" title="Align Right"></i>
@@ -262,6 +275,67 @@ $fcha = date("Y-m-d",strtotime(date("Y-m-d")."+ 1 days"));
                         </div>
                     </div>
                 </div>
+
+                <!--modal para mostrar los pedidos ya registrados el dia actual responsive -->
+                <div class="modal fade" id="ModalMostrarPedidos" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="exampleModalLongTitle">Pedidos Registrados</h5>
+                            </div>
+                            <div class="modal-body">
+
+                                <div class="accordion accordion-flush" id="acordionresponsive">
+                                    
+                                </div>
+
+
+                                <div class="table-responsive " id="tbedidosRegistrados">
+                                    <table class="table table-hover ">
+                                        <thead>
+                                            <tr>
+                                            <th scope="col">#</th>
+                                            <th scope="col">First</th>
+                                            <th scope="col">Last</th>
+                                            <th scope="col">Handle</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                            <th scope="row">1</th>
+                                            <td>Mark</td>
+                                            <td>Otto</td>
+                                            <td>@mdo</td>
+                                            </tr>
+                                            <tr>
+                                            <th scope="row">2</th>
+                                            <td>Jacob</td>
+                                            <td>Thornton</td>
+                                            <td>@fat</td>
+                                            </tr>
+                                            <tr>
+                                            <th scope="row">3</th>
+                                            <td colspan="2">Larry the Bird</td>
+                                            <td>@twitter</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+
+
+
+
+
+                            </div>
+
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" id="cerrarmodal" data-dismiss="modal">Cerrar</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
         </div>
     </body>
 </html>
