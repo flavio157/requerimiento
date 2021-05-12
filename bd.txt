@@ -388,4 +388,26 @@ Group by p.CODIGO
 
 
 
+/*vista para buscar los productos y traer el precio web*/
+create view V_BUSCAR_PRODUCTO_WEB
+as
+select COD_PRODUCTO as CODIGO ,COD_CATEGORIA as CATEGORIA ,
+ABR_PRODUCTO  as ABREVIATURA, DES_PRODUCTO as DES_PRODUCTO ,PRECIO_WEB as PRECIO
+from T_PRODUCTO 
 
+
+/*vista para mostrar los productos resien ingresados*/
+
+create view V_MOSTRAR_PEDIDO
+as
+select CODIGO ,CLIENTE,NUM_CONTRATO ,COD_VENDEDORA, FECHA from T_PPEDIDO 
+
+
+
+/*vista para mostrar los pedidos segun el cod del pedido*/
+
+create view V_MOSTRAR_PEDIDO_ITEM
+as
+select pc.CODIGO,pc.COD_PRODUCTO, p.ABR_PRODUCTO,p.DES_PRODUCTO,pc.CANTIDAD ,pc.precio from T_PPEDIDO_CANTIDAD as pc
+inner join T_PRODUCTO as p
+on pc.COD_PRODUCTO =  p.COD_PRODUCTO
