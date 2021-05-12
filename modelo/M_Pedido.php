@@ -111,6 +111,53 @@
         }
         
     }
+
+    public function mostrarPedido($cod_vendedor,$fecha)
+    {
+        $query = $this->bd->prepare("SELECT * FROM V_MOSTRAR_PEDIDO 
+        WHERE COD_VENDEDORA = :cod_vendedor AND Fecha = :fecha_actual  order by CODIGO desc"); 
+        $query->bindParam("cod_vendedor",$cod_vendedor,PDO::PARAM_STR);
+        $query->bindParam("fecha_actual",$fecha,PDO::PARAM_STR);  
+        $query->execute();
+       
+        $html = "";
+        while ($row = $query->fetch()) {         
+            $cliente = str_replace(' ', '', $row['CLIENTE']);    
+            $html .= '<div class="accordion-item">'.
+                         '<button class="accordion-button collapsed" data-="'.$row['CODIGO'].'"  onclick="ontenerid('.$row['CODIGO'].','.$cliente.');"
+                            data-bs-toggle="collapse" data-bs-target="#'.$cliente.'" aria-expanded="false" id="btnMostaraPedido" aria-controls="'.$cliente.'">'.
+                            
+                            'N° Contrato: '. $row['NUM_CONTRATO'].'<br>'.
+                            'Cliente: ' . $row['CLIENTE'].
+                         '</button>'.
+                            '<div id="'.$cliente.'" class="accordion-collapse collapse" aria-labelledby="'.$cliente.'"  data-bs-parent="#acordionresponsive">'.
+                            '</div>'.
+                        '</div>' ;
+        }
+        return $html ;
+        $query->closeCursor();
+        $query = null;
+    }
+
+
+    public function mostrarPedidoItems($idpedido)
+    {
+        $query = $this->bd->prepare("SELECT * FROM V_MOSTRAR_PEDIDO_ITEM 
+        WHERE CODIGO =:idpedido"); 
+        $query->bindParam("idpedido",$idpedido,PDO::PARAM_STR);
+        $query->execute();
+        $html = "";
+        while ($row = $query->fetch()) {  
+                $html.='<div class="accordion-body">'.
+                           '<ul style="font-size: 14px;">'.
+                                '<li>'.$row['COD_PRODUCTO'].' : '.$row['DES_PRODUCTO'].'</li>'.                                
+                            '</ul>'.                         
+                    '</div>';
+        }
+        return $html ;
+        $query->closeCursor();
+        $query = null;
+    }
    }
    
 
