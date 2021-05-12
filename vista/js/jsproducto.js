@@ -58,7 +58,7 @@ $(document).ready(function(){
         
     })
 
-    $("#txttelefono").keyup(function (e) {
+    $("#txtTelefono2").keyup(function (e) {
         var input=  document.getElementById('txtTelefono2');
         input.addEventListener('input',function(){
             this.value = this.value.slice(0,9);
@@ -111,7 +111,7 @@ $(document).ready(function(){
             if(cantidad != "" && cantidad != 0){
                 politicabonos(cantidad,codproducto);
             }
-        
+        /** */
        
         
       });
@@ -223,11 +223,13 @@ $(document).ready(function(){
     $("#G_cantidad").on('keyup',function(){
         cantidad = $("#G_cantidad").val();
         codproducto = $("#cod_producto").val();
+        
         if(tipodeproducto !== "CM"){
             if(cantidad != "" && cantidad != 0){ 
                 politicaprecios(cantidad,codproducto);
             }
         }
+
     });
 
     $("#nombreproducto").keydown(function(e){
@@ -253,7 +255,22 @@ $(document).ready(function(){
         $('#Selectdistro').find('option').remove().end();
         var id = $('#Selectprovincia').val();
         obtenerDistrito(id);
-});
+    });
+
+    $("#verPedidos").on('click',function(params) {
+        $("#ModalMostrarPedidos").modal('show');
+        mostrarPedido("mostrarPedidos");
+
+    })
+
+    $("#verPedidos2").on('click',function(params) {
+        console.log("pedidos");
+        $("#ModalMostrarPedidos").modal('show');
+    })
+
+    $("#cerrarmodal").on('click',function (params) {
+        $("#ModalMostrarPedidos").modal('hide');
+    })
 
 })
 
