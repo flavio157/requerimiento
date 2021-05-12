@@ -45,6 +45,14 @@
     text-align: center;
    }
 
+   .responsive{display:none;}   
+
+   .noresposive{display: block;}
+
+   #acordionresponsive{display:none ;}
+
+   #tbedidosRegistrados{display: block;}
+
 @media screen and (max-width:992px){
     .main{
         width:100%;
@@ -78,5 +86,13 @@
         font-size: 14px;
         text-align: center;
        }
-  
+       
+    .responsive{display:block;}   
+
+    .noresposive{display: none;}
+
+    #acordionresponsive{display: block ;}
+   
+   #tbedidosRegistrados{display: none;}
+
 }
