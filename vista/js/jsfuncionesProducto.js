@@ -60,6 +60,7 @@ function buscarProducto(nombreproducto) {
                         array = datos.split("&");
                         $('#nombreproducto').val(array[0]);
                         $("#precioproducto").val(array[1]);
+                        /*valorproducto = array[1];*/
                         $('#sugerencias').fadeOut(0); 
                         $("#cod_producto").val(id);
                         $("#G_promocion").removeAttr('disabled');
@@ -209,6 +210,7 @@ function agregarproductos() {
 function calcularTotal(cantidad,accion){
     if(accion === "ingresar" && valorproducto !== "" && cantidad !== "" && cantidad != 0 ){
         var total = Number(cantidad) * Number(valorproducto);
+        console.log(valorproducto +""+cantidad);
         $("#G_total").val(total.toFixed(2)); 
     }
 }
@@ -332,6 +334,12 @@ function obtenerprovincia(){
 
 function validacionFrm() {
     telefono = document.getElementById("txttelefono").value
+    telefono2 = document.getElementById("txtTelefono2").value
+    tlfvalidacion = validarTelefono(telefono);
+    tlf2validacion = validarTelefono(telefono2);
+    exprecion = new RegExp(/([0-9])\1{6,}/);
+   
+  
 
     if($("#txtnumero").val().length == 0){
         mensajesError("Ingrese el DNI del cliente");
@@ -339,18 +347,17 @@ function validacionFrm() {
     }else if($("#txtcliente").val().length == 0){
         mensajesError("Ingrese nombre del Cliente","mensajesgenerales");
         $('#txtcliente').focus();
-    }else if($("#txtdireccion").val().length == 0){
-
-        mensajesError("Ingrese una Dirección","mensajesgenerales");
-        $('#txtdireccion').focus();
-
     }else if($("#Selectprovincia").val() === "s"){
         mensajesError("Seleccione una Ciudad","mensajesgenerales");
 
+    }else if($("#txtdireccion").val().length == 0){
+        mensajesError("Ingrese una Dirección","mensajesgenerales");
+        $('#txtdireccion').focus();
+
     }else if($("#txtreferencia").val().length == 0){
         mensajesError("Ingrese una Referencia","mensajesgenerales");
-        
         $('#txtreferencia').focus();
+
     }else if($("#txtcontacto").val().length == 0){
         mensajesError("Ingrese un contacto","mensajesgenerales");
         $('#txtcontacto').focus();
@@ -358,6 +365,14 @@ function validacionFrm() {
     }else if(telefono.length < 9){
         mensajesError("El telefono no puede menor de 9 digitos","mensajesgenerales");
         $('#txttelefono').focus();
+
+    }else if(exprecion.test(telefono) || tlfvalidacion){
+        mensajesError("ingrese un numero telefonico valido","mensajesgenerales");
+        $('#txttelefono').focus();
+
+    }else if(telefono2.length != 0 && exprecion.test(telefono2) || tlf2validacion) {
+        mensajesError("ingrese un numero telefonico valido","mensajesgenerales");
+        $('#txtTelefono2').focus();
 
     }else if($("#condicion").val() === "n"){
         console.log($("#condicion").val() );
@@ -372,8 +387,10 @@ function validacionFrm() {
     }else if (Object.keys(arrayproductos) == "") {
         mensajesError("vuelva a seleccionar un producto","mensajesgenerales");
     }else if($("#txtcliente").val().length > 0){
+
         verificar = $("#txtcliente").val().split(" ");
-        if( verificar[2] === undefined || verificar[2].length === 0 ) {
+
+        if( verificar[2] === undefined && verificar.length < 2 || verificar[2].length === 0 ) {
             mensajesError("se necesita un nombre y los dos apellidos","mensajesgenerales");
           $('#txtcliente').focus();
 
@@ -415,3 +432,58 @@ function guardarPedido() {
        
 }
 
+
+
+function validarTelefono(telefono) {
+    var numeros = ['012345678','123456789','987654321','876543210'];
+    for (let i = 0; i < numeros.length; i++) {
+        if(telefono == numeros[i]){
+            console.log(numeros[i]);
+            return true;
+        } 
+        
+    }
+}
+
+
+function mostrarPedido(mostrarpedido) {
+    var accion = mostrarpedido;
+    $.ajax({
+        dataType:'text',
+        type: 'POST', 
+        url:  '../controlador/C_Pedido.php',
+        data: "accion=" + accion,
+        success: function(response){
+            $('#acordionresponsive').html(response);
+        }
+    });  
+
+}
+
+function mostarapedidoItem($codigo,id) {
+    var accion = "pedidoItem";
+    $.ajax({
+        dataType:'text',
+        type: 'POST', 
+        url:  '../controlador/C_Pedido.php',
+        data: 
+        {
+            "accion": accion,
+            "idpedido" : $codigo,
+         },
+        
+        success: function(response){
+           
+            $('#'+id).html(response);
+        }
+    });  
+}
+
+
+function ontenerid(id,dato) {
+    var datos = dato.id;
+    var ids= id;
+
+    mostarapedidoItem(id,dato.id);
+    
+}
