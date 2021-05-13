@@ -1,15 +1,16 @@
 <?php
     require_once("../modelo/M_ListarCiudades.php");
-    
+    session_start();
 
     
     $accion = $_POST['accion'];
+    $oficina = $_POST['oficina'];
 
     if($accion == "provincia"){
-        C_ListarCiudades::Listar_Provincia();
+        C_ListarCiudades::Listar_Provincia($oficina);
     }else if ($accion == "distrito"){
         $provincia = $_POST['provincia'];
-        C_ListarCiudades::Listar_Distrito($provincia);
+        C_ListarCiudades::Listar_Distrito($provincia,$oficina);
     }
 
 
@@ -17,9 +18,9 @@
     
     class C_ListarCiudades
     {
-        static function Listar_Provincia(){
-            $bd="SMP2";
-            $M_listarProvincia = new M_ListarCiudades($bd);
+      
+        static function Listar_Provincia($oficina){
+            $M_listarProvincia = new M_ListarCiudades($oficina);
             $C_codProvincia = $M_listarProvincia->M_Provincia();
             if($C_codProvincia > 0){
                 $provincia="";
@@ -32,9 +33,8 @@
 
     
 
-        static function Listar_Distrito($Provincia){
-            $bd="SMP2";
-            $M_listarDistrito = new M_ListarCiudades($bd);
+        static function Listar_Distrito($Provincia,$oficina){
+            $M_listarDistrito = new M_ListarCiudades($oficina);
             $C_codDistrito = $M_listarDistrito->M_Distrito($Provincia);
            if($C_codDistrito > 0){
                 $Distrito="";
