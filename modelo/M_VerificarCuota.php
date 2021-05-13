@@ -30,8 +30,8 @@ class M_VerificarCuota
         }
          
        if($query){
-            /*   return $separarFechas[0] ." ".$separarFechas[1];*/
-            return $montoTotal; 
+            /*   return  $fechas[0] ." ".$fechas[1]; */
+            return $montoTotal;
             $query->closeCursor();
             $query = null;
         } 
