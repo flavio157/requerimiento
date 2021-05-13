@@ -1,7 +1,7 @@
 <?php
+session_start();
 require_once("../db/Usuarios.php");
 require_once("../controlador/C_Funciones.php");
-session_start();
 class M_Login
 {
     
@@ -14,15 +14,17 @@ class M_Login
     
     public function Login($cod_usuario)
     {
-            $query=$this->db->prepare("SELECT * FROM V_Login WHERE COD_PERSONAL = :cod_usuario");
+            $query=$this->db->prepare("SELECT * FROM V_LOGIN WHERE COD_PERSONAL = :cod_usuario");
             $query->bindParam("cod_usuario", $cod_usuario, PDO::PARAM_STR);
             $query->execute();
             $cod_usuario = $query->fetch(PDO::FETCH_ASSOC);
 
             $_SESSION['zona'] = $cod_usuario['ZONA'];
-            
+            $_SESSION['cod_personal'] = $cod_usuario['COD_PERSONAL'] ;
+            $_SESSION['oficina'] = $cod_usuario['OFICINA'];
+             
             if($query){
-                return $cod_usuario;
+                return  $cod_usuario;
                 $query->closeCursor();
                 $query = null;
             }
@@ -32,7 +34,7 @@ class M_Login
     {
         
         $fechas = fechas($diasprimeraquincena,$diassegundaquincena);
-
+        
         $query=$this->db->prepare("SELECT * FROM V_CALL_CENTER  
         WHERE VENDEDOR = :cod_vendedor AND FECHA_GENERADO >= :fechaInical 
         AND FECHA_GENERADO < :fechaFinal");
@@ -49,7 +51,7 @@ class M_Login
         }
             
        if($query){
-           /*  return $fechas[0] .'  '. $fechas[1];*/
+            /* return $fechas[0] .'  '. $fechas[1];*/
             return $montoTotal;
             $query->closeCursor();
             $query = null;
