@@ -1,12 +1,17 @@
 <?php
 require_once("../db/Contrato.php");
+require_once("../db/Usuarios.php");
 class M_ListarCiudades{
       
     private $db;
     
     public function __construct($bd)
     {
-        $this->db=ClassContrato::Contrato($bd);
+        if($bd != "SMP2"){
+            $this->db=ClassUsuario::Usuario();
+        }else{
+            $this->db=ClassContrato::Contrato($bd);
+        }
     }
     
     public function M_Provincia(){
