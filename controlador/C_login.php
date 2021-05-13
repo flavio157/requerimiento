@@ -10,20 +10,21 @@ require_once("../modelo/M_Login.php");
     if ($cod_usuario!="") {
         $usu = new C_Login();
         $usu->C_usuario($cod_usuario);
-
     }else{
         return header("Location: http://localhost:8080/requerimiento/vista/");
     }
+
+
 class C_Login
 {
-
     public function C_usuario($cod_usuario){   
-        $montoSMP = 700; /*el monto al que debe llegar*/
-        $diasprimeraquincena =array("15","26"); /*fecha de la primera quincena cuando comienza y termina */
-        $diassegundaquincena =array("05","11"); /*fecha de la segunda quincena cuando comienza y termina*/
+        $montoSMP = 1000; 
+        $diasprimeraquincena =array("15","26");
+        $diassegundaquincena =array("01","11");
         
         $m_login = new M_Login();
         $datosUsuario = $m_login->Login($cod_usuario);
+        
 
        if($datosUsuario){
         if(trim($datosUsuario['OFICINA']) == "SMP2"){
@@ -38,9 +39,8 @@ class C_Login
        }else{
          return header("Location: http://localhost:8080/requerimiento/vista/");
         }
-
     }
-  
+
 }
 
 ?>
