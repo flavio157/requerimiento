@@ -8,6 +8,8 @@
       
 
     if($accion == "guardar"){
+        $oficina = $_POST['oficina'];
+        $codPersonal = $_POST['codPersonal'];
         $tipo_documento = $_POST["slcdocumento"];
         $identificacion = $_POST["txtnumero"]; 
         $cliente = $_POST["txtcliente"];
@@ -28,36 +30,31 @@
         $dataproductos = json_decode($_POST['array']);
         $provincia = $_POST["slcciudad"];
        
-        guardarPedidos::guardarpedido(trim($tipo_documento),
+        guardarPedidos::guardarpedido(trim($oficina),trim($tipo_documento),trim($codPersonal),
         trim($identificacion),trim($cliente),trim($direccion),trim($referencia),
         trim($contacto),trim($telefono),trim($entrega),trim($fcancelacion) ,trim($est_pedido),
         trim($cod_distrito),trim($num_contrato),
         trim($provincia),trim($telefono2),trim($condicion),$dataproductos);
 
-    }else if($accion == "mostrarPedidos"){
-        guardarPedidos::mostrarPedido($_SESSION['cod_personal']);
-    }else if($accion == "pedidoItem"){
-        $idpedido =$_POST['idpedido'];
-        guardarPedidos::mostrarPedidoItem($idpedido);
     }
 
 
     class guardarPedidos
     { 
-        static function guardarpedido($tipo_documento,
+        static function guardarpedido($oficina,$tipo_documento,$codPersonal,
         $identificacion,$cliente,$direccion,$referencia,$contacto,$telefono,$entrega,
         $fcancelacion,$est_pedido,$cod_distrito,$num_contrato,
         $cod_provincia,$telefono2,$condicion,$dataproductos){
             
-            $bd = 'SMP2';
-            $c_guardar = new M_Pedidos($bd);
+           /* $bd = 'SMP2';*/
+            $c_guardar = new M_Pedidos($oficina);
             $verificar = $c_guardar->verificar($identificacion);
      
             if($verificar == ""){
                 $observacion = observacionProducto($dataproductos);
                 $total = TotalProducto($dataproductos);
     
-                $c_pedido = $c_guardar->guardarpedido(date("d-m-Y"),$_SESSION['cod_personal'],$tipo_documento,
+                $c_pedido = $c_guardar->guardarpedido(date("d-m-Y"),$codPersonal,$tipo_documento,
                 $identificacion,$cliente,$direccion,$referencia,$contacto,$telefono,$entrega,$fcancelacion,
                 $est_pedido,$observacion,$total,$cod_distrito,$num_contrato,$cod_provincia,$telefono2,$condicion,$dataproductos);
              
@@ -80,25 +77,6 @@
             }
             echo json_encode($buscarProducto,JSON_FORCE_OBJECT);
         }  
-        
-       
-
-
-
-        static function mostrarPedido($cod_vendedor){
-            $bd = 'SMP2';
-            $c_mostrarpedido = new M_Pedidos($bd);
-            $datos = $c_mostrarpedido->mostrarPedido($cod_vendedor,date("d-m-Y"));
-            print_r($datos) ;
-        }
-
-        static function mostrarPedidoItem($idPedido){
-            $bd = 'SMP2';
-            $c_mostrarpedido = new M_Pedidos($bd);
-            $datos = $c_mostrarpedido->mostrarPedidoItems($idPedido);
-            print_r($datos) ;
-        }
-
     }
 
 ?>
