@@ -7,17 +7,20 @@ require_once("../modelo/M_BuscarProductos.php");
     
     if($accion === "buscar"){
         $nomproducto = $_POST['producto'];
-        C_BuscarProducto::BuscaProducto($nomproducto);
+        $zona = $_POST['zona'];
+        C_BuscarProducto::BuscaProducto($nomproducto,$zona);
 
     }else if ($accion == "politicaprecios"){
         $cantidad = $_POST['cantidad'];
         $cod_producto = $_POST['codproducto'];
-        C_BuscarProducto::PoliticaPrecios($cantidad,$cod_producto);
+        $zona = $_POST['zona'];
+        C_BuscarProducto::PoliticaPrecios($cantidad,$cod_producto,$zona);
       
     }else if($accion == "politicabonos"){
         $cantidad = $_POST['cantidad'];
         $cod_producto = $_POST['codproducto'];
-        C_BuscarProducto::PoliticaBonos($cantidad,$cod_producto);
+        $zona = $_POST['zona'];
+        C_BuscarProducto::PoliticaBonos($cantidad,$cod_producto,$zona);
 
     }else if($accion == "bonoitem"){
         $cod_bono = $_POST['codbono'];
@@ -32,7 +35,7 @@ require_once("../modelo/M_BuscarProductos.php");
 class C_BuscarProducto
 {
     
-    static function BuscaProducto($nomproducto)
+    static function BuscaProducto($nomproducto,$zona)
     {   
         $M_buscarproducto = new M_BuscarProductos();
             if(substr($nomproducto, 0, 2) == "CM"){
@@ -42,7 +45,8 @@ class C_BuscarProducto
                     'combo' => $c_cod,
                     );
             }else{
-                $c_cod = $M_buscarproducto->M_BuscarProducto($_SESSION['zona'],$nomproducto);
+               
+                $c_cod = $M_buscarproducto->M_BuscarProducto($zona,$nomproducto);
                 $datos  = array(
                     'estado' => 'productos',
                     'producto' => $c_cod,
@@ -53,9 +57,9 @@ class C_BuscarProducto
     }
 
 
-    static function PoliticaPrecios($cantidad,$cod_producto){
+    static function PoliticaPrecios($cantidad,$cod_producto,$zona){
             $M_politicaPrecio = new M_BuscarProductos();
-            $precio = $M_politicaPrecio->M_PoliticaPrecios($_SESSION['zona'],$cantidad,$cod_producto);
+            $precio = $M_politicaPrecio->M_PoliticaPrecios($zona,$cantidad,$cod_producto);
             if($precio['PRECIO'] != null){
                 $datos  = array(
                     'estado' => 'ok',
@@ -68,10 +72,10 @@ class C_BuscarProducto
 
 
     
-    static function PoliticaBonos($cantidad,$cod_producto)
+    static function PoliticaBonos($cantidad,$cod_producto,$zona)
     {
             $M_politicaBono = new M_BuscarProductos();
-            $Bono = $M_politicaBono->M_PoliticaBono($_SESSION['zona'],$cantidad,$cod_producto);
+            $Bono = $M_politicaBono->M_PoliticaBono($zona,$cantidad,$cod_producto);
             $dato = $Bono['BONO'];
             if($Bono!= 0){
                 if($cantidad >= 20){
