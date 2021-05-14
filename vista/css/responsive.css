@@ -51,7 +51,20 @@
 
    #acordionresponsive{display:none ;}
 
-   #tbedidosRegistrados{display: block;}
+   #tbpedidosRegistrados{display: block;}
+
+   .collapse-row.collapsed + tr {
+        display: none;
+    }
+
+
+    input[type=number]::-webkit-inner-spin-button, 
+    input[type=number]::-webkit-outer-spin-button { 
+        -webkit-appearance: none; 
+        margin: 0; 
+    }
+
+
 
 @media screen and (max-width:992px){
     .main{
@@ -87,12 +100,26 @@
         text-align: center;
        }
        
-    .responsive{display:block;}   
+    .responsive{
+        display:block;
+    }   
 
-    .noresposive{display: none;}
+    .noresposive{
+        display: none;
+    }
 
-    #acordionresponsive{display: block ;}
+    #acordionresponsive{
+        display: block ;
+    }
    
-   #tbedidosRegistrados{display: none;}
+    #tbpedidosRegistrados{
+        display: none;
+    }
 
+    #acordionresponsive {
+        height: 245px;
+        border: 1px solid #ddd;
+        background: #f1f1f1;
+        overflow-y: scroll;
+    }
 }
