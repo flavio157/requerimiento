@@ -15,20 +15,14 @@ $fcha = date("Y-m-d",strtotime(date("Y-m-d")."+ 1 days"));
 
 <html>
     <head>
-        <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6" crossorigin="anonymous">
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js" integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf" crossorigin="anonymous"></script>
+        <script type="text/javascript" src="../vista/js/jquery-3.3.1.slim.min.js"></script>
+        <script type="text/javascript" src="../vista/js/jquery.min.js"></script>
         <LINK REL=StyleSheet HREF="./css/responsive.css" TYPE="text/css" MEDIA=screen>
-
-        <link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.0.1/css/toastr.css" rel="stylesheet"/>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.0.1/js/toastr.js"></script>
-        
+        <link rel="STYLESHEET" type="text/css" href="../vista/fonts/style.css">
+        <link rel="STYLESHEET" type="text/css" href="../vista/bootstrap/css/bootstrap.min.css">
+        <script type="text/javascript" src="../vista/bootstrap/js/bootstrap.bundle.min.js"></script>
         <script type="text/javascript" src="../vista/js/jsproducto.js"></script>
         <script type="text/javascript" src="../vista/js/jsfuncionesProducto.js"></script>
-
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
-        <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
         <meta name="viewport" content="width=device-width, initial-scale=1.0 ,user-scalable=no">
         
     </head>
@@ -80,16 +74,12 @@ $fcha = date("Y-m-d",strtotime(date("Y-m-d")."+ 1 days"));
                     <input type="text" class="form-control" name="txtreferencia" id="txtreferencia" >
                 </div>
 
-                <!-- cambie el campo descripcion del formulario original 
-                por el modal de ingresar productos -->
                 <div class="col-12">
                     <label for="formdescripcion" class="form-label">DESCRIPCIÓN DEL PEDIDO</label>
-                    <button type="button" id="DescrPedido" class="btn btn-primary mb-1" data-bs-toggle="modal" data-bs-target="#ModalProducto">
-                        +
-                    </button>
-                   <!-- <button type="button" id="btnModiDescr" class="btn btn-primary mb-1" data-bs-toggle="modal" data-bs-target="#ModalProductoModificar">
-                        MODIFICAR
-                    </button>-->
+                    
+                    <a id="DescrPedido" class="btn btn-primary mb-1" data-bs-toggle="modal" data-bs-target="#ModalProducto">
+                                <i class="icon-circle-with-plus" title="Align Right"></i>
+                            </a> 
                 </div>
                 <div class="table-responsive tablafrmpedidos" id="tablaproductos">
                     <table class="table tabladelProducto" id="tabladelProducto">
@@ -171,33 +161,29 @@ $fcha = date("Y-m-d",strtotime(date("Y-m-d")."+ 1 days"));
 
                 <div class="row g-2">
                     <div class="col text-center ">
-                    <a class="btn btn-primary btn-lg" id="grabar" >
-                        <i class="fas fa-file-alt" title="Align Right"></i>
-                    </a>
-                   
-                         <!--<button type="button" id="grabar" class="btn btn-primary mb-3">Guardar
-                        
-                        </button>-->
-                        </div>
+                        <a class="btn btn-primary btn-lg" id="grabar" >
+                            <i class="icon-add-to-list" title="Align Right"></i>
+                        </a>
+                    </div>
+                    <div class="col text-center">
+                        <a class="btn btn-primary btn-lg" id="nuevo" >
+                            <i class="icon-cycle" title="Align Right"></i>
+                        </a>
+                    </div>
 
                         <div class="col text-center responsive">
                             <a class="btn btn-primary btn-lg " id="verPedidos">
-                                <i class="fas fa-file-alt" title="Align Right"></i>
+                                <i class="icon-eye" title="Align Right"></i>
                             </a>
                         </div>
 
                         <div class="col text-center noresposive">
                             <a class="btn btn-primary btn-lg " id="verPedidos2">
-                                <i class="fas fa-file-alt" title="Align Right"></i>
+                                <i class="icon-eye" title="Align Right"></i>
                             </a>  
                         </div>
 
-                    <div class="col text-center">
-                        <a class="btn btn-primary btn-lg" id="nuevo" >
-                            <i class="fas fa-file" title="Align Right"></i>
-                        </a>
-                        <!--<button type="button" id="nuevo" class="btn btn-primary mb-3">NUEVO</button>-->
-                    </div>
+                   
                 </div>
         </form>
 
