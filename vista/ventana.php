@@ -29,9 +29,9 @@ $fcha = date("Y-m-d",strtotime(date("Y-m-d")."+ 1 days"));
     <body>
     <div class="main">
         <form class="row g-3"  id="frmpedidos">
-                <input type="text" id="vroficina" style="display: none;" value="<?php echo $_SESSION['oficina']?>"/>
-                <input type="text" id="vrzona" style="display: none;" value="<?php echo $_SESSION['zona']?>"/>
-                <input type="text" id="vrcodpersonal" style="display: none;" value="<?php echo $_SESSION['cod_personal']?>"/>
+        <input type="text" id="vroficina" style="display: none;" value="<?php echo $_SESSION["ofi"]?>"/>
+                <input type="text" id="vrzona" style="display: none;" value="<?php echo  $_SESSION["zon"]?>"/>
+                <input type="text" id="vrcodpersonal" style="display: none;" value="<?php echo $_SESSION["cod"]?>"/>
                 <div id="mensajesgenerales">
                                    
                 </div>
