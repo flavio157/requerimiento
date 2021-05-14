@@ -48,7 +48,9 @@
                     </div>
                     <div class="card-body d-flex justify-content-between align-items-center">
                             Lista de Productos
-                            <a id="agregarProducto" class="btn btn-primary btn-sm">+</a>
+                            <a id="agregarProducto" class="btn btn-primary btn-lg">
+                                <i class="icon-circle-with-plus" title="Align Right"></i>
+                            </a>
                     </div>
 
                     <div class="table-responsive tablafrmpedidos" id="tablaproductos">
@@ -73,7 +75,10 @@
                 </form>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-primary" id="agregar">Agregar</button>
+                <a id="agregar" class="btn btn-primary btn-lg">
+                  <i class="icon-add-to-list" title="Align Right"></i>
+                </a>
+                
             </div>
         </div>
     </div>
