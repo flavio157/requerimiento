@@ -1,4 +1,4 @@
-function buscarProducto(nombreproducto) {
+function buscarProducto(nombreproducto,zona) {
     if(nombreproducto.substring(2,0) === "CM"){
         $.ajax({
             dataType:'text',
@@ -7,6 +7,7 @@ function buscarProducto(nombreproducto) {
             data:{
                 "accion" : "buscar",
                 "producto" : nombreproducto,
+                "zona" : zona
             } ,
             success:  function(response){
                if(response != ""){
@@ -42,6 +43,7 @@ function buscarProducto(nombreproducto) {
             data:{
                 "accion" : "buscar",
                 "producto" : nombreproducto,
+                "zona" : zona
             } ,
             success: function name(response) {
                 if(response != ""){
@@ -60,7 +62,7 @@ function buscarProducto(nombreproducto) {
                         array = datos.split("&");
                         $('#nombreproducto').val(array[0]);
                         $("#precioproducto").val(array[1]);
-                        /*valorproducto = array[1];*/
+                        /*valorproducto = array[1];*/           /*descometar para mostrar el precio aotumaticamente */
                         $('#sugerencias').fadeOut(0); 
                         $("#cod_producto").val(id);
                         $("#G_promocion").removeAttr('disabled');
@@ -148,7 +150,7 @@ function agregarcombos(dato) {
                  });
                 
                   
-                arraycodigos.push(cod_producto); 
+                arraycodigos.push(combo); 
                 arraytemporal.push(combo);
                 document.getElementById("frmagregarProducto").reset();
               
@@ -210,13 +212,13 @@ function agregarproductos() {
 function calcularTotal(cantidad,accion){
     if(accion === "ingresar" && valorproducto !== "" && cantidad !== "" && cantidad != 0 ){
         var total = Number(cantidad) * Number(valorproducto);
-        console.log(valorproducto +""+cantidad);
         $("#G_total").val(total.toFixed(2)); 
     }
 }
 
 
 function politicaprecios(cantidad,codproducto) {
+    var zona = $("#vrzona").val();
     if(cantidad != 0){
         $.ajax({
             dataType:'text',
@@ -226,6 +228,7 @@ function politicaprecios(cantidad,codproducto) {
                     "accion" : "politicaprecios",
                     "cantidad" : cantidad,
                     "codproducto" : codproducto,
+                    "zona" : zona,
                 } , 
                 success: function(response){ 
                     var obj = JSON.parse(response);
@@ -243,6 +246,7 @@ function politicaprecios(cantidad,codproducto) {
 
 
 function politicabonos(cantidad,codproducto) { 
+    var zona = $("#vrzona").val();
     if(cantidad != 0){
         $.ajax({
             dataType:'text',
@@ -252,6 +256,7 @@ function politicabonos(cantidad,codproducto) {
                     "accion" : "politicabonos",
                     "cantidad" : cantidad,
                     "codproducto" : codproducto,
+                    "zona" : zona,
                 } , 
                 success: function(response){ 
                     var obj = JSON.parse(response);
@@ -318,12 +323,16 @@ function obtenerDistrito(provincia){
 
 
 function obtenerprovincia(){
+    var oficina = $("#vroficina").val();
     var accion = "provincia";
     $.ajax({
         dataType:'text',
         type: 'POST', 
         url:  '../controlador/C_ListarCiudades.php',
-        data: "accion=" + accion,
+        data: {
+            "accion": accion,
+             "oficina" :  oficina  
+        },
         success: function(response){
             $('#Selectprovincia').append(response);
         }
@@ -339,14 +348,22 @@ function validacionFrm() {
     tlf2validacion = validarTelefono(telefono2);
     exprecion = new RegExp(/([0-9])\1{6,}/);
    
-  
-
     if($("#txtnumero").val().length == 0){
-        mensajesError("Ingrese el DNI del cliente");
-        $('#txtcliente').focus();
+        mensajesError("Ingrese el DNI del cliente","mensajesgenerales");
+        $('#txtnumero').focus();
+
+    }else if($("#slcdocumento").val() == "DNI" && $("#txtnumero").val().length < 8){
+        mensajesError("El DNI no puede ser menor a 8 digitos","mensajesgenerales");
+        $('#txtnumero').focus();
+
+    }else if($("#slcdocumento").val() == "RUC" && $("#txtnumero").val().length < 11){
+        mensajesError("El RUC no puede ser menor a 11 digitos","mensajesgenerales");
+        $('#txtnumero').focus();
+
     }else if($("#txtcliente").val().length == 0){
         mensajesError("Ingrese nombre del Cliente","mensajesgenerales");
         $('#txtcliente').focus();
+
     }else if($("#Selectprovincia").val() === "s"){
         mensajesError("Seleccione una Ciudad","mensajesgenerales");
 
@@ -400,7 +417,7 @@ function validacionFrm() {
                    mensajesError("se necesitan mas datos en la dirección","mensajesgenerales");
                    $('#txtdireccion').focus();
                 }else{
-            /*console.log("se registro ");*/
+          /*  console.log("se registro ");*/
             guardarPedido();
             }
             
@@ -411,13 +428,16 @@ function validacionFrm() {
 
 
 function guardarPedido() {
+        var codpersonal =$("#vrcodpersonal").val();
+        var oficina = $("#vroficina").val();
         var datosproductos ={arrayproductos}
         var data = $("#frmpedidos");
           $.ajax({
             dataType:'text',
             type: 'POST', 
             url:  '../controlador/C_Pedido.php',
-            data:data.serialize()+"&accion=guardar&array="+JSON.stringify(datosproductos), 
+            data:data.serialize()+"&accion=guardar&array="+JSON.stringify(datosproductos)+
+                "&codPersonal="+codpersonal+"&oficina="+oficina, 
             success: function(response){
               
                 var obj = JSON.parse(response);
@@ -446,44 +466,28 @@ function validarTelefono(telefono) {
 }
 
 
-function mostrarPedido(mostrarpedido) {
+function mostrarPedido(mostrarpedido,tipo,codpersonal,oficina) {
     var accion = mostrarpedido;
     $.ajax({
         dataType:'text',
         type: 'POST', 
-        url:  '../controlador/C_Pedido.php',
-        data: "accion=" + accion,
+        url:  '../controlador/C_ListarPedidos.php',
+        data: {
+            "accion":  accion,
+            "tipo": tipo,
+            "codpersonal" : codpersonal,
+            "oficina" : oficina
+        },
         success: function(response){
-            $('#acordionresponsive').html(response);
+            if(tipo == "c"){
+                $('#acordionresponsive').html(response);
+            }else{
+                $('#tbmostrarpedidos').html(response);
+            }
+            
         }
     });  
 
 }
 
-function mostarapedidoItem($codigo,id) {
-    var accion = "pedidoItem";
-    $.ajax({
-        dataType:'text',
-        type: 'POST', 
-        url:  '../controlador/C_Pedido.php',
-        data: 
-        {
-            "accion": accion,
-            "idpedido" : $codigo,
-         },
-        
-        success: function(response){
-           
-            $('#'+id).html(response);
-        }
-    });  
-}
 
-
-function ontenerid(id,dato) {
-    var datos = dato.id;
-    var ids= id;
-
-    mostarapedidoItem(id,dato.id);
-    
-}
