@@ -173,7 +173,7 @@ function agregarproductos() {
     var precio =$("#precioproducto").val();
     var total = $("#G_total").val();
     
-    if(nombre !== '' & cantidad !== '' && promocion !== ''){
+    if(nombre !== '' & cantidad !== '' && promocion !== '' && cod_producto !== '' ){
                 var estado = 1;
                 if (contador >= 0) {
                     for (let j = 0; j < arrayproductos.length; j++) {
@@ -231,11 +231,13 @@ function politicaprecios(cantidad,codproducto) {
                     "zona" : zona,
                 } , 
                 success: function(response){ 
-                    var obj = JSON.parse(response);
-                    if(obj["estado"] === "ok"){
-                        precioproducto = obj['precio'];  
-                        $("#precioproducto").val(precioproducto);
-                        valorproducto = precioproducto;
+                    if(response != ''){
+                        var obj = JSON.parse(response);
+                        if(obj["estado"] === "ok"){
+                            precioproducto = obj['precio'];  
+                            $("#precioproducto").val(precioproducto);
+                            valorproducto = precioproducto;
+                        }
                     }
                 }
         });
