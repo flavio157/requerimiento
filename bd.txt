@@ -421,3 +421,57 @@ as
 select * from T_PPEDIDO
 
 GO
+
+
+/*vista para verificar la couta del personal*/
+create view V_VERIFICAR_CUOTAPERSONAL
+as
+select * from  T_PERSONAL
+
+
+
+
+/*se creo la tabla PERSONAL*/
+
+CREATE TABLE [dbo].[T_PERSONAL](
+	[COD_PERSONAL] [char](5) NULL,
+	[COD_AREA] [char](5) NULL,
+	[COD_CARGO] [char](5) NULL,
+	[TIP_AGRUPADO] [char](3) NULL,
+	[DNI_PERSONAL] [char](8) NULL,
+	[NOM_PERSONAL1] [varchar](60) NULL,
+	[NOM_PERSONAL2] [varchar](30) NULL,
+	[APE_PPERSONAL] [varchar](30) NULL,
+	[APE_MPERSONAL] [varchar](30) NULL,
+	[SAL_BASICO] [decimal](9, 2) NULL,
+	[COMISIONES] [decimal](7, 2) NULL,
+	[DIR_PERSONAL] [varchar](100) NULL,
+	[COD_DEPARTAMENTO] [char](5) NULL,
+	[COD_PROVINCIA] [char](5) NULL,
+	[COD_DISTRITO] [char](5) NULL,
+	[TEL_PERSONAL] [decimal](11, 0) NULL,
+	[CEL_PERSONAL] [decimal](11, 0) NULL,
+	[EST_PERSONAL] [char](1) NULL,
+	[COD_SUPERVISOR] [char](5) NULL,
+	[COD_ZONA] [char](5) NULL,
+	[FEC_INGRESO] [datetime] NULL,
+	[USU_REGISTRO] [varchar](30) NULL,
+	[FEC_REGISTRO] [datetime] NULL,
+	[USU_MODIFICO] [varchar](30) NULL,
+	[FEC_MODIFICO] [datetime] NULL,
+	[GRUPO] [char](1) NULL,
+	[POR_INICIAL] [char](1),
+	[NPAGO] [char](1),
+	[NCONTRATOS] [numeric](7,2),
+	[PRODUCCION] [char](1),
+	[SANC_CAJA] [char](1),
+	[SANC_MERCA] [char](1),
+	[SANC_COBRA] [char](1),
+	[IDENTIFICADOR] [char](1),
+	[N_CUENTA] [char](14),
+	[TITULAR] [varchar](50),
+	[OCURRENCIA] [char](1),
+	[LIMPIEZA] [char](1),
+	[AFP] [numeric](18,0),
+	[CUOTA] [numeric](7,2)
+) ON [PRIMARY]
