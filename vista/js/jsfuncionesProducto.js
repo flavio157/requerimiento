@@ -140,7 +140,10 @@ function agregarcombos(dato) {
                     "</td><td>"+nombre+ "</td><td>"+cantidad+
                     "</td><td>"+precio+"</td><td>"+promocion+"</td><td style='display: none;'>"+
                     total +"</td>"
-                    +"<td><button type='button' id='btneliminar' class='btn btn-primary btn-sm'>-</button></td></tr>";
+                    +"<td><a class='btn btn-primary btn-sm ' id='btneliminar'>"+
+                        "<i class='icon-trash' title='Align Right'></i>"+
+                    "</a>"+
+                    "</td></tr>";
                     var btn = document.createElement("TR");
                     btn.setAttribute('id', combo);
                     btn.innerHTML=fila;
