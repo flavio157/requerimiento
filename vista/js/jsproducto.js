@@ -82,7 +82,7 @@ $(document).ready(function(){
             var promocion = $("#G_promocion").val();
             if (promocion <= bono) {  
                 agregarproductos();
-                arraycodigos = [];
+                /*arraycodigos = [];*/
             }else{
                 mensajesError("La Promoción no puede ser mayor a lo indicado: " + bono,"mensaje");
             }
@@ -91,13 +91,14 @@ $(document).ready(function(){
     });
 
     $("#nombreproducto").on('keyup',function () {
+        var zona = $("#vrzona").val();
         var nombreproducto = $("#nombreproducto").val().toUpperCase();
         tipodeproducto = nombreproducto.substring(2,0).toUpperCase();
        
         if(tipodeproducto === "CM"){
-            buscarProducto(nombreproducto);
+            buscarProducto(nombreproducto,zona);
         }else{
-            buscarProducto(nombreproducto);
+            buscarProducto(nombreproducto,zona);
         }
         
      
@@ -111,42 +112,43 @@ $(document).ready(function(){
             if(cantidad != "" && cantidad != 0){
                 politicabonos(cantidad,codproducto);
             }
-        /** */
-       
-        
+        /*comentar politicaBonos para filtrar producto por precio web */
       });
 
+
     $("#agregar").on('click',function() {
-        if(arrayproductos.length != 0){
+        if(Object.keys(arrayproductos) != "" && arraycodigos.length != 0){
             $('#tabladelProducto').find("tr:gt(0)").remove();
-            for (let i = 0; i < arrayproductos.length; i++) {
-                if (arrayproductos[i] != undefined) {
-                        if(arrayproductos[i]['combo'] != undefined){
-                            var fila="<tr><td style='display: none;'>"+arrayproductos[i]['combo']+
-                            "</td><td>"+arrayproductos[i]['nombre']+ "</td><td>"+arrayproductos[i]['cantidad']+
-                            "</td><td>"+arrayproductos[i]['precio']+"</td><td>"+arrayproductos[i]['promocion']+"</td><td style='display: none;'>"+
-                            arrayproductos[i]['total'] +"</td>"
-                            +"<td><button type='button' id='btneliminar' class='btn btn-primary btn-sm'>-</button></td></tr>";
-                            var btn = document.createElement("TR");
-                            btn.setAttribute('id', arrayproductos[i]['combo']);
-                        }else{
-                            var fila="<tr><td style='display: none;'>"+arrayproductos[i]['cod_producto']+
-                            "</td><td>"+arrayproductos[i]['nombre']+ "</td><td>"+arrayproductos[i]['cantidad']+
-                            "</td><td>"+arrayproductos[i]['precio']+"</td><td>"+arrayproductos[i]['promocion']+"</td><td style='display: none;'>"+
-                            arrayproductos[i]['total'] +"</td>"
-                            +"<td><button type='button' id='btneliminar' class='btn btn-primary btn-sm'>-</button></td></tr>";
-                            var btn = document.createElement("TR");
-                        }
-                        btn.innerHTML=fila;
-                        document.getElementById("tabla").appendChild(btn);
-                }   
-            }
-    
-            $("#tablaproductos").show("slow");
-            $("#ModalProducto").modal("hide");
-            document.getElementById("frmagregarProducto").reset();
-            $('#productosMomento').find("tr:gt(0)").remove();
-            arraytemporal =[];
+                    for (let i = 0; i < arrayproductos.length; i++) {
+                        if (arrayproductos[i] != undefined) {
+                                if(arrayproductos[i]['combo'] != undefined){
+                                    var fila="<tr><td style='display: none;'>"+arrayproductos[i]['combo']+
+                                    "</td><td>"+arrayproductos[i]['nombre']+ "</td><td>"+arrayproductos[i]['cantidad']+
+                                    "</td><td>"+arrayproductos[i]['precio']+"</td><td>"+arrayproductos[i]['promocion']+"</td><td style='display: none;'>"+
+                                    arrayproductos[i]['total'] +"</td>"
+                                    +"<td><button type='button' id='btneliminar' class='btn btn-primary btn-sm'>-</button></td></tr>";
+                                    var btn = document.createElement("TR");
+                                    btn.setAttribute('id', arrayproductos[i]['combo']);
+                                }else{
+                                    var fila="<tr><td style='display: none;'>"+arrayproductos[i]['cod_producto']+
+                                    "</td><td>"+arrayproductos[i]['nombre']+ "</td><td>"+arrayproductos[i]['cantidad']+
+                                    "</td><td>"+arrayproductos[i]['precio']+"</td><td>"+arrayproductos[i]['promocion']+"</td><td style='display: none;'>"+
+                                    arrayproductos[i]['total'] +"</td>"
+                                    +"<td><button type='button' id='btneliminar' class='btn btn-primary btn-sm'>-</button></td></tr>";
+                                    var btn = document.createElement("TR");
+                                }
+                                btn.innerHTML=fila;
+                                document.getElementById("tabla").appendChild(btn);
+                        }   
+                    }
+                    $("#tablaproductos").show("slow");
+                    $("#ModalProducto").modal("hide");
+                    document.getElementById("frmagregarProducto").reset();
+                    $('#productosMomento').find("tr:gt(0)").remove();
+                    arraytemporal =[];
+                    arraycodigos=[];
+        }else{
+            mensajesError("Ingrese un Producto","mensaje");
         }
        
     });  
@@ -183,12 +185,22 @@ $(document).ready(function(){
                     if (arrayproductos[i]['combo'] === valores) {
                         for (let l = 0; l < arrayproductos.length; l++) {
                             $("#"+arrayproductos[i]['combo']).remove();   
+                           
+                        }
+                        var index = arraycodigos.indexOf(valores);
+                        if ( index !== -1 ) {
+                            arraycodigos.splice( index, 1 );
                         }
                         delete(arrayproductos[i]);
                      }
                      
                 }else{
                     if (arrayproductos[i]['cod_producto'] === valores) {
+                        var index = arraycodigos.indexOf(valores);
+                        if ( index !== -1 ) {
+                            arraycodigos.splice( index, 1 );
+                        }
+
                         delete(arrayproductos[i]);
                         $(this).closest('tr').remove();
                      }
@@ -258,15 +270,21 @@ $(document).ready(function(){
     });
 
     $("#verPedidos").on('click',function(params) {
+        /*muestra el modal para vista en celular */
+        var codpersonal = $("#vrcodpersonal").val();
+        var oficina = $("#vroficina").val();
         $("#ModalMostrarPedidos").modal('show');
-        mostrarPedido("mostrarPedidos");
-
+        mostrarPedido("mostrarPedidos","c",codpersonal,oficina);
     })
 
     $("#verPedidos2").on('click',function(params) {
-        console.log("pedidos");
+        /*muestra el modal para vista en pc*/
+        var codpersonal = $("#vrcodpersonal").val();
+        var oficina = $("#vroficina").val();
         $("#ModalMostrarPedidos").modal('show');
+        mostrarPedido("mostrarPedidos","p",codpersonal,oficina);
     })
+
 
     $("#cerrarmodal").on('click',function (params) {
         $("#ModalMostrarPedidos").modal('hide');
