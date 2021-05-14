@@ -411,3 +411,13 @@ as
 select pc.CODIGO,pc.COD_PRODUCTO, p.ABR_PRODUCTO,p.DES_PRODUCTO,pc.CANTIDAD ,pc.precio from T_PPEDIDO_CANTIDAD as pc
 inner join T_PRODUCTO as p
 on pc.COD_PRODUCTO =  p.COD_PRODUCTO
+
+
+
+
+/*para verificar si existe un pedido pendiente*/
+create view [dbo].[V_VERIFICAR_PEDIDO]
+as
+select * from T_PPEDIDO
+
+GO
