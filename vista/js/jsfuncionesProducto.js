@@ -196,7 +196,10 @@ function agregarproductos() {
                             "</td><td>"+nombre+ "</td><td>"+cantidad+
                             "</td><td>"+precio+"</td><td>"+promocion+"</td><td style='display: none;'>"+
                             total +"</td>"
-                            +"<td><button type='button' id='btneliminar' class='btn btn-primary btn-sm'>-</button></td></tr>";
+                            +"<td><a class='btn btn-primary btn-sm ' id='btneliminar'>"+
+                            "<i class='icon-trash' title='Align Right'></i>"+
+                            "</a>"+
+                            "</td></tr>";
                             var btn = document.createElement("TR");
                             btn.innerHTML=fila;
                             document.getElementById("tablaModal").appendChild(btn);
@@ -304,6 +307,7 @@ function reiniciarFrm() {
     document.getElementById("frmpedidos").reset();
     $('#tablaproductos').find("tr:gt(0)").remove();
     $("#tablaproductos").hide();
+    generarCodigo();
 }
 
 
@@ -397,11 +401,18 @@ function validacionFrm() {
         $('#txtTelefono2').focus();
 
     }else if($("#condicion").val() === "n"){
-        console.log($("#condicion").val() );
+      
         mensajesError("Seleccione una condicion","mensajesgenerales");
 
     }else if($("#turno").val() === "n"){
         mensajesError("Seleccione un Turno","mensajesgenerales");
+
+    }else if($("#txtcontrato").val() == "" || $("#txtcontrato").val().length < 5){
+        mensajesError("Ingrese el numero de Contrato minimo 5 digitos","mensajesgenerales");
+      
+
+    }else if($("#txtcodigo").val() != $("#txtgenereado").val()){
+        mensajesError("El codigo ingresado no es igual al Codigo Generado","mensajesgenerales");
 
     }else if(arrayproductos.length == 0){
         mensajesError("No puede guardar sin seleccionar un producto","mensajesgenerales");
@@ -422,8 +433,9 @@ function validacionFrm() {
                    mensajesError("se necesitan mas datos en la dirección","mensajesgenerales");
                    $('#txtdireccion').focus();
                 }else{
-          /*  console.log("se registro ");*/
-            guardarPedido();
+          /* console.log("se registro ");*/
+             guardarPedido();
+          
             }
             
         }
@@ -451,6 +463,7 @@ function guardarPedido() {
                 }else{
                     mensajeSuccess(obj['mensaje'],"mensajesgenerales")
                     reiniciarFrm();
+                    generarCodigo();
                 }
             }
         });
@@ -496,3 +509,34 @@ function mostrarPedido(mostrarpedido,tipo,codpersonal,oficina) {
 }
 
 
+function completarContrato(nr_contrato) {
+    var accion = "contrato";
+    $.ajax({
+        dataType:'text',
+        type: 'POST', 
+        url:  '../controlador/C_verificar.php',
+        data: {
+            "verificar":  accion,
+            "nr_contrato": nr_contrato,    
+        },
+        success: function(response){
+            $("#txtcontrato").val(response);
+        }
+    });  
+    
+}
+
+function generarCodigo() {
+    var accion = "generarcodigo";
+    $.ajax({
+        dataType:'text',
+        type: 'POST', 
+        url:  '../controlador/C_verificar.php',
+        data: {
+            "verificar":  accion,
+        },
+        success: function(response){
+            $("#txtgenereado").val(response);
+        }
+    });  
+}
