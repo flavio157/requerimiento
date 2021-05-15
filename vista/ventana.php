@@ -4,10 +4,10 @@ if (session_status() == PHP_SESSION_NONE) {
     session_start();
 }
 
-if(!isset($_SESSION['zona'])){
+/*if(!isset($_SESSION['zona'])){
     header('Location: index.php');
     exit;
-} 
+} */
 date_default_timezone_set('America/Lima');
 $fcha = date("Y-m-d",strtotime(date("Y-m-d")."+ 1 days"));
 
@@ -29,7 +29,7 @@ $fcha = date("Y-m-d",strtotime(date("Y-m-d")."+ 1 days"));
     <body>
     <div class="main">
         <form class="row g-3"  id="frmpedidos">
-        <input type="text" id="vroficina" style="display: none;" value="<?php echo $_SESSION["ofi"]?>"/>
+                <input type="text" id="vroficina" style="display: none;" value="<?php echo $_SESSION["ofi"]?>"/>
                 <input type="text" id="vrzona" style="display: none;" value="<?php echo  $_SESSION["zon"]?>"/>
                 <input type="text" id="vrcodpersonal" style="display: none;" value="<?php echo $_SESSION["cod"]?>"/>
                 <div id="mensajesgenerales">
@@ -155,7 +155,7 @@ $fcha = date("Y-m-d",strtotime(date("Y-m-d")."+ 1 days"));
                     </div>
                     <div class="col">
                         <label for="formfpago" class="form-label">GENERADO</label>
-                        <input type="text" name="txtgenereado" value="100061" class="form-control" disabled=true>
+                        <input type="text" name="txtgenereado" id="txtgenereado" class="form-control" disabled=true>
                     </div>
                 </div>
 
@@ -193,3 +193,4 @@ $fcha = date("Y-m-d",strtotime(date("Y-m-d")."+ 1 days"));
         </div>
     </body>
 </html>
+
