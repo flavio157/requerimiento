@@ -15,7 +15,7 @@ class M_VerificarCuota
     {  
         $fechas = fechas($diasprimeraquincena,$diassegundaquincena,$fec_ingreso);
         if(!is_string($fechas[0])){
-            $fech1 = $fechas[0];
+            $fech1 = $fechas[0]->format('d-m-y');
             $fech2 = $fechas[1];
             $bool = $fechas[2];
             
