@@ -2,6 +2,7 @@
 date_default_timezone_set('America/Lima');
 require_once("../modelo/M_VerificarCuota.php");
 require_once("../modelo/M_Login.php");
+require_once("../controlador/f_funcion.php");
 
 
    $cod_usuario = $_POST['usuario'];
@@ -31,12 +32,14 @@ class C_Login
        if($datosUsuario){
         if(trim($datosUsuario['OFICINA']) == "SMP2"){
             $_cuota = new M_VerificarCuota($datosUsuario['OFICINA']);
-            $montoTotal = $_cuota->VerificandoQuincena($datosUsuario['COD_PERSONAL'],$diasprimeraquincena,$diassegundaquincena,$montoSMP['FEC_INGRESO']);
+            $montoTotal = $_cuota->VerificandoQuincena($datosUsuario['COD_PERSONAL'],$diasprimeraquincena
+                                                       ,$diassegundaquincena,$montoSMP['FEC_INGRESO']);
         }else{
-           $montoTotal = $m_login->VerificarCallCenter($datosUsuario['COD_PERSONAL'],$diasprimeraquincena,$diassegundaquincena,$montoSMP['FEC_INGRESO']);
+           $montoTotal = $m_login->VerificarCallCenter($datosUsuario['COD_PERSONAL'],$diasprimeraquincena,
+                                                       $diassegundaquincena,$montoSMP['FEC_INGRESO']);
         }
-        print_r($montoTotal);
-        /*f_Cuotas($montoTotal,$montoSMP['CUOTA'], $diasprimeraquincena,$diassegundaquincena);*/
+       /* print_r($montoTotal);*/
+        f_Cuotas($montoTotal[0],$montoSMP['CUOTA'], $diasprimeraquincena,$diassegundaquincena,$montoTotal[1]);
 
        }else{
          return header("Location: http://localhost:8080/requerimiento/vista/");
