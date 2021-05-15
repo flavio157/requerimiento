@@ -9,6 +9,7 @@ var tipodeproducto = "";
 
 $(document).ready(function(){
     obtenerprovincia();
+    generarCodigo();
     $('body').on('keydown', function(e){
         if( e.which == 38 ||  e.which == 40) {
         return false;
@@ -30,16 +31,6 @@ $(document).ready(function(){
                 this.value = this.value.slice(0,9); 
             })
     })
-
-    $("#txtcliente").bind('keypress', function(event) {
-        var regex = new RegExp("^[a-zA-Z ]+$");
-        var key = String.fromCharCode(!event.charCode ? event.which : event.charCode);
-        if (!regex.test(key)) {
-          event.preventDefault();
-          return false;
-        }
-      });
-
 
 
 
@@ -299,6 +290,16 @@ $(document).ready(function(){
     $("#cerrarmodal").on('click',function (params) {
         $("#ModalMostrarPedidos").modal('hide');
     })
+
+    $("#txtcontrato").blur(function (e) {
+        nr_contrato = $("#txtcontrato").val();
+        if(nr_contrato.length >= 5){
+            completarContrato(nr_contrato); 
+        }  
+    });
+
+
+
 
 })
 
