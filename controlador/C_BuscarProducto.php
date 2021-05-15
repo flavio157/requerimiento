@@ -47,6 +47,7 @@ class C_BuscarProducto
             }else{
                
                 $c_cod = $M_buscarproducto->M_BuscarProducto($zona,$nomproducto);
+                /*$c_cod = $M_buscarproducto->M_BuscarProducto_WEB($nomproducto);*/ /*retorna el producto con su precio web*/
                 $datos  = array(
                     'estado' => 'productos',
                     'producto' => $c_cod,
