@@ -98,7 +98,7 @@
 
     public function verificar($dni)
     {
-        $query = $this->bd->prepare("SELECT * FROM V_REGISTRAR_PEDIDO WHERE IDENTIFICACION = :dni and (EST_PEDIDO = 'P'
+        $query = $this->bd->prepare("SELECT * FROM V_VERIFICAR_PEDIDO WHERE IDENTIFICACION = :dni and (EST_PEDIDO = 'P'
         or EST_PEDIDO = 'R')"); 
         $query->bindParam("dni",$dni,PDO::PARAM_STR); 
         $query->execute();
