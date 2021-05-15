@@ -141,9 +141,9 @@ class M_BuscarProductos{
 
         }
 
-                        
 
-        
+
+        /*buscar y retorna el producto con su precio web */
         public function M_BuscarProducto_WEB($nom_producto)
         {
             $query=$this->db->prepare("SELECT * FROM V_BUSCAR_PRODUCTO_WEB WHERE ABREVIATURA LIKE '%$nom_producto%'");
@@ -159,9 +159,5 @@ class M_BuscarProductos{
                 $query = null;
             }
         } 
-
-
-
-
 }
 ?>
