@@ -444,21 +444,21 @@ function RestriccionOficina($total,$permiso,$tgeneral){
                 if($hoy['mday'] >= $diasprimeraquincena[0] && round($cuotas,2)  > round($verificarCuotas,2)   && $hoy['mday'] <=$diasprimeraquincena[1]){
 
                     if( $hoy['mday'] == $diasprimeraquincena[0] || $hoy['mday'] <= $diasprimeraquincena[1] ){
-                        return header("Location:http://localhost:8080/requerimiento/vista/bloqueo.php");
+                        return header("Location:http://localhost:8080/requerimiento-1/vista/bloqueo.php");
                     }
                 }else if($hoy['mday'] >= $diassegundaquincena[0] &&  round($cuotas,2)  > round($verificarCuotas,2)  && $hoy['mday'] <= $diassegundaquincena[1]){
                 
                     if($hoy['mday'] == $diassegundaquincena[0] || $hoy['mday'] <= $diassegundaquincena[1]){
-                        return header("Location:http://localhost:8080/requerimiento/vista/bloqueo.php");
+                        return header("Location:http://localhost:8080/requerimiento-1/vista/bloqueo.php");
                     } 
                 }else{
-                    return header("Location: http://localhost:8080/requerimiento/vista/ventana.php");
+                    return header("Location: http://localhost:8080/requerimiento-1/vista/ventana.php");
                 }
         }else{
-            return header("Location:http://localhost:8080/requerimiento/vista/Advertencia.php");
+            return header("Location:http://localhost:8080/requerimiento-1/vista/Advertencia.php");
         }
       }else{
-            return header("Location: http://localhost:8080/requerimiento/vista/ventana.php");
+            return header("Location: http://localhost:8080/requerimiento-1/vista/ventana.php");
       }  
     }
 
