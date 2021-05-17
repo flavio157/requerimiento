@@ -475,3 +475,9 @@ CREATE TABLE [dbo].[T_PERSONAL](
 	[AFP] [numeric](18,0),
 	[CUOTA] [numeric](7,2)
 ) ON [PRIMARY]
+
+
+
+
+
+/*el solo esta el logeo para obtener la oficina del personal*/
