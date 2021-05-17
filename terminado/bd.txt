@@ -1,0 +1,477 @@
+bd Almacenes
+
+create table T_USUARIO_CALL(
+COD_USUARIO char(3),
+NOM_USUARIO varchar(30),
+PDW_USUARIO char(6),
+ANEXO_USUARIO char(4),
+EST_USUARIO char(1),
+EST_INGRESO char(1),
+OFICINA char(30),
+COD_PERSONAL char(5),
+ZONA char(1)
+)
+
+CREATE table T_CALL_CENTER_ITEM(
+CODIGO numeric(18,0),
+NUM_CONTRATO char(9),
+COD_PRODUCTO char(6),
+NUM_LOTE char(6), 
+PRECIO numeric(7,2),   
+OFICINA char(30)
+)
+
+
+
+
+
+create table T_CALL_CENTER(
+CODIGO numeric(18,0),
+NUM_CONTRATO char(9),
+NOMBRE varchar(100),
+DIRECCION varchar (100),
+TELEFONO char(9),
+EST_LLAMADA char(1),
+OK_CONTRATO char(1),
+OFICINA char(30),
+FEC_OK char(10),
+COD_PERSONAL char(5),			
+IDENTIFICACION char(11),
+COD_REGISTRO char(5),
+FEC_REGISTRO datetime,
+EQUIPO varchar(50),
+COD_DISTRITO char(5),
+CUOTAS numeric,
+COMENTARIO varchar(200),
+DESPRODUCTOS varchar(200),
+MON_INICIAL numeric(7,2),
+FEC_GENERADO datetime,
+COD_VENDEDOR char(5),		/*cod vendedor*/
+COD_ZONA char(5),
+REFERENCIA varchar(200),
+COD_CLIENTE char(7),
+FEC_COBRO datetime,
+TELEFONO2 char(9)
+)
+
+
+
+
+create table T_CALL_PERMISOS(
+COD_PERMISO char(9),
+COD_PERSONAL char(5),
+COD_AUTORIZO char(5),
+PERMISO char(1),
+ANEXO char(4),
+FECHA datetime
+)
+ 
+create Table T_COMBO(
+ COD_COMBO char(6),
+ USU_REGISTRO char(5),
+ PRECIO numeric(7,2),
+ CANTIDAD int,
+)
+ 
+create table T_COMBO_ITEM (
+COD_COMBO char(6),
+COD_PRODUCTO char(6),
+PRECIO numeric(7,2)
+)
+
+create table T_PRODUCTO(
+COD_PRODUCTO char(6),
+COD_CATEGORIA char(5),
+DES_PRODUCTO varchar(50),
+UNI_MEDIDA char(10),
+STOCK_MINIMO numeric(7,2),
+ABR_PRODUCTO char(4),
+PRE_PRODUCTO numeric(7,3),
+EST_PRODUCTO char(1),
+USU_REGISTRO varchar(30),
+FEC_REGISTRO datetime,
+USU_MODIFICADO varchar(30),
+FEC_MODIFICADO datetime,
+MAQUINA varchar(50),
+COMPRA char(1),
+COD_EMPRESA char(5),
+EXTERNO char(1),
+COD_CONTABLE char(6),
+PRECIO_WEB numeric(7,2),
+PRECIO_NORTE numeric(7,2),
+PRECIO_SUR numeric(7,2),
+CANTIDAD int,
+)
+
+T_PRODUCTO_PRECIO(
+COD_PRODUCTO char(6),
+ZONA char(1),
+CANTIDAD int,
+BONO int,
+PRECIO numeric(7,2)
+)
+
+
+
+
+
+
+
+
+
+
+bd SMP2
+
+select * from T_PRODUCTO
+
+
+create table T_DEPARTAMENTO(
+COD_DEPARTAMENTO char(5),
+DES_DEPARTAMENTO varchar(50),
+COD_POSTAL char(5)
+)
+
+
+/*insert into T_PROVINCIA values ('01','01','Chachapoyas','')
+insert into T_PROVINCIA values ('01','02','Bagua','')
+insert into T_PROVINCIA values ('01','03','Bongará','')
+insert into T_PROVINCIA values ('01','04','Condorcanqui','')
+insert into T_PROVINCIA values ('01','05','Luya','')*/
+
+
+
+create table T_PROVINCIA(
+COD_DEPARTAMENTO char(5),
+COD_PROVINCIA char(5),
+DES_PROVINCIA varchar(50),
+COD_POSTAL char(5)
+)
+
+
+
+create table T_DISTRITO(
+COD_DEPARTAMETO char(5),
+COD_PROVINCIA char(5),
+COD_DISTRITO char(5),
+DES_DISTRITO varchar(70),
+COD_POSTAL char(5)
+)
+
+/*insert into T_DISTRITO values('01','01','01','CHACHAPOYAS','')
+insert into T_DISTRITO values('01','02','01','Bagua','')
+insert into T_DISTRITO values('01','03','01','JUMBILLA','')
+insert into T_DISTRITO values('01','04','01','NIEVA','')
+insert into T_DISTRITO values('01','05','01','LAMUD','')*/
+
+
+
+create table T_PPEDIDO( 
+CODIGO numeric(18,0),
+FECHA datetime,			  /*fecha del sistema*/	
+COD_CLIENTE char(7),      /*se guardan codigo cliente*/
+COD_VENDEDORA char(5),		/*codigo vendedora*/
+TIPO_DOCUMENTO char(3),		/*tipo documento campo tipo*/
+IDENTIFICACION char(11),	/*numero documento campo numero*/
+CLIENTE varchar(50),		/*el nombre del cliente campo cliente*/
+DIRECCION varchar(100),		/*campo direccion*/
+REFERENCIA varchar(200),	/*campo referencia*/
+CONTACTO varchar(50),		/*campo contacto*/
+TELEFONO char(9),			/*campo telefono*/
+ENTREGA char(1),			/*campo entrega*/
+FCANCELACION datetime,		/*campo F. Pago*/		
+EST_PEDIDO char(1),			
+OBSERVACION varchar(200),	/*campo descripcion del pedido*/
+N_PRODUCTOS int,			/*campo descripcion del pedido*/
+FREPARTO datetime,			
+COD_REPARTO char(5),			
+COD_DISTRITO char(5),		/*campo distrito*/
+NUM_CONTRATO char(9),		/*campo numero deo contrato*/
+COD_PROVINCIA char(5),		/*campo ciudad*/
+FEC_DESPACHO datetime,
+)
+
+
+
+create table T_PPEDIDO_CANTIDAD(
+CODIGO numeric(18,0),
+COD_PRODUCTO char(6),
+CANTIDAD int,
+BONO int,
+PRECIO numeric(7,2),
+CCAN int,
+CBON int
+)
+
+
+
+
+create table T_CLIENTE(
+COD_CLIENTE char(7),
+NOM_CLIENTE1 varchar(50),
+NOM_CLIENTE2 varchar(30),
+APP_CLIENTE varchar(20),
+APM_CLIENTE varchar(20),
+COD_DEPARTAMENTO char(5),
+COD_PROVINCIA char(5),
+COD_DISTRITO char(5),
+DIR_CLIENTE varchar(100),
+REF_CLIENTE varchar(200),
+NUM_RUC char(11),
+DNI_CLIENTE char(8),
+DCT_CLIENTE decimal(3,0),
+TEL_CLIENTE decimal(11,0),
+CEL_CLIENTE decimal(11,0),
+CAT_CLIENTE char(1),
+EST_CLIENTE char(1),
+COD_PERSONAL char(5),
+COD_ZONA char(5),
+EST_VERIFICACION char(1),
+USU_REGISTRO varchar(30),
+FEC_REGISTRO datetime,
+USU_MODIFICO varchar(30),
+FEC_MODIFICO varchar(30),
+SALDO decimal(7,2),
+ULT_PAGO datetime
+)
+
+
+create table T_CALL_CENTER(
+CODIGO char(20),
+NUM_CONTRATO char(9),
+NOMBRE varchar(100),
+DIRECCION varchar (100),
+TELEFONO char(9),
+EST_LLAMADA char(1),
+OK_CONTRATO char(1),
+OFICINA char(30),
+FEC_OK char(10),
+COD_PERSONAL char(5),			
+IDENTIFICACION char(11),
+COD_REGISTRO char(5),
+FEC_REGISTRO datetime,
+EQUIPO varchar(50),
+COD_DISTRITO char(5),
+CUOTAS numeric,
+COMENTARIO varchar(200),
+DESPRODUCTOS varchar(200),
+MON_INICIAL numeric(7,2),
+FEC_GENERADO datetime,
+COD_VENDEDOR char(5),		/*cod vendedor*/
+COD_ZONA char(5),
+REFERENCIA varchar(200),
+COD_CLIENTE char(7),
+FEC_COBRO datetime,
+TELEFONO2 char(9)
+)
+
+
+VISTAS Almacenes
+
+/*buscar producto por zona y categoria 00004*/
+ create View [dbo].[V_BUSCAR_PRODUCTO]  
+ as
+	select p.COD_PRODUCTO as CODIGO ,MAX(c.COD_CATEGORIA) as CATEGORIA,
+	MAX(c.DES_PRODUCTO) as DES_PRODUCTO , p.ZONA as ZONA ,
+	MAX(p.CANTIDAD) as cantidad, MAX(p.BONO) as BONO, MAX(p.PRECIO) as PRECIO
+	from T_PRODUCTO_PRECIO as p
+	inner join T_PRODUCTO as c
+	on p.COD_PRODUCTO = c.COD_PRODUCTO where c.COD_CATEGORIA = '00004'
+	group by p.COD_PRODUCTO , ZONA
+
+GO
+
+
+ /*verificar cuota del vendedro almacenes*/
+
+create view [dbo].[V_CALL_CENTER]  
+as
+select c.NUM_CONTRATO, MAX(c.COD_VENDEDOR)as VENDEDOR,
+MAX(c.FEC_GENERADO)as FECHA_GENERADO,SUM(ci.PRECIO) as MONTO from T_CALL_CENTER as c
+inner join T_CALL_CENTER_ITEM as ci on
+c.NUM_CONTRATO = ci.NUM_CONTRATO
+Group by c.NUM_CONTRATO 
+
+
+
+/*para el login */
+
+create view [dbo].[V_LOGIN]  
+as
+SELECT COD_USUARIO, NOM_USUARIO, 
+PDW_USUARIO, ANEXO_USUARIO, 
+EST_USUARIO, EST_INGRESO, 
+OFICINA, COD_PERSONAL, ZONA
+FROM dbo.T_USUARIO_CALL where EST_USUARIO != 'A'
+
+
+
+ /*para buscar los bonos del producto*/
+
+create VIEW [dbo].[V_POLITICA_BONOS]
+as
+select * from T_PRODUCTO_PRECIO
+
+
+/*para buscar los precios del producto*/
+
+create view [dbo].[V_POLITICA_PRECIOS]
+as
+SELECT * FROM T_PRODUCTO_PRECIO 
+
+
+/*para buscar los combos al momento de escribir el codigo */
+
+create view [dbo].[V_BUSCAR_COMBO]
+as
+select c.COD_COMBO,c.PRECIO
+from T_COMBO as c
+GO
+
+
+/*para buscar los los codigos de los productos segun su combo */
+
+create view [dbo].[V_COMBOITEM]
+as
+select *
+from T_COMBO_ITEM 
+GO
+
+
+
+/*para mostrar los productos asociados al comboitem*/
+
+create view [dbo].[V_COMBOPRODUCTO]
+as 
+select c.COD_COMBO as combo,p.COD_PRODUCTO as cod_producto,p.DES_PRODUCTO as nombre,c.PRECIO as precio from T_PRODUCTO as p
+inner join T_COMBO_ITEM as c on 
+p.COD_PRODUCTO = c.COD_PRODUCTO
+GO
+
+
+/*para mostrar las provincias*/
+
+create view [dbo].[V_PROVINCIA]
+as 
+select * from T_PROVINCIA 
+
+
+
+
+
+
+/*para mostrar los distritos*/
+
+create view [dbo].[V_DISTRITO]
+as
+select * from T_DISTRITO 
+
+
+
+/* trae el ultimo registro para poder guardar el peddido segun el vendedor*/
+create view [dbo].[V_ULTIMO_REGISTRO]
+as
+SELECT TOP 1 * FROM T_PPEDIDO ORDER BY CODIGO DESC
+
+
+
+/*para verificar si cumplio con el monto a llegar cuado inicia sesion*/
+
+ALTER view [dbo].[V_PEDIDO_MONTO]
+as
+select p.CODIGO, MAX(p.COD_VENDEDORA) as VENDEDOR, MAX(p.FECHA) as FECHA , 
+SUM(pc.CANTIDAD * pc.PRECIO) as CANTIDAD 
+FROM T_PPEDIDO as p
+inner JOIN T_PPEDIDO_CANTIDAD pc
+ON p.CODIGO = pc.CODIGO 
+WHERE  p.EST_PEDIDO != 'A'  
+Group by p.CODIGO
+
+
+
+/*vista para buscar los productos y traer el precio web*/
+create view V_BUSCAR_PRODUCTO_WEB
+as
+select COD_PRODUCTO as CODIGO ,COD_CATEGORIA as CATEGORIA ,
+ABR_PRODUCTO  as ABREVIATURA, DES_PRODUCTO as DES_PRODUCTO ,PRECIO_WEB as PRECIO
+from T_PRODUCTO 
+
+
+/*vista para mostrar los productos resien ingresados*/
+
+create view V_MOSTRAR_PEDIDO
+as
+select CODIGO ,CLIENTE,NUM_CONTRATO ,COD_VENDEDORA, FECHA from T_PPEDIDO 
+
+
+
+/*vista para mostrar los pedidos segun el cod del pedido*/
+
+create view V_MOSTRAR_PEDIDO_ITEM
+as
+select pc.CODIGO,pc.COD_PRODUCTO, p.ABR_PRODUCTO,p.DES_PRODUCTO,pc.CANTIDAD ,pc.precio from T_PPEDIDO_CANTIDAD as pc
+inner join T_PRODUCTO as p
+on pc.COD_PRODUCTO =  p.COD_PRODUCTO
+
+
+
+
+/*para verificar si existe un pedido pendiente*/
+create view [dbo].[V_VERIFICAR_PEDIDO]
+as
+select * from T_PPEDIDO
+
+GO
+
+
+/*vista para verificar la couta del personal*/
+create view V_VERIFICAR_CUOTAPERSONAL
+as
+select * from  T_PERSONAL
+
+
+
+
+/*se creo la tabla PERSONAL*/
+
+CREATE TABLE [dbo].[T_PERSONAL](
+	[COD_PERSONAL] [char](5) NULL,
+	[COD_AREA] [char](5) NULL,
+	[COD_CARGO] [char](5) NULL,
+	[TIP_AGRUPADO] [char](3) NULL,
+	[DNI_PERSONAL] [char](8) NULL,
+	[NOM_PERSONAL1] [varchar](60) NULL,
+	[NOM_PERSONAL2] [varchar](30) NULL,
+	[APE_PPERSONAL] [varchar](30) NULL,
+	[APE_MPERSONAL] [varchar](30) NULL,
+	[SAL_BASICO] [decimal](9, 2) NULL,
+	[COMISIONES] [decimal](7, 2) NULL,
+	[DIR_PERSONAL] [varchar](100) NULL,
+	[COD_DEPARTAMENTO] [char](5) NULL,
+	[COD_PROVINCIA] [char](5) NULL,
+	[COD_DISTRITO] [char](5) NULL,
+	[TEL_PERSONAL] [decimal](11, 0) NULL,
+	[CEL_PERSONAL] [decimal](11, 0) NULL,
+	[EST_PERSONAL] [char](1) NULL,
+	[COD_SUPERVISOR] [char](5) NULL,
+	[COD_ZONA] [char](5) NULL,
+	[FEC_INGRESO] [datetime] NULL,
+	[USU_REGISTRO] [varchar](30) NULL,
+	[FEC_REGISTRO] [datetime] NULL,
+	[USU_MODIFICO] [varchar](30) NULL,
+	[FEC_MODIFICO] [datetime] NULL,
+	[GRUPO] [char](1) NULL,
+	[POR_INICIAL] [char](1),
+	[NPAGO] [char](1),
+	[NCONTRATOS] [numeric](7,2),
+	[PRODUCCION] [char](1),
+	[SANC_CAJA] [char](1),
+	[SANC_MERCA] [char](1),
+	[SANC_COBRA] [char](1),
+	[IDENTIFICADOR] [char](1),
+	[N_CUENTA] [char](14),
+	[TITULAR] [varchar](50),
+	[OCURRENCIA] [char](1),
+	[LIMPIEZA] [char](1),
+	[AFP] [numeric](18,0),
+	[CUOTA] [numeric](7,2)
+) ON [PRIMARY]
