@@ -28,22 +28,21 @@ class C_Login
       
         $datosUsuario = $m_login->Login($cod_usuario);
         
-
-       if($datosUsuario){
-        if(trim($datosUsuario['OFICINA']) == "SMP2"){
-            $_cuota = new M_VerificarCuota($datosUsuario['OFICINA']);
-            $montoTotal = $_cuota->VerificandoQuincena($datosUsuario['COD_PERSONAL'],$diasprimeraquincena
-                                                       ,$diassegundaquincena,$montoSMP['FEC_INGRESO']);
-        }else{
-           $montoTotal = $m_login->VerificarCallCenter($datosUsuario['COD_PERSONAL'],$diasprimeraquincena,
-                                                       $diassegundaquincena,$montoSMP['FEC_INGRESO']);
-        }
-       /* print_r($montoTotal);*/
-        f_Cuotas($montoTotal[0],$montoSMP['CUOTA'], $diasprimeraquincena,$diassegundaquincena,$montoTotal[1]);
-
-       }else{
-         return header("Location: http://localhost:8080/requerimiento/vista/");
-        }
+        if($datosUsuario){
+            if(substr($datosUsuario['OFICINA'],0,3) == "SMP"){
+                $_cuota = new M_VerificarCuota($datosUsuario['OFICINA']);
+                $montoTotal = $_cuota->VerificandoQuincena($datosUsuario['COD_PERSONAL'],$diasprimeraquincena
+                                                           ,$diassegundaquincena,$montoSMP['FEC_INGRESO']);
+            }else{
+               $montoTotal = $m_login->VerificarCallCenter($datosUsuario['COD_PERSONAL'],$diasprimeraquincena,
+                                                           $diassegundaquincena,$montoSMP['FEC_INGRESO']);
+            }
+            /*print_r($montoTotal);*/
+            f_Cuotas($montoTotal[0],$montoSMP['CUOTA'], $diasprimeraquincena,$diassegundaquincena,$montoTotal[1]);
+    
+           }else{
+             return header("Location: http://localhost:8080/requerimiento/vista/");
+            }
     }
 
 }

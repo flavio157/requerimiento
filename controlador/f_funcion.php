@@ -376,66 +376,47 @@ function RestriccionOficina($total,$permiso,$tgeneral){
 
 
 
-    function fechas($diasprimeraquincena,$diassegundaquincena,$fec_ingreso){
-      date_default_timezone_set('America/Lima');
-        $fecha = getdate();
-        $mes = $fecha['mon'];
-        $ano = $fecha['year'];
-        $fech = explode(" ",$fec_ingreso);
-        $separando = explode("-",$fech[0]);
-        $dia = date("d-m-Y",strtotime(date("d-m-Y")."- 1 days"));
+/***
+lo habanzado el dia de hoy 
+*/    
+function nuevafecha($diaPrquincena,$diaSegundaquincena,$fec_ingreso){
+    date_default_timezone_set('America/Lima');
+    $nvafech = explode("-",$fec_ingreso);
+    $fecha = getdate();
+    $mes = $fecha['mon'];
+    $primeraquincena = '12'.'-'. '0'.$mes .'-'.$fecha['year'];
+    $segundaquincena = '27'.'-'. '0'.($mes - 1) .'-'.$fecha['year'];
+    $fechaIngOrd = $nvafech[2]."-".$nvafech[1]."-".$nvafech[0];
+    $fechaInord= new DateTime($fechaIngOrd);
+    $Primquincena= new DateTime($primeraquincena);
+    $fech = new DateTime();
+    
 
-        if($mes <= '9'){$mes = '0'.$mes; }
-        $m = intval($mes) - intval(1); 
 
-        $fquincena2=$diassegundaquincena[0]."-".$mes."-".$ano;
-        $fquincenafin2='11'."-".$mes."-".$ano;
+    if($fechaInord > $Primquincena){
+        $fechfin =  date("d-m-Y",strtotime($fechaIngOrd."+ 1 days"));; 
+       
+    }else{
+        $diff2 = $fechaInord->diff($fech);
+        print_r($diff2->days);
+        for ($i=0; $i < $diff2->days ; $i++) { 
+            if(date('l', strtotime($fechaIngOrd)) != 'Sunday'){
 
-        $resta_dia = date("d-m-Y",strtotime($fquincena2."- 1 days"));
-        $fechaIngOrd = $separando[2]."-".$separando[1]."-".$separando[0];
+                $fechfin =  date("d-m-Y",strtotime($primeraquincena."+ 1 days"));
 
-        $fechaIngOrd= new DateTime($fechaIngOrd);
-        $resta_dia= new DateTime($resta_dia);
-        $fquincenafin2= new DateTime($fquincenafin2);
-
-     
-        if($separando[0] == $ano && $separando[1] == $mes 
-            &&  $separando[2] >= ($diasprimeraquincena[0]-1) && $fecha['mday'] <= '26' &&
-            $separando[2] <='26') {  
-             
-            return array($fechaIngOrd,date("d-m-y"),"false");   
+            }
         }
+        
 
-
-        else if($separando[0] == $ano  && (( $mes - $separando[1]) == 0 ||
-                ($mes - $separando[1]) == 1) && $fechaIngOrd >=  $resta_dia && date("d-m-y") <= $fquincenafin2  
-                && $fechaIngOrd <= $fquincenafin2)      
-                {
-                 /* print_r("s");*/
-                return array($fechaIngOrd,date("d-m-y"),"false");  
-
-        }else if($fecha['mday'] >= $diasprimeraquincena[0] && $fecha['mday'] <= '26'){
-
-                    $fechainicial = '12'.'-'. $mes .'-'.$ano;
-                    $fechafinal =  $dia;
-                    return array($fechainicial, $fechafinal);
-
-        }else if($fecha['mday'] >= $diassegundaquincena[0] && $fecha['mday'] <= '11'){
-
-                if($m <= '9'){ $m = '0'.$m;}
-                    $fechainicial = '27'.'-'. $m .'-'.$ano;
-                    $fechafinal =  $dia;
-                return array($fechainicial, $fechafinal);
-
-        }
     }
+ 
+   /*return array($fechini , $fechfin,$cantidias);*/
+   
+}
+/*** */
 
 
-
-
-
-
-    function f_Cuotas($verificarCuotas,$cuotas,$diasprimeraquincena,$diassegundaquincena,$nuevo){
+   function f_Cuotas($verificarCuotas,$cuotas,$diasprimeraquincena,$diassegundaquincena,$nuevo){
      
       if($nuevo === true){
             if($cuotas != '0' && $cuotas != null){
