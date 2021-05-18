@@ -75,11 +75,11 @@ $fcha = date("Y-m-d",strtotime(date("Y-m-d")."+ 1 days"));
                 </div>
 
                 <div class="col-12">
-                    <label for="formdescripcion" class="form-label">DESCRIPCIÓN DEL PEDIDO</label>
+                    <label for="formdescripcion" class="form-label">AGREGAR PEDIDO </label>
                     
-                    <a id="DescrPedido" class="btn btn-primary mb-1" data-bs-toggle="modal" data-bs-target="#ModalProducto">
-                                <i class="icon-circle-with-plus" title="Align Right"></i>
-                            </a> 
+                    <a id="DescrPedido" class="btn btn-primary mb-1 active" data-bs-toggle="modal" data-bs-target="#ModalProducto">
+                            <i class="icon-circle-with-plus" title="Align Right"></i>
+                    </a> 
                 </div>
                 <div class="table-responsive tablafrmpedidos" id="tablaproductos">
                     <table class="table tabladelProducto" id="tabladelProducto">
@@ -140,7 +140,7 @@ $fcha = date("Y-m-d",strtotime(date("Y-m-d")."+ 1 days"));
                 <div class="row g-2">
                     <div class="col">
                         <label for="formentrega" class="form-label">N° CONTRATO</label>
-                        <input type="number" name="txtcontrato" id="txtcontrato" class="form-control">
+                        <input type="text" name="txtcontrato" id="txtcontrato" class="form-control">
                     </div>
                     <div class="col">
                         <label for="formfpago" class="form-label">TELEFONO 2</label>
@@ -156,34 +156,29 @@ $fcha = date("Y-m-d",strtotime(date("Y-m-d")."+ 1 days"));
                     <div class="col">
                         <label for="formfpago" class="form-label">GENERADO</label>
                         <input type="text" name="txtgenereado" id="txtgenereado" class="form-control" disabled=true>
+                       
                     </div>
                 </div>
 
                 <div class="row g-2">
                     <div class="col text-center ">
-                        <a class="btn btn-primary btn-lg" id="grabar" >
-                            <i class="icon-add-to-list" title="Align Right"></i>
+                        <a class="btn btn-primary btn-lg active" id="grabar" >
+                            <i class="icon-save" title="Align Right"></i>
                         </a>
                     </div>
-                    <div class="col text-center">
-                        <a class="btn btn-primary btn-lg" id="nuevo" >
-                            <i class="icon-cycle" title="Align Right"></i>
-                        </a>
-                    </div>
+                   
 
                         <div class="col text-center responsive">
-                            <a class="btn btn-primary btn-lg " id="verPedidos">
+                            <a class="btn btn-primary btn-lg active" id="verPedidos">
                                 <i class="icon-eye" title="Align Right"></i>
                             </a>
                         </div>
 
                         <div class="col text-center noresposive">
-                            <a class="btn btn-primary btn-lg " id="verPedidos2">
+                            <a class="btn btn-primary btn-lg active" id="verPedidos2">
                                 <i class="icon-eye" title="Align Right"></i>
                             </a>  
                         </div>
-
-                   
                 </div>
         </form>
 
