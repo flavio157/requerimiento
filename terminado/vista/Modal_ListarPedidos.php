@@ -1,5 +1,5 @@
   <!--modal para mostrar los pedidos ya registrados el dia actual responsive -->
-<div class="modal fade" id="ModalMostrarPedidos" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+  <div class="modal fade" id="ModalMostrarPedidos" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -13,7 +13,7 @@
                     <table class="table table-hover ">
                         <thead>
                             <tr>
-                                <th scope="col">#</th>
+                                
                                 <th scope="col">N° Contrato</th>
                                 <th scope="col">CLIENTE</th>
                                 <th scope="col">DIRECCION</th>
