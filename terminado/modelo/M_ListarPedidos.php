@@ -36,11 +36,11 @@
                             '</div>' ;
             }
         }else{
-            $contador = 1;
+         
             while ($row = $query->fetch()) { 
                 $cliente = str_replace(' ', '', $row['CLIENTE']);    
                 $html .='<tr  data-bs-toggle="collapse" data-bs-target="#'.$cliente.'" class="collapse-row collapsed">'.
-                            '<td>'.$contador++.'</td>'.
+                           
                             '<td>'.$row['NUM_CONTRATO'].'</td>'.
                             '<td>'.$row['CLIENTE'].'</td>'.
                             '<td>'.$row['DIRECCION'].'</td>'.
