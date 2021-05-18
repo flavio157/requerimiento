@@ -47,7 +47,7 @@
                         </div>
                     </div>
                     <div class="card-body d-flex justify-content-between align-items-center">
-                            Agregar Producto
+                            AGREGAR PRODUCTO
                             <a id="agregarProducto" class="btn btn-primary mb-1 active">
                                 <i class="icon-circle-with-plus" title="Align Right"></i>
                             </a>
