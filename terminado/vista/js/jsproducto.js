@@ -10,6 +10,11 @@ var tipodeproducto = "";
 $(document).ready(function(){
     obtenerprovincia();
     generarCodigo();
+
+    $("#cerrarmodalProducto").click(function name(params) {
+        $("#ModalProducto").modal("hide");
+    })
+
     $('body').on('keydown', function(e){
         if( e.which == 38 ||  e.which == 40) {
         return false;
@@ -28,10 +33,16 @@ $(document).ready(function(){
     $("#txtcontrato").keyup(function(e) {
         var input=  document.getElementById('txtcontrato');
             input.addEventListener('input',function(){
-                this.value = this.value.slice(0,9); 
-            })
+                this.value = this.value.slice(0,8); 
+        })
     })
 
+
+    $('#txtcontrato').keydown(function(e) {
+        if (e.keyCode == 32) {
+            return false;
+        }
+    });
 
 
     $("#txtnumero").keyup(function(e) {
@@ -293,14 +304,10 @@ $(document).ready(function(){
 
     $("#txtcontrato").blur(function (e) {
         nr_contrato = $("#txtcontrato").val();
-        if(nr_contrato.length >= 5){
+        if(nr_contrato.length >= 1){
             completarContrato(nr_contrato); 
         }  
     });
-
-
-
-
 })
 
 
