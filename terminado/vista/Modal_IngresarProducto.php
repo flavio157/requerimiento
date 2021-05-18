@@ -47,8 +47,8 @@
                         </div>
                     </div>
                     <div class="card-body d-flex justify-content-between align-items-center">
-                            Lista de Productos
-                            <a id="agregarProducto" class="btn btn-primary btn-lg">
+                            Agregar Producto
+                            <a id="agregarProducto" class="btn btn-primary mb-1 active">
                                 <i class="icon-circle-with-plus" title="Align Right"></i>
                             </a>
                     </div>
@@ -75,7 +75,8 @@
                 </form>
             </div>
             <div class="modal-footer">
-                <a id="agregar" class="btn btn-primary btn-lg">
+            <button type="button" id="cerrarmodalProducto" class="btn btn-secondary active " data-dismiss="modal">Salir</button>
+                <a id="agregar" class="btn btn-primary btn-lg active">
                   <i class="icon-add-to-list" title="Align Right"></i>
                 </a>
                 
