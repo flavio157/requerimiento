@@ -375,45 +375,108 @@ function RestriccionOficina($total,$permiso,$tgeneral){
 
 
 
-
-/***
-lo habanzado el dia de hoy 
-*/    
-function nuevafecha($diaPrquincena,$diaSegundaquincena,$fec_ingreso){
+function nuevafecha($diaPrquincena,$diaSegquincena,$fec_ingreso){
     date_default_timezone_set('America/Lima');
     $nvafech = explode("-",$fec_ingreso);
     $fecha = getdate();
     $mes = $fecha['mon'];
-    $primeraquincena = '12'.'-'. '0'.$mes .'-'.$fecha['year'];
+    $primeraquincena = '12'.'-'. '0'. $mes .'-'.$fecha['year'];
     $segundaquincena = '27'.'-'. '0'.($mes - 1) .'-'.$fecha['year'];
     $fechaIngOrd = $nvafech[2]."-".$nvafech[1]."-".$nvafech[0];
+
     $fechaInord= new DateTime($fechaIngOrd);
     $Primquincena= new DateTime($primeraquincena);
+    $segquincena = new DateTime($segundaquincena);
     $fech = new DateTime();
-    
+    $diastrascurridos = $fechaInord->diff($fech);
+    $dfecIngPriqu = $Primquincena->diff($fechaInord);
+    $d = new DateTime($diaSegquincena[0].'-'.'0'.($mes - 1) .'-'.$fecha['year']);
 
 
-    if($fechaInord > $Primquincena){
-        $fechfin =  date("d-m-Y",strtotime($fechaIngOrd."+ 1 days"));; 
-       
-    }else{
-        $diff2 = $fechaInord->diff($fech);
-        print_r($diff2->days);
-        for ($i=0; $i < $diff2->days ; $i++) { 
-            if(date('l', strtotime($fechaIngOrd)) != 'Sunday'){
-
-                $fechfin =  date("d-m-Y",strtotime($primeraquincena."+ 1 days"));
-
+    if($fecha['mday'] >= $diaPrquincena[0] && $fecha['mday'] <= '26'){
+        if($fechaInord > $Primquincena){
+            $cantidias = cantidadDias($diastrascurridos->days,$fechaIngOrd);
+            $fechfin = evaluacionfechfin($fechaIngOrd);
+            return array($fechaInord ,$fechfin,$cantidias);
+        }else{
+            $d = new DateTime($diaPrquincena[0].'-'. $mes .'-'.$fecha['year']);
+            $dfecIngPriqu = $Primquincena->diff($d);
+            
+            if($fecha >= date("d-m-Y",strtotime($Primquincena->format("d-m-Y")."+".$dfecIngPriqu->days."days"))){
+                $diastrascurridos = $Primquincena->diff($fech);
+                $fechfin = evaluacionfechfin($primeraquincena);
+                $fechini = evaluarfechIni($primeraquincena);
+                $cantidias = cantidadDias($diastrascurridos->days,$primeraquincena);
+                return array($fechini ,$fechfin,$cantidias);
             }
         }
-        
 
-    }
- 
-   /*return array($fechini , $fechfin,$cantidias);*/
+    }else if($fech >= $d && $fecha['mday'] <= '11'){
+        if($fechaInord > $segquincena){
+            $cantidias = cantidadDias($diastrascurridos->days,$fechaIngOrd);
+            $fechfin = evaluacionfechfin($fechaIngOrd);
+            return array($fechaInord ,$fechfin,$cantidias);
+        }else{
+            $d = new DateTime($diaSegquincena[0].'-'. $mes .'-'.$fecha['year']);
+            $dfecIngPriqu = $segquincena->diff($d);
+            
+            if($fecha >= date("d-m-Y",strtotime($segquincena->format("d-m-Y")."+".$dfecIngPriqu->days."days"))){
+                $diastrascurridos = $segquincena->diff($fech);
+                $fechfin = evaluacionfechfin($segundaquincena);
+                $fechini = evaluarfechIni($segundaquincena);
+                $cantidias = cantidadDias($diastrascurridos->days,$segundaquincena);
+                return array($fechini ,$fechfin,$cantidias);
+            }
+        }
    
+    } 
+
 }
-/*** */
+
+
+
+
+
+function evaluarfechIni($fechaIngOrd){
+    if(date('l',strtotime($fechaIngOrd)) == 'Sunday' || date('l',strtotime($fechaIngOrd)) == 'Saturday' ){
+        $fechaini = date("d-m-Y",strtotime($fechaIngOrd."+ 1 days"));
+    }else{
+           $fechaini = date("d-m-Y",strtotime($fechaIngOrd."+ 0 days"));
+        }
+    return $fechaini ; 
+}
+
+
+function evaluacionfechfin($fechaIngOrd){
+    if(date('l',strtotime($fechaIngOrd)) == 'Sunday' || date('l',strtotime($fechaIngOrd)) == 'Saturday' ){
+        $fechafin = date("d-m-Y",strtotime(date("d-m-Y")."+ 0 days"));
+    }else{
+           $fechafin = date("d-m-Y",strtotime(date("d-m-Y")."+ 0 days")); 
+        }
+     return $fechafin ;   
+}
+
+
+
+
+
+function cantidadDias($dias,$quincena){
+    $contador = 1;
+    for ($i=1; $i < $dias ; $i++) { 
+        $fechfin =  date("d-m-Y",strtotime($quincena."+".$i."days"));
+       
+        if(date('l',strtotime($fechfin)) == 'Sunday'){
+            $contador = $i-1;
+        }else{
+            $contador = $i;
+        }
+    }
+    return $contador;
+}
+
+
+
+
 
 
    function f_Cuotas($verificarCuotas,$cuotas,$diasprimeraquincena,$diassegundaquincena,$nuevo){
