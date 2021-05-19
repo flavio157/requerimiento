@@ -28,15 +28,13 @@ class C_Login
         $datosUsuario = $m_login->Login($cod_usuario);
        
 
-        $m_cuotaPersonal = new M_VerificarCuota($datosUsuario['OFICINA']);
-        $montoSMP = $m_cuotaPersonal->CuotaPersonal($cod_usuario);
-
        if($datosUsuario){
         return header("Location: http://localhost:8080/terminado/vista/ventana.php");
        }else{
          return header("Location: http://localhost:8080/terminado/vista/");
         }
     }
+
 
 }
 

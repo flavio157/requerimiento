@@ -7,11 +7,9 @@ class M_ListarCiudades{
     
     public function __construct($bd)
     {
-        if($bd != "SMP2"){
-            $this->db=DataBase::DataBase();
-        }else{
+        
             $this->db=DataDinamica::DataDinamica($bd);
-        }
+     
     }
     
     public function M_Provincia(){
