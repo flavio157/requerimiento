@@ -8,7 +8,7 @@ class M_VerificarCuota
     
     public function __construct($basedatos)
     {
-        $this->db=ClassContrato::Contrato($basedatos);
+        $this->db=DataDinamica::DataDinamica($basedatos);
     }
 
     public function VerificandoQuincena($cod_vendedor,$diasprimeraquincena,$diassegundaquincena,$fec_ingreso)

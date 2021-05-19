@@ -1,9 +1,11 @@
 <?php
 /*Contrato.php */
-class ClassContrato
+class DataDinamica
 {
+    /*DataDinamica.php*/
+    
  
-    public static  function Contrato($database){
+    public static  function DataDinamica($database){
         try {
            
             $server = "DESKTOP-PCSH8QU";

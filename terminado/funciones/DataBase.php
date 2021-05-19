@@ -1,9 +1,10 @@
 <?php
 
 /*usuarios.php*/
-class ClassUsuario
+class DataBase
 {
- public static  function Usuario(){
+   
+ public static  function DataBase(){
         try {
             $base_de_datos = new PDO("sqlsrv:server=DESKTOP-PCSH8QU;database=Almacenes", "", "sa");
             $base_de_datos->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);

@@ -8,9 +8,9 @@ class M_ListarCiudades{
     public function __construct($bd)
     {
         if($bd != "SMP2"){
-            $this->db=ClassUsuario::Usuario();
+            $this->db=DataBase::DataBase();
         }else{
-            $this->db=ClassContrato::Contrato($bd);
+            $this->db=DataDinamica::DataDinamica($bd);
         }
     }
     

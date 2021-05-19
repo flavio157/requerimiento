@@ -7,7 +7,7 @@
     
     public function __construct($bd)
     {
-        $this->bd=ClassContrato::Contrato($bd);
+        $this->bd=DataDinamica::DataDinamica($bd);
     }
 
     public function GuardarPedido($fecha,$cod_vendedora,$tipo_documento,$identificacion,
