@@ -1,6 +1,6 @@
 <?php
     require_once("../modelo/M_ListarPedidos.php");
-    session_start();
+
     date_default_timezone_set('America/Lima');
 
     $accion = $_POST["accion"];

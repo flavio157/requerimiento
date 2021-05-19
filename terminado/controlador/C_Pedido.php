@@ -1,7 +1,7 @@
 <?php
     require_once("../modelo/M_Pedido.php");
     require_once("../funciones/f_funcion.php");
-    session_start();
+
    
 
     $accion = $_POST["accion"];

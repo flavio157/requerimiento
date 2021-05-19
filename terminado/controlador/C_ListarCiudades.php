@@ -1,6 +1,6 @@
 <?php
     require_once("../modelo/M_ListarCiudades.php");
-    session_start();
+
 
     
     $accion = $_POST['accion'];
