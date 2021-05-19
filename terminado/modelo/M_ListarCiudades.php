@@ -1,6 +1,6 @@
 <?php
-require_once("../db/Contrato.php");
-require_once("../db/Usuarios.php");
+require_once("../db/DataDinamica.php");
+require_once("../db/DataBase.php");
 class M_ListarCiudades{
       
     private $db;

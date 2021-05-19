@@ -2,7 +2,7 @@
 date_default_timezone_set('America/Lima');
 require_once("../modelo/M_VerificarCuota.php");
 require_once("../modelo/M_Login.php");
-require_once("../controlador/f_funcion.php");
+require_once("../funciones/f_funcion.php");
 
 
    $cod_usuario = $_POST['usuario'];

@@ -1,5 +1,5 @@
 <?php
-   require_once("../db/Contrato.php");
+   require_once("../funciones/DataDinamica.php");
 
    class M_ListarPedidos 
    {

@@ -1,6 +1,6 @@
 <?php
     require_once("../modelo/M_Pedido.php");
-    require_once("../controlador/f_funcion.php");
+    require_once("../funciones/f_funcion.php");
     session_start();
    
 

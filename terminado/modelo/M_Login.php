@@ -1,6 +1,6 @@
 <?php
-require_once("../db/Usuarios.php");
-require_once("../controlador/f_funcion.php");
+require_once("../funciones/DataBase.php");
+require_once("../funciones/f_funcion.php");
 class M_Login
 {
     
