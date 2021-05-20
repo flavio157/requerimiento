@@ -21,6 +21,7 @@ function buscarProducto(nombreproducto,zona) {
                 }
 
                 $('#sugerencias').fadeIn(0).html(obj['combo']);
+                
                 $('.suggest-element').on('click', function(){
                     var id =  $(this).attr('id');
                     var precio =$(this).attr('data-')
@@ -304,7 +305,7 @@ function mensajeSuccess(texto,id) {
 
 function obtenerDistrito(provincia){
     var accion = "distrito";        
-
+    var oficina = $("#vroficina").val();
     $.ajax({
         dataType:'text',
         type: 'POST', 
@@ -312,6 +313,7 @@ function obtenerDistrito(provincia){
         data: {
            "accion" : accion ,
            "provincia" : provincia,
+           "oficina" :  oficina  
         },
         success: function(response){
             $('#Selectdistro').append(response);

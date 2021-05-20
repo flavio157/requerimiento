@@ -5,7 +5,7 @@ class DataDinamica
     /*DataDinamica.php*/
     
  
-    public static  function DataDinamica($database){
+    public static  function Contratos($database){
         try {
            
             $server = "DESKTOP-PCSH8QU";

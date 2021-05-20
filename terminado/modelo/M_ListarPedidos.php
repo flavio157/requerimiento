@@ -7,7 +7,7 @@
     
     public function __construct($bd)
     {
-        $this->bd=DataDinamica::DataDinamica($bd);
+        $this->bd=DataDinamica::Contratos($bd);
     }
 
     public function mostrarPedido($cod_vendedor,$fecha,$tipo)

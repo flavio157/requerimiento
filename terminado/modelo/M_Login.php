@@ -8,7 +8,7 @@ class M_Login
     
     public function __construct()
     {
-        $this->db=DataBase::DataBase();
+        $this->db=DataBase::Usuarios();
     }
     
     public function Login($cod_usuario)

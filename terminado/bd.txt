@@ -403,18 +403,6 @@ as
 select CODIGO ,CLIENTE,NUM_CONTRATO ,COD_VENDEDORA, FECHA from T_PPEDIDO 
 
 
-
-/*vista para mostrar los pedidos segun el cod del pedido*/
-
-create view V_MOSTRAR_PEDIDO_ITEM
-as
-select pc.CODIGO,pc.COD_PRODUCTO, p.ABR_PRODUCTO,p.DES_PRODUCTO,pc.CANTIDAD ,pc.precio from T_PPEDIDO_CANTIDAD as pc
-inner join T_PRODUCTO as p
-on pc.COD_PRODUCTO =  p.COD_PRODUCTO
-
-
-
-
 /*para verificar si existe un pedido pendiente*/
 create view [dbo].[V_VERIFICAR_PEDIDO]
 as
@@ -480,4 +468,15 @@ CREATE TABLE [dbo].[T_PERSONAL](
 
 
 
+create view [dbo].[V_MOSTRAR_PEDIDO_ITEM]
+	as
+	select pc.CODIGO,pc.COD_PRODUCTO, p.NUM_LOTE,p.DES_PRODUCTO,pc.CANTIDAD ,pc.precio from T_PPEDIDO_CANTIDAD as pc
+	inner join T_PRODUCTO as p
+	on pc.COD_PRODUCTO =  p.COD_PRODUCTO
+GO
+
+
+
+
 /*el solo esta el logeo para obtener la oficina del personal*/
+

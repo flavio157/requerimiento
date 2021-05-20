@@ -7,7 +7,7 @@ class M_BuscarProductos{
     
         public function __construct()
         {
-            $this->db=DataBase::DataBase();
+            $this->db=DataBase::Usuarios();
         }
         
         public function M_BuscarProducto($zona,$nom_producto)

@@ -8,7 +8,7 @@ class M_ListarCiudades{
     public function __construct($bd)
     {
         
-            $this->db=DataDinamica::DataDinamica($bd);
+            $this->db=DataDinamica::Contratos($bd);
      
     }
     
