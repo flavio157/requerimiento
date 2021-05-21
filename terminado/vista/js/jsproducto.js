@@ -13,6 +13,9 @@ $(document).ready(function(){
 
     $("#cerrarmodalProducto").click(function name(params) {
         $("#ModalProducto").modal("hide");
+        $('#productosMomento').find("tr:gt(0)").remove();
+        arraytemporal =[];
+        arraycodigos = [];
     })
 
     $('body').on('keydown', function(e){
