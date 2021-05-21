@@ -533,3 +533,28 @@ function generarCodigo() {
         }
     });  
 }
+
+
+function eliminarArrayTemporal(){
+    $("#ModalProducto").modal("hide");
+    document.getElementById("frmagregarProducto").reset();
+        for (let i = 0; i < arrayproductos.length; i++) {
+            for (let l = 0; l <= arraytemporal.length; l++) {
+                    if (arrayproductos[i]!= undefined) {
+                            if(arrayproductos[i]['combo'] !== undefined){
+                                if (arrayproductos[i]['combo'] === arraytemporal[l]) {
+                                    delete(arrayproductos[i]);
+                                }
+                            }else{
+                                if (arrayproductos[i]['cod_producto'] === arraytemporal[l]) {
+                                    delete(arrayproductos[i]);
+                                 }
+                            }
+                    }
+            }
+        }
+        $('#productosMomento').find("tr:gt(0)").remove();
+        arraytemporal =[];
+    arraycodigos = [];
+     
+}

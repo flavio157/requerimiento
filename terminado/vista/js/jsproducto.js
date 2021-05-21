@@ -11,11 +11,8 @@ $(document).ready(function(){
     obtenerprovincia();
     generarCodigo();
 
-    $("#cerrarmodalProducto").click(function name(params) {
-        $("#ModalProducto").modal("hide");
-        $('#productosMomento').find("tr:gt(0)").remove();
-        arraytemporal =[];
-        arraycodigos = [];
+    $("#cerrarmodalProducto").click(function name() {
+        eliminarArrayTemporal();
     })
 
     $('body').on('keydown', function(e){
@@ -169,27 +166,7 @@ $(document).ready(function(){
     });  
 
    $("#closemodal").on('click',function(){
-        $("#ModalProducto").modal("hide");
-        document.getElementById("frmagregarProducto").reset();
-            for (let i = 0; i < arrayproductos.length; i++) {
-                for (let l = 0; l <= arraytemporal.length; l++) {
-                        if (arrayproductos[i]!= undefined) {
-                                if(arrayproductos[i]['combo'] !== undefined){
-                                    if (arrayproductos[i]['combo'] === arraytemporal[l]) {
-                                        delete(arrayproductos[i]);
-                                    }
-                                }else{
-                                    if (arrayproductos[i]['cod_producto'] === arraytemporal[l]) {
-                                        delete(arrayproductos[i]);
-                                     }
-                                }
-                        }
-                }
-            }
-            $('#productosMomento').find("tr:gt(0)").remove();
-            arraytemporal =[];
-        arraycodigos = [];
-        
+        eliminarArrayTemporal();
     });
 
     $(document).on('click', '#btneliminar',function (e) {
