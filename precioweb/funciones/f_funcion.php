@@ -375,7 +375,7 @@ function RestriccionOficina($total,$permiso,$tgeneral){
 
 
 function nuevfech($dias,$fechaingreso){
-    $dias = 2;
+   /* $dias = 2;*/
     date_default_timezone_set('America/Lima');
     $nvafech = explode("-",$fechaingreso);
     $fechaPriquin = '12'."-".date("m")."-".date("Y");
@@ -391,33 +391,32 @@ function nuevfech($dias,$fechaingreso){
    
     $dias1 = (evaluarfechIni($fechaPriquin)) ? $dias + 1 : $dias;
     $dias2 = (evaluarfechIni($fechaSegquin)) ? $dias + 1 : $dias;
-
+  
     if($fecAct >= $fechaPriquicena && $fechaActual <= '26'."-".date("m")."-".date("Y")){
-        if($fechaInord > $fechaPriquicena && 
-        $fechaActual >= date("d-m-Y",strtotime($fechaIngOrd."+".$dias."days"))){ 
 
+        if($fechaInord >= $fechaPriquicena && 
+        $fechaActual >= date("d-m-Y",strtotime($fechaIngOrd."+".$dias."days"))){ 
+            
             $cantidadDias = cantidadDias($fechaInord,$fecAct);
             return array($fechaIngOrd,$fechaActual,$cantidadDias);
 
         }else if($fecAct >= date("d-m-Y",strtotime($fechaPriquin."+".$dias1."days")) && 
         $fechaInord <= $fechaPriquicena){
-            
             $cantidadDias = cantidadDias($fechaPriquicena,$fecAct);
             return array($fechaPriquin,$fechaActual,$cantidadDias);
         }
-    }else if($fecAct >= $fechaSegquincena && $fechaActual <= '11'."-".date("m")."-".date("Y")){
-        if($fechaInord >= $fechaSegquincena &&  
-        $fechaActual >= date("d-m-Y",strtotime($fechaIngOrd."+".$dias."days"))){   
+    }else if($fecAct >= $fechaSegquincena){
+        $fech= new DateTime (date("d-m-Y",strtotime($fechaIngOrd."+".$dias."days")));
 
+        if($fechaInord >= $fechaSegquincena &&  $fecAct >=  $fech){   
+           
             $cantidadDias =cantidadDias($fechaInord,$fecAct);
             return array($fechaIngOrd,$fechaActual,$cantidadDias);
-
-        }else if($fecAct >= date("d-m-Y",strtotime($fechaSegquin."+".$dias2."days") && 
-            $fechaInord <= $fechaSegquincena)){
-
+            
+        }else if($fecAct >= date("d-m-Y",strtotime($fechaSegquin."+".$dias2."days")) && 
+            $fechaInord <= $fechaSegquincena){
             $cantidadDias =cantidadDias($fechaSegquincena,$fecAct);
             return array($fechaSegquin,$fechaActual,$cantidadDias);
-
         }
     }
 }
@@ -449,40 +448,44 @@ function cantidadDias($fechaQuincena,$fechaActual){
 }
 
 
+function f_Cuotas($promedioCuota,$cuotas,$dias){
 
-
-
-
-
-
-
-
-
-    function f_Cuotas($verificarCuotas,$cuotas,$fechaRegQuin,$dias){
     date_default_timezone_set('America/Lima');
     $fechaActual = date("d")."-".date("m")."-".date("Y");
     $mes = (date("m") <= '9')? '0'.(date("m")-1) : (date("m")-1);
-        if($cuotas != '0' && $cuotas != null){
-   /*fecha actual >= fechadeRegistro o fecha de quincena + 2 
-    and fechaActual <= 26 and verificarCouta != $cuotas */
-    date("d-m-Y",strtotime($fechaRegQuin->format("d-m-Y")."+".$dias."days"));
-            if( $fechaActual >= '12'."-".date("m")."-".date("Y") && 
-               $fechaActual <= '26'."-".date("m")."-".date("Y") && $cuotas >=$verificarCuotas)
+    $fechaSegquin = '27'."-".$mes."-".date("Y");
+    $fechaActual2 = new DateTime($fechaActual);
+    $fechaSegquincena = new DateTime($fechaSegquin);
+  
+   
+    if($cuotas != '0' && $cuotas != null){
+            if($fechaActual >= '12'."-".date("m")."-".date("Y") && 
+               $fechaActual <= '26'."-".date("m")."-".date("Y") &&
+               $fechaActual >= date("d-m-Y",strtotime($promedioCuota[0]."+".$dias."days")) &&
+               $promedioCuota[1] < $cuotas)
             {
-              
-               /* return header("Location:http://localhost:8080/requerimiento/vista/bloqueo.php");*/
-            }else if($fechaActual >= '27'."-".$mes."-".date("Y") && 
-                    $fechaActual <= '11'."-".date("m")."-".date("Y") && $cuotas >=$verificarCuotas){
+            
+                print_r("USUARIO BLOQUEADO");
+                /*return header("Location:http://localhost:8080/requerimiento/vista/bloqueo.php");*/
+            }else if($fechaActual2 >= $fechaSegquincena && 
+                    $fechaActual2 >= date("d-m-Y",strtotime($promedioCuota[0]."+".$dias."days")) &&
+                    $promedioCuota[1] < $cuotas){
+
+                echo "USUARIO BLOQUEADO";
                 /*return header("Location:http://localhost:8080/requerimiento/vista/bloqueo.php");*/
             }else{
-               /*return header("Location: http://localhost:8080/requerimiento/vista/ventana.php");*/
+                print_r("SIN RESTRICCION");
+                /*return header("Location: http://localhost:8080/requerimiento/vista/ventana.php");*/
             } 
         }else{
-              return header("Location:http://localhost:8080/requerimiento/vista/Advertencia.php");
+            print_r("NO SE ESPECIFICO CUOTA AL USUARIO");
+              /*return header("Location:http://localhost:8080/requerimiento/vista/Advertencia.php");*/
         }
-    }
+}
 
     
+
+
 
 
 
