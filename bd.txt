@@ -101,6 +101,7 @@ PRECIO_WEB numeric(7,2),
 PRECIO_NORTE numeric(7,2),
 PRECIO_SUR numeric(7,2),
 CANTIDAD int,
+PESO_NETO int
 )
 
 T_PRODUCTO_PRECIO(
@@ -388,12 +389,22 @@ Group by p.CODIGO
 
 
 
+
+
 /*vista para buscar los productos y traer el precio web*/
-create view V_BUSCAR_PRODUCTO_WEB
+create view [dbo].[V_BUSCAR_PRODUCTO_WEB]
 as
-select COD_PRODUCTO as CODIGO ,COD_CATEGORIA as CATEGORIA ,
-ABR_PRODUCTO  as ABREVIATURA, DES_PRODUCTO as DES_PRODUCTO ,PRECIO_WEB as PRECIO
-from T_PRODUCTO 
+	select COD_PRODUCTO as CODIGO ,COD_CATEGORIA as CATEGORIA,
+	DES_PRODUCTO as DESCRIPCION, UNI_MEDIDA as UNIDAD, STOCK_MINIMO as STOCK,
+	ABR_PRODUCTO as ABREVIATURA,
+	PRE_PRODUCTO as PREPRODUCTO , PRECIO_WEB as PRECIO_WEB,
+	PRECIO_NORTE as NORTE ,PRECIO_SUR as SUR, PESO_NETO as PESO
+	from T_PRODUCTO where COD_CATEGORIA = '00004' and EST_PRODUCTO = '1'
+GO
+
+
+
+
 
 
 /*vista para mostrar los productos resien ingresados*/
@@ -475,3 +486,14 @@ CREATE TABLE [dbo].[T_PERSONAL](
 	[AFP] [numeric](18,0),
 	[CUOTA] [numeric](7,2)
 ) ON [PRIMARY]
+
+
+
+
+
+
+/*se agrego campo a la tabla T_PRODUCTO 
+el total en gramos*/
+
+ALTER TABLE T_PRODUCTO add
+PESO_NETO int 
