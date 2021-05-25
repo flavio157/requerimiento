@@ -1,5 +1,5 @@
 <?php
-
+session_start();
 require_once("../modelo/M_BuscarProductos.php");
 
 
@@ -78,20 +78,15 @@ class C_BuscarProducto
             $M_politicaBono = new M_BuscarProductos();
             $Bono = $M_politicaBono->M_PoliticaBono($zona,$cantidad,$cod_producto);
             $dato = $Bono['BONO'];
-            if($Bono!= 0){
+            if($Bono != 0){
                 if($cantidad >= 20){
-                    if(strlen($cantidad) == 2){
-                        $cifra = $cantidad[0]; 
-                    }else if (strlen($cantidad) == 3){
-                        $cifra = $cantidad[0].''.$cantidad[1];
-                    }else if(strlen($cantidad) == 4){
-                        $cifra = $cantidad[0].''.$cantidad[1].''.$cantidad[2];
-                    }
-                    $dato = $Bono['BONO'] * ($cifra-1);
+                        $dato = intval(($cantidad / 20)) * $Bono['BONO'];
                 }
             }else{
                 $dato = 0;
             }
+            
+            
             $array  = array(
                 'estado' => 'ok',
                 'bono' =>  $dato,
