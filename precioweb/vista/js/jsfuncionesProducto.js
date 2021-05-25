@@ -1,47 +1,46 @@
 function buscarProducto(nombreproducto,zona) {
-        if(nombreproducto != ""){
-            $.ajax({
-                dataType:'text',
-                type: 'POST', 
-                url:  '../controlador/C_BuscarProducto.php',
-                data:{
-                    "accion" : "buscar",
-                    "producto" : nombreproducto,
-                } ,
-                success: function name(response) {
+    if(nombreproducto != ""){
+        $.ajax({
+            dataType:'text',
+            type: 'POST', 
+            url:  '../controlador/C_BuscarProducto.php',
+            data:{
+                "accion" : "buscar",
+                "producto" : nombreproducto,
+            } ,
+            success: function name(response) {
+                var obj = JSON.parse(response);
+                html = "";
+                $.each(obj['producto'], function(i, item) {
+                    html += "<div><a class='suggest-element' data='"+item.DESCRIPCION+'&'+item.PRECIO_WEB+'&'+item.PESO+"'  id="+item.CODIGO+">"+item.DESCRIPCION+"</a></div>";
+                });
+                $('#sugerencias').fadeIn(0).html(html);
+                if(response != ""){
                     var obj = JSON.parse(response);
-                    html = "";
-                    $.each(obj['producto'], function(i, item) {
-                        html += "<div><a class='suggest-element' data='"+item.DESCRIPCION+'&'+item.PRECIO_WEB+'&'+item.UNIDAD+"'  id="+item.CODIGO+">"+item.DESCRIPCION+"</a></div>";
-                    });
-                    $('#sugerencias').fadeIn(0).html(html);
-                    if(response != ""){
-                        var obj = JSON.parse(response);
-                         if(obj['producto'] !== "" ){
-                            $("#sugerencias").html(html);
-                            $("#sugerencias").height(300);
-                            $("#sugerencias").css('overflow','scroll');
-                        }else{
-                            $("#sugerencias").height(0);
-                        }
+                     if(obj['producto'] !== "" ){
+                        $("#sugerencias").html(html);
+                        $("#sugerencias").height(300);
+                        $("#sugerencias").css('overflow','scroll');
+                    }else{
+                        $("#sugerencias").height(0);
                     }
-                    $('.suggest-element').on('click', function(){
-                            var id =  $(this).attr('id');
-                            var datos = $('#'+id).attr('data');
-                            array = datos.split("&");
-                            $('#nombreproducto').val(array[0]);
-                                valorproducto = array[1];  
-                                $("#precioproducto").val(array[1]);
-                            $("#G_gramo").val(array[2]);
-                            $('#sugerencias').fadeOut(0); 
-                            $("#cod_producto").val(id);
-                          
-                      });
-                    }
-            });
-        }
+                }
+                $('.suggest-element').on('click', function(){
+                        var id =  $(this).attr('id');
+                        var datos = $('#'+id).attr('data');
+                        array = datos.split("&");
+                        $('#nombreproducto').val(array[0]);
+                            valorproducto = array[1];  
+                            $("#precioproducto").val(array[1]);
+                        $("#G_gramo").val(array[2]);
+                        $('#sugerencias').fadeOut(0); 
+                        $("#cod_producto").val(id);
+                      
+                  });
+                }
+        });
     }
-
+}
 
 function agregarproductos() {
         var cod_producto =$("#cod_producto").val();
