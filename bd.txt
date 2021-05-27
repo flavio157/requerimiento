@@ -490,6 +490,15 @@ CREATE TABLE [dbo].[T_PERSONAL](
 
 
 
+Create view [dbo].[V_LLAMADA_PENDIENTE]
+as
+select * from T_CALL_EMPADRONADORA where PROX_OPERADORA is not null and PROX_LLAMADA <= GETDATE()
+and HORA_OPERADORA is not null
+GO
+
+
+
+
 
 
 /*se agrego campo a la tabla T_PRODUCTO 
@@ -497,3 +506,8 @@ el total en gramos*/
 
 ALTER TABLE T_PRODUCTO add
 PESO_NETO int 
+
+
+
+
+
