@@ -375,63 +375,62 @@ function RestriccionOficina($total,$permiso,$tgeneral){
 
 
 function nuevfech($dias,$fechaingreso){
-   /* $dias = 2;*/
-    date_default_timezone_set('America/Lima');
-    $nvafech = explode("-",$fechaingreso);
-    $fechaPriquin = '12'."-".date("m")."-".date("Y");
-    $mes = (date("m") <= '9')? '0'.(date("m")-1) : (date("m")-1);
-    $fechaSegquin = '27'."-".$mes."-".date("Y");
-    $fechaIngOrd = $nvafech[2]."-".$nvafech[1]."-".$nvafech[0];
-    $fechaInord= new DateTime($fechaIngOrd);
-    $fechaPriquicena = new DateTime($fechaPriquin);
-    $fechaSegquincena = new DateTime($fechaSegquin);
-
-    $fechaActual = date("d")."-".date("m")."-".date("Y");
-    $fecAct = new DateTime($fechaActual);
+    /* $dias = 2;*/
+     date_default_timezone_set('America/Lima');
+     $nvafech = explode("-",$fechaingreso);
+     $fechaPriquin = '12'."-".date("m")."-".date("Y");
+     $mes = (date("m") <= '9')? '0'.(date("m")-1) : (date("m")-1);
+     $fechaSegquin = '27'."-".$mes."-".date("Y");
+     $fechaIngOrd = $nvafech[2]."-".$nvafech[1]."-".$nvafech[0];
+     $fechaInord= new DateTime($fechaIngOrd);
+     $fechaPriquicena = new DateTime($fechaPriquin);
+     $fechaSegquincena = new DateTime($fechaSegquin);
+ 
+     $fechaActual = date("d")."-".date("m")."-".date("Y");
+     $fecAct = new DateTime($fechaActual);
+    
+     $dias1 = (evaluarfechIni($fechaPriquin)) ? $dias + 1 : $dias;
+     $dias2 = (evaluarfechIni($fechaSegquin)) ? $dias + 1 : $dias;
    
-    $dias1 = (evaluarfechIni($fechaPriquin)) ? $dias + 1 : $dias;
-    $dias2 = (evaluarfechIni($fechaSegquin)) ? $dias + 1 : $dias;
-  
-  
-
-    if($fecAct >= $fechaPriquicena && $fechaActual <= '26'."-".date("m")."-".date("Y")){
-
-        if($fechaInord >= $fechaPriquicena && 
-        $fechaActual >= date("d-m-Y",strtotime($fechaIngOrd."+".$dias."days"))){ 
-            
-            $cantidadDias = cantidadDias($fechaInord,$fecAct);
-            return array($fechaIngOrd,$fechaActual,$cantidadDias);
-
-        }else if($fecAct >= date("d-m-Y",strtotime($fechaPriquin."+".$dias1."days")) && 
-        $fechaInord <= $fechaPriquicena){
-            $cantidadDias = cantidadDias($fechaPriquicena,$fecAct);
-            return array($fechaPriquin,$fechaActual,$cantidadDias);
-        }
-    }else if($fecAct >= $fechaSegquincena){
-       
+   
+ 
+     if($fecAct >= $fechaPriquicena && $fechaActual <= '26'."-".date("m")."-".date("Y")){
+ 
+         if($fechaInord >= $fechaPriquicena && 
+         $fechaActual >= date("d-m-Y",strtotime($fechaIngOrd."+".$dias."days"))){ 
+             
+             $cantidadDias = cantidadDias($fechaInord,$fecAct->format("d-m-Y"));
+             return array($fechaIngOrd,$fechaActual,$cantidadDias);
+ 
+         }else if($fecAct >= date("d-m-Y",strtotime($fechaPriquin."+".$dias1."days")) && 
+         $fechaInord <= $fechaPriquicena){
+             $cantidadDias = cantidadDias($fechaPriquicena,$fecAct->format("d-m-Y"));
+             return array($fechaPriquin,$fechaActual,$cantidadDias);
+         }
+     }else if($fecAct >= $fechaSegquincena){
         
-        $fech= new DateTime (date("d-m-Y",strtotime($fechaIngOrd."+".$dias."days")));
-        if(date("d") >= 01 && date("d") < 27){
-            $fechaSegquin = '27'."-".$mes."-".date("Y");
-            $fechaSegquincena = new DateTime($fechaSegquin);
-        }else if(date("d") >= 27  ){
-            $fechaSegquin = '27'."-".date("m")."-".date("Y");
-            $fechaSegquincena = new DateTime($fechaSegquin);
-        }
-        $fecqui = new DateTime(date("d-m-Y",strtotime($fechaSegquin."+".$dias2."days")));
-      
-
-        if($fechaInord >= $fechaSegquincena &&  $fecAct >=  $fech){  
-            $cantidadDias =cantidadDias($fechaInord,$fecAct->format("d-m-Y"));
-            return array($fechaIngOrd,$fechaActual,$cantidadDias);
-            
-        }else if($fecAct >= $fecqui &&  $fechaInord <= $fechaSegquincena ){
-            $cantidadDias =cantidadDias($fechaSegquincena,$fechaActual );
-            return array($fechaSegquincena,$fechaActual,$cantidadDias);
-        }
-    }
-}
-
+         
+         $fech= new DateTime (date("d-m-Y",strtotime($fechaIngOrd."+".$dias."days")));
+         if(date("d") >= 01 && date("d") < 27){
+             $fechaSegquin = '27'."-".$mes."-".date("Y");
+             $fechaSegquincena = new DateTime($fechaSegquin);
+         }else if(date("d") >= 27  ){
+             $fechaSegquin = '27'."-".date("m")."-".date("Y");
+             $fechaSegquincena = new DateTime($fechaSegquin);
+         }
+         $fecqui = new DateTime(date("d-m-Y",strtotime($fechaSegquin."+".$dias2."days")));
+       
+ 
+         if($fechaInord >= $fechaSegquincena &&  $fecAct >=  $fech){  
+             $cantidadDias =cantidadDias($fechaInord,$fecAct->format("d-m-Y"));
+             return array($fechaIngOrd,$fechaActual,$cantidadDias);
+             
+         }else if($fecAct >= $fecqui &&  $fechaInord <= $fechaSegquincena ){
+             $cantidadDias =cantidadDias($fechaSegquincena,$fechaActual );
+             return array($fechaSegquincena,$fechaActual,$cantidadDias);
+         }
+     }
+ }
 
 
 
