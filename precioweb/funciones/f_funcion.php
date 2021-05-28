@@ -538,4 +538,32 @@ function f_Cuotas($promedioCuota,$cuotas,$dias){
         return $total; 
 
     }
+
+    function seguMinu($datoscdr){
+        $minutos = $datoscdr / 60;
+         return round($minutos,2);
+     }   
+ 
+ 
+     function verificarCuotaLlamadas($Cantminutos,$CantMinRequeidos){
+         if($Cantminutos < $CantMinRequeidos){
+             return "false";
+         }else{
+             return "true";
+         }
+     }
+ 
+     function restarDias($fechaactual,$diasresta){
+         $contador = 1;
+         for($i = 1 ; $i <= $diasresta ; $i++){
+             $retufch =  date("d-m-Y",strtotime($fechaactual->format("d-m-Y")."-".$i."days")); 
+             if(date('l',strtotime($retufch)) == 'Sunday'){
+                 $contador++;
+             }
+         }
+         return $contador;
+     }
+
+
+
   ?>

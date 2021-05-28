@@ -433,6 +433,7 @@ function nuevfech($dias,$fechaingreso){
  }
 
 
+
 function evaluarfechIni($fechaIngOrd){
     if(date('l',strtotime($fechaIngOrd)) == 'Sunday'){
         return true;
@@ -445,7 +446,6 @@ function evaluarfechIni($fechaIngOrd){
 
 
 function cantidadDias($fechaQuincena,$fechaActual){
-    $fechaActual = new DateTime($fechaActual);
     $dias = $fechaQuincena->diff($fechaActual);
     $contador = 0;
     for ($i=1; $i <= $dias->days ; $i++) { 
@@ -455,6 +455,18 @@ function cantidadDias($fechaQuincena,$fechaActual){
         }
     }
     return $dias->days-$contador;
+}
+
+
+function restarDias($fechaactual,$diasresta){
+    $contador = 1;
+    for($i = 1 ; $i <= $diasresta ; $i++){
+        $retufch =  date("d-m-Y",strtotime($fechaactual->format("d-m-Y")."-".$i."days")); 
+        if(date('l',strtotime($retufch)) == 'Sunday'){
+            $contador++;
+        }
+    }
+    return $contador;
 }
 
 
@@ -482,33 +494,20 @@ function f_Cuotas($promedioCuota,$cuotas,$dias){
                $fechaActual >= date("d-m-Y",strtotime($promedioCuota[0]."+".$dias."days")) &&
                $promedioCuota[1] < $cuotas)
             {
-            
                 return false ;
-                /*print_r("USUARIO BLOQUEADO");*/
-               
             }else if($fechaActual2 >= $fechaSegquincena && 
                     $fechaActual2 >= $restriccion &&
                     $promedioCuota[1] < $cuotas){
-
                 return false;      
-                /*echo "USUARIO BLOQUEADO";*/
-                
             }else{
                 return true;
-                /*print_r("SIN RESTRICCION");*/
             } 
         }else{
             return false;
-              /*print_r("NO SE ESPECIFICO CUOTA AL USUARIO");/*
-              /*return header("Location:http://localhost:8080/requerimiento/vista/Advertencia.php");*/
         }
 }
 
     
-
-
-
-
 
 
     function observacionProducto($dataproductos)
@@ -538,31 +537,18 @@ function f_Cuotas($promedioCuota,$cuotas,$dias){
     }
 
     function seguMinu($datoscdr){
-        $minutos = $datoscdr / 60;
-         return round($minutos,2);
-     }   
- 
- 
-     function verificarCuotaLlamadas($Cantminutos,$CantMinRequeidos){
-         if($Cantminutos < $CantMinRequeidos){
-             return "false";
-         }else{
-             return "true";
-         }
-     }
- 
-     function restarDias($fechaactual,$diasresta){
-         $contador = 1;
-         for($i = 1 ; $i <= $diasresta ; $i++){
-             $retufch =  date("d-m-Y",strtotime($fechaactual->format("d-m-Y")."-".$i."days")); 
-             if(date('l',strtotime($retufch)) == 'Sunday'){
-                 $contador++;
-             }
-         }
-         return $contador;
-     }
+       $minutos = $datoscdr / 60;
+        return round($minutos,2);
+    }   
 
 
+    function verificarCuotaLlamadas($Cantminutos,$CantMinRequeidos){
+        if($Cantminutos < $CantMinRequeidos){
+            return "false";
+        }else{
+            return "true";
+        }
+    }
 
 
   ?>
