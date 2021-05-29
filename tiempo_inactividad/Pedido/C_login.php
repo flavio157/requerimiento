@@ -25,7 +25,7 @@ class C_Login
     
 
         if($datosUsuario){
-            return header("Location: index.php");
+            return header("Location: Index.php");
            }else{
              return header("Location: ../index.php");
             }

@@ -1,6 +1,5 @@
 <?php
 date_default_timezone_set('America/Lima');
-require_once("M_VerificarCuota.php");
 require_once("M_Login.php");
 require_once("../Funciones/f_funcion.php");
 

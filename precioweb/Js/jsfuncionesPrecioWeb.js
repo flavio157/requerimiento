@@ -1,4 +1,4 @@
-function buscarProducto(nombreproducto,zona) {
+function buscarProducto(nombreproducto) {
     if(nombreproducto != ""){
         $.ajax({
             dataType:'text',

@@ -69,7 +69,7 @@ class M_Login
     
        
       if($query){
-          return $oficina;
+          return $arraydato;
        } 
     }
 

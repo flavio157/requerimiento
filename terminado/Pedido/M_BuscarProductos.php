@@ -141,23 +141,5 @@ class M_BuscarProductos{
 
         }
 
-
-
-        /*buscar y retorna el producto con su precio web */
-        public function M_BuscarProducto_WEB($nom_producto)
-        {
-            $query=$this->db->prepare("SELECT * FROM V_BUSCAR_PRODUCTO_WEB WHERE ABREVIATURA LIKE '%$nom_producto%'");
-            $query->execute();
-           if ($query) {
-               $html = "";
-                while ($row = $query->fetch()) {                
-                    $html .= '<div><a class="suggest-element" data-="'.$row['DES_PRODUCTO'].'&'.$row['PRECIO'].'"  
-                    id="'.$row['CODIGO'].'">'.$row['DES_PRODUCTO'].'</a></div>';
-                }
-                return $html ;
-                $query->closeCursor();
-                $query = null;
-            }
-        } 
 }
 ?>

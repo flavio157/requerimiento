@@ -531,9 +531,9 @@ function f_Cuotas($promedioCuota,$cuotas,$dias){
 
     function verificarCuotaLlamadas($Cantminutos,$CantMinRequeidos){
         if($Cantminutos < $CantMinRequeidos){
-            return "false";
+            return false;
         }else{
-            return "true";
+            return true;
         }
     }
 

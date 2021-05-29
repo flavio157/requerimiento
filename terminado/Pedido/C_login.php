@@ -20,10 +20,6 @@ class C_Login
 {
     public function C_usuario($cod_usuario){   
         
-
-        $diasprimeraquincena =array("14","26");
-        $diassegundaquincena =array("29","11");
-        
         $m_login = new M_Login();
         $datosUsuario = $m_login->Login($cod_usuario);
        
