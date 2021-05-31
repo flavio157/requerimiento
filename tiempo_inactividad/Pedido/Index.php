@@ -23,7 +23,7 @@ $cod = $_SESSION["cod"];*/
         <link rel="STYLESHEET" type="text/css" href="../Font/style.css">
         <link rel="STYLESHEET" type="text/css" href="../Css/bootstrap.min.css">
         <script type="text/javascript" src="../Js/bootstrap.bundle.min.js"></script>
-        <script type="text/javascript" src="../Js/jsllamada.js"></script>
+        <script type="text/javascript" src="../Js/jsinactividad.js"></script>
         <meta name="viewport" content="width=device-width, initial-scale=1.0 ,user-scalable=no">
         
     </head>

@@ -7,6 +7,8 @@ $(document).ready(function(){
         var id = $('#Selectprovincia').val();
         if(id == "R"){
             StopInterval();
+        }else{
+            StarInterval();
         }
     });
 
