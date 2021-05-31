@@ -26,7 +26,7 @@ require_once("../Funciones/Database.php");
         public function M_pendiente($hora,$fecha)
         {
             $query=$this->db->prepare("SELECT * FROM V_LLAMADA_PENDIENTE 
-                    WHERE HORA_OPERADORA = :hora");
+                    WHERE HORA_OPERADORA <= :hora");
                   
             $query->bindParam("hora", $hora, PDO::PARAM_STR);
             $query->execute();
