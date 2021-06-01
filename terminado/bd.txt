@@ -578,6 +578,19 @@ CREATE TABLE T_PRODUCTOS_REGALO(
 ) 
 
 
+Create view [dbo].[V_RESUMEN_EMPADRONADORA]
+as
+select * from T_RESUMEN where PROX_OPERADORA is not null and FECHA <= GETDATE()
+and HORA_OPERADORA is not null
+GO
+
+create view [dbo].[V_LLAMADA_PENDIENTE]
+as
+select * from T_CALL_EMPADRONADORA where PROX_OPERADORA is not null and PROX_LLAMADA <= GETDATE()
+and HORA_OPERADORA is not null
+GO
+
+
 
 /*query de la Tabla T_Producto_Regalo*/
 
