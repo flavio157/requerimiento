@@ -21,7 +21,7 @@ $(document).ready(function(){
 /*llamadas pendientes */
 function llamadasPendientes() {
     codigo = $("#vrcodpersonal").val();
-    ofi = $("#vrcodpersonal").val();
+    ofi = $("#vroficina").val();
     $.ajax({
         method: "POST",
         url: "../Pedido/C_Pen_LLamada.php", 
@@ -50,7 +50,7 @@ function StarInterval(){
 
 function setTime() {
    codigo = $("#vrcodpersonal").val();
-   ofi = $("#vrcodpersonal").val();
+   ofi = $("#vroficina").val();
     $.ajax({
         method: "POST",
         url: "../Pedido/C_Pen_LLamada.php", 
@@ -60,7 +60,6 @@ function setTime() {
             ofi : ofi
         },
         success: function name(e) {
-            console.log(e);
             var c = JSON.parse(e);
             if(c != "0"){
                 $("#modalPrueba").modal('show');
