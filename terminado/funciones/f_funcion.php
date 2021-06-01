@@ -551,16 +551,16 @@ function f_Cuotas($promedioCuota,$cuotas,$dias){
          }
      }
  
+
      function restarDias($fechaactual,$diasresta){
-         $contador = 1;
-         for($i = 1 ; $i <= $diasresta ; $i++){
-             $retufch =  date("d-m-Y",strtotime($fechaactual->format("d-m-Y")."-".$i."days")); 
-             if(date('l',strtotime($retufch)) == 'Sunday'){
-                 $contador++;
-             }
-         }
-         return $contador;
-     }
+        for($i = 1 ; $i <= $diasresta ; $i++){ 
+            $retufch =  date("d-m-Y",strtotime($fechaactual->format("d-m-Y")."-".$i."days")); 
+            if(date('l',strtotime($retufch)) == 'Sunday'){
+                $diasresta++;
+            }
+        }
+        return $diasresta;
+    }
 
 
 
