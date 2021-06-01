@@ -510,4 +510,17 @@ PESO_NETO int
 
 
 
+Create view [dbo].[V_PRODUCTO_REGALO]
+as
+select * from T_PRODUCTOS_REGALO where ESTADO = '1'
+GO
+
+
+
+CREATE TABLE T_PRODUCTOS_REGALO(
+	UNIDAD_MEDIDA char(10),
+	CANTIDAD int,
+	REGALO_UNIDAD_MEDIDA char(10),
+	ESTADO char(1) 
+) 
 
