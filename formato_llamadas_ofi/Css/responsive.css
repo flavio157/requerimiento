@@ -1,0 +1,135 @@
+.main{
+    width:40%;
+    margin:0 auto;
+    padding:1em;
+    border-style: solid;
+    border-width: 1px;
+    border-radius: 8px;
+    
+   }
+
+   #sugerencias {
+    box-shadow: 2px 2px 8px 0 rgba(0,0,0,.2);
+    background-color:#fff;;
+    height: auto;
+    position: absolute;
+    top: 85px;
+    z-index: 9999;
+    width: 460px;
+}
+ 
+    #sugerencias .suggest-element {
+        background-color: #fff;
+        border-top: 1px solid #d6d4d4;
+        cursor: pointer;
+        padding: 8px;
+        width: 100%;
+        float: left;
+        text-decoration: none;
+        color: black;
+    }
+
+    .tablafrmpedidos {
+        overflow:scroll;
+        height: 150px;
+      
+   }
+
+   .productosMomento{
+    font-size: 14px;
+    text-align: center;
+   }
+
+   .tabladelProducto{
+    font-size: 14px;
+    text-align: center;
+   }
+
+   .responsive{display:none;}   
+
+   .noresposive{display: block;}
+
+   #acordionresponsive{display:none ;}
+
+   #tbpedidosRegistrados{display: block;}
+
+   .collapse-row.collapsed + tr {
+        display: none;
+    }
+
+
+    input[type=number]::-webkit-inner-spin-button, 
+    input[type=number]::-webkit-outer-spin-button { 
+        -webkit-appearance: none; 
+        margin: 0; 
+    }
+    
+    #txtcontrato{
+        text-transform: uppercase;
+    }
+
+
+
+@media screen and (max-width:992px){
+    .main{
+        width:100%;
+        border-style: solid;
+        border-width: 1px;
+        border-radius: 8px; 	
+    } 
+    #sugerencias {
+        box-shadow: 2px 2px 8px 0 rgba(0,0,0,.2);
+        background-color:  #fff;
+        box-shadow: 3px 2px 8px 0;
+        height: auto;
+        position: absolute;
+        top: 85px;
+        z-index: 9999;
+        width:300px;
+    }
+
+    .tablafrmpedidos {
+        overflow:scroll;
+        height: 150px;
+        
+   }
+
+   .productosMomento{
+       font-size: 14px;
+       text-align: center;
+    }
+
+    .tabladelProducto{
+        font-size: 14px;
+        text-align: center;
+       }
+       
+    .responsive{
+        display:block;
+    }   
+
+    .noresposive{
+        display: none;
+    }
+
+    #acordionresponsive{
+        display: block ;
+    }
+   
+    #tbpedidosRegistrados{
+        display: none;
+    }
+
+    #acordionresponsive {
+        height: 245px;
+        border: 1px solid #ddd;
+        background: #f1f1f1;
+        overflow-y: scroll;
+    }
+    #txtcontrato{
+        text-transform: uppercase;
+    }
+
+    
+
+}
