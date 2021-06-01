@@ -1,9 +1,8 @@
 var i = null;
 $(document).ready(function(){
-  
     llamadasPendientes(); 
 
-    $("#Selectprovincia").change(function(){
+    $("#Selectprovincia").change(function(){   
         var id = $('#Selectprovincia').val();
         if(id == "R"){
             StopInterval();
@@ -18,13 +17,18 @@ $(document).ready(function(){
     });
 })
 
+
 /*llamadas pendientes */
 function llamadasPendientes() {
+    codigo = $("#vrcodpersonal").val();
+    ofi = $("#vrcodpersonal").val();
     $.ajax({
         method: "POST",
         url: "../Pedido/C_Pen_LLamada.php", 
         data: {
-            accion: "tiempo"
+            accion: "tiempo",
+            cod : codigo,
+            ofi : ofi
         },
         success: function name(c) {
             var o = JSON.parse(c);
@@ -45,14 +49,17 @@ function StarInterval(){
 
 
 function setTime() {
+   codigo = $("#vrcodpersonal").val();
+   ofi = $("#vrcodpersonal").val();
     $.ajax({
         method: "POST",
         url: "../Pedido/C_Pen_LLamada.php", 
         data: {
-            accion: "datos"
+            accion: "datos",
+            cod : codigo,
+            ofi : ofi
         },
         success: function name(e) {
-            $("#txtcliente").val(e);
             console.log(e);
             var c = JSON.parse(e);
             if(c != "0"){
