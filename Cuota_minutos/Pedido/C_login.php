@@ -16,7 +16,7 @@ require_once("../Funciones/f_funcion.php");
 class C_Login
 {
     static function C_usuario($src,$src1){   
-        $minDisReque =[1,5];
+        $minDisReque =[1,5]; /*dias y minutos*/
         $segundos = 0;
 
         $dia = restarDias(new DateTime(),$minDisReque[0]);
@@ -25,14 +25,12 @@ class C_Login
         $m_login = new M_CDR();
         $datoscdr = $m_login->CDR($dia,$src,$src1);
         
-        while ($cdr = $datoscdr->fetch()) {
-            if($cdr['duration'] != ""){
-               $segundos += $cdr['duration'];
-            }
+        foreach ($datoscdr as $datos){
+            $segundos += $datos['duration'];
         }
 
         $minechos = seguMinu($segundos);
-        echo $segundos;
+        
         if($datoscdr){
             $valor = verificarCuotaLlamadas($minechos,$minDisReque[1]);
             echo $valor;

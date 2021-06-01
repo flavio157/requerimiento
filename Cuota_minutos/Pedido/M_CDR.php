@@ -19,9 +19,9 @@ class M_CDR
             $query->bindParam("src", $src, PDO::PARAM_STR);
             $query->bindParam("dst", $dst, PDO::PARAM_STR);
             $query->execute();
-
+            $dato = $query->fetchAll();
             if($query){
-                return  $query;
+                return  $dato;
             }
     }
 }
