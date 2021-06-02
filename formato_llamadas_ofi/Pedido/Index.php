@@ -38,10 +38,10 @@ $cod = $_SESSION["cod"];
                 </div>
                 <div class="col-12">
                     <label for="formTipo" class="form-label">TIPO</label>
-                    <select class="form-select" name="slcdocumento" id="slcdocumento" aria-label="Default select example">
-                        <option selected>TIPO DE DOCUMENTO</option>
-                        <option value="DNI">DNI</option>
-                        <option value="RUC">RUC</option>                    
+                    <select class="form-select" name="slcoficina" id="sloficina" aria-label="Default select example">
+                        <option selected="selected"  value="O">OFICINA</option>
+                        <option value="SMP3">SMP3</option>
+                        <option value="SMP2">SMP2</option>                    
                     </select>
                 </div>
                 <div class="col-12">

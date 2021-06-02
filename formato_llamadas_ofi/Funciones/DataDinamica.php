@@ -3,7 +3,7 @@
 class DataDinamica
 {
  
-    public static  function Contrato($database){
+    public static  function Conectarbd($database){
         try {
            
             $server = "DESKTOP-PCSH8QU";

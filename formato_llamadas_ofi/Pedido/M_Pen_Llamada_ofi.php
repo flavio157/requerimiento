@@ -7,16 +7,16 @@ require_once("../Funciones/f_funcion.php");
     
         public function __construct($ofi)
         {
-            $this->db=DataDinamica::Contrato($ofi);
+            $this->db=DataDinamica::Conectarbd($ofi);
         }
 
 
 
-        public function M_LlamadasDta($cod_operadora,$ofi){
+        public function M_LlamadasDta($cod_operadora,$oficinalogin){
             $query=$this->db->prepare("SELECT * FROM V_RESUMEN_EMPADRONADORA WHERE COD_OPERADORA = :cod_operadora
             AND OFI_OPERADORA = :oficina");
             $query->bindParam("cod_operadora", $cod_operadora, PDO::PARAM_STR);
-            $query->bindParam("oficina", $ofi, PDO::PARAM_STR);
+            $query->bindParam("oficina", $oficinalogin, PDO::PARAM_STR);
             $query->execute();
             $pendiente = $query->fetchAll(PDO::FETCH_ASSOC);
             if($query){
@@ -27,14 +27,15 @@ require_once("../Funciones/f_funcion.php");
 
 
 
-        public function M_pendiente($hora,$cod_operadora,$ofi)
+        public function M_pendiente($hora,$cod_operadora,$oficinalogin)
         {
+           
             $query=$this->db->prepare("SELECT * FROM V_RESUMEN_EMPADRONADORA 
                     WHERE HORA_OPERADORA <= :hora AND COD_OPERADORA = :cod_operadora AND OFI_OPERADORA = :oficina");
                   
             $query->bindParam("hora", $hora, PDO::PARAM_STR);
             $query->bindParam("cod_operadora", $cod_operadora, PDO::PARAM_STR);
-            $query->bindParam("oficina", $ofi, PDO::PARAM_STR);
+            $query->bindParam("oficina", $oficinalogin, PDO::PARAM_STR);
             $query->execute();
             $pendiente = $query->fetch(PDO::FETCH_ASSOC);
             

@@ -1,6 +1,7 @@
 var i = null;
+var oficina ;
 $(document).ready(function(){
-    llamadasPendientes(); 
+   
 
     $("#Selectprovincia").change(function(){   
         var id = $('#Selectprovincia').val();
@@ -15,14 +16,25 @@ $(document).ready(function(){
         $("#modalPrueba").modal('hide');
         $('#Selectprovincia').val('1');
     });
+
+    $("#sloficina").change(function() {
+        oficina = $("#sloficina").val();
+        if(oficina !== 'O'){
+            llamadasPendientes(); 
+        }else{
+            StopInterval(i);
+        }  
+    })
+
+
 })
 
 
 /*llamadas pendientes */
 function llamadasPendientes() {
     codigo = $("#vrcodpersonal").val();
-    oficina = $("#vroficina").val();
-    console.log(oficina);
+    ofilogin = $("#vroficina").val();
+   
     $.ajax({
         method: "POST",
         url: "../Pedido/C_Pen_LLamada.php", 
@@ -30,13 +42,15 @@ function llamadasPendientes() {
             accion: "tiempo",
             cod : codigo,
             ofi : oficina,
+            oficinalogin : ofilogin
         },
         success: function name(c) {
-            console.log(c);
             var o = JSON.parse(c);
             if(o == 1){
                 StarInterval();
-            } 
+            }else{
+                StopInterval(i);
+            }
         }
     })
 }
@@ -52,7 +66,8 @@ function StarInterval(){
 
 function setTime() {
    codigo = $("#vrcodpersonal").val();
-   oficina = $("#vroficina").val();
+   ofilogin = $("#vroficina").val();
+ 
     $.ajax({
         method: "POST",
         url: "../Pedido/C_Pen_LLamada.php", 
@@ -60,10 +75,10 @@ function setTime() {
             accion: "datos",
             cod : codigo ,
             ofi : oficina,
+            oficinalogin : ofilogin
         },
         success: function name(e) {
-            console.log(e);
-            var c = JSON.parse(e);
+           var c = JSON.parse(e);
             if(c != "0"){
                 $("#modalPrueba").modal('show');
             }
