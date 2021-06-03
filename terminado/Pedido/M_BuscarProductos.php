@@ -87,7 +87,7 @@ class M_BuscarProductos{
 
 
         public function M_Combo($cod_combo){
-            $query=$this->db->prepare("SELECT * FROM T_COMBO WHERE ABR_PRODUCTO LIKE '%$cod_combo%'");
+            $query=$this->db->prepare("SELECT * FROM V_BUSCAR_COMBO WHERE ABR_PRODUCTO LIKE '%$cod_combo%'");
             $query->execute();
            if ($query) {
                $html = "";

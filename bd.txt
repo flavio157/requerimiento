@@ -278,8 +278,6 @@ VISTAS Almacenes
 	inner join T_PRODUCTO as c
 	on p.COD_PRODUCTO = c.COD_PRODUCTO where c.COD_CATEGORIA = '00004'
 	group by p.COD_PRODUCTO , ZONA
-
-
 GO
 
 
@@ -325,8 +323,12 @@ SELECT * FROM T_PRODUCTO_PRECIO
 
 create view [dbo].[V_BUSCAR_COMBO]
 as
-select c.COD_COMBO,c.PRECIO
-from T_COMBO as c
+	select c.COD_COMBO as COD_COMBO ,c.PRECIO as PRECIO ,p.ABR_PRODUCTO as ABR_PRODUCTO,
+	p.DES_PRODUCTO as DESCRIPCION
+	,c.COD_COMBO +' - '+p.DES_PRODUCTO [NOM_COMPLETO]
+	from T_COMBO  as c
+	inner join T_PRODUCTO as p
+	on c.COD_COMBO = p.COD_PRODUCTO 
 GO
 
 
@@ -344,7 +346,8 @@ GO
 
 create view [dbo].[V_COMBOPRODUCTO]
 as 
-select c.COD_COMBO as combo,p.COD_PRODUCTO as cod_producto,p.DES_PRODUCTO as nombre,c.PRECIO as precio from T_PRODUCTO as p
+select c.COD_COMBO as combo,p.COD_PRODUCTO as cod_producto,p.DES_PRODUCTO as nombre,
+c.PRECIO as precio from T_PRODUCTO as p
 inner join T_COMBO_ITEM as c on 
 p.COD_PRODUCTO = c.COD_PRODUCTO
 GO

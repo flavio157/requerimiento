@@ -24,7 +24,8 @@ class M_BuscarProductos{
         
         
         public function M_VerificarRegalo($gramo,$cantidad){
-            $query=$this->db->prepare("SELECT * FROM V_PRODUCTO_REGALO WHERE UNIDAD_MEDIDA = $gramo  AND CANTIDAD = $cantidad");                  
+            $query=$this->db->prepare("SELECT * FROM T_PRODUCTOS_REGALO WHERE UNIDAD_MEDIDA = $gramo  AND CANTIDAD = $cantidad
+            AND  ESTADO = '1'");                  
             $query->execute();
             $regalo =  $query->fetchAll();
             if ($query) {
