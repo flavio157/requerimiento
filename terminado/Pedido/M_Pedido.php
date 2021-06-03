@@ -9,7 +9,7 @@
     {
         $this->bd=DatabaseDinamica::Conectarbd($bd);
     }
-
+    
     public function GuardarPedido($fecha,$cod_vendedora,$tipo_documento,$identificacion,
     $cliente,$direccion,$referencia,$contacto,$telefono,$entrega,$fcancelacion,$est_pedido,$observacion,
     $n_productos,$cod_distrito,$num_contrato,$cod_provincia,$telefono2,$contado,$dataproductos){
@@ -63,7 +63,7 @@
 
     public function UltimoRegistro($cod_vendedora)
     {
-        $query = $this->bd->prepare("SELECT * FROM V_ULTIMO_REGISTRO WHERE COD_VENDEDORA = '$cod_vendedora'"); 
+        $query = $this->bd->prepare(" SELECT TOP 1 * FROM T_PPEDIDO WHERE COD_VENDEDORA = '$cod_vendedora' ORDER BY CODIGO DESC"); 
         $query->execute();
         $ultimoregistro =  $query->fetch(PDO::FETCH_ASSOC);
         return $ultimoregistro;
