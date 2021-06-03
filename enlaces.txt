@@ -1,0 +1,8 @@
+localhost:8080/terminado/Js/jquery-3.3.1.slim.min.js
+localhost:8080/terminado/Js/jquery.min.js
+localhost:8080/terminado/Css/responsive.css
+localhost:8080/terminado/Font/style.css
+localhost:8080/terminado/Css/bootstrap.min.css
+localhost:8080/terminado/Js/bootstrap.bundle.min.js
+localhost:8080/terminado/Js/jsproducto.js
+localhost:8080/terminado/Js/jsfuncionesProducto.js
