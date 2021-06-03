@@ -271,13 +271,14 @@ VISTAS Almacenes
 /*buscar producto por zona y categoria 00004*/
  create View [dbo].[V_BUSCAR_PRODUCTO]  
  as
-	select p.COD_PRODUCTO as CODIGO ,MAX(c.COD_CATEGORIA) as CATEGORIA,
+	select p.COD_PRODUCTO as CODIGO ,MAX(c.COD_CATEGORIA) as CATEGORIA,MAX(UNI_MEDIDA) as UNI_MEDIDA, MAX(c.ABR_PRODUCTO) as ABREVIATURA,
 	MAX(c.DES_PRODUCTO) as DES_PRODUCTO , p.ZONA as ZONA ,
 	MAX(p.CANTIDAD) as cantidad, MAX(p.BONO) as BONO, MAX(p.PRECIO) as PRECIO
 	from T_PRODUCTO_PRECIO as p
 	inner join T_PRODUCTO as c
 	on p.COD_PRODUCTO = c.COD_PRODUCTO where c.COD_CATEGORIA = '00004'
 	group by p.COD_PRODUCTO , ZONA
+
 
 GO
 
