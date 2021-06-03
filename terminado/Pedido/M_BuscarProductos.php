@@ -32,16 +32,16 @@ class M_BuscarProductos{
             $consulta = "";
             
             if($cantidad < '10'){
-                $consulta = "SELECT * FROM V_POLITICA_PRECIOS WHERE ZONA = $zona AND CANTIDAD < 10
+                $consulta = "SELECT * FROM T_PRODUCTO_PRECIO  WHERE ZONA = $zona AND CANTIDAD < 10
                 AND COD_PRODUCTO = '$codproducto'";
                 
             }else if($cantidad > '9' && $cantidad <= '19')
             {
-                $consulta = "SELECT * FROM V_POLITICA_PRECIOS WHERE ZONA = $zona AND CANTIDAD > 9
+                $consulta = "SELECT * FROM T_PRODUCTO_PRECIO  WHERE ZONA = $zona AND CANTIDAD > 9
                 AND CANTIDAD <= 19 AND COD_PRODUCTO = '$codproducto'";
 
             }else if($cantidad >= '20'){
-                $consulta = "SELECT * FROM V_POLITICA_PRECIOS WHERE ZONA = $zona AND CANTIDAD = 20
+                $consulta = "SELECT * FROM T_PRODUCTO_PRECIO  WHERE ZONA = $zona AND CANTIDAD = 20
                              AND COD_PRODUCTO = '$codproducto'";
             }
 
@@ -60,15 +60,15 @@ class M_BuscarProductos{
         {   
             $consulta = "";
             if($cantidad >= '6' && $cantidad <= '9'){
-                $consulta = "SELECT * FROM V_POLITICA_BONOS WHERE ZONA = $zona AND CANTIDAD <= 9
+                $consulta = "SELECT * FROM T_PRODUCTO_PRECIO WHERE ZONA = $zona AND CANTIDAD <= 9
                 AND COD_PRODUCTO = '$codproducto'";
                 
             }else if($cantidad >= '10' && $cantidad <='19'){
-                $consulta = "SELECT * FROM V_POLITICA_BONOS WHERE ZONA = $zona AND CANTIDAD >= 10
+                $consulta = "SELECT * FROM T_PRODUCTO_PRECIO WHERE ZONA = $zona AND CANTIDAD >= 10
                 AND CANTIDAD <= 19 AND COD_PRODUCTO = '$codproducto'";
 
             }else if($cantidad >= '20'){
-                $consulta = "SELECT * FROM V_POLITICA_BONOS WHERE ZONA = $zona AND CANTIDAD = 20
+                $consulta = "SELECT * FROM T_PRODUCTO_PRECIO WHERE ZONA = $zona AND CANTIDAD = 20
                 AND COD_PRODUCTO = '$codproducto'";
             }
 
@@ -87,7 +87,7 @@ class M_BuscarProductos{
 
 
         public function M_Combo($cod_combo){
-            $query=$this->db->prepare("SELECT * FROM V_BUSCAR_COMBO WHERE ABR_PRODUCTO LIKE '%$cod_combo%'");
+            $query=$this->db->prepare("SELECT * FROM T_COMBO WHERE ABR_PRODUCTO LIKE '%$cod_combo%'");
             $query->execute();
            if ($query) {
                $html = "";
@@ -103,7 +103,7 @@ class M_BuscarProductos{
 
 
         public function M_ComboItem($cod_combo){
-            $query=$this->db->prepare("SELECT * FROM V_COMBOITEM WHERE COD_COMBO = '$cod_combo'");
+            $query=$this->db->prepare("SELECT * FROM T_COMBO_ITEM WHERE COD_COMBO = '$cod_combo'");
             $query->execute();
             $cod_productos = "";
             if($query){

@@ -12,7 +12,7 @@
 
     public function mostrarPedido($cod_vendedor,$fecha,$tipo)
     {
-        $query = $this->bd->prepare("SELECT * FROM V_MOSTRAR_PEDIDO 
+        $query = $this->bd->prepare("SELECT * FROM T_PPEDIDO 
         WHERE COD_VENDEDORA = '$cod_vendedor' AND Fecha = '$fecha' AND EST_PEDIDO != 'A'  ORDER BY CODIGO DESC"); 
         $query->execute();
         $html = "";

@@ -72,7 +72,7 @@
 
     public function verificar($dni)
     {
-        $query = $this->bd->prepare("SELECT * FROM V_VERIFICAR_PEDIDO WHERE IDENTIFICACION = '$dni' and (EST_PEDIDO = 'P'
+        $query = $this->bd->prepare("SELECT * FROM T_PPEDIDO WHERE IDENTIFICACION = '$dni' and (EST_PEDIDO = 'P'
         or EST_PEDIDO = 'R')"); 
         $query->execute();
         $verificar = $query->fetch(PDO::FETCH_ASSOC);
