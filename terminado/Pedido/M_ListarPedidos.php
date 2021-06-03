@@ -7,15 +7,13 @@
     
     public function __construct($bd)
     {
-        $this->bd=DataDinamica::Contratos($bd);
+        $this->bd=DatabaseDinamica::Conectarbd($bd);
     }
 
     public function mostrarPedido($cod_vendedor,$fecha,$tipo)
     {
         $query = $this->bd->prepare("SELECT * FROM V_MOSTRAR_PEDIDO 
-        WHERE COD_VENDEDORA = :cod_vendedor AND Fecha = :fecha_actual AND EST_PEDIDO != 'A'  ORDER BY CODIGO DESC"); 
-        $query->bindParam("cod_vendedor",$cod_vendedor,PDO::PARAM_STR);
-        $query->bindParam("fecha_actual",$fecha,PDO::PARAM_STR);  
+        WHERE COD_VENDEDORA = '$cod_vendedor' AND Fecha = '$fecha' AND EST_PEDIDO != 'A'  ORDER BY CODIGO DESC"); 
         $query->execute();
         $html = "";
 
@@ -66,8 +64,7 @@
     public function mostrarPedidoItems($idpedido)
     {
         $query = $this->bd->prepare("SELECT * FROM V_MOSTRAR_PEDIDO_ITEM 
-        WHERE CODIGO =:idpedido"); 
-        $query->bindParam("idpedido",$idpedido,PDO::PARAM_STR);
+        WHERE CODIGO = '$idpedido'"); 
         $query->execute();
          $html = "";
             while ($row = $query->fetch()) {  

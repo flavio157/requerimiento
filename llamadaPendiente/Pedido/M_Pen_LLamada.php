@@ -7,16 +7,11 @@ require_once("../Funciones/f_funcion.php");
     
         public function __construct()
         {
-            $this->db=DataBase::Usuario();
+            $this->db=DataBase::Conectar();
         }
 
-
-
         public function M_LlamadasDta($cod_operadora,$ofi){
-            $query=$this->db->prepare("SELECT * FROM V_LLAMADA_PENDIENTE WHERE COD_OPERADORA = :cod_operadora
-            AND OFI_OPERADORA = :oficina");
-            $query->bindParam("cod_operadora", $cod_operadora, PDO::PARAM_STR);
-            $query->bindParam("oficina", $ofi, PDO::PARAM_STR);
+            $query=$this->db->prepare("SELECT * FROM V_LLAMADA_PENDIENTE WHERE COD_OPERADORA =".$cod_operadora." AND OFI_OPERADORA  ='$ofi'");
             $query->execute();
             $pendiente = $query->fetchAll(PDO::FETCH_ASSOC);
             if($query){
@@ -25,16 +20,10 @@ require_once("../Funciones/f_funcion.php");
         }
 
 
-
-
         public function M_pendiente($hora,$cod_operadora,$ofi)
         {
             $query=$this->db->prepare("SELECT * FROM V_LLAMADA_PENDIENTE 
-                    WHERE HORA_OPERADORA <= :hora AND COD_OPERADORA = :cod_operadora AND OFI_OPERADORA = :oficina");
-                  
-            $query->bindParam("hora", $hora, PDO::PARAM_STR);
-            $query->bindParam("cod_operadora", $cod_operadora, PDO::PARAM_STR);
-            $query->bindParam("oficina", $ofi, PDO::PARAM_STR);
+                    WHERE HORA_OPERADORA <='$hora' AND COD_OPERADORA = ".$cod_operadora." AND OFI_OPERADORA = '$ofi'");
             $query->execute();
             $pendiente = $query->fetch(PDO::FETCH_ASSOC);
             
@@ -43,7 +32,4 @@ require_once("../Funciones/f_funcion.php");
             }
         }
     }
-
-
-
 ?>

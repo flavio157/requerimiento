@@ -7,7 +7,7 @@ class M_BuscarProductos{
     
         public function __construct()
         {
-            $this->db=DataBase::Usuario();
+            $this->db=DataBase::Conectar();
         }
         
 
@@ -24,10 +24,7 @@ class M_BuscarProductos{
         
         
         public function M_VerificarRegalo($gramo,$cantidad){
-            $query=$this->db->prepare("SELECT * FROM V_PRODUCTO_REGALO WHERE UNIDAD_MEDIDA = :gramo 
-                                       AND CANTIDAD = :cantidad");
-            $query->bindParam("gramo",$gramo, PDO::PARAM_INT);
-            $query->bindParam("cantidad",$cantidad, PDO::PARAM_INT);                           
+            $query=$this->db->prepare("SELECT * FROM V_PRODUCTO_REGALO WHERE UNIDAD_MEDIDA = $gramo  AND CANTIDAD = $cantidad");                  
             $query->execute();
             $regalo =  $query->fetchAll();
             if ($query) {

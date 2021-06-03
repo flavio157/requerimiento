@@ -7,13 +7,12 @@ class M_BuscarProductos{
     
         public function __construct()
         {
-            $this->db=DataBase::Usuarios();
+            $this->db=DataBase::Conectar();
         }
         
         public function M_BuscarProducto($zona,$nom_producto)
         {
-            $query=$this->db->prepare("SELECT * FROM V_BUSCAR_PRODUCTO WHERE ZONA = :zona AND ABREVIATURA LIKE '%$nom_producto%'");
-            $query->bindParam("zona",$zona, PDO::PARAM_INT);
+            $query=$this->db->prepare("SELECT * FROM V_BUSCAR_PRODUCTO WHERE ZONA = $zona AND ABREVIATURA LIKE '%$nom_producto%'");
             $query->execute();
            if ($query) {
                $html = "";
@@ -33,22 +32,20 @@ class M_BuscarProductos{
             $consulta = "";
             
             if($cantidad < '10'){
-                $consulta = "SELECT * FROM V_POLITICA_PRECIOS WHERE ZONA = :zona AND CANTIDAD < 10
-                AND COD_PRODUCTO = :cod_producto";
+                $consulta = "SELECT * FROM V_POLITICA_PRECIOS WHERE ZONA = $zona AND CANTIDAD < 10
+                AND COD_PRODUCTO = '$codproducto'";
                 
             }else if($cantidad > '9' && $cantidad <= '19')
             {
-                $consulta = "SELECT * FROM V_POLITICA_PRECIOS WHERE ZONA = :zona AND CANTIDAD > 9
-                AND CANTIDAD <= 19 AND COD_PRODUCTO = :cod_producto";
+                $consulta = "SELECT * FROM V_POLITICA_PRECIOS WHERE ZONA = $zona AND CANTIDAD > 9
+                AND CANTIDAD <= 19 AND COD_PRODUCTO = '$codproducto'";
 
             }else if($cantidad >= '20'){
-                $consulta = "SELECT * FROM V_POLITICA_PRECIOS WHERE ZONA = :zona AND CANTIDAD = 20
-                             AND COD_PRODUCTO = :cod_producto";
+                $consulta = "SELECT * FROM V_POLITICA_PRECIOS WHERE ZONA = $zona AND CANTIDAD = 20
+                             AND COD_PRODUCTO = '$codproducto'";
             }
 
             $query=$this->db->prepare($consulta);
-            $query->bindParam("zona",$zona,PDO::PARAM_STR);
-            $query->bindParam("cod_producto", $codproducto, PDO::PARAM_INT); 
             $query->execute();
             $datosproducto = $query->fetch(PDO::FETCH_ASSOC);
             if($query){
@@ -63,23 +60,21 @@ class M_BuscarProductos{
         {   
             $consulta = "";
             if($cantidad >= '6' && $cantidad <= '9'){
-                $consulta = "SELECT * FROM V_POLITICA_BONOS WHERE ZONA = :zona AND CANTIDAD <= 9
-                AND COD_PRODUCTO = :cod_producto";
+                $consulta = "SELECT * FROM V_POLITICA_BONOS WHERE ZONA = $zona AND CANTIDAD <= 9
+                AND COD_PRODUCTO = '$codproducto'";
                 
             }else if($cantidad >= '10' && $cantidad <='19'){
-                $consulta = "SELECT * FROM V_POLITICA_BONOS WHERE ZONA = :zona AND CANTIDAD >= 10
-                AND CANTIDAD <= 19 AND COD_PRODUCTO = :cod_producto";
+                $consulta = "SELECT * FROM V_POLITICA_BONOS WHERE ZONA = $zona AND CANTIDAD >= 10
+                AND CANTIDAD <= 19 AND COD_PRODUCTO = '$codproducto'";
 
             }else if($cantidad >= '20'){
-                $consulta = "SELECT * FROM V_POLITICA_BONOS WHERE ZONA = :zona AND CANTIDAD = 20
-                AND COD_PRODUCTO = :cod_producto";
+                $consulta = "SELECT * FROM V_POLITICA_BONOS WHERE ZONA = $zona AND CANTIDAD = 20
+                AND COD_PRODUCTO = '$codproducto'";
             }
 
             if($consulta == ""){return 0;}
 
             $query=$this->db->prepare($consulta);
-            $query->bindParam("zona",$zona,PDO::PARAM_STR);
-            $query->bindParam("cod_producto", $codproducto, PDO::PARAM_INT); 
             $query->execute();
             $datosproducto = $query->fetch(PDO::FETCH_ASSOC);
           
@@ -108,8 +103,7 @@ class M_BuscarProductos{
 
 
         public function M_ComboItem($cod_combo){
-            $query=$this->db->prepare("SELECT * FROM V_COMBOITEM WHERE COD_COMBO = :cod_combo");
-            $query->bindParam("cod_combo",$cod_combo,PDO::PARAM_STR);
+            $query=$this->db->prepare("SELECT * FROM V_COMBOITEM WHERE COD_COMBO = '$cod_combo'");
             $query->execute();
             $cod_productos = "";
             if($query){
@@ -129,8 +123,7 @@ class M_BuscarProductos{
         }
 
         public function M_ComboProducto($cod_combo){
-            $query=$this->db->prepare("SELECT * FROM V_COMBOPRODUCTO WHERE combo = :cod_combo");
-            $query->bindParam("cod_combo",$cod_combo,PDO::PARAM_STR);
+            $query=$this->db->prepare("SELECT * FROM V_COMBOPRODUCTO WHERE combo = '$cod_combo'");
             $query->execute();
             $productos = $query->fetchAll();
             if($query){

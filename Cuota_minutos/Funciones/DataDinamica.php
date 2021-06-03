@@ -1,9 +1,8 @@
 <?php
-/*Contrato.php */
-class DataDinamica
+
+class DatabaseDinamica
 {
- 
-    public static  function Contrato($database){
+    public static  function Conectarbd($database){
         try {
            
             $server = "DESKTOP-PCSH8QU";

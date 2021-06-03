@@ -63,7 +63,6 @@ function buscarProducto(nombreproducto,zona) {
                         array = datos.split("&");
                         $('#nombreproducto').val(array[0]);
                         $("#precioproducto").val(array[1]);
-                        /*valorproducto = array[1];*/           /*descometar para mostrar el precio aotumaticamente */
                         $('#sugerencias').fadeOut(0); 
                         $("#cod_producto").val(id);
                         $("#G_promocion").removeAttr('disabled');
@@ -350,12 +349,15 @@ function validacionFrm() {
     tlf2validacion = validarTelefono(telefono2);
     exprecion = new RegExp(/([0-9])\1{6,}/);
    
-    if($("#txtnumero").val().length == 0){
+    if($("#slcdocumento").val() != "DNI" && $("#slcdocumento").val() != "RUC" ){
+        mensajesError("Seleccione el Tipo de Documento","mensajesgenerales");
+     
+    }else if($("#txtnumero").val().length == 0){
         mensajesError("Ingrese el DNI del cliente","mensajesgenerales");
         $('#txtnumero').focus();
 
-    }else if($("#slcdocumento").val() == "DNI" && $("#txtnumero").val().length < 8){
-        mensajesError("El DNI no puede ser menor a 8 digitos","mensajesgenerales");
+    }else if($("#slcdocumento").val() == "DNI" && ($("#txtnumero").val().length < 8 || $("#txtnumero").val().length > 8)){
+        mensajesError("El DNI no puede ser menor o mayor a 8 digitos","mensajesgenerales");
         $('#txtnumero').focus();
 
     }else if($("#slcdocumento").val() == "RUC" && $("#txtnumero").val().length < 11){
@@ -426,7 +428,6 @@ function validacionFrm() {
                    mensajesError("se necesitan mas datos en la dirección","mensajesgenerales");
                    $('#txtdireccion').focus();
                 }else{
-          /* console.log("se registro ");*/
              guardarPedido();
           
             }

@@ -8,7 +8,7 @@ class M_VerificarCuota
     
     public function __construct($basedatos)
     {
-        $this->db=DataDinamica::Contratos($basedatos);
+        $this->db=DatabaseDinamica::Conectarbd($basedatos);
     }
 
     public function VerificandoQuincena($cod_vendedor,$dias,$fec_ingreso)
@@ -26,12 +26,9 @@ class M_VerificarCuota
        
         $fech2 = $fechas[1];
         $dias =  $fechas[2];
-        
-         $query=$this->db->prepare("SELECT * FROM V_PEDIDO_MONTO WHERE VENDEDOR = :cod_vendedor and
-         FECHA >= :fecha_inicial and FECHA < :fecha_final");
-         $query->bindParam("cod_vendedor", $cod_vendedor, PDO::PARAM_STR);
-         $query->bindParam("fecha_inicial", $fech1, PDO::PARAM_STR);
-         $query->bindParam("fecha_final", $fech2, PDO::PARAM_STR);
+
+         $query=$this->db->prepare("SELECT * FROM V_PEDIDO_MONTO WHERE VENDEDOR =$cod_vendedor AND
+         FECHA >= '$fech1' and FECHA < '$fech2'");
          $query->execute();
          $montoTotal= 0;
          while ($result = $query->fetch()) {
@@ -47,10 +44,11 @@ class M_VerificarCuota
        } 
     }
 
+
+    
     public function CuotaPersonal($cod_usuario){
         try {
-            $query=$this->db->prepare("SELECT * FROM V_VERIFICAR_CUOTAPERSONAL WHERE COD_PERSONAL = :cod_usuario");
-            $query->bindParam("cod_usuario", $cod_usuario, PDO::PARAM_STR);
+            $query=$this->db->prepare("SELECT * FROM V_VERIFICAR_CUOTAPERSONAL WHERE COD_PERSONAL =$cod_usuario");
             $query->execute();
             $d_usuario = $query->fetch(PDO::FETCH_ASSOC);
         return $d_usuario;

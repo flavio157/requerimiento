@@ -6,7 +6,6 @@ require_once("M_Pen_Llamada_ofi.php");
     $oficina = $_POST['ofi'];
     $oficinalogin = $_POST['oficinalogin'];
 
-
     if($tipo == "tiempo"){
         C_Pen_LLamada::Llamadas($cod_operadora,$oficina,$oficinalogin);
     }else if ($tipo == "datos"){
@@ -19,7 +18,7 @@ require_once("M_Pen_Llamada_ofi.php");
         {
             $pendi = new M_Pen_Llamada_Ofi($ofi);
 
-            $llamada = $pendi->M_LlamadasDta($cod_operadora,$oficinalogin);
+            $llamada = $pendi->M_LlamadasDta($cod_operadora,trim($oficinalogin));
             $valor = ($llamada) ? "1" : "0";
 
             echo json_encode($valor,JSON_FORCE_OBJECT);
@@ -32,7 +31,7 @@ require_once("M_Pen_Llamada_ofi.php");
             $pendi = new M_Pen_Llamada_Ofi($ofi);
 
 
-            $pendientes = $pendi->M_pendiente($hora,$cod_operadora,$oficinalogin);
+            $pendientes = $pendi->M_pendiente($hora,$cod_operadora,trim($oficinalogin));
            
             if($pendientes != ""){
                 $pendientes = '1';

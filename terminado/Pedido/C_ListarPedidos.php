@@ -16,7 +16,6 @@
     class C_ListarPedidos
     { 
         static function mostrarPedido($cod_vendedor,$tipo,$oficina){
-            /*$bd = SMP2;*/
             $c_mostrarpedido = new M_ListarPedidos($oficina);
             $datos = $c_mostrarpedido->mostrarPedido($cod_vendedor,date("d-m-Y"),$tipo);
             if($datos == ""){$datos = "No hay Pedidos registrados";}

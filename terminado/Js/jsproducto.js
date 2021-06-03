@@ -11,6 +11,10 @@ $(document).ready(function(){
     obtenerprovincia();
     generarCodigo();
 
+    $("#dtfechapago").on("keydown",function () {
+        return false;
+    })
+
     $("#cerrarmodalProducto").click(function name() {
         eliminarArrayTemporal();
     })
@@ -124,7 +128,7 @@ $(document).ready(function(){
             if(cantidad != "" && cantidad != 0){
                 politicabonos(cantidad,codproducto);
             }
-        /*comentar politicaBonos para filtrar producto por precio web */
+      
       });
 
 
@@ -138,7 +142,10 @@ $(document).ready(function(){
                                     "</td><td>"+arrayproductos[i]['nombre']+ "</td><td>"+arrayproductos[i]['cantidad']+
                                     "</td><td>"+arrayproductos[i]['precio']+"</td><td>"+arrayproductos[i]['promocion']+"</td><td style='display: none;'>"+
                                     arrayproductos[i]['total'] +"</td>"
-                                    +"<td><button type='button' id='btneliminar' class='btn btn-primary btn-sm'>-</button></td></tr>";
+                                    +"<td><a class='btn btn-primary btn-sm ' id='btneliminar'>"+
+                                    "<i class='icon-trash' title='Align Right'></i>"+
+                                    "</a>"+
+                                    "</td></tr>";
                                     var btn = document.createElement("TR");
                                     btn.setAttribute('id', arrayproductos[i]['combo']);
                                 }else{
@@ -146,7 +153,10 @@ $(document).ready(function(){
                                     "</td><td>"+arrayproductos[i]['nombre']+ "</td><td>"+arrayproductos[i]['cantidad']+
                                     "</td><td>"+arrayproductos[i]['precio']+"</td><td>"+arrayproductos[i]['promocion']+"</td><td style='display: none;'>"+
                                     arrayproductos[i]['total'] +"</td>"
-                                    +"<td><button type='button' id='btneliminar' class='btn btn-primary btn-sm'>-</button></td></tr>";
+                                    +"<td><a class='btn btn-primary btn-sm ' id='btneliminar'>"+
+                                    "<i class='icon-trash' title='Align Right'></i>"+
+                                    "</a>"+
+                                    "</td></tr>";
                                     var btn = document.createElement("TR");
                                 }
                                 btn.innerHTML=fila;

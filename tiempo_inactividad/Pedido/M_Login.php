@@ -8,14 +8,13 @@ class M_Login
     
     public function __construct()
     {
-        $this->db=DataBase::Usuario();
+        $this->db=DataBase::Conectar();
     }
     
     public function Login($cod_usuario)
     {   
             
-            $query=$this->db->prepare("SELECT * FROM V_LOGIN WHERE COD_PERSONAL = :cod_usuario");
-            $query->bindParam("cod_usuario", $cod_usuario, PDO::PARAM_STR);
+            $query=$this->db->prepare("SELECT * FROM V_LOGIN WHERE COD_PERSONAL = $cod_usuario");
             $query->execute();
             $cod_usuario = $query->fetch(PDO::FETCH_ASSOC);
             f_regSession($cod_usuario['ANEXO_USUARIO'],$cod_usuario['COD_PERSONAL'],$cod_usuario['NOM_USUARIO'],$cod_usuario['OFICINA'],$cod_usuario['ZONA']);

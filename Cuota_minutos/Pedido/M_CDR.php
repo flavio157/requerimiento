@@ -8,16 +8,13 @@ class M_CDR
     
     public function __construct()
     {
-        $this->db=DataBase::Usuario();
+        $this->db=DataBase::Conectar();
     }
     
     public function CDR($fecha,$src,$dst)
     {       
-            $query=$this->db->prepare("SELECT * FROM CDR WHERE calldate >= :fecha AND calldate < GETDATE() AND
-            (src = :src OR dst = :dst)");
-            $query->bindParam("fecha", $fecha, PDO::PARAM_STR);
-            $query->bindParam("src", $src, PDO::PARAM_STR);
-            $query->bindParam("dst", $dst, PDO::PARAM_STR);
+            $query=$this->db->prepare("SELECT * FROM CDR WHERE calldate >= '$fecha' AND calldate < GETDATE() AND
+            (src = '$src' OR dst = '$dst')");
             $query->execute();
             $dato = $query->fetchAll();
             if($query){

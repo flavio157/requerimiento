@@ -7,7 +7,7 @@ class M_ListarCiudades{
     public function __construct($bd)
     {
         
-            $this->db=DataDinamica::Contratos($bd);
+        $this->db=DatabaseDinamica::Conectarbd($bd);
      
     }
     
@@ -24,8 +24,7 @@ class M_ListarCiudades{
     }
 
     public function M_Distrito($id_provincia){
-        $query=$this->db->prepare("SELECT * from V_DISTRITO WHERE COD_PROVINCIA = :provincia");
-        $query->bindParam("provincia", $id_provincia, PDO::PARAM_STR);
+        $query=$this->db->prepare("SELECT * from V_DISTRITO WHERE COD_PROVINCIA ='$id_provincia'");
         $query->execute();
         $datosDistrito = $query->fetchAll();
         if($datosDistrito){

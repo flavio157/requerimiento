@@ -1,6 +1,5 @@
 <?php
 date_default_timezone_set('America/Lima');
-require_once("M_VerificarCuota.php");
 require_once("M_Login.php");
 require_once("../Funciones/f_funcion.php");
 
@@ -19,7 +18,7 @@ require_once("../Funciones/f_funcion.php");
 class C_Login
 {
     public function C_usuario($cod_usuario){   
-        
+
         $m_login = new M_Login();
         $datosUsuario = $m_login->Login($cod_usuario);
        

@@ -1,6 +1,7 @@
 <?php
-/*Contrato.php */
-class DataDinamica
+
+/*DatabaseDinamica::Conectarbd($ofi)*/
+class DatabaseDinamica
 {
  
     public static  function Conectarbd($database){
