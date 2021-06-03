@@ -422,7 +422,7 @@ function nuevfech($dias,$fechaingreso){
       
 
         if($fechaInord >= $fechaSegquincena &&  $fecAct >=  $fech){  
-            $cantidadDias =cantidadDias($fechaInord,$fecAct);
+            $cantidadDias =cantidadDias($fechaInord,$fecAct->format("d-m-Y"));
             return array($fechaIngOrd,$fechaActual,$cantidadDias);
             
         }else if($fecAct >= $fecqui &&  $fechaInord <= $fechaSegquincena ){
