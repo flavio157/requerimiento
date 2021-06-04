@@ -302,3 +302,8 @@ insert into T_PRODUCTO_PRECIO values('00594','2','20','10','73.92')
 insert into T_PRODUCTO_PRECIO values('00594','3','6','2','73.92')
 insert into T_PRODUCTO_PRECIO values('00594','3','10','5','73.92')
 insert into T_PRODUCTO_PRECIO values('00594','3','20','10','73.92')
+
+
+
+/*AP9 ya no se encuentra en los producto*/
+update T_PRODUCTO set EST_PRODUCTO = 'I' where COD_PRODUCTO = '00432'
