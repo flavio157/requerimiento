@@ -1,7 +1,7 @@
 <?php
 date_default_timezone_set('America/Lima');
-require_once("../Funciones/DataDinamica.php");
-require_once("../Funciones/f_funcion.php");
+require_once("../funciones/DataDinamica.php");
+require_once("../funciones/f_funcion.php");
 class M_VerificarCuota
 {
     private $db;

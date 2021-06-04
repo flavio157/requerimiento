@@ -1,7 +1,7 @@
 <?php
 date_default_timezone_set('America/Lima');
 require_once("M_CDR.php");
-require_once("../Funciones/f_funcion.php");
+require_once("../funciones/f_funcion.php");
 
 
    $src = $_POST['src'];

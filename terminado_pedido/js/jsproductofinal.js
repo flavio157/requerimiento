@@ -298,10 +298,11 @@ $(document).ready(function(){
             completarContrato(nr_contrato); 
         }  
     });
+
+    $('#txtcontrato').on('input', function () { 
+        this.value = this.value.replace(/[^0-9a-zA-Z]/g,'');
+    });
 })
-
-
-
 
 
 function buscarProducto(nombreproducto,zona) {
@@ -375,8 +376,6 @@ function buscarProducto(nombreproducto,zona) {
     }
 
 }
-
-
 
 
 
@@ -755,7 +754,6 @@ function guardarPedido() {
             data:data.serialize()+"&accion=guardar&array="+JSON.stringify(datosproductos)+
                 "&codPersonal="+codpersonal+"&oficina="+oficina, 
             success: function(response){
-              
                 var obj = JSON.parse(response);
                 if(obj["estado"] === "error"){
                     mensajesError(obj['mensaje'],"mensajesgenerales")

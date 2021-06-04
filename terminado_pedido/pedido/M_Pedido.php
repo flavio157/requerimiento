@@ -1,5 +1,6 @@
 <?php
-   require_once("../Funciones/DataDinamica.php");
+   require_once("../funciones/DataDinamica.php");
+   require_once("../funciones/f_funcion.php");
 
    class M_Pedidos 
    {
@@ -9,24 +10,23 @@
     {
         $this->bd=DatabaseDinamica::Conectarbd($bd);
     }
-    
-    public function GuardarPedido($fecha,$cod_vendedora,$tipo_documento,$identificacion,
+
+    public function GuardarPedido($cod_vendedora,$tipo_documento,$identificacion,
     $cliente,$direccion,$referencia,$contacto,$telefono,$entrega,$fcancelacion,$est_pedido,$observacion,
     $n_productos,$cod_distrito,$num_contrato,$cod_provincia,$telefono2,$contado,$dataproductos){
-    $nuevaFecha = date("d-m-Y", strtotime($fcancelacion));
-        
+    $nuevaFecha = retunrFechaSqlphp($fcancelacion);
+    $this->bd->beginTransaction();
         try { 
-            $this->bd->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-            $this->bd->beginTransaction();
-            $query1=$this->bd->prepare("INSERT INTO T_PPEDIDO(FECHA,COD_VENDEDORA,
+            $query1=$this->bd->prepare("INSERT INTO T_PPEDIDO(COD_VENDEDORA,
             TIPO_DOCUMENTO,IDENTIFICACION,CLIENTE,DIRECCION,REFERENCIA,CONTACTO,TELEFONO,ENTREGA,
             FCANCELACION,EST_PEDIDO,OBSERVACION,N_PRODUCTOS,
             COD_DISTRITO,NUM_CONTRATO,COD_PROVINCIA,TELEFONO2,CONTADO) values 
             
-            ('$fecha','$cod_vendedora','$tipo_documento','$identificacion','$cliente','$direccion',
-            '$referencia','$contacto','$telefono','$entrega','$nuevaFecha','$est_pedido','$observacion',$n_productos,
+            ('$cod_vendedora','$tipo_documento','$identificacion','$cliente','$direccion',
+            '$referencia','$contacto','$telefono','$entrega','$nuevaFecha','$est_pedido','$observacion','$n_productos',
             '$cod_distrito','$num_contrato','$cod_provincia','$telefono2','$contado')");
             $query1->execute();
+       
            
     
             $ultimocodigo = $this->UltimoRegistro($cod_vendedora);
@@ -53,8 +53,9 @@
           return $guardado;
           
         } catch (Exception $e) {
-            echo $e;
             $this->bd->rollBack();
+            echo $e;
+            
         }
     }
 

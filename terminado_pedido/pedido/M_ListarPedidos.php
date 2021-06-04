@@ -1,5 +1,5 @@
 <?php
-   require_once("../Funciones/DataDinamica.php");
+   require_once("../funciones/DataDinamica.php");
 
    class M_ListarPedidos 
    {
@@ -10,7 +10,7 @@
         $this->bd=DatabaseDinamica::Conectarbd($bd);
     }
 
-    public function mostrarPedido($cod_vendedor,$fecha,$tipo)
+    public function mostrarPedido($cod_vendedor,$fecha)
     {
         $query = $this->bd->prepare("SELECT * FROM T_PPEDIDO 
         WHERE COD_VENDEDORA = '$cod_vendedor' AND Fecha = '$fecha' AND EST_PEDIDO != 'A'  ORDER BY CODIGO DESC"); 

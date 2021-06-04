@@ -1,6 +1,6 @@
 <?php
-require_once("../Funciones/Database.php");
-require_once("../Funciones/f_funcion.php");
+require_once("../funciones/Database.php");
+require_once("../funciones/f_funcion.php");
 class M_CDR
 {
     

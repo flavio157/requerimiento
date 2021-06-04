@@ -1,6 +1,6 @@
 <?php
     require_once("M_Pedido.php");
-    require_once("../Funciones/f_funcion.php");
+    require_once("../funciones/f_funcion.php");
 
    
 
@@ -29,8 +29,8 @@
         
         $dataproductos = json_decode($_POST['array']);
         $provincia = $_POST["slcciudad"];
-       
-        guardarPedidos::guardarpedido(trim($oficina),trim($tipo_documento),trim($codPersonal),
+
+        guardarPedidos::validacion(trim($oficina),trim($tipo_documento),trim($codPersonal),
         trim($identificacion),trim($cliente),trim($direccion),trim($referencia),
         trim($contacto),trim($telefono),trim($entrega),trim($fcancelacion) ,trim($est_pedido),
         trim($cod_distrito),trim($num_contrato),
@@ -41,12 +41,33 @@
 
     class guardarPedidos
     { 
+
+        static function validacion($oficina,$tipo_documento,$codPersonal,
+            $identificacion,$cliente,$direccion,$referencia,$contacto,$telefono,$entrega,
+            $fcancelacion,$est_pedido,$cod_distrito,$num_contrato,
+            $cod_provincia,$telefono2,$condicion,$dataproductos){
+
+             $contrato = preg_match("/^[a-zA-Z0-9]+$/", $num_contrato);
+             if($contrato != 0){
+                    guardarPedidos::guardarpedido($oficina,$tipo_documento,$codPersonal,
+                    $identificacion,$cliente,$direccion,$referencia,$contacto,$telefono,$entrega,
+                    $fcancelacion,$est_pedido,$cod_distrito,$num_contrato,
+                    $cod_provincia,$telefono2,$condicion,$dataproductos);
+             }else{
+                $buscarProducto = array(
+                    'estado' => 'error',
+                    'mensaje' => 'Error al registrar el pedido'
+                ); 
+                echo json_encode($buscarProducto,JSON_FORCE_OBJECT);
+             }
+            
+        }
+        
         static function guardarpedido($oficina,$tipo_documento,$codPersonal,
         $identificacion,$cliente,$direccion,$referencia,$contacto,$telefono,$entrega,
         $fcancelacion,$est_pedido,$cod_distrito,$num_contrato,
         $cod_provincia,$telefono2,$condicion,$dataproductos){
             
-           /* $bd = 'SMP2';*/
             $c_guardar = new M_Pedidos($oficina);
             $verificar = $c_guardar->verificar($identificacion);
      
@@ -54,7 +75,7 @@
                 $observacion = observacionProducto($dataproductos);
                 $total = TotalProducto($dataproductos);
     
-                $c_pedido = $c_guardar->guardarpedido(date("d-m-Y"),$codPersonal,$tipo_documento,
+                $c_pedido = $c_guardar->guardarpedido($codPersonal,$tipo_documento,
                 $identificacion,$cliente,$direccion,$referencia,$contacto,$telefono,$entrega,$fcancelacion,
                 $est_pedido,$observacion,$total,$cod_distrito,$num_contrato,$cod_provincia,$telefono2,$condicion,$dataproductos);
              

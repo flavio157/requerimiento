@@ -1,6 +1,6 @@
 <?php
-require_once("../Funciones/DataDinamica.php");
-require_once("../Funciones/f_funcion.php");
+require_once("../funciones/DataDinamica.php");
+require_once("../funciones/f_funcion.php");
     class M_Pen_Llamada_Ofi{
 
         private $db;

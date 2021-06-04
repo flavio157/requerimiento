@@ -1,5 +1,5 @@
 <?php
-require_once("../Funciones/f_funcion.php");
+require_once("../funciones/f_funcion.php");
 
 
    $verificar = $_POST['verificar'];

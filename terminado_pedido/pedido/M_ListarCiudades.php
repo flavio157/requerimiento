@@ -1,5 +1,5 @@
 <?php
-require_once("../Funciones/DataDinamica.php");
+require_once("../funciones/DataDinamica.php");
 class M_ListarCiudades{
       
     private $db;

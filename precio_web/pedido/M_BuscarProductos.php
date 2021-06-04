@@ -1,5 +1,5 @@
 <?php
-    require_once("../Funciones/DataBase.php");
+    require_once("../funciones/DataBase.php");
 
 class M_BuscarProductos{
 
