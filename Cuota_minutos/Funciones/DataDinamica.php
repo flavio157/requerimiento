@@ -2,6 +2,7 @@
 
 class DatabaseDinamica
 {
+    /*DatabaseDinamica::Conectarbd($ofi)*/
     public static  function Conectarbd($database){
         try {
            

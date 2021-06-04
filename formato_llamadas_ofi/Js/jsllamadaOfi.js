@@ -45,7 +45,9 @@ function llamadasPendientes() {
             oficinalogin : ofilogin
         },
         success: function name(c) {
+            console.log(c);
             var o = JSON.parse(c);
+            console.log(o);
             if(o == 1){
                 StarInterval();
             }else{
@@ -78,6 +80,7 @@ function setTime() {
             oficinalogin : ofilogin
         },
         success: function name(e) {
+            console.log(e);
            var c = JSON.parse(e);
             if(c != "0"){
                 $("#modalPrueba").modal('show');

@@ -10,9 +10,9 @@ if (session_status() == PHP_SESSION_NONE) {
 } */
 date_default_timezone_set('America/Lima');
 $fcha = date("Y-m-d",strtotime(date("Y-m-d")."+ 1 days"));
-$ofi = $_SESSION["ofi"];
+/*$ofi = $_SESSION["ofi"];
 $zon = $_SESSION["zon"];
-$cod = $_SESSION["cod"];
+$cod = $_SESSION["cod"];*/
 ?>
 
 <html>
@@ -30,9 +30,9 @@ $cod = $_SESSION["cod"];
     <body>
     <div class="main">
         <form class="row g-3"  id="frmpedidos">
-                <input type="text" id="vroficina" style="display: none;" value="<?php echo $ofi?>"/>
+               <!-- <input type="text" id="vroficina" style="display: none;" value="<?php echo $ofi?>"/>
                 <input type="text" id="vrzona" style="display: none;" value="<?php echo  $zon?>"/>
-                <input type="text" id="vrcodpersonal" style="display: none;" value="<?php echo  $cod?>"/>
+                <input type="text" id="vrcodpersonal" style="display: none;" value="<?php echo  $cod?>"/>-->
                 <div id="mensajesgenerales">
                                    
                 </div>
@@ -72,7 +72,8 @@ $cod = $_SESSION["cod"];
                 </div>
                 <div class="col-12">
                     <label for="formdireccion" class="form-label">DIRECCIÓN</label>
-                    <input type="text" class="form-control" name="txtdireccion" id="txtdireccion" >
+                    <input type="file" accept="image/*" capture="camera">
+                    <!--<input type="text" class="form-control" name="txtdireccion" id="txtdireccion" >-->
                 </div>
                 
                 <div class="col-12">

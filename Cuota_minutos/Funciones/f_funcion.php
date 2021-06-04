@@ -525,7 +525,7 @@ function f_Cuotas($promedioCuota,$cuotas,$dias){
 
     function seguMinu($datoscdr){
        $minutos = $datoscdr / 60;
-        return round($minutos,2);
+       return round($minutos,2);
     }   
 
 
@@ -535,8 +535,8 @@ function f_Cuotas($promedioCuota,$cuotas,$dias){
         }else{
             return true;
         }
+       
     }
-
 
     function restarDias($fechaactual,$diasresta){
         for($i = 1 ; $i <= $diasresta ; $i++){ 

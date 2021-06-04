@@ -2,6 +2,8 @@
  /*Database::Conectar()*/
 class DataBase 
 {
+    
+
     public static  function Conectar(){
             try {
                 $base_de_datos = new PDO("sqlsrv:server=DESKTOP-PCSH8QU;database=Almacenes", "", "sa");

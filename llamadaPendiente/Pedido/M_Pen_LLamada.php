@@ -10,6 +10,8 @@ require_once("../Funciones/f_funcion.php");
             $this->db=DataBase::Conectar();
         }
 
+
+
         public function M_LlamadasDta($cod_operadora,$ofi){
             $query=$this->db->prepare("SELECT * FROM V_LLAMADA_PENDIENTE WHERE COD_OPERADORA =".$cod_operadora." AND OFI_OPERADORA  ='$ofi'");
             $query->execute();
@@ -18,6 +20,8 @@ require_once("../Funciones/f_funcion.php");
                 return  $pendiente;
             }
         }
+
+
 
 
         public function M_pendiente($hora,$cod_operadora,$ofi)

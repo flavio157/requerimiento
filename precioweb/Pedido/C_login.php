@@ -22,9 +22,7 @@ class C_Login
         
         $m_login = new M_Login();
         $datosUsuario = $m_login->Login($cod_usuario);
-       
-
-     
+    
 
         if($datosUsuario){
             return header("Location: index.php");

@@ -1,7 +1,9 @@
 <?php
 
+/*usuarios.php*/
 class DataBase 
 {
+     /*Database::Conectar()*/
     public static  function Conectar(){
             try {
                 $base_de_datos = new PDO("sqlsrv:server=DESKTOP-PCSH8QU;database=Almacenes", "", "sa");

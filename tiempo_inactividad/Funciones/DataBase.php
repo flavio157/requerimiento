@@ -1,10 +1,11 @@
 <?php
- /*Database::Conectar()*/
+
+/*usuarios.php*/
 class DataBase 
 {
     
 
-    public static  function Conectar(){
+    public static  function Usuario(){
             try {
                 $base_de_datos = new PDO("sqlsrv:server=DESKTOP-PCSH8QU;database=Almacenes", "", "sa");
                 $base_de_datos->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);

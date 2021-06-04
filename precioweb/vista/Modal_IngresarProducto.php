@@ -40,8 +40,6 @@
                         <div class="col">
                             <label for="formpromocion" class="form-label">GRAMOS</label>
                             <input type="number" class="form-control" name="G_gramo" autocomplete="off" id="G_gramo" disabled=true>
-                            <!--<label for="formpromocion" class="form-label">PROMOCION</label>
-                            <input type="number" class="form-control" name="G_promocion" autocomplete="off" id="G_promocion">!-->
                         </div>
                         <div class="col">
                                 <label for="formfpago" class="form-label">TOTAL</label>

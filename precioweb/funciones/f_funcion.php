@@ -375,62 +375,51 @@ function RestriccionOficina($total,$permiso,$tgeneral){
 
 
 function nuevfech($dias,$fechaingreso){
-    /* $dias = 2;*/
-     date_default_timezone_set('America/Lima');
-     $nvafech = explode("-",$fechaingreso);
-     $fechaPriquin = '12'."-".date("m")."-".date("Y");
-     $mes = (date("m") <= '9')? '0'.(date("m")-1) : (date("m")-1);
-     $fechaSegquin = '27'."-".$mes."-".date("Y");
-     $fechaIngOrd = $nvafech[2]."-".$nvafech[1]."-".$nvafech[0];
-     $fechaInord= new DateTime($fechaIngOrd);
-     $fechaPriquicena = new DateTime($fechaPriquin);
-     $fechaSegquincena = new DateTime($fechaSegquin);
- 
-     $fechaActual = date("d")."-".date("m")."-".date("Y");
-     $fecAct = new DateTime($fechaActual);
-    
-     $dias1 = (evaluarfechIni($fechaPriquin)) ? $dias + 1 : $dias;
-     $dias2 = (evaluarfechIni($fechaSegquin)) ? $dias + 1 : $dias;
+   /* $dias = 2;*/
+    date_default_timezone_set('America/Lima');
+    $nvafech = explode("-",$fechaingreso);
+    $fechaPriquin = '12'."-".date("m")."-".date("Y");
+    $mes = (date("m") <= '9')? '0'.(date("m")-1) : (date("m")-1);
+    $fechaSegquin = '27'."-".$mes."-".date("Y");
+    $fechaIngOrd = $nvafech[2]."-".$nvafech[1]."-".$nvafech[0];
+    $fechaInord= new DateTime($fechaIngOrd);
+    $fechaPriquicena = new DateTime($fechaPriquin);
+    $fechaSegquincena = new DateTime($fechaSegquin);
+
+    $fechaActual = date("d")."-".date("m")."-".date("Y");
+    $fecAct = new DateTime($fechaActual);
    
-   
- 
-     if($fecAct >= $fechaPriquicena && $fechaActual <= '26'."-".date("m")."-".date("Y")){
- 
-         if($fechaInord >= $fechaPriquicena && 
-         $fechaActual >= date("d-m-Y",strtotime($fechaIngOrd."+".$dias."days"))){ 
-             
-             $cantidadDias = cantidadDias($fechaInord,$fecAct->format("d-m-Y"));
-             return array($fechaIngOrd,$fechaActual,$cantidadDias);
- 
-         }else if($fecAct >= date("d-m-Y",strtotime($fechaPriquin."+".$dias1."days")) && 
-         $fechaInord <= $fechaPriquicena){
-             $cantidadDias = cantidadDias($fechaPriquicena,$fecAct->format("d-m-Y"));
-             return array($fechaPriquin,$fechaActual,$cantidadDias);
-         }
-     }else if($fecAct >= $fechaSegquincena){
-        
-         
-         $fech= new DateTime (date("d-m-Y",strtotime($fechaIngOrd."+".$dias."days")));
-         if(date("d") >= 01 && date("d") < 27){
-             $fechaSegquin = '27'."-".$mes."-".date("Y");
-             $fechaSegquincena = new DateTime($fechaSegquin);
-         }else if(date("d") >= 27  ){
-             $fechaSegquin = '27'."-".date("m")."-".date("Y");
-             $fechaSegquincena = new DateTime($fechaSegquin);
-         }
-         $fecqui = new DateTime(date("d-m-Y",strtotime($fechaSegquin."+".$dias2."days")));
-       
- 
-         if($fechaInord >= $fechaSegquincena &&  $fecAct >=  $fech){  
-             $cantidadDias =cantidadDias($fechaInord,$fecAct->format("d-m-Y"));
-             return array($fechaIngOrd,$fechaActual,$cantidadDias);
-             
-         }else if($fecAct >= $fecqui &&  $fechaInord <= $fechaSegquincena ){
-             $cantidadDias =cantidadDias($fechaSegquincena,$fechaActual );
-             return array($fechaSegquincena,$fechaActual,$cantidadDias);
-         }
-     }
- }
+    $dias1 = (evaluarfechIni($fechaPriquin)) ? $dias + 1 : $dias;
+    $dias2 = (evaluarfechIni($fechaSegquin)) ? $dias + 1 : $dias;
+  
+    if($fecAct >= $fechaPriquicena && $fechaActual <= '26'."-".date("m")."-".date("Y")){
+
+        if($fechaInord >= $fechaPriquicena && 
+        $fechaActual >= date("d-m-Y",strtotime($fechaIngOrd."+".$dias."days"))){ 
+            
+            $cantidadDias = cantidadDias($fechaInord,$fecAct);
+            return array($fechaIngOrd,$fechaActual,$cantidadDias);
+
+        }else if($fecAct >= date("d-m-Y",strtotime($fechaPriquin."+".$dias1."days")) && 
+        $fechaInord <= $fechaPriquicena){
+            $cantidadDias = cantidadDias($fechaPriquicena,$fecAct);
+            return array($fechaPriquin,$fechaActual,$cantidadDias);
+        }
+    }else if($fecAct >= $fechaSegquincena){
+        $fech= new DateTime (date("d-m-Y",strtotime($fechaIngOrd."+".$dias."days")));
+
+        if($fechaInord >= $fechaSegquincena &&  $fecAct >=  $fech){   
+           
+            $cantidadDias =cantidadDias($fechaInord,$fecAct);
+            return array($fechaIngOrd,$fechaActual,$cantidadDias);
+            
+        }else if($fecAct >= date("d-m-Y",strtotime($fechaSegquin."+".$dias2."days")) && 
+            $fechaInord <= $fechaSegquincena){
+            $cantidadDias =cantidadDias($fechaSegquincena,$fecAct);
+            return array($fechaSegquin,$fechaActual,$cantidadDias);
+        }
+    }
+}
 
 
 
@@ -447,7 +436,6 @@ function evaluarfechIni($fechaIngOrd){
 
 
 function cantidadDias($fechaQuincena,$fechaActual){
-    $fechaActual = new DateTime($fechaActual);
     $dias = $fechaQuincena->diff($fechaActual);
     $contador = 0;
     for ($i=1; $i <= $dias->days ; $i++) { 
@@ -465,43 +453,32 @@ function f_Cuotas($promedioCuota,$cuotas,$dias){
     date_default_timezone_set('America/Lima');
     $fechaActual = date("d")."-".date("m")."-".date("Y");
     $mes = (date("m") <= '9')? '0'.(date("m")-1) : (date("m")-1);
-    
-    
-    if(date("d") >= 01 && date("d") < 27){
-        $fechaSegquin = '27'."-".$mes."-".date("Y");
-        $fechaSegquincena = new DateTime($fechaSegquin);
-    }else if(date("d") >= 27  ){
-        $fechaSegquin = '27'."-".date("m")."-".date("Y");
-        $fechaSegquincena = new DateTime($fechaSegquin);
-    }
-
+    $fechaSegquin = '27'."-".$mes."-".date("Y");
+    $fechaActual2 = new DateTime($fechaActual);
+    $fechaSegquincena = new DateTime($fechaSegquin);
+  
+   
     if($cuotas != '0' && $cuotas != null){
-        $fechaActual2 = new DateTime($fechaActual);
-        $restriccion  =  new  DateTime(date("d-m-Y",strtotime($promedioCuota[0]."+".$dias."days")));
-        
             if($fechaActual >= '12'."-".date("m")."-".date("Y") && 
                $fechaActual <= '26'."-".date("m")."-".date("Y") &&
                $fechaActual >= date("d-m-Y",strtotime($promedioCuota[0]."+".$dias."days")) &&
                $promedioCuota[1] < $cuotas)
             {
             
-                return false ;
-                /*print_r("USUARIO BLOQUEADO");*/
-               
+                print_r("USUARIO BLOQUEADO");
+                /*return header("Location:http://localhost:8080/requerimiento/vista/bloqueo.php");*/
             }else if($fechaActual2 >= $fechaSegquincena && 
-                    $fechaActual2 >= $restriccion &&
+                    $fechaActual2 >= date("d-m-Y",strtotime($promedioCuota[0]."+".$dias."days")) &&
                     $promedioCuota[1] < $cuotas){
 
-                return false;      
-                /*echo "USUARIO BLOQUEADO";*/
-                
+                echo "USUARIO BLOQUEADO";
+                /*return header("Location:http://localhost:8080/requerimiento/vista/bloqueo.php");*/
             }else{
-                return true;
-                /*print_r("SIN RESTRICCION");*/
+                print_r("SIN RESTRICCION");
+                /*return header("Location: http://localhost:8080/requerimiento/vista/ventana.php");*/
             } 
         }else{
-            return false;
-              /*print_r("NO SE ESPECIFICO CUOTA AL USUARIO");/*
+            print_r("NO SE ESPECIFICO CUOTA AL USUARIO");
               /*return header("Location:http://localhost:8080/requerimiento/vista/Advertencia.php");*/
         }
 }
@@ -538,31 +515,4 @@ function f_Cuotas($promedioCuota,$cuotas,$dias){
         return $total; 
 
     }
-
-    function seguMinu($datoscdr){
-        $minutos = $datoscdr / 60;
-         return round($minutos,2);
-     }   
- 
- 
-     function verificarCuotaLlamadas($Cantminutos,$CantMinRequeidos){
-         if($Cantminutos < $CantMinRequeidos){
-             return "false";
-         }else{
-             return "true";
-         }
-     }
- 
-
-     function restarDias($fechaactual,$diasresta){
-        for($i = 1 ; $i <= $diasresta ; $i++){ 
-            $retufch =  date("d-m-Y",strtotime($fechaactual->format("d-m-Y")."-".$i."days")); 
-            if(date('l',strtotime($retufch)) == 'Sunday'){
-                $diasresta++;
-            }
-        }
-        return $diasresta;
-    }
-
-
   ?>

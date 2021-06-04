@@ -63,7 +63,7 @@
 
     public function UltimoRegistro($cod_vendedora)
     {
-        $query = $this->bd->prepare(" SELECT TOP 1 * FROM T_PPEDIDO WHERE COD_VENDEDORA = '$cod_vendedora' ORDER BY CODIGO DESC"); 
+        $query = $this->bd->prepare("SELECT TOP 1 * FROM T_PPEDIDO WHERE COD_VENDEDORA = '$cod_vendedora' ORDER BY CODIGO DESC"); 
         $query->execute();
         $ultimoregistro =  $query->fetch(PDO::FETCH_ASSOC);
         return $ultimoregistro;

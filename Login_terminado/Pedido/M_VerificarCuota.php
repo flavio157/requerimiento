@@ -48,7 +48,7 @@ class M_VerificarCuota
     
     public function CuotaPersonal($cod_usuario){
         try {
-            $query=$this->db->prepare("SELECT * FROM T_PERSONAL WHERE COD_PERSONAL =$cod_usuario");
+            $query=$this->db->prepare("SELECT * FROM V_VERIFICAR_CUOTAPERSONAL WHERE COD_PERSONAL =$cod_usuario");
             $query->execute();
             $d_usuario = $query->fetch(PDO::FETCH_ASSOC);
         return $d_usuario;

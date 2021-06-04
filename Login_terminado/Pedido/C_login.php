@@ -37,9 +37,11 @@ class C_Login
         }else{
            $montoTotal = $m_login->VerificarCallCenter($datosUsuario['COD_PERSONAL'],$dias,$montoSMP['FEC_INGRESO'],$oficina);
         }
+           
         
-        $retur =  f_Cuotas($montoTotal,$montoSMP['CUOTA'], $dias) ; 
-        echo $retur;
+         $retur =  f_Cuotas($montoTotal,$montoSMP['CUOTA'], $dias) ; 
+         echo $retur;
+
        }else{
            return header("Location: ../index.php");
         }
