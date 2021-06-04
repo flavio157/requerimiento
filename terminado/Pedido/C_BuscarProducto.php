@@ -40,19 +40,24 @@ class C_BuscarProducto
         $M_buscarproducto = new M_BuscarProductos();
             if(substr($nomproducto, 0, 2) == "CM"){
                 $c_cod = $M_buscarproducto->M_Combo($nomproducto);
-                $datos  = array(
-                    'estado' => "combo",
-                    'combo' => $c_cod,
-                    );
+                $html="";
+                foreach($c_cod as $combo){
+                    $html.= '<div><a class="suggest-element" data="'.$combo['PRECIO'].'"
+                    class ="'.$combo['COD_COMBO'].'" id="'.$combo['NOM_COMPLETO'].'">'.$combo['NOM_COMPLETO'].'</a></div>';
+                }
             }else{
                
                 $c_cod = $M_buscarproducto->M_BuscarProducto($zona,$nomproducto);
-                $datos  = array(
-                    'estado' => 'productos',
-                    'producto' => $c_cod,
-                    );
+                $html="";
+                foreach($c_cod as $producto){
+                    $html.= '<div><a class="suggest-element" data="'.$producto['DES_PRODUCTO'].'&'.$producto['PRECIO'].'"  
+                            id="'.$producto['CODIGO'].'">'.$producto['DES_PRODUCTO'].'</a></div>';
+                }
+
+              
             }
-            echo json_encode($datos,JSON_FORCE_OBJECT);
+            echo $html;
+         
         
     }
 
@@ -112,8 +117,6 @@ class C_BuscarProducto
             );
             echo json_encode($datos,JSON_FORCE_OBJECT);
     }
-
-
 }
 
 ?>

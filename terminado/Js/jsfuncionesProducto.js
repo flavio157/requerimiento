@@ -10,21 +10,20 @@ function buscarProducto(nombreproducto,zona) {
                 "zona" : zona
             } ,
             success:  function(response){
-               if(response != ""){
-                    var obj = JSON.parse(response);
-                     if(obj['combo'] !== ""){
+                $("#sugerencias").fadeIn(0).html(response);
+                if(response != ""){
                         $("#sugerencias").height(300);
                         $("#sugerencias").css('overflow','scroll');
-                    }else{
+                }else{
                         $("#sugerencias").height(0);
                     }
-                }
 
-                $('#sugerencias').fadeIn(0).html(obj['combo']);
+                $('#sugerencias').fadeIn(0).html(response);
+               
                 
                 $('.suggest-element').on('click', function(){
                     var id =  $(this).attr('id');
-                    var precio =$(this).attr('data-')
+                    var precio =$(this).attr('data')
                     $("#nombreproducto").val(id);
                     $("#precioproducto").val(precio)
                     valorproducto = precio;
@@ -47,19 +46,17 @@ function buscarProducto(nombreproducto,zona) {
                 "zona" : zona
             } ,
             success: function name(response) {
+                $("#sugerencias").fadeIn(0).html(response);
                 if(response != ""){
-                    var obj = JSON.parse(response);
-                     if(obj['producto'] !== "" ){
-                        $("#sugerencias").height(300);
-                        $("#sugerencias").css('overflow','scroll');
-                    }else{
-                        $("#sugerencias").height(0);
-                    }
+                    $("#sugerencias").height(300);
+                    $("#sugerencias").css('overflow','scroll');
+                }else{
+                    $("#sugerencias").height(0);
                 }
-                    $('#sugerencias').fadeIn(0).html(obj['producto']);
+
                     $('.suggest-element').on('click', function(){
                         var id =  $(this).attr('id');
-                        var datos = $('#'+id).attr('data-');
+                        var datos = $('#'+id).attr('data');
                         array = datos.split("&");
                         $('#nombreproducto').val(array[0]);
                         $("#precioproducto").val(array[1]);
@@ -72,6 +69,8 @@ function buscarProducto(nombreproducto,zona) {
     }
 
 }
+
+
 
 
 

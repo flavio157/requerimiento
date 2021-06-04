@@ -15,12 +15,7 @@ class M_BuscarProductos{
             $query=$this->db->prepare("SELECT * FROM V_BUSCAR_PRODUCTO WHERE ZONA = $zona AND ABREVIATURA LIKE '%$nom_producto%'");
             $query->execute();
            if ($query) {
-               $html = "";
-                while ($row = $query->fetch()) {                
-                    $html .= '<div><a class="suggest-element" data-="'.$row['DES_PRODUCTO'].'&'.$row['PRECIO'].'"  
-                    id="'.$row['CODIGO'].'">'.$row['DES_PRODUCTO'].'</a></div>';
-                }
-                return $html ;
+                return $query->fetchAll();
                 $query->closeCursor();
                 $query = null;
             }
@@ -90,12 +85,7 @@ class M_BuscarProductos{
             $query=$this->db->prepare("SELECT * FROM V_BUSCAR_COMBO WHERE ABR_PRODUCTO LIKE '%$cod_combo%'");
             $query->execute();
            if ($query) {
-               $html = "";
-                while ($row = $query->fetch()) {                
-                    $html .= '<div><a class="suggest-element" data-="'.$row['PRECIO'].'"
-                    class ="'.$row['COD_COMBO'].'" id="'.$row['NOM_COMPLETO'].'">'.$row['NOM_COMPLETO'].'</a></div>';
-                }
-                return $html ;
+                return $query->fetchAll();
                 $query->closeCursor();
                 $query = null;
             }
