@@ -1,16 +1,4 @@
 
-/*GLUZAN	FRASCO 1000 g*/
-update T_PRODUCTO_PRECIO set PRECIO = '104.43', BONO = '2' where COD_PRODUCTO = '00581' and ZONA = '1' and CANTIDAD = '6'
-update T_PRODUCTO_PRECIO set PRECIO = '104.43', BONO = '5' where COD_PRODUCTO = '00581' and ZONA = '1' and CANTIDAD = '10'
-update T_PRODUCTO_PRECIO set PRECIO = '98.89', BONO = '10' where COD_PRODUCTO = '00581' and ZONA = '1' and CANTIDAD = '20'
-
-update T_PRODUCTO_PRECIO set PRECIO = '130.65', BONO = '2' where COD_PRODUCTO = '00581' and ZONA = '2' and CANTIDAD = '6'
-update T_PRODUCTO_PRECIO set PRECIO = '130.65', BONO = '5' where COD_PRODUCTO = '00581' and ZONA = '2' and CANTIDAD = '10'
-update T_PRODUCTO_PRECIO set PRECIO = '125.11', BONO = '10' where COD_PRODUCTO = '00581' and ZONA = '2' and CANTIDAD = '20'
-
-update T_PRODUCTO_PRECIO set PRECIO = '128.19', BONO = '2' where COD_PRODUCTO = '00581' and ZONA = '3' and CANTIDAD = '6'
-update T_PRODUCTO_PRECIO set PRECIO = '128.19', BONO = '5' where COD_PRODUCTO = '00581' and ZONA = '3' and CANTIDAD = '10'
-update T_PRODUCTO_PRECIO set PRECIO = '122.65', BONO = '10' where COD_PRODUCTO = '00581' and ZONA = '3' and CANTIDAD = '20'
 
 
 
@@ -285,19 +273,6 @@ update T_PRODUCTO_PRECIO set PRECIO = '92.54', BONO = '10' where COD_PRODUCTO = 
 
 
 
-/*PLUS FORT	FRASCO 1000 g*/
-update T_PRODUCTO_PRECIO set PRECIO = '92.40', BONO = '2' where COD_PRODUCTO = '00579' and ZONA = '1' and CANTIDAD = '6'
-update T_PRODUCTO_PRECIO set PRECIO = '92.40', BONO = '5' where COD_PRODUCTO = '00579' and ZONA = '1' and CANTIDAD = '10'
-update T_PRODUCTO_PRECIO set PRECIO = '80.08', BONO = '10' where COD_PRODUCTO = '00579' and ZONA = '1' and CANTIDAD = '20'
-
-update T_PRODUCTO_PRECIO set PRECIO = '97.32', BONO = '2' where COD_PRODUCTO = '00579' and ZONA = '2' and CANTIDAD = '6'
-update T_PRODUCTO_PRECIO set PRECIO = '97.32', BONO = '5' where COD_PRODUCTO = '00579' and ZONA = '2' and CANTIDAD = '10'
-update T_PRODUCTO_PRECIO set PRECIO = '95.00', BONO = '10' where COD_PRODUCTO = '00579' and ZONA = '2' and CANTIDAD = '20'
-
-update T_PRODUCTO_PRECIO set PRECIO = '94.86', BONO = '2' where COD_PRODUCTO = '00579' and ZONA = '3' and CANTIDAD = '6'
-update T_PRODUCTO_PRECIO set PRECIO = '94.86', BONO = '5' where COD_PRODUCTO = '00579' and ZONA = '3' and CANTIDAD = '10'
-update T_PRODUCTO_PRECIO set PRECIO = '82.54', BONO = '10' where COD_PRODUCTO = '00579' and ZONA = '3' and CANTIDAD = '20'
-
 
 /*MORE ENERGY	FRASCO 1000 g*/
 update T_PRODUCTO_PRECIO set PRECIO = '96.09', BONO = '2' where COD_PRODUCTO = '00430' and ZONA = '1' and CANTIDAD = '6'
@@ -342,19 +317,6 @@ update T_PRODUCTO_PRECIO set PRECIO = '73.92', BONO = '5' where COD_PRODUCTO = '
 update T_PRODUCTO_PRECIO set PRECIO = '73.92', BONO = '10' where COD_PRODUCTO = '00591' and ZONA = '3' and CANTIDAD = '20'
 
 
-/*SACHET VITALER PROS SACHET 15 g*/
-update T_PRODUCTO_PRECIO set PRECIO = '71.45', BONO = '2' where COD_PRODUCTO = '00592' and ZONA = '1' and CANTIDAD = '6'
-update T_PRODUCTO_PRECIO set PRECIO = '71.45', BONO = '5' where COD_PRODUCTO = '00592' and ZONA = '1' and CANTIDAD = '10'
-update T_PRODUCTO_PRECIO set PRECIO = '71.45', BONO = '10' where COD_PRODUCTO = '00592' and ZONA = '1' and CANTIDAD = '20'
-
-update T_PRODUCTO_PRECIO set PRECIO = '73.92', BONO = '2' where COD_PRODUCTO = '00592' and ZONA = '2' and CANTIDAD = '6'
-update T_PRODUCTO_PRECIO set PRECIO = '73.92', BONO = '5' where COD_PRODUCTO = '00592' and ZONA = '2' and CANTIDAD = '10'
-update T_PRODUCTO_PRECIO set PRECIO = '73.92', BONO = '10' where COD_PRODUCTO = '00592' and ZONA = '2' and CANTIDAD = '20'
-
-update T_PRODUCTO_PRECIO set PRECIO = '73.92', BONO = '2' where COD_PRODUCTO = '00592' and ZONA = '3' and CANTIDAD = '6'
-update T_PRODUCTO_PRECIO set PRECIO = '73.92', BONO = '5' where COD_PRODUCTO = '00592' and ZONA = '3' and CANTIDAD = '10'
-update T_PRODUCTO_PRECIO set PRECIO = '73.92', BONO = '10' where COD_PRODUCTO = '00592' and ZONA = '3' and CANTIDAD = '20'
-
 
 
 
@@ -398,3 +360,44 @@ update T_PRODUCTO_PRECIO set PRECIO = '68.99', BONO = '10' where COD_PRODUCTO = 
 update T_PRODUCTO_PRECIO set PRECIO = '70.22', BONO = '2' where COD_PRODUCTO = '00532' and ZONA = '3' and CANTIDAD = '6'
 update T_PRODUCTO_PRECIO set PRECIO = '70.22', BONO = '5' where COD_PRODUCTO = '00532' and ZONA = '3' and CANTIDAD = '10'
 update T_PRODUCTO_PRECIO set PRECIO = '64.06', BONO = '10' where COD_PRODUCTO = '00532' and ZONA = '3' and CANTIDAD = '20'
+
+
+
+
+
+/*GLUZAN	FRASCO 1000 g*/
+insert into T_PRODUCTO_PRECIO values('00581','1','6','2','104.43')
+insert into T_PRODUCTO_PRECIO values('00581','1','10','5','104.43')
+insert into T_PRODUCTO_PRECIO values('00581','1','20','10','98.89')
+insert into T_PRODUCTO_PRECIO values('00581','2','6','2','130.65')
+insert into T_PRODUCTO_PRECIO values('00581','2','10','5','130.65')
+insert into T_PRODUCTO_PRECIO values('00581','2','20','10','125.11')
+insert into T_PRODUCTO_PRECIO values('00581','3','6','2','128.19')
+insert into T_PRODUCTO_PRECIO values('00581','3','10','5','128.19')
+insert into T_PRODUCTO_PRECIO values('00581','3','20','10','122.65')
+
+
+
+/*PLUS FORT	FRASCO 1000 g*/
+insert into T_PRODUCTO_PRECIO values('00579','1','6','2','92.40')
+insert into T_PRODUCTO_PRECIO values('00579','1','10','5','92.40')
+insert into T_PRODUCTO_PRECIO values('00579','1','20','10','80.08')
+insert into T_PRODUCTO_PRECIO values('00579','2','6','2','97.32')
+insert into T_PRODUCTO_PRECIO values('00579','2','10','5','97.32')
+insert into T_PRODUCTO_PRECIO values('00579','2','20','10','95.00')
+insert into T_PRODUCTO_PRECIO values('00579','3','6','2','94.86')
+insert into T_PRODUCTO_PRECIO values('00579','3','10','5','94.86')
+insert into T_PRODUCTO_PRECIO values('00579','3','20','10','82.54')
+
+
+
+/*SACHET VITALER PROS SACHET 15 g*/
+insert into T_PRODUCTO_PRECIO values('00592','1','6','2','71.45')
+insert into T_PRODUCTO_PRECIO values('00592','1','10','5','71.45')
+insert into T_PRODUCTO_PRECIO values('00592','1','20','10','71.45')
+insert into T_PRODUCTO_PRECIO values('00592','2','6','2','73.92')
+insert into T_PRODUCTO_PRECIO values('00592','2','10','5','73.92')
+insert into T_PRODUCTO_PRECIO values('00592','2','20','10','73.92')
+insert into T_PRODUCTO_PRECIO values('00592','3','6','2','73.92')
+insert into T_PRODUCTO_PRECIO values('00592','3','10','5','73.92')
+insert into T_PRODUCTO_PRECIO values('00592','3','20','10','73.92')
