@@ -110,18 +110,6 @@ update T_PRODUCTO set PRECIO_WEB = '65.00',PESO_NETO = '300',EST_PRODUCTO = 'A' 
 /*00471 CP1 Procolagen uva 300*/
 update T_PRODUCTO set PRECIO_WEB = '65.00',PESO_NETO = '300',EST_PRODUCTO = 'A' where COD_PRODUCTO = '00471' /*CP1*/
 
-/*00594 EP4 sachet vitaclean  producto Prueba*/
-update T_PRODUCTO set PRECIO_WEB = '',PESO_NETO = '',EST_PRODUCTO = 'A' where COD_PRODUCTO = '00594' /*EP4*/ 
-
-/*00592 EP2 sachet vitaler Prosn producto Prueba*/
-update T_PRODUCTO set PRECIO_WEB = '',PESO_NETO = '',EST_PRODUCTO = 'A' where COD_PRODUCTO = '00594' /*EP2*/ 
- 
-/*00591 EP1-SACHET FEMSURE Producto Prueba*/
-update T_PRODUCTO set PRECIO_WEB = '',PESO_NETO = '',EST_PRODUCTO = 'A' where COD_PRODUCTO = '00594' /*EP1*/  
-
-/*00593 EP3-SACHET GLUSAN Producto Prueba*/
-update T_PRODUCTO set PRECIO_WEB = '',PESO_NETO = '',EST_PRODUCTO = 'A' where COD_PRODUCTO = '00593' /*EP3*/   
-
 /*00425 AP2-PLUSFORT X750 */
 update T_PRODUCTO set PRECIO_WEB = '120.00',PESO_NETO = '750',EST_PRODUCTO = 'A' where COD_PRODUCTO = '00425' /*AP2*/ 
 
@@ -137,3 +125,14 @@ update T_PRODUCTO set PRECIO_WEB = '',PESO_NETO = '' ,EST_PRODUCTO = 'A' where C
 
 /*00529	CP8 COLAG.PLUS NAR X300*/
 update T_PRODUCTO set PRECIO_WEB = '70',PESO_NETO = '300',EST_PRODUCTO = 'A' where COD_PRODUCTO = '00529' /*CP8*/ 
+
+
+
+
+
+
+update T_PRODUCTO set EST_PRODUCTO = 'I' where COD_PRODUCTO = '00594'
+update T_PRODUCTO set EST_PRODUCTO = 'I' where COD_PRODUCTO = '00592'
+update T_PRODUCTO set EST_PRODUCTO = 'I' where COD_PRODUCTO = '00591'
+update T_PRODUCTO set EST_PRODUCTO = 'I' where COD_PRODUCTO = '00593'
+update T_PRODUCTO set EST_PRODUCTO = 'I' where COD_PRODUCTO = '00590'
