@@ -370,3 +370,31 @@ update T_PRODUCTO_PRECIO set PRECIO = '73.92', BONO = '10' where COD_PRODUCTO = 
 update T_PRODUCTO_PRECIO set PRECIO = '73.92', BONO = '2' where COD_PRODUCTO = '00594' and ZONA = '3' and CANTIDAD = '6'
 update T_PRODUCTO_PRECIO set PRECIO = '73.92', BONO = '5' where COD_PRODUCTO = '00594' and ZONA = '3' and CANTIDAD = '10'
 update T_PRODUCTO_PRECIO set PRECIO = '73.92', BONO = '10' where COD_PRODUCTO = '00594' and ZONA = '3' and CANTIDAD = '20'
+
+
+/*SA5 SACHET PROCOL.PLUS*/
+update T_PRODUCTO_PRECIO set PRECIO = '71.45', BONO = '2' where COD_PRODUCTO = '00541' and ZONA = '1' and CANTIDAD = '6'
+update T_PRODUCTO_PRECIO set PRECIO = '71.45', BONO = '5' where COD_PRODUCTO = '00541' and ZONA = '1' and CANTIDAD = '10'
+update T_PRODUCTO_PRECIO set PRECIO = '71.45', BONO = '10' where COD_PRODUCTO = '00541' and ZONA = '1' and CANTIDAD = '20'
+
+update T_PRODUCTO_PRECIO set PRECIO = '73.92', BONO = '2' where COD_PRODUCTO = '00541' and ZONA = '2' and CANTIDAD = '6'
+update T_PRODUCTO_PRECIO set PRECIO = '73.92', BONO = '5' where COD_PRODUCTO = '00541' and ZONA = '2' and CANTIDAD = '10'
+update T_PRODUCTO_PRECIO set PRECIO = '73.92', BONO = '10' where COD_PRODUCTO = '00541' and ZONA = '2' and CANTIDAD = '20'
+
+update T_PRODUCTO_PRECIO set PRECIO = '73.92', BONO = '2' where COD_PRODUCTO = '00541' and ZONA = '3' and CANTIDAD = '6'
+update T_PRODUCTO_PRECIO set PRECIO = '73.92', BONO = '5' where COD_PRODUCTO = '00541' and ZONA = '3' and CANTIDAD = '10'
+update T_PRODUCTO_PRECIO set PRECIO = '73.92', BONO = '10' where COD_PRODUCTO = '00541' and ZONA = '3' and CANTIDAD = '20'
+
+
+/*CP4 FEM SURE (M.A.) X 600*/
+update T_PRODUCTO_PRECIO set PRECIO = '67.76', BONO = '2' where COD_PRODUCTO = '00532' and ZONA = '1' and CANTIDAD = '6'
+update T_PRODUCTO_PRECIO set PRECIO = '67.76', BONO = '5' where COD_PRODUCTO = '00532' and ZONA = '1' and CANTIDAD = '10'
+update T_PRODUCTO_PRECIO set PRECIO = '61.60', BONO = '10' where COD_PRODUCTO = '00532' and ZONA = '1' and CANTIDAD = '20'
+
+update T_PRODUCTO_PRECIO set PRECIO = '75.15', BONO = '2' where COD_PRODUCTO = '00532' and ZONA = '2' and CANTIDAD = '6'
+update T_PRODUCTO_PRECIO set PRECIO = '75.15', BONO = '5' where COD_PRODUCTO = '00532' and ZONA = '2' and CANTIDAD = '10'
+update T_PRODUCTO_PRECIO set PRECIO = '68.99', BONO = '10' where COD_PRODUCTO = '00532' and ZONA = '2' and CANTIDAD = '20'
+
+update T_PRODUCTO_PRECIO set PRECIO = '70.22', BONO = '2' where COD_PRODUCTO = '00532' and ZONA = '3' and CANTIDAD = '6'
+update T_PRODUCTO_PRECIO set PRECIO = '70.22', BONO = '5' where COD_PRODUCTO = '00532' and ZONA = '3' and CANTIDAD = '10'
+update T_PRODUCTO_PRECIO set PRECIO = '64.06', BONO = '10' where COD_PRODUCTO = '00532' and ZONA = '3' and CANTIDAD = '20'
