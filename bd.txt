@@ -514,10 +514,6 @@ PESO_NETO int
 
 
 
-Create view [dbo].[V_PRODUCTO_REGALO]
-as
-select * from T_PRODUCTOS_REGALO where ESTADO = '1'
-GO
 
 
 
