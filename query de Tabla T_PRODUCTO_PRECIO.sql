@@ -379,13 +379,6 @@ update T_PRODUCTO_PRECIO set PRECIO = '53.59', BONO = '10' where COD_PRODUCTO = 
 
 
 
-
-
-
-
-
-
-
 /*GLUZAN	FRASCO 1000 g*/
 insert into T_PRODUCTO_PRECIO values('00581','1','6','2','104.43')
 insert into T_PRODUCTO_PRECIO values('00581','1','10','5','104.43')
