@@ -363,6 +363,27 @@ update T_PRODUCTO_PRECIO set PRECIO = '64.06', BONO = '10' where COD_PRODUCTO = 
 
 
 
+/*BP9 PROCOL.PLUS N.X600*/
+update T_PRODUCTO_PRECIO set PRECIO = '57.28', BONO = '2' where COD_PRODUCTO = '00457' and ZONA = '1' and CANTIDAD = '6'
+update T_PRODUCTO_PRECIO set PRECIO = '57.28', BONO = '5' where COD_PRODUCTO = '00457' and ZONA = '1' and CANTIDAD = '10'
+update T_PRODUCTO_PRECIO set PRECIO = '51.12', BONO = '10' where COD_PRODUCTO = '00457' and ZONA = '1' and CANTIDAD = '20'
+
+update T_PRODUCTO_PRECIO set PRECIO = '59.75', BONO = '2' where COD_PRODUCTO = '00457' and ZONA = '2' and CANTIDAD = '6'
+update T_PRODUCTO_PRECIO set PRECIO = '59.75', BONO = '5' where COD_PRODUCTO = '00457' and ZONA = '2' and CANTIDAD = '10'
+update T_PRODUCTO_PRECIO set PRECIO = '53.59', BONO = '10' where COD_PRODUCTO = '00457' and ZONA = '2' and CANTIDAD = '20'
+
+update T_PRODUCTO_PRECIO set PRECIO = '59.75', BONO = '2' where COD_PRODUCTO = '00457' and ZONA = '3' and CANTIDAD = '6'
+update T_PRODUCTO_PRECIO set PRECIO = '59.75', BONO = '5' where COD_PRODUCTO = '00457' and ZONA = '3' and CANTIDAD = '10'
+update T_PRODUCTO_PRECIO set PRECIO = '53.59', BONO = '10' where COD_PRODUCTO = '00457' and ZONA = '3' and CANTIDAD = '20'
+
+
+
+
+
+
+
+
+
 
 
 /*GLUZAN	FRASCO 1000 g*/
