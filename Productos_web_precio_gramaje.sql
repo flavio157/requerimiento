@@ -1,9 +1,3 @@
-/*
-00594 EP4 sachet vitaclean     /*producto prueba*/
-00592 EP2 sachet vitaler Pros  /*producto prueba*/
-00591 EP1-SACHET FEMSURE	   /*producto prueba*/
-00593 EP3-SACHET GLUSAN		   /*producto prueba*/	
-*/
 /*Productos que se dieron de baja -> I inactivo*/
 update T_PRODUCTO set EST_PRODUCTO = 'I' where COD_PRODUCTO = '00589'
 update T_PRODUCTO set EST_PRODUCTO = 'I' where COD_PRODUCTO = '00462'
@@ -54,7 +48,7 @@ update T_PRODUCTO set PRECIO_WEB = '130.00',PESO_NETO = '600',EST_PRODUCTO = 'A'
 
 ------
 /*Vitaclean 500g*/
-update T_PRODUCTO set PRECIO_WEB = '120.00',PESO_NETO = '500',EST_PRODUCTO = 'A' where COD_PRODUCTO = '00427' /*AP4*/
+update T_PRODUCTO set PRECIO_WEB = '120.00',PESO_NETO = '600',EST_PRODUCTO = 'A' where COD_PRODUCTO = '00427' /*AP4*/
 update T_PRODUCTO set PRECIO_WEB = '120.00',PESO_NETO = '500',EST_PRODUCTO = 'A' where COD_PRODUCTO = '00464' /*BL4*/
 
 
@@ -132,6 +126,16 @@ update T_PRODUCTO set PRECIO_WEB = '70',PESO_NETO = '300',EST_PRODUCTO = 'A' whe
 update T_PRODUCTO set EST_PRODUCTO = 'I' where COD_PRODUCTO = '00594'
 update T_PRODUCTO set EST_PRODUCTO = 'I' where COD_PRODUCTO = '00592'
 update T_PRODUCTO set EST_PRODUCTO = 'I' where COD_PRODUCTO = '00591'
-update T_PRODUCTO set EST_PRODUCTO = 'I' where COD_PRODUCTO = '00593'
+update T_PRODUCTO set EST_PRODUCTO = 'A' where COD_PRODUCTO = '00593'
 update T_PRODUCTO set EST_PRODUCTO = 'I' where COD_PRODUCTO = '00590'
 update T_PRODUCTO set EST_PRODUCTO = 'I' where COD_PRODUCTO = '00583'
+
+update T_PRODUCTO set EST_PRODUCTO = 'I' where COD_PRODUCTO = '00419'
+update T_PRODUCTO set EST_PRODUCTO = 'I' where COD_PRODUCTO = '00425'
+update T_PRODUCTO set EST_PRODUCTO = 'I' where COD_PRODUCTO = '00428'
+update T_PRODUCTO set EST_PRODUCTO = 'I' where COD_PRODUCTO = '00433'
+update T_PRODUCTO set EST_PRODUCTO = 'I' where COD_PRODUCTO = '00455'
+update T_PRODUCTO set EST_PRODUCTO = 'I' where COD_PRODUCTO = '00461'
+update T_PRODUCTO set EST_PRODUCTO = 'I' where COD_PRODUCTO = '00463'
+update T_PRODUCTO set EST_PRODUCTO = 'I' where COD_PRODUCTO = '00464'
+update T_PRODUCTO set EST_PRODUCTO = 'I' where COD_PRODUCTO = '00466'
