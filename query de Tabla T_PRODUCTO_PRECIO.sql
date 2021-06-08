@@ -497,7 +497,6 @@ insert into T_PRODUCTO_PRECIO values('00436','3','20','10','82.54')
 
 
 
-update T_PRODUCTO set EST_PRODUCTO = 'A' where COD_PRODUCTO = '00534' /*CP6*/
 
 
 
@@ -506,3 +505,6 @@ update T_PRODUCTO set EST_PRODUCTO = 'A' where COD_PRODUCTO = '00534' /*CP6*/
     00455	00004	MAGNESIO 140 GRS -> MG1
     00534	00004	CP6 VITA FE (ANEMIA) X 300 -> CP6
 */
+
+1 activo 
+0 inactivo
