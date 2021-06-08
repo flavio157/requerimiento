@@ -216,19 +216,9 @@ update T_PRODUCTO_PRECIO set PRECIO = '59.75', BONO = '5' where COD_PRODUCTO = '
 update T_PRODUCTO_PRECIO set PRECIO = '53.59', BONO = '10' where COD_PRODUCTO = '00529' and ZONA = '3' and CANTIDAD = '20'
 
 
-/*DISLIGRAS	FRASCO 600 g DP5*/
-insert into T_PRODUCTO_PRECIO values('00582','1','6','2','92.40')
-insert into T_PRODUCTO_PRECIO values('00582','1','10','5','92.40')
-insert into T_PRODUCTO_PRECIO values('00582','1','20','10','80.08')
 
-insert into T_PRODUCTO_PRECIO values('00582','2','6','2','97.32')
-insert into T_PRODUCTO_PRECIO values('00582','2','10','5','97.32')
-insert into T_PRODUCTO_PRECIO values('00582','2','20','10','85.00')
 
-insert into T_PRODUCTO_PRECIO values('00582','3','6','2','94.86')
-insert into T_PRODUCTO_PRECIO values('00582','3','10','5','94.86')
-insert into T_PRODUCTO_PRECIO values('00582','3','20','10','82.54')
-
+ 
 
 
 
@@ -247,34 +237,10 @@ insert into T_PRODUCTO_PRECIO values('00590','3','10','5','73.92')
 insert into T_PRODUCTO_PRECIO values('00590','3','20','10','73.92')
 
 
-/*00594	00004	EP4 SACHET VITACLEAN*/
-insert into T_PRODUCTO_PRECIO values('00594','1','6','2','71.45')
-insert into T_PRODUCTO_PRECIO values('00594','1','10','5','71.45')
-insert into T_PRODUCTO_PRECIO values('00594','1','20','10','71.45')
-
-insert into T_PRODUCTO_PRECIO values('00594','2','6','2','73.92')
-insert into T_PRODUCTO_PRECIO values('00594','2','10','5','73.92')
-insert into T_PRODUCTO_PRECIO values('00594','2','20','10','73.92')
-
-insert into T_PRODUCTO_PRECIO values('00594','3','6','2','73.92')
-insert into T_PRODUCTO_PRECIO values('00594','3','10','5','73.92')
-insert into T_PRODUCTO_PRECIO values('00594','3','20','10','73.92')
 
 
 
 
-/*ENFAFORT	FRASCO 1000 g DP1*/
-insert into T_PRODUCTO_PRECIO values('00578','1','6','2','92.40')
-insert into T_PRODUCTO_PRECIO values('00578','1','10','5','92.40')
-insert into T_PRODUCTO_PRECIO values('00578','1','20','10','80.08')
-
-insert into T_PRODUCTO_PRECIO values('00578','2','6','2','97.32')
-insert into T_PRODUCTO_PRECIO values('00578','2','10','5','97.32')
-insert into T_PRODUCTO_PRECIO values('00578','2','20','10','85.00')
-
-insert into T_PRODUCTO_PRECIO values('00578','3','6','2','94.86')
-insert into T_PRODUCTO_PRECIO values('00578','3','10','5','94.86')
-insert into T_PRODUCTO_PRECIO values('00578','3','20','10','82.54')
 
 
 /*METALSHAKE	FRASCO 300 g  DP6*/
@@ -501,10 +467,59 @@ insert into T_PRODUCTO_PRECIO values('00436','3','20','10','82.54')
 
 
 
+
+
+/*DISLIGRAS	FRASCO 600 g DP5*/
+update T_PRODUCTO_PRECIO set PRECIO = '92.40', BONO = '2' where COD_PRODUCTO = '00582' and ZONA = '1' and CANTIDAD = '6'
+update T_PRODUCTO_PRECIO set PRECIO = '92.40', BONO = '5' where COD_PRODUCTO = '00582' and ZONA = '1' and CANTIDAD = '10'
+update T_PRODUCTO_PRECIO set PRECIO = '80.08', BONO = '10' where COD_PRODUCTO = '00582' and ZONA = '1' and CANTIDAD = '20'
+
+update T_PRODUCTO_PRECIO set PRECIO = '97.32', BONO = '2' where COD_PRODUCTO = '00582' and ZONA = '2' and CANTIDAD = '6'
+update T_PRODUCTO_PRECIO set PRECIO = '97.32', BONO = '5' where COD_PRODUCTO = '00582' and ZONA = '2' and CANTIDAD = '10'
+update T_PRODUCTO_PRECIO set PRECIO = '85.00', BONO = '10' where COD_PRODUCTO = '00582' and ZONA = '2' and CANTIDAD = '20'
+
+update T_PRODUCTO_PRECIO set PRECIO = '94.86', BONO = '2' where COD_PRODUCTO = '00582' and ZONA = '3' and CANTIDAD = '6'
+update T_PRODUCTO_PRECIO set PRECIO = '94.86', BONO = '5' where COD_PRODUCTO = '00582' and ZONA = '3' and CANTIDAD = '10'
+update T_PRODUCTO_PRECIO set PRECIO = '82.54', BONO = '10' where COD_PRODUCTO = '00582' and ZONA = '3' and CANTIDAD = '20'
+
+
+
+/*00594	00004	EP4 SACHET VITACLEAN*/
+update T_PRODUCTO_PRECIO set PRECIO = '71.45', BONO = '2' where COD_PRODUCTO = '00594' and ZONA = '1' and CANTIDAD = '6'
+update T_PRODUCTO_PRECIO set PRECIO = '71.45', BONO = '5' where COD_PRODUCTO = '00594' and ZONA = '1' and CANTIDAD = '10'
+update T_PRODUCTO_PRECIO set PRECIO = '71.45', BONO = '10' where COD_PRODUCTO = '00594' and ZONA = '1' and CANTIDAD = '20'
+
+update T_PRODUCTO_PRECIO set PRECIO = '73.92', BONO = '2' where COD_PRODUCTO = '00594' and ZONA = '2' and CANTIDAD = '6'
+update T_PRODUCTO_PRECIO set PRECIO = '73.92', BONO = '5' where COD_PRODUCTO = '00594' and ZONA = '2' and CANTIDAD = '10'
+update T_PRODUCTO_PRECIO set PRECIO = '73.92', BONO = '10' where COD_PRODUCTO = '00594' and ZONA = '2' and CANTIDAD = '20'
+
+update T_PRODUCTO_PRECIO set PRECIO = '73.92', BONO = '2' where COD_PRODUCTO = '00594' and ZONA = '3' and CANTIDAD = '6'
+update T_PRODUCTO_PRECIO set PRECIO = '73.92', BONO = '5' where COD_PRODUCTO = '00594' and ZONA = '3' and CANTIDAD = '10'
+update T_PRODUCTO_PRECIO set PRECIO = '73.92', BONO = '10' where COD_PRODUCTO = '00594' and ZONA = '3' and CANTIDAD = '20'
+
+
+/*ENFAFORT	FRASCO 1000 g DP1*/
+update T_PRODUCTO_PRECIO set PRECIO = '92.40', BONO = '2' where COD_PRODUCTO = '00578' and ZONA = '1' and CANTIDAD = '6'
+update T_PRODUCTO_PRECIO set PRECIO = '92.40', BONO = '5' where COD_PRODUCTO = '00578' and ZONA = '1' and CANTIDAD = '10'
+update T_PRODUCTO_PRECIO set PRECIO = '80.08', BONO = '10' where COD_PRODUCTO = '00578' and ZONA = '1' and CANTIDAD = '20'
+
+update T_PRODUCTO_PRECIO set PRECIO = '97.32', BONO = '2' where COD_PRODUCTO = '00578' and ZONA = '2' and CANTIDAD = '6'
+update T_PRODUCTO_PRECIO set PRECIO = '97.32', BONO = '5' where COD_PRODUCTO = '00578' and ZONA = '2' and CANTIDAD = '10'
+update T_PRODUCTO_PRECIO set PRECIO = '85.00', BONO = '10' where COD_PRODUCTO = '00578' and ZONA = '2' and CANTIDAD = '20'
+
+update T_PRODUCTO_PRECIO set PRECIO = '94.86', BONO = '2' where COD_PRODUCTO = '00578' and ZONA = '3' and CANTIDAD = '6'
+update T_PRODUCTO_PRECIO set PRECIO = '94.86', BONO = '5' where COD_PRODUCTO = '00578' and ZONA = '3' and CANTIDAD = '10'
+update T_PRODUCTO_PRECIO set PRECIO = '94.86', BONO = '10' where COD_PRODUCTO = '00578' and ZONA = '3' and CANTIDAD = '20'
+
+
+
+
+
+
+
+
 /* NO HAY PRECIO LIMA NORTE Y SUR 
     00455	00004	MAGNESIO 140 GRS -> MG1
     00534	00004	CP6 VITA FE (ANEMIA) X 300 -> CP6
 */
 
-1 activo 
-0 inactivo
