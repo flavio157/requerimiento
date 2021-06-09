@@ -1,5 +1,6 @@
 <?php
    require_once("../funciones/DataDinamica.php");
+   require_once("../funciones/f_funcion.php");
 
    class M_ListarPedidos 
    {
@@ -12,12 +13,16 @@
 
     public function mostrarPedido($cod_vendedor,$fecha)
     {
+        $nuevafecha = retunrFechaSql($fecha);
         $query = $this->bd->prepare("SELECT * FROM T_PPEDIDO 
-        WHERE COD_VENDEDORA = '$cod_vendedor' AND Fecha = '$fecha' AND EST_PEDIDO != 'A'  ORDER BY CODIGO DESC"); 
+        WHERE COD_VENDEDORA = '$cod_vendedor' AND Fecha >= '$nuevafecha' AND EST_PEDIDO != 'A'  ORDER BY CODIGO DESC"); 
         $query->execute();
         return $query->fetchAll();
         $query->closeCursor();
         $query = null;
+
+        
+    
     }
 
 

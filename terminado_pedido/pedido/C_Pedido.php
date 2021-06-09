@@ -12,9 +12,9 @@
         $codPersonal = $_POST['codPersonal'];
         $tipo_documento = $_POST["slcdocumento"];
         $identificacion = $_POST["txtnumero"]; 
-        $cliente = $_POST["txtcliente"];
-        $direccion = $_POST["txtdireccion"];
-        $referencia = $_POST["txtreferencia"];
+        $cliente = strtoupper($_POST["txtcliente"]);
+        $direccion = strtoupper($_POST["txtdireccion"]);
+        $referencia =  strtoupper($_POST["txtreferencia"]);
         $contacto = $_POST["txtcontacto"] ;
         $condicion = $_POST["slccondicion"];
         $telefono = $_POST["txttelefono"];
