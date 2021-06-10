@@ -87,13 +87,11 @@ $cod = $_SESSION["cod"];
                         <caption>Lista de Productos</caption>
                         <thead>
                             <tr>
-                            <th scope="col" style="display: none;">COD_PRODUCTO</th>
-                            <th scope="col">PRODUCTO</th>
-                            <th scope="col">CANTIDAD</th>
-                            <th scope="col">PRECIO</th>
-                            <th scope="col">PROMO</th>
-                            <th scope="col" style='display: none;'>TOTAL</th>
-                            <th scope="col">ACCIONES</th>
+                                <th scope="col" style="display: none;">COD_PRODUCTO</th>
+                                <th scope="col">PRODUCTO</th>
+                                <th scope="col">CANTIDAD</th>
+                                <th scope="col">PRECIO</th>
+                                <th scope="col">PROMO</th>
                             </tr>
                         </thead>
                         <tbody  id="tabla">

@@ -51,20 +51,18 @@ class M_BuscarProductos{
         } 
                 
 
-        public function M_PoliticaBono($zona,$cantidad,$codproducto)
+        public function M_PoliticaBono($zona,$cantidad)
         {   
             $consulta = "";
             if($cantidad >= '6' && $cantidad <= '9'){
-                $consulta = "SELECT * FROM T_PRODUCTO_PRECIO WHERE ZONA = $zona AND CANTIDAD <= 9
-                AND COD_PRODUCTO = '$codproducto'";
+                $consulta = "SELECT * FROM T_PRODUCTO_PRECIO WHERE ZONA = $zona AND CANTIDAD <= 9";
                 
             }else if($cantidad >= '10' && $cantidad <='19'){
                 $consulta = "SELECT * FROM T_PRODUCTO_PRECIO WHERE ZONA = $zona AND CANTIDAD >= 10
-                AND CANTIDAD <= 19 AND COD_PRODUCTO = '$codproducto'";
+                AND CANTIDAD <= 19 ";
 
             }else if($cantidad >= '20'){
-                $consulta = "SELECT * FROM T_PRODUCTO_PRECIO WHERE ZONA = $zona AND CANTIDAD = 20
-                AND COD_PRODUCTO = '$codproducto'";
+                $consulta = "SELECT * FROM T_PRODUCTO_PRECIO WHERE ZONA = $zona AND CANTIDAD = 20";
             }
 
             if($consulta == ""){return 0;}

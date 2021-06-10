@@ -95,15 +95,8 @@ $(document).ready(function(){
                 ProductosCombo(cod[0]);
             }
         }else{
-            var promocion = $("#G_promocion").val();
-            if (promocion <= bono) {  
-                agregarproductos();
-                /*arraycodigos = [];*/
-            }else{
-                mensajesError("La Promoción no puede ser mayor a lo indicado: " + bono,"mensaje");
-            }
+            agregarproductos();
         }
-       
     });
 
     $("#nombreproducto").on('keyup',function () {
@@ -122,57 +115,13 @@ $(document).ready(function(){
 
     $("#G_cantidad").blur(function(){
         cantidad = $("#G_cantidad").val();
-        
-            codproducto = $("#cod_producto").val();
-            calcularTotal(cantidad,"ingresar");
-            if(cantidad != "" && cantidad != 0){
-                politicabonos(cantidad,codproducto);
-            }
-      
+        codproducto = $("#cod_producto").val();
+        calcularTotal(cantidad,"ingresar");
       });
 
 
     $("#agregar").on('click',function() {
-        if(Object.keys(arrayproductos) != "" && arraycodigos.length != 0){
-            $('#tabladelProducto').find("tr:gt(0)").remove();
-                    for (let i = 0; i < arrayproductos.length; i++) {
-                        if (arrayproductos[i] != undefined) {
-                                if(arrayproductos[i]['combo'] != undefined){
-                                    var fila="<tr><td style='display: none;'>"+arrayproductos[i]['combo']+
-                                    "</td><td>"+arrayproductos[i]['nombre']+ "</td><td>"+arrayproductos[i]['cantidad']+
-                                    "</td><td>"+arrayproductos[i]['precio']+"</td><td>"+arrayproductos[i]['promocion']+"</td><td style='display: none;'>"+
-                                    arrayproductos[i]['total'] +"</td>"
-                                    +"<td><a class='btn btn-primary btn-sm ' id='btneliminar'>"+
-                                    "<i class='icon-trash' title='Align Right'></i>"+
-                                    "</a>"+
-                                    "</td></tr>";
-                                    var btn = document.createElement("TR");
-                                    btn.setAttribute('id', arrayproductos[i]['combo']);
-                                }else{
-                                    var fila="<tr><td style='display: none;'>"+arrayproductos[i]['cod_producto']+
-                                    "</td><td>"+arrayproductos[i]['nombre']+ "</td><td>"+arrayproductos[i]['cantidad']+
-                                    "</td><td>"+arrayproductos[i]['precio']+"</td><td>"+arrayproductos[i]['promocion']+"</td><td style='display: none;'>"+
-                                    arrayproductos[i]['total'] +"</td>"
-                                    +"<td><a class='btn btn-primary btn-sm ' id='btneliminar'>"+
-                                    "<i class='icon-trash' title='Align Right'></i>"+
-                                    "</a>"+
-                                    "</td></tr>";
-                                    var btn = document.createElement("TR");
-                                }
-                                btn.innerHTML=fila;
-                                document.getElementById("tabla").appendChild(btn);
-                        }   
-                    }
-                    $("#tablaproductos").show("slow");
-                    $("#ModalProducto").modal("hide");
-                    document.getElementById("frmagregarProducto").reset();
-                    $('#productosMomento').find("tr:gt(0)").remove();
-                    arraytemporal =[];
-                    arraycodigos=[];
-        }else{
-            mensajesError("Ingrese un Producto","mensaje");
-        }
-       
+        politicabonos(arrayproductos);
     });  
 
    $("#closemodal").on('click',function(){
@@ -310,7 +259,7 @@ function buscarProducto(nombreproducto,zona) {
         $.ajax({
             dataType:'text',
             type: 'POST', 
-            url:  '../Pedido/C_BuscarProducto.php',
+            url:  '../pedido/C_BuscarProducto.php',
             data:{
                 "accion" : "buscar",
                 "producto" : nombreproducto,
@@ -346,7 +295,7 @@ function buscarProducto(nombreproducto,zona) {
         $.ajax({
             dataType:'text',
             type: 'POST', 
-            url:  '../Pedido/C_BuscarProducto.php',
+            url:  '../pedido/C_BuscarProducto.php',
             data:{
                 "accion" : "buscar",
                 "producto" : nombreproducto,
@@ -383,7 +332,7 @@ function BuscarBonoItem(cod_bono) {
     $.ajax({
         dataType:'text',
             type: 'POST', 
-            url:  '../Pedido/C_BuscarProducto.php',
+            url:  '../pedido/C_BuscarProducto.php',
             data:{
                 "accion" : "bonoitem",
                 "codbono" : cod_bono,
@@ -398,7 +347,7 @@ function ProductosCombo(idcombo) {
     $.ajax({
         dataType:'text',
             type: 'POST', 
-            url:  '../Pedido/C_BuscarProducto.php',
+            url:  '../pedido/C_BuscarProducto.php',
             data:{
                 "accion" : "productobono",
                 "codbono" : idcombo,
@@ -480,7 +429,7 @@ function agregarproductos() {
     var precio =$("#precioproducto").val();
     var total = $("#G_total").val();
     
-    if(nombre !== '' & cantidad !== '' && promocion !== '' && cod_producto !== '' ){
+    if(nombre !== '' & cantidad !== ''  && cod_producto !== '' ){
                 var estado = 1;
                 if (contador >= 0) {
                     for (let j = 0; j < arrayproductos.length; j++) {
@@ -495,6 +444,8 @@ function agregarproductos() {
                         }
                     }
                     if (estado === 1) {
+                        if(promocion == ""){promocion = "0"}
+                      
                         arrayproductos[contador] = {cod_producto,nombre,cantidad,promocion,precio,total};
                         var fila="<tr><td style='display: none;'>"+cod_producto+
                             "</td><td>"+nombre+ "</td><td>"+cantidad+
@@ -533,7 +484,7 @@ function politicaprecios(cantidad,codproducto) {
         $.ajax({
             dataType:'text',
                 type: 'POST', 
-                url:  '../Pedido/C_BuscarProducto.php',
+                url:  '../pedido/C_BuscarProducto.php',
                 data:{
                     "accion" : "politicaprecios",
                     "cantidad" : cantidad,
@@ -557,24 +508,26 @@ function politicaprecios(cantidad,codproducto) {
 }
 
 
-function politicabonos(cantidad,codproducto) { 
+function politicabonos(arrayproductos) {
     var zona = $("#vrzona").val();
+    var datosproductos ={arrayproductos};
     if(cantidad != 0){
         $.ajax({
             dataType:'text',
                 type: 'POST', 
-                url:  '../Pedido/C_BuscarProducto.php',
+                url:  '../pedido/C_BuscarProducto.php',
                 data:{
                     "accion" : "politicabonos",
-                    "cantidad" : cantidad,
-                    "codproducto" : codproducto,
+                    "datos" : JSON.stringify(datosproductos),
                     "zona" : zona,
                 } , 
                 success: function(response){ 
-                    var obj = JSON.parse(response);
-                    if(obj["estado"] === "ok"){
-                        bono = obj['bono'];  
-                        $("#G_promocion").val(bono);
+                 
+                        obj = JSON.parse(response);
+                    if(obj['estado'] === "ok"){
+                        tablaprincipal(arrayproductos);
+                    }else{
+                        mensajesError(obj['mensaje'],"mensaje");
                     }
                 }
         });
@@ -612,7 +565,7 @@ function obtenerDistrito(provincia){
     $.ajax({
         dataType:'text',
         type: 'POST', 
-        url:  '../Pedido/C_ListarCiudades.php',
+        url:  '../pedido/C_ListarCiudades.php',
         data: {
            "accion" : accion ,
            "provincia" : provincia,
@@ -745,12 +698,13 @@ function validacionFrm() {
 function guardarPedido() {
         var codpersonal =$("#vrcodpersonal").val();
         var oficina = $("#vroficina").val();
+        var zona = $('vrzona').val();
         var datosproductos ={arrayproductos}
         var data = $("#frmpedidos");
           $.ajax({
             dataType:'text',
             type: 'POST', 
-            url:  '../Pedido/C_Pedido.php',
+            url:  '../pedido/C_Pedido.php',
             data:data.serialize()+"&accion=guardar&array="+JSON.stringify(datosproductos)+
                 "&codPersonal="+codpersonal+"&oficina="+oficina, 
             success: function(response){
@@ -773,7 +727,7 @@ function validarTelefono(telefono) {
     var numeros = ['012345678','123456789','987654321','876543210'];
     for (let i = 0; i < numeros.length; i++) {
         if(telefono == numeros[i]){
-            console.log(numeros[i]);
+           
             return true;
         } 
         
@@ -786,7 +740,7 @@ function mostrarPedido(mostrarpedido,tipo,codpersonal,oficina) {
     $.ajax({
         dataType:'text',
         type: 'POST', 
-        url:  '../Pedido/C_ListarPedidos.php',
+        url:  '../pedido/C_ListarPedidos.php',
         data: {
             "accion":  accion,
             "tipo": tipo,
@@ -794,6 +748,7 @@ function mostrarPedido(mostrarpedido,tipo,codpersonal,oficina) {
             "oficina" : oficina
         },
         success: function(response){
+            console.log(response);
             if(tipo == "c"){
                 $('#acordionresponsive').html(response);
             }else{
@@ -811,7 +766,7 @@ function completarContrato(nr_contrato) {
     $.ajax({
         dataType:'text',
         type: 'POST', 
-        url:  '../Pedido/C_verificar.php',
+        url:  '../pedido/C_verificar.php',
         data: {
             "verificar":  accion,
             "nr_contrato": nr_contrato,    
@@ -828,7 +783,7 @@ function generarCodigo() {
     $.ajax({
         dataType:'text',
         type: 'POST', 
-        url:  '../Pedido/C_verificar.php',
+        url:  '../pedido/C_verificar.php',
         data: {
             "verificar":  accion,
         },
@@ -871,4 +826,40 @@ function reiniciarFrm() {
     $('#tablaproductos').find("tr:gt(0)").remove();
     $("#tablaproductos").hide();
     generarCodigo();
+}
+
+
+function tablaprincipal(arrayproductos){
+    if(Object.keys(arrayproductos) != "" && arraycodigos.length != 0){
+        $('#tabladelProducto').find("tr:gt(0)").remove();
+                for (let i = 0; i < arrayproductos.length; i++) {
+                    if (arrayproductos[i] != undefined) {
+                            if(arrayproductos[i]['combo'] != undefined){
+                                var fila="<tr><td style='display: none;'>"+arrayproductos[i]['combo']+
+                                "</td><td>"+arrayproductos[i]['nombre']+ "</td><td>"+arrayproductos[i]['cantidad']+
+                                "</td><td>"+arrayproductos[i]['precio']+"</td><td>"+arrayproductos[i]['promocion']+"</td><td style='display: none;'>"+
+                                arrayproductos[i]['total'] +"</td></tr>";
+                                var btn = document.createElement("TR");
+                                btn.setAttribute('id', arrayproductos[i]['combo']);
+                            }else{
+                               
+                                var fila="<tr><td style='display: none;'>"+arrayproductos[i]['cod_producto']+
+                                "</td><td>"+arrayproductos[i]['nombre']+ "</td><td>"+arrayproductos[i]['cantidad']+
+                                "</td><td>"+arrayproductos[i]['precio']+"</td><td>"+arrayproductos[i]['promocion']+"</td><td style='display: none;'>"+
+                                arrayproductos[i]['total'] +"</td></tr>";
+                                var btn = document.createElement("TR");
+                            }
+                            btn.innerHTML=fila;
+                            document.getElementById("tabla").appendChild(btn);
+                    }   
+                }
+                $("#tablaproductos").show("slow");
+                $("#ModalProducto").modal("hide");
+                document.getElementById("frmagregarProducto").reset();
+                $('#productosMomento').find("tr:gt(0)").remove();
+                arraytemporal =[];
+                arraycodigos=[];
+    }else{
+        mensajesError("Ingrese un Producto","mensaje");
+    }
 }

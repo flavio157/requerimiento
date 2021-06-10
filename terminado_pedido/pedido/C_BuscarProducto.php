@@ -1,5 +1,5 @@
 <?php
-session_start();
+
 require_once("M_BuscarProductos.php");
 
 
@@ -17,10 +17,9 @@ require_once("M_BuscarProductos.php");
         C_BuscarProducto::PoliticaPrecios($cantidad,$cod_producto,$zona);
       
     }else if($accion == "politicabonos"){
-        $cantidad = $_POST['cantidad'];
-        $cod_producto = $_POST['codproducto'];
+        $dt = json_decode($_POST['datos']);
         $zona = $_POST['zona'];
-        C_BuscarProducto::PoliticaBonos($cantidad,$cod_producto,$zona);
+        C_BuscarProducto::PoliticaBonos($dt,$zona);
 
     }else if($accion == "bonoitem"){
         $cod_bono = $_POST['codbono'];
@@ -77,25 +76,40 @@ class C_BuscarProducto
 
 
     
-    static function PoliticaBonos($cantidad,$cod_producto,$zona)
+    static function PoliticaBonos($dt,$zona)
     {
             $M_politicaBono = new M_BuscarProductos();
-            $Bono = $M_politicaBono->M_PoliticaBono($zona,$cantidad,$cod_producto);
-            $dato = $Bono['BONO'];
-            if($Bono != 0){
-                if($cantidad >= 20){
-                        $dato = intval(($cantidad / 20)) * $Bono['BONO'];
-                }
-            }else{
-                $dato = 0;
+            $mensaje = "";
+            $cantidad = 0;
+            $promo = 0;
+            foreach ($dt->arrayproductos as $date){
+                if(isset($date->cod_producto)){
+                    $cantidad += intval($date->cantidad);
+                    $promo += intval($date->promocion);  
             }
-            
-            
-            $array  = array(
-                'estado' => 'ok',
-                'bono' =>  $dato,
-                );
-            echo json_encode($array,JSON_FORCE_OBJECT);
+          }  
+            $Bono = $M_politicaBono->M_PoliticaBono($zona,$cantidad);   
+            if($cantidad >= 20){
+                $dato = intval(($cantidad / 20)) * $Bono['BONO'];
+                if($dato < $promo){
+                    $estado = 'error';
+                    $mensaje =  'La promocion no corresponde a la cantidad';
+                }else{
+                    $estado = 'ok';
+                }
+            }else {
+                if($Bono['BONO'] < $promo){
+                    $estado = 'error';
+                    $mensaje = 'La promocion no corresponde a la cantidad';
+                }else{
+                    $estado = 'ok';
+                }
+            }
+            $datos  = array(
+                'estado' => $estado,
+                'mensaje' => $mensaje,
+            );
+            echo json_encode($datos,JSON_FORCE_OBJECT);
     }
 
 
@@ -104,7 +118,6 @@ class C_BuscarProducto
         $M_politicaPrecio = new M_BuscarProductos();
         $codigosProducto =   $M_politicaPrecio->M_ComboItem($cod_combo);
         print_r($codigosProducto);
-       
     }
 
     static function comboProducto($cod_combo)
