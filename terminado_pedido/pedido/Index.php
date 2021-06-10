@@ -114,8 +114,8 @@ $cod = $_SESSION["cod"];
                         <label for="formcondicion" class="form-label">CONDICIÓN</label>
                         <select class="form-select" name="slccondicion" aria-label="Default select example" id="condicion">
                             <option selected value="n">Condicion</option>
-                            <option value="1">Credito</option>
-                            <option value="2">Contado</option>
+                            <option value="0">Credito</option>
+                            <option value="1">Contado</option>
                         </select>
                     </div>
                 </div>
