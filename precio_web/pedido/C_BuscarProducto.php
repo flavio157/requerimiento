@@ -3,13 +3,15 @@ require_once("M_BuscarProductos.php");
 
 
     $accion = $_POST["accion"];
+
     
     if($accion === "buscar"){
         $nomproducto = $_POST['producto'];
        C_BuscarProducto::BuscaProducto($nomproducto);
     }else if($accion === "regalos"){
-        $cantidad = $_POST['cantidad'];
-        C_BuscarProducto::VerificarProductoRegalo($cantidad);
+        $zona = $_POST["zona"];
+        $cantidad = json_decode($_POST['cantidad']) ;
+        C_BuscarProducto::VerificarProductoRegalo($cantidad,$zona);
     }
       
 class C_BuscarProducto
@@ -27,9 +29,9 @@ class C_BuscarProducto
         
     }
 
-    static function VerificarProductoRegalo($cantidad){
+    static function VerificarProductoRegalo($cantidad,$zona){
             $reglaReg = new M_BuscarProductos();
-            $regalo = $reglaReg->M_VerificarRegalo('600',$cantidad);
+            $regalo = $reglaReg->M_VerificarRegalo('600',$cantidad,$zona);
            
             $datos  = array(
                 "regalo" =>  $regalo

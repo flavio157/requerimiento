@@ -1,5 +1,3 @@
-
-<!-- Modal1 para ingresar el pedido de producto -->
 <div class="modal fade " id="ModalProducto" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-x2">
         <div class="modal-content">
