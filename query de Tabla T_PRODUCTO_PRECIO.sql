@@ -186,18 +186,6 @@ update T_PRODUCTO_PRECIO set PRECIO = '64.06', BONO = '10' where COD_PRODUCTO = 
 
 
 
-/*BP9 PROCOL.PLUS N.X600*/
-update T_PRODUCTO_PRECIO set PRECIO = '57.28', BONO = '2' where COD_PRODUCTO = '00457' and ZONA = '1' and CANTIDAD = '6'
-update T_PRODUCTO_PRECIO set PRECIO = '57.28', BONO = '5' where COD_PRODUCTO = '00457' and ZONA = '1' and CANTIDAD = '10'
-update T_PRODUCTO_PRECIO set PRECIO = '51.12', BONO = '10' where COD_PRODUCTO = '00457' and ZONA = '1' and CANTIDAD = '20'
-
-update T_PRODUCTO_PRECIO set PRECIO = '59.75', BONO = '2' where COD_PRODUCTO = '00457' and ZONA = '2' and CANTIDAD = '6'
-update T_PRODUCTO_PRECIO set PRECIO = '59.75', BONO = '5' where COD_PRODUCTO = '00457' and ZONA = '2' and CANTIDAD = '10'
-update T_PRODUCTO_PRECIO set PRECIO = '53.59', BONO = '10' where COD_PRODUCTO = '00457' and ZONA = '2' and CANTIDAD = '20'
-
-update T_PRODUCTO_PRECIO set PRECIO = '59.75', BONO = '2' where COD_PRODUCTO = '00457' and ZONA = '3' and CANTIDAD = '6'
-update T_PRODUCTO_PRECIO set PRECIO = '59.75', BONO = '5' where COD_PRODUCTO = '00457' and ZONA = '3' and CANTIDAD = '10'
-update T_PRODUCTO_PRECIO set PRECIO = '53.59', BONO = '10' where COD_PRODUCTO = '00457' and ZONA = '3' and CANTIDAD = '20'
 
 
 
@@ -361,7 +349,7 @@ insert into T_PRODUCTO_PRECIO values('00579','1','10','5','92.40')
 insert into T_PRODUCTO_PRECIO values('00579','1','20','10','80.08')
 insert into T_PRODUCTO_PRECIO values('00579','2','6','2','97.32')
 insert into T_PRODUCTO_PRECIO values('00579','2','10','5','97.32')
-insert into T_PRODUCTO_PRECIO values('00579','2','20','10','95.00')
+insert into T_PRODUCTO_PRECIO values('00579','2','20','10','85.00')
 insert into T_PRODUCTO_PRECIO values('00579','3','6','2','94.86')
 insert into T_PRODUCTO_PRECIO values('00579','3','10','5','94.86')
 insert into T_PRODUCTO_PRECIO values('00579','3','20','10','82.54')
@@ -520,6 +508,5 @@ update T_PRODUCTO_PRECIO set PRECIO = '94.86', BONO = '10' where COD_PRODUCTO = 
 
 /* NO HAY PRECIO LIMA NORTE Y SUR 
     00455	00004	MAGNESIO 140 GRS -> MG1
-    00534	00004	CP6 VITA FE (ANEMIA) X 300 -> CP6
 */
 
