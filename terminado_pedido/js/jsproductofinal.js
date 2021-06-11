@@ -586,7 +586,7 @@ function obtenerprovincia(){
     $.ajax({
         dataType:'text',
         type: 'POST', 
-        url:  '../Pedido/C_ListarCiudades.php',
+        url:  '../pedido/C_ListarCiudades.php',
         data: {
             "accion": accion,
              "oficina" :  oficina  
