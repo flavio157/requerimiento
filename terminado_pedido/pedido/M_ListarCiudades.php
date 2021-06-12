@@ -33,6 +33,18 @@ class M_ListarCiudades{
             $query = null;
         }
     }
+
+    public function M_BuscarCLiente($identificacion)
+    {
+        $query=$this->db->prepare("SELECT * FROM T_CLIENTE WHERE NUM_RUC = '$identificacion ' OR DNI_CLIENTE = '$identificacion'");
+        $query->execute();
+        $datosDistrito = $query->fetchAll();
+        if($datosDistrito){
+            return $datosDistrito;
+            $query->closeCursor();
+            $query = null;
+        }
+    }
 }
 
 ?>

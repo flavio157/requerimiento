@@ -11,6 +11,9 @@
     }else if ($accion == "distrito"){
         $provincia = $_POST['provincia'];
         C_ListarCiudades::Listar_Distrito($provincia,$oficina);
+    }else if($accion == "Bcliente"){
+        $identificacion = $_POST['identificaion'];
+        C_ListarCiudades::BuscarCLiente($identificacion,$oficina);
     }
 
 
@@ -43,6 +46,14 @@
                 }
               echo $Distrito;   
             }
+        }
+
+        static function BuscarCLiente($identificacion,$oficina){
+            $M_listarDistrito = new M_ListarCiudades($oficina);
+            $c_cliente = $M_listarDistrito->M_BuscarCLiente($identificacion);
+            echo json_encode($c_cliente,JSON_FORCE_OBJECT);
+      
+            
         }
     }
 

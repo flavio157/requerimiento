@@ -251,6 +251,18 @@ $(document).ready(function(){
     $('#txtcontrato').on('input', function () { 
         this.value = this.value.replace(/[^0-9a-zA-Z]/g,'');
     });
+
+    $('#txtnumero').keypress(function (e) {
+        if(e.which == 13) {
+            e.preventDefault();
+            
+            cliente =  $("#txtnumero").val();
+            BuscarCLiente(cliente);
+        }
+   })
+
+
+
 })
 
 
@@ -558,8 +570,7 @@ function mensajeSuccess(texto,id) {
 
 
 
-
-function obtenerDistrito(provincia){
+function obtenerDistrito(provincia,seleccDistrito){
     var accion = "distrito";        
     var oficina = $("#vroficina").val();
     $.ajax({
@@ -573,11 +584,12 @@ function obtenerDistrito(provincia){
         },
         success: function(response){
             $('#Selectdistro').append(response);
-           
+            if(seleccDistrito){
+                $("#Selectdistro").val(seleccDistrito);
+            }
         }
     });
 }
-
 
 
 function obtenerprovincia(){
@@ -748,7 +760,6 @@ function mostrarPedido(mostrarpedido,tipo,codpersonal,oficina) {
             "oficina" : oficina
         },
         success: function(response){
-            console.log(response);
             if(tipo == "c"){
                 $('#acordionresponsive').html(response);
             }else{
@@ -862,4 +873,37 @@ function tablaprincipal(arrayproductos){
     }else{
         mensajesError("Ingrese un Producto","mensaje");
     }
+}
+
+
+function BuscarCLiente(identificacion) {
+    var oficina = $("#vroficina").val();
+    var accion = "Bcliente";
+    $.ajax({
+        dataType:'text',
+        type: 'POST', 
+        url:  '../pedido/C_ListarCiudades.php',
+        data: {
+           "accion" : accion ,
+           "identificaion" : identificacion,
+           "oficina" :  oficina  
+        },
+        success: function(response){
+            obj = JSON.parse(response);
+          
+            if(obj != null){
+              
+                $("#txtcliente").val(obj[0]['1']+" "+obj[0]['2']+" "+obj[0]['3']+" "+obj[0]['4']);
+                $("#txtdireccion").val(obj[0]['8']);
+                $("#txtreferencia").val(obj[0]['9']);
+                $("#txttelefono").val(obj[0]['13']);
+                $("#Selectprovincia").val(obj[0]['6']);
+                obtenerDistrito(obj[0]['6'],obj[0]['7']);
+            }else{
+                console.log('el cliente no esta registrado');
+            }
+           
+           
+        }
+    });
 }

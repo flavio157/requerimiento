@@ -181,8 +181,8 @@ $cod = $_SESSION["cod"];
                 </div>
         </form>
 
-        <?php include '../Vista/Modal_IngresarProducto.php';?>
-        <?php include '../Vista/Modal_ListarPedidos.php';?>
+        <?php include '../vista/Modal_IngresarProducto.php';?>
+        <?php include '../vista/Modal_ListarPedidos.php';?>
 
         </div>
     </body>
