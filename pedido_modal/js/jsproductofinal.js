@@ -482,7 +482,7 @@ function agregarproductos() {
     var precio =$("#precioproducto").val();
     var total = $("#G_total").val();
     
-    if(nombre !== '' & cantidad !== ''  && cod_producto !== '' ){
+    if(nombre !== '' & cantidad !== ''  && cod_producto !== '' && precio != ''){
                 var estado = 1;
                 if (contador >= 0) {
                     for (let j = 0; j < arrayproductos.length; j++) {
