@@ -1,0 +1,159 @@
+<?php
+
+require_once("../funciones/M_BuscarProductos.php");
+
+
+    $accion = $_POST["accion"];
+    
+    if($accion === "buscar"){
+        $nomproducto = $_POST['producto'];
+        $zona = $_POST['zona'];
+        C_BuscarProducto::BuscaProducto($nomproducto,$zona);
+
+    }else if ($accion == "politicaprecios"){
+        $cantidad = $_POST['cantidad'];
+        $cod_producto = $_POST['codproducto'];
+        $zona = $_POST['zona'];
+        C_BuscarProducto::PoliticaPrecios($cantidad,$cod_producto,$zona);
+      
+    }else if($accion == "politicabonos"){
+        $dt = json_decode($_POST['datos']);
+        $zona = $_POST['zona'];
+        C_BuscarProducto::PoliticaBonos($dt,$zona);
+
+    }else if($accion == "bonoitem"){
+        $cod_bono = $_POST['codbono'];
+        C_BuscarProducto::comboitem($cod_bono);
+
+    }else if($accion == "productobono"){
+        $cod_bono = $_POST['codbono'];
+        C_BuscarProducto::comboProducto($cod_bono);
+    }else if($accion == "precioweb"){
+        $cod_producto = $_POST['cod_producto'];
+        C_BuscarProducto::precioweb($cod_producto);
+    }else if($accion == "regalos") {
+        $zona = $_POST["zona"];
+        $cantidad = json_decode($_POST['cantidad']) ;
+        C_BuscarProducto::VerificarProductoRegalo($cantidad,$zona);
+    }
+   
+
+class C_BuscarProducto
+{
+    
+    static function BuscaProducto($nomproducto,$zona)
+    {   
+        $M_buscarproducto = new M_BuscarProductos();
+            if(substr($nomproducto, 0, 2) == "CM"){
+                $c_cod = $M_buscarproducto->M_Combo($nomproducto);
+                $html="";
+                foreach($c_cod as $combo){
+                    $html.= '<div><a class="suggest-element" data="'.$combo['PRECIO'].'"class ="'.$combo['COD_COMBO'].'" id="'.$combo['NOM_COMPLETO'].'">'.$combo['NOM_COMPLETO'].'</a></div>';
+                }
+            }else{
+                $c_cod = $M_buscarproducto->M_BuscarProducto($zona,$nomproducto);
+                $html="";
+                foreach($c_cod as $producto){
+                    $html.= '<div><a class="suggest-element" data="'.$producto['DES_PRODUCTO'].'&'.$producto['PESO_NETO'].'" id="'.$producto['COD_PRODUCTO'].'">'.$producto['DES_PRODUCTO'].'</a></div>';
+                }
+            }
+            echo $html;
+         
+        
+    }
+
+
+    static function PoliticaPrecios($cantidad,$cod_producto,$zona){
+            $M_politicaPrecio = new M_BuscarProductos();
+            $precio = $M_politicaPrecio->M_PoliticaPrecios($zona,$cantidad,$cod_producto);
+            if($precio['PRECIO'] != null){
+                $datos  = array(
+                    'estado' => 'ok',
+                    'precio' => $precio['PRECIO'],
+                    );
+                    echo json_encode($datos,JSON_FORCE_OBJECT);
+            }
+        
+    }
+
+
+    
+    static function PoliticaBonos($dt,$zona)
+    {
+            $M_politicaBono = new M_BuscarProductos();
+            $mensaje = "";
+            $cantidad = 0;
+            $promo = 0;
+            foreach ($dt->arrayproductos as $date){
+                if(isset($date->cod_producto)){
+                    $cantidad += intval($date->cantidad);
+                    $promo += intval($date->promocion);  
+            }
+          }  
+            $Bono = $M_politicaBono->M_PoliticaBono($zona,$cantidad);   
+            if($cantidad >= 20){
+                $dato = intval(($cantidad / 20)) * $Bono['BONO'];
+                if($dato < $promo){
+                    $estado = 'error';
+                    $mensaje =  'La promocion no corresponde a la cantidad';
+                }else{
+                    $estado = 'ok';
+                }
+            }else {
+                if($Bono['BONO'] < $promo){
+                    $estado = 'error';
+                    $mensaje = 'La promocion no corresponde a la cantidad';
+                }else{
+                    $estado = 'ok';
+                }
+            }
+            $datos  = array(
+                'estado' => $estado,
+                'mensaje' => $mensaje,
+            );
+            echo json_encode($datos,JSON_FORCE_OBJECT);
+    }
+
+
+    static function comboitem($cod_combo)
+    {
+        $M_politicaPrecio = new M_BuscarProductos();
+        $codigosProducto =   $M_politicaPrecio->M_ComboItem($cod_combo);
+        print_r($codigosProducto);
+    }
+
+    static function comboProducto($cod_combo)
+    {
+        $M_politicaPrecio = new M_BuscarProductos();
+        $codigosProducto =   $M_politicaPrecio->M_ComboProducto($cod_combo);
+        $datos  = array(
+            'estado' => 'ok',
+            'datos' => $codigosProducto,
+            );
+            echo json_encode($datos,JSON_FORCE_OBJECT);
+    }
+
+
+    static function precioweb($cod_producto){
+        $M_politicaPrecio = new M_BuscarProductos();
+        $precio_web =   $M_politicaPrecio->M_PrecioWeb($cod_producto);
+        print_r($precio_web[0]['17']);
+    }
+
+
+    static function VerificarProductoRegalo($cantidad,$zona){
+        $reglaReg = new M_BuscarProductos();
+        $regalo = $reglaReg->M_VerificarRegalo('600',$cantidad,$zona);
+       
+        $datos  = array(
+            "regalo" =>  $regalo
+        );
+
+    echo json_encode($datos,JSON_FORCE_OBJECT);
+}
+
+
+
+}
+
+?>
