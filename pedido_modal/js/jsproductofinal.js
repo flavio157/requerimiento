@@ -1025,10 +1025,10 @@ function agregarProductoRegalo(dat) {
         $("#productosMomento tbody tr").remove();
     }
 
-    console.log(dt);
+
    for (let j = 0; j < dat.length; j++) {
       
-       console.log(j);
+     
         if (dat[j] != undefined && j >= dt) { 
             fila="<tr><td style='display: none;'>"+dat[j]['cod_producto']+
             "</td><td>"+dat[j]['nombre']+"</td><td>"+dat[j]['cantidad']+
