@@ -113,7 +113,7 @@ class C_BuscarProducto
             foreach ($dt->arrayproductos as $date){
                 if($date != null){
                     $Bono = $M_politicaBono->M_PoliticaBono($zona,$date->cantidad);  
-                    if($date->promocion <= $Bono['BONO']){
+                    if($date->promocion <= $Bono['BONO'] && $date->promocion != 0){
                         $tipo = 1;
                         break;
                     }else{
