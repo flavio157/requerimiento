@@ -31,7 +31,7 @@ class C_BuscarProducto
 
     static function VerificarProductoRegalo($cantidad,$zona){
             $reglaReg = new M_BuscarProductos();
-            $regalo = $reglaReg->M_VerificarRegalo('600',$cantidad,$zona);
+            $regalo = $reglaReg->M_VerificarRegalo($cantidad,$zona);
            
             $datos  = array(
                 "regalo" =>  $regalo

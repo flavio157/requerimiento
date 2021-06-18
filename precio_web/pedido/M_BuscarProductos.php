@@ -1,5 +1,5 @@
 <?php
-    require_once("../Funciones/DataBase.php");
+    require_once("../funciones/DataBase.php");
 
 class M_BuscarProductos{
 
@@ -23,8 +23,8 @@ class M_BuscarProductos{
         }
         
         
-        public function M_VerificarRegalo($gramo,$cantidad,$zona){
-            $query=$this->db->prepare("SELECT * FROM T_PRODUCTOS_REGALO WHERE UNIDAD_MEDIDA = $gramo  AND CANTIDAD = $cantidad
+        public function M_VerificarRegalo($cantidad,$zona){
+            $query=$this->db->prepare("SELECT * FROM T_PRODUCTOS_REGALO WHERE CANTIDAD = $cantidad
             AND  ESTADO = '1' AND ZONA = $zona ");                  
             $query->execute();
             $regalo =  $query->fetchAll();

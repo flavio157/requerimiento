@@ -1,12 +1,10 @@
 var valorproducto = 0;
-var precioproducto = 0;
+/*var precioproducto = 0;*/
 var arrayproductos = [];
 var contador = 0;
 var arraycodigos = [];
 var arraytemporal = [];
 var temporalPrecios = [];
-var cumpliopromo = [];
-
 
 $(document).ready(function(){
     $("#cerrarmodalProducto").click(function name(params) {
@@ -70,15 +68,7 @@ $(document).ready(function(){
                      }
             }   
         }
-        for (let l = 0; l < temporalPrecios.length; l++) {
-            if(temporalPrecios[l] != undefined && arrayproductos[l] != undefined){
-                if(arrayproductos[l]['precio'] == "0"){
-                    arrayproductos[l]['precio'] = temporalPrecios[l]['precio'];
-                }
-            }
-        }
-        cumpliopromo = [];
-        verificarRegalo(arrayproductos)
+        returnPrecio(temporalPrecios);
     }); 
 
     $("#G_cantidad").on('keyup',function(e){
@@ -128,6 +118,19 @@ $(document).ready(function(){
 
 
 })
+
+function returnPrecio(temporalPrecios) {
+    for (let l = 0; l < temporalPrecios.length; l++) {
+        if(temporalPrecios[l] != undefined && arrayproductos[l] != undefined){
+            if(arrayproductos[l]['precio'] == "0"){
+                arrayproductos[l]['precio'] = temporalPrecios[l]['precio'];
+            }
+        }
+    }
+    cumpliopromo = [];
+    verificarRegalo(arrayproductos)
+}
+
 
 
 function buscarProducto(nombreproducto) {
@@ -261,54 +264,102 @@ function agregarproductos() {
 
 
     function verificarRegalo(datos) {
-        var productoRegalo = 0;
-
         var zona = $("#vrzona").val();
+        var unidad = 600; 
+        var precio = 120.00;
+        var productoRegalo = 0;
+        var arrad = [];
+        var temp = [];
+        var _canregun = 0;
+        var _canregdo = 0;
+        var jungle = [];
         for (let i = 0; i < datos.length; i++) {
             if (datos[i] != undefined) { 
-                if(datos[i]['gramos'] >= 600){
+                if(datos[i]['gramos'] >= unidad || datos[i]['precio'] >= precio){
                     productoRegalo++ ;
-
-                    $.ajax({
-                        dataType:'text',
-                        type: 'POST', 
-                        url:  '../pedido/C_BuscarProducto.php',
-                        data: {
-                            "accion": "regalos",
-                            "cantidad" : productoRegalo,
-                            "zona" : zona
-                        },
-                        success: function(response){
-                            obj = JSON.parse(response);
-                            $.each(obj['regalo'], function(i, item) {
-                                for (let l = 0; l < datos.length; l++) {
-                                        if (datos[l] != undefined && datos[l]['gramos'] != undefined ) { 
-                                            if(item.REGALO_UNIDAD_MEDIDA.trim() === datos[l]['gramos']){
-                                                if(cumpliopromo.indexOf(item.CANTIDAD) == -1){
-                                                    datos[l]["precio"] = 0;
-                                                    datos[l]["total"] = 0;
-                                                }
-                                                  cumpliopromo.push(item.CANTIDAD);
-                                            } 
-                                          
-                                        }
-                                    }
-                            });
-                            agregarProductoRegalo(datos);
-                        }
-                        
-                    });
-                   
                 }else{
-                    agregarProductoRegalo(datos);
+                    arrad.push(i);
+                }  
+            }      
+        }    
+        if(arrad.length > 0){
+            jungle = [
+                { regalo1: productoRegalo, gramo: datos[arrad[0]]['gramos']},
+            ];    
+        }       
+       
+        $.ajax({
+            dataType:'text',
+            type: 'POST', 
+            url:  '../pedido/C_BuscarProducto.php',
+            data: {
+                "accion": "regalos",
+                "cantidad" : productoRegalo,
+                "zona" : zona,
+                
+            },
+            success: function(response){
+                var arr = [];
+                var count = 0;
+                var cantpro = 0;
+                obj = JSON.parse(response);
+                if(arrad.length >= 1){
+                        $.each(obj['regalo'], function(i, item) {
+                            console.log(item['3'].trim() +"=="+ jungle[0]['gramo']);
+                            if(item['3'].trim() == jungle[0]['gramo'] ){
+                                arr.push(obj['regalo'][i]);
+                                cantpro = cantpro + 1;
+                            }
+                        });
+                        
+                    
+                    if(cantpro >= 2){
+                        if(arrad.length >= 2){
+                            for (let i = 0; i < arr.length; i++) {
+                                if(arr[i]['4'].trim() == datos[arrad[1]]['gramos']){
+                                    temp = arr[1];
+                                    console.log(arr[1]);
+                                    count = 1;
+                                    break;
+                                }else if(arr[i]['4'] == 0){
+                                    console.log(arr[i]);
+                                    temp = arr[i];
+                                    count = 1;
+                                  
+                                }
+                            } 
+                        } 
+                    }else{
+                        $.each(obj['regalo'], function(i, item) {
+                            if(item['3'].trim() == jungle[0]['gramo'] ){
+                                temp = obj['regalo'][i];
+                                count = 1; 
+                           }
+                        });
+                    }
+                    if(temp != ""){
+                        for (let i = 1; i <= arrad.length; i++) {
+                            if(temp['3'].trim() == datos[arrad[i - 1]]['gramos']){
+                               _canregun++;
+                            }else if(temp['4'].trim() == datos[arrad[i - 1]]['gramos']){
+                               _canregdo++;
+                            }
+                       }
+                    }
                 }
-              
-            }    
-               
-        }
-        
-      
-     
+           
+                if(count == 1){
+                    for (let l = 1; l <= arrad.length; l++) {
+                        if(temp[3].trim() == datos[arrad[l - 1]]['gramos'] &&  _canregun <= temp[5].trim()){
+                            datos[arrad[l - 1]]["precio"] = 0;
+                        }else if (temp[4].trim() == datos[arrad[l - 1]]['gramos'] && _canregdo <= temp[6].trim()){
+                            datos[arrad[l - 1]]["precio"] = 0;
+                        }
+                    } 
+                 } 
+                agregarProductoRegalo(datos);                        
+            } 
+        });            
     }
 
     function agregarProductoRegalo(dat) {
@@ -339,3 +390,7 @@ function agregarproductos() {
     }
 
   
+
+
+
+
