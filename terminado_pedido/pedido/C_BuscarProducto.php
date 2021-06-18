@@ -28,6 +28,12 @@ require_once("M_BuscarProductos.php");
     }else if($accion == "productobono"){
         $cod_bono = $_POST['codbono'];
         C_BuscarProducto::comboProducto($cod_bono);
+
+    }else if ($accion == "verificarprecio"){
+        $cantidad = $_POST['cantidad'];
+        $cod_producto = json_decode($_POST['codproducto']);
+        $zona = $_POST['zona'];
+        C_BuscarProducto::vrificarprecio($zona,$cantidad,$cod_producto);
     }
    
 
@@ -61,6 +67,21 @@ class C_BuscarProducto
     }
 
 
+    static function vrificarprecio($zona,$cantidad,$dt){
+        $M_politicaPrecio = new M_BuscarProductos();
+       foreach ($dt->arrayproductos as $date){
+           if($date != null){
+            $precio = $M_politicaPrecio->M_PoliticaPrecios($zona,$cantidad,$date->cod_producto);
+            $date->precioproducto = $precio['PRECIO'];
+           }
+            
+        }
+        echo json_encode($dt,JSON_FORCE_OBJECT);
+    }
+
+
+
+
     static function PoliticaPrecios($cantidad,$cod_producto,$zona){
             $M_politicaPrecio = new M_BuscarProductos();
             $precio = $M_politicaPrecio->M_PoliticaPrecios($zona,$cantidad,$cod_producto);
@@ -68,46 +89,88 @@ class C_BuscarProducto
                 $datos  = array(
                     'estado' => 'ok',
                     'precio' => $precio['PRECIO'],
+                    'cod_producto' => $precio['COD_PRODUCTO']
                     );
                     echo json_encode($datos,JSON_FORCE_OBJECT);
             }
         
     }
 
-
     
+
+
+   
+
+
     static function PoliticaBonos($dt,$zona)
     {
             $M_politicaBono = new M_BuscarProductos();
             $mensaje = "";
             $cantidad = 0;
             $promo = 0;
+            $tipo=0;
+            $dif= "";
             foreach ($dt->arrayproductos as $date){
-                if(isset($date->cod_producto)){
-                    $cantidad += intval($date->cantidad);
-                    $promo += intval($date->promocion);  
+                if($date != null){
+                    $Bono = $M_politicaBono->M_PoliticaBono($zona,$date->cantidad);  
+                    if($date->promocion <= $Bono['BONO']){
+                        $tipo = 1;
+                        break;
+                    }else{
+                        break;
+                    } 
+                } 
             }
-          }  
-            $Bono = $M_politicaBono->M_PoliticaBono($zona,$cantidad);   
-            if($cantidad >= 20){
-                $dato = intval(($cantidad / 20)) * $Bono['BONO'];
-                if($dato < $promo){
-                    $estado = 'error';
-                    $mensaje =  'La promocion no corresponde a la cantidad';
-                }else{
-                    $estado = 'ok';
+
+            if($tipo != 1){
+                foreach ($dt->arrayproductos as $date){
+                    if(isset($date->cod_producto)){
+                        $cantidad += intval($date->cantidad);
+                        $promo += intval($date->promocion);  
+                    }
+                }  
+
+                $Bono = $M_politicaBono->M_PoliticaBono($zona,$cantidad);  
+
+                if($cantidad >= 20){
+                    $dato = intval(($cantidad / 20)) * $Bono['BONO'];
+                    if($dato < $promo){
+                        $estado = 'error';
+                        $mensaje =  'La promocion no corresponde a la cantidad';
+                    }else{
+                        $estado = 'ok';
+                        $dif = 'com';
+                    }
+                }else {
+                    if($promo > $Bono['BONO']){
+                        $estado = 'error';
+                        $mensaje = 'La promocion no corresponde a la cantidad';
+                    }else{
+                        $estado = 'ok';
+                        $dif = 'com';
+                    }
                 }
-            }else {
-                if($Bono['BONO'] < $promo){
-                    $estado = 'error';
-                    $mensaje = 'La promocion no corresponde a la cantidad';
-                }else{
-                    $estado = 'ok';
-                }
+            }else{
+                foreach($dt->arrayproductos as $date){
+                    if($date != null){
+                        $Bono = $M_politicaBono->M_PoliticaBono($zona,$date->cantidad);  
+                   
+                        if($date->promocion > $Bono["BONO"]){
+                            $estado = 'error';
+                            $mensaje = 'La promocion no corresponde a la cantidad';
+                            break; 
+                        }else{
+                            $estado = 'ok';
+                            $dif = 'nor';
+                        }
+                    }
+                }  
             }
             $datos  = array(
                 'estado' => $estado,
                 'mensaje' => $mensaje,
+                'dif' => $dif,
+                'tipo' => $tipo
             );
             echo json_encode($datos,JSON_FORCE_OBJECT);
     }

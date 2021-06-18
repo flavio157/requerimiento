@@ -1,13 +1,13 @@
 <?php
-    require_once("M_Pedido.php");
-    require_once("../funciones/f_funcion.php");
+require_once("M_Pedido.php");
+require_once("../funciones/f_funcion.php");
 
-   
 
     $accion = $_POST["accion"];
       
 
     if($accion == "guardar"){
+        $codcliente = $_POST['codcliente'];
         $oficina = $_POST['oficina'];
         $codPersonal = $_POST['codPersonal'];
         $tipo_documento = $_POST["slcdocumento"];
@@ -30,7 +30,7 @@
         $dataproductos = json_decode($_POST['array']);
         $provincia = $_POST["slcciudad"];
 
-        guardarPedidos::validacion(trim($oficina),trim($tipo_documento),trim($codPersonal),
+        guardarPedidos::validacion(trim($codcliente),trim($oficina),trim($tipo_documento),trim($codPersonal),
         trim($identificacion),trim($cliente),trim($direccion),trim($referencia),
         trim($contacto),trim($telefono),trim($entrega),trim($fcancelacion) ,trim($est_pedido),
         trim($cod_distrito),trim($num_contrato),
@@ -42,14 +42,14 @@
     class guardarPedidos
     { 
 
-        static function validacion($oficina,$tipo_documento,$codPersonal,
+        static function validacion($codcliente,$oficina,$tipo_documento,$codPersonal,
             $identificacion,$cliente,$direccion,$referencia,$contacto,$telefono,$entrega,
             $fcancelacion,$est_pedido,$cod_distrito,$num_contrato,
             $cod_provincia,$telefono2,$condicion,$dataproductos){
 
              $contrato = preg_match("/^[a-zA-Z0-9]+$/", $num_contrato);
              if($contrato != 0){
-                    guardarPedidos::guardarpedido($oficina,$tipo_documento,$codPersonal,
+                    guardarPedidos::guardarpedido($codcliente,$oficina,$tipo_documento,$codPersonal,
                     $identificacion,$cliente,$direccion,$referencia,$contacto,$telefono,$entrega,
                     $fcancelacion,$est_pedido,$cod_distrito,$num_contrato,
                     $cod_provincia,$telefono2,$condicion,$dataproductos);
@@ -63,7 +63,7 @@
             
         }
         
-        static function guardarpedido($oficina,$tipo_documento,$codPersonal,
+        static function guardarpedido($codcliente,$oficina,$tipo_documento,$codPersonal,
         $identificacion,$cliente,$direccion,$referencia,$contacto,$telefono,$entrega,
         $fcancelacion,$est_pedido,$cod_distrito,$num_contrato,
         $cod_provincia,$telefono2,$condicion,$dataproductos){
@@ -75,7 +75,7 @@
                 $observacion = observacionProducto($dataproductos);
                 $total = TotalProducto($dataproductos);
     
-                $c_pedido = $c_guardar->guardarpedido($codPersonal,$tipo_documento,
+                $c_pedido = $c_guardar->guardarpedido($codcliente,$codPersonal,$tipo_documento,
                 $identificacion,$cliente,$direccion,$referencia,$contacto,$telefono,$entrega,$fcancelacion,
                 $est_pedido,$observacion,$total,$cod_distrito,$num_contrato,$cod_provincia,$telefono2,$condicion,$dataproductos);
              
