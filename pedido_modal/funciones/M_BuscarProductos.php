@@ -12,7 +12,7 @@ class M_BuscarProductos{
         
         public function M_BuscarProducto($zona,$nom_producto)
         {
-            $query=$this->db->prepare("SELECT * FROM T_PRODUCTO WHERE COD_CATEGORIA = '00004' AND EST_PRODUCTO = '1' AND ABR_PRODUCTO LIKE '%$nom_producto%'");
+            $query=$this->db->prepare("SELECT * FROM T_PRODUCTO WHERE COD_CATEGORIA = '00004' AND EST_PRODUCTO = '1' AND DES_PRODUCTO LIKE '%$nom_producto%'");
             $query->execute();
            if ($query) {
                 return $query->fetchAll();
@@ -133,8 +133,8 @@ class M_BuscarProductos{
             }
         }
 
-        public function M_VerificarRegalo($gramo,$cantidad,$zona){
-            $query=$this->db->prepare("SELECT * FROM T_PRODUCTOS_REGALO WHERE UNIDAD_MEDIDA = $gramo  AND CANTIDAD = $cantidad
+        public function M_VerificarRegalo($cantidad,$zona){
+            $query=$this->db->prepare("SELECT * FROM T_PRODUCTOS_REGALO WHERE CANTIDAD = $cantidad
             AND  ESTADO = '1' AND ZONA = $zona ");                  
             $query->execute();
             $regalo =  $query->fetchAll();
@@ -142,6 +142,5 @@ class M_BuscarProductos{
                 return $regalo;
             }
         }
-
 }
 ?>

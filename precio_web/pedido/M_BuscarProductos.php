@@ -1,5 +1,5 @@
 <?php
-    require_once("../funciones/DataBase.php");
+    require_once("../Funciones/DataBase.php");
 
 class M_BuscarProductos{
 
@@ -14,7 +14,7 @@ class M_BuscarProductos{
         /*buscar y retorna el producto con su precio web */
         public function M_BuscarProducto_WEB($nom_producto)
         {
-            $query=$this->db->prepare("SELECT * FROM V_BUSCAR_PRODUCTO_WEB WHERE ABREVIATURA LIKE '%$nom_producto%'");
+            $query=$this->db->prepare("SELECT * FROM V_BUSCAR_PRODUCTO_WEB WHERE DESCRIPCION LIKE '%$nom_producto%'");
             $query->execute();
             $producto =  $query->fetchAll();
            if ($query) {

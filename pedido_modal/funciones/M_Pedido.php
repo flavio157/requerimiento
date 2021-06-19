@@ -11,18 +11,18 @@
         $this->bd=DatabaseDinamica::Conectarbd($bd);
     }
 
-    public function GuardarPedido($cod_vendedora,$tipo_documento,$identificacion,
+    public function GuardarPedido($codcliente,$cod_vendedora,$tipo_documento,$identificacion,
     $cliente,$direccion,$referencia,$contacto,$telefono,$entrega,$fcancelacion,$est_pedido,$observacion,
     $n_productos,$cod_distrito,$num_contrato,$cod_provincia,$telefono2,$contado,$dataproductos){
     $nuevaFecha = retunrFechaSqlphp($fcancelacion);
     $this->bd->beginTransaction();
         try { 
-            $query1=$this->bd->prepare("INSERT INTO T_PPEDIDO(COD_VENDEDORA,
+            $query1=$this->bd->prepare("INSERT INTO T_PPEDIDO(COD_CLIENTE,COD_VENDEDORA,
             TIPO_DOCUMENTO,IDENTIFICACION,CLIENTE,DIRECCION,REFERENCIA,CONTACTO,TELEFONO,ENTREGA,
             FCANCELACION,EST_PEDIDO,OBSERVACION,N_PRODUCTOS,
             COD_DISTRITO,NUM_CONTRATO,COD_PROVINCIA,TELEFONO2,CONTADO) values 
             
-            ('$cod_vendedora','$tipo_documento','$identificacion','$cliente','$direccion',
+            ('$codcliente','$cod_vendedora','$tipo_documento','$identificacion','$cliente','$direccion',
             '$referencia','$contacto','$telefono','$entrega','$nuevaFecha','$est_pedido','$observacion','$n_productos',
             '$cod_distrito','$num_contrato','$cod_provincia','$telefono2','$contado')");
             $query1->execute();
@@ -37,7 +37,7 @@
                     $query2 = $this->bd->prepare("INSERT INTO T_PPEDIDO_CANTIDAD(CODIGO,COD_PRODUCTO,
                     CANTIDAD,BONO,PRECIO,CCAN,CBON) 
                     VALUES($ultimocodigo[CODIGO],'$dato->cod_producto',$dato->cantidad,
-                    $dato->promocion,$dato->precio,$dato->cantidad,$dato->promocion)");
+                    $dato->promocion,$dato->precioproducto,$dato->cantidad,$dato->promocion)");
 
                     $query2->execute(); 
                              if($query2->errorCode()>0){	

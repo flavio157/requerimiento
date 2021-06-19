@@ -10,6 +10,7 @@
                 <input type="text" id="vroficina" style="display: none;" value="<?php echo $ofi?>"/>
                 <input type="text" id="vrzona" style="display: none;" value="<?php echo  $zon?>"/>
                 <input type="text" id="vrcodpersonal" style="display: none;" value="<?php echo  $cod?>"/>
+                <input type="text" id="vrcodcliente" style="display: none;"/>
                 <div id="mensajesgenerales">
                                    
                 </div>

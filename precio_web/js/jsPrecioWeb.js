@@ -1,5 +1,4 @@
 var valorproducto = 0;
-/*var precioproducto = 0;*/
 var arrayproductos = [];
 var contador = 0;
 var arraycodigos = [];
@@ -185,6 +184,8 @@ function agregarproductos() {
         var precio =$("#precioproducto").val();
         var total = $("#G_total").val();
 
+       
+
         if(nombre !== '' & cantidad !== '' && cod_producto !== '' ){
                     var estado = 1;
                     if (contador >= 0) {
@@ -305,7 +306,6 @@ function agregarproductos() {
                 obj = JSON.parse(response);
                 if(arrad.length >= 1){
                         $.each(obj['regalo'], function(i, item) {
-                            console.log(item['3'].trim() +"=="+ jungle[0]['gramo']);
                             if(item['3'].trim() == jungle[0]['gramo'] ){
                                 arr.push(obj['regalo'][i]);
                                 cantpro = cantpro + 1;
@@ -318,11 +318,9 @@ function agregarproductos() {
                             for (let i = 0; i < arr.length; i++) {
                                 if(arr[i]['4'].trim() == datos[arrad[1]]['gramos']){
                                     temp = arr[1];
-                                    console.log(arr[1]);
                                     count = 1;
                                     break;
                                 }else if(arr[i]['4'] == 0){
-                                    console.log(arr[i]);
                                     temp = arr[i];
                                     count = 1;
                                   
@@ -390,7 +388,3 @@ function agregarproductos() {
     }
 
   
-
-
-
-

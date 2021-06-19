@@ -142,6 +142,7 @@ class C_BuscarProducto
                         $dif = 'com';
                     }
                 }else {
+                   
                     if($promo > $Bono['BONO']){
                         $estado = 'error';
                         $mensaje = 'La promocion no corresponde a la cantidad';
@@ -154,8 +155,7 @@ class C_BuscarProducto
                 foreach($dt->arrayproductos as $date){
                     if($date != null){
                         $Bono = $M_politicaBono->M_PoliticaBono($zona,$date->cantidad);  
-                   
-                        if($date->promocion > $Bono["BONO"]){
+                        if($Bono["BONO"] != null && $date->promocion > $Bono["BONO"]){
                             $estado = 'error';
                             $mensaje = 'La promocion no corresponde a la cantidad';
                             break; 
@@ -172,6 +172,7 @@ class C_BuscarProducto
                 'dif' => $dif,
                 'tipo' => $tipo
             );
+
             echo json_encode($datos,JSON_FORCE_OBJECT);
     }
 
