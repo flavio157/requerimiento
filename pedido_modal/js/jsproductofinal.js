@@ -550,8 +550,8 @@ function verificarPrecios(zona,cantidad,arrayproductos) {
                     obj = JSON.parse(response);
                     $('#tabladelProducto').find("tr:gt(0)").remove();
                     $.each(obj['arrayproductos'], function(i, item) {
-                       
                         if(obj['arrayproductos'][i] != null){
+                            item.precioproducto = (item.cantidad == 0) ? 0 : item.precioproducto;
                                 var fila="<tr><td style='display: none;'>"+item.cod_producto+
                             "</td><td>"+item.nombre+ "</td><td>"+item.cantidad+
                             "</td><td>"+item.precioproducto+"</td><td>"+item.promocion+"</td><td style='display: none;'>"+
@@ -613,6 +613,7 @@ function politicaprecios(cantidad,codproducto,tipo) {
                         }
                         if(tipo === 1 && response != ''){
                             if(promocion == ""){promocion = "0"}
+                                precioproducto = (cantidad == 0) ? precioproducto = 0 : precioproducto;
                                 arrayproductos[contador] = {cod_producto,nombre,cantidad,promocion,precioproducto,total};
                                 var fila="<tr><td style='display: none;'>"+cod_producto+
                                     "</td><td>"+nombre+ "</td><td>"+cantidad+
@@ -1143,12 +1144,17 @@ function verificarRegalo(datos) {
             if(count == 1){
                 for (let l = 1; l <= arrad.length; l++) {
                     if(temp[3].trim() == datos[arrad[l - 1]]['gramos'] &&  _canregun <= temp[5].trim()){
-                        datos[arrad[l - 1]]["total"] = (datos[arrad[l - 1]]["total"] -  datos[arrad[l - 1]]["precioproducto"]).toFixed(2);
-                      
-                        /*datos[arrad[l - 1]]["precioproducto"] = 0;*/
+                        if(datos[arrad[l-1]['cantidad']] > 1){
+                            datos[arrad[l - 1]]["total"] = (datos[arrad[l - 1]]["total"] -  datos[arrad[l - 1]]["precioproducto"]).toFixed(2);
+                        }else{
+                            datos[arrad[l - 1]]["total"] = 0
+                        }
                     }else if (temp[4].trim() == datos[arrad[l - 1]]['gramos'] && _canregdo <= temp[6].trim()){
-                        datos[arrad[l - 1]]["total"] = ( datos[arrad[l - 1]]["total"] -  datos[arrad[l - 1]]["precioproducto"]).toFixed(2);
-                        /*datos[arrad[l - 1]]["precioproducto"] = 0;*/
+                        if(datos[arrad[l-1]['cantidad']] > 1){
+                            datos[arrad[l - 1]]["total"] = (datos[arrad[l - 1]]["total"] -  datos[arrad[l - 1]]["precioproducto"]).toFixed(2);
+                        }else{
+                            datos[arrad[l - 1]]["total"] = 0
+                        }
                     }
                 } 
              } 
