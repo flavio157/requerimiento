@@ -1,5 +1,5 @@
 <?php
-   require_once("../funcionesDataDinamica.php");
+   require_once("../funciones/DataDinamica.php");
    require_once("../funciones/f_funcion.php");
 
    class M_Pedidos 
