@@ -16,7 +16,7 @@
         $cliente = strtoupper($_POST["txtcliente"]);
         $direccion = strtoupper($_POST["txtdireccion"]);
         $referencia =  strtoupper($_POST["txtreferencia"]);
-        $contacto = $_POST["txtcontacto"] ;
+        $contacto =  strtoupper($_POST["txtcontacto"]);
         $condicion = $_POST["slccondicion"];
         $telefono = $_POST["txttelefono"];
         $entrega = $_POST["slcentrega"];
