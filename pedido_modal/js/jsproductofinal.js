@@ -1144,13 +1144,13 @@ function verificarRegalo(datos) {
             if(count == 1){
                 for (let l = 1; l <= arrad.length; l++) {
                     if(temp[3].trim() == datos[arrad[l - 1]]['gramos'] &&  _canregun <= temp[5].trim()){
-                        if(datos[arrad[l-1]['cantidad']] > 1){
+                        if(datos[arrad[l-1]]['cantidad'] > 1){
                             datos[arrad[l - 1]]["total"] = (datos[arrad[l - 1]]["total"] -  datos[arrad[l - 1]]["precioproducto"]).toFixed(2);
                         }else{
                             datos[arrad[l - 1]]["total"] = 0
                         }
                     }else if (temp[4].trim() == datos[arrad[l - 1]]['gramos'] && _canregdo <= temp[6].trim()){
-                        if(datos[arrad[l-1]['cantidad']] > 1){
+                        if(datos[arrad[l-1]]['cantidad'] > 1){
                             datos[arrad[l - 1]]["total"] = (datos[arrad[l - 1]]["total"] -  datos[arrad[l - 1]]["precioproducto"]).toFixed(2);
                         }else{
                             datos[arrad[l - 1]]["total"] = 0
