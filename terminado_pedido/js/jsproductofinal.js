@@ -477,7 +477,6 @@ function politicabonos(arrayproductos) {
                     "zona" : zona,
                 } , 
                 success: function(response){ 
-                    console.log(response);
                     obj = JSON.parse(response);
                     if(obj['estado'] === "ok"){
                         if(obj['dif'] == "com" ){
@@ -512,8 +511,8 @@ function verificarPrecios(zona,cantidad,arrayproductos) {
                     obj = JSON.parse(response);
                     $('#tabladelProducto').find("tr:gt(0)").remove();
                     $.each(obj['arrayproductos'], function(i, item) {
-                       
                         if(obj['arrayproductos'][i] != null){
+                            item.precioproducto = (item.cantidad == 0) ? 0 : item.precioproducto;
                                 var fila="<tr><td style='display: none;'>"+item.cod_producto+
                             "</td><td>"+item.nombre+ "</td><td>"+item.cantidad+
                             "</td><td>"+item.precioproducto+"</td><td>"+item.promocion+"</td><td style='display: none;'>"+
@@ -575,6 +574,7 @@ function politicaprecios(cantidad,codproducto,tipo) {
                     }
                    if(tipo === 1 && response != ''){
                     if(promocion == ""){promocion = "0"}
+                        precioproducto = (cantidad == 0) ? precioproducto = 0 : precioproducto;
                         arrayproductos[contador] = {cod_producto,nombre,cantidad,promocion,precioproducto,total};
                         var fila="<tr><td style='display: none;'>"+cod_producto+
                             "</td><td>"+nombre+ "</td><td>"+cantidad+
@@ -775,7 +775,6 @@ function guardarPedido() {
             data:data.serialize()+"&accion=guardar&array="+JSON.stringify(datosproductos)+
                 "&codPersonal="+codpersonal+"&oficina="+oficina+"&codcliente="+codcliente, 
             success: function(response){
-                console.log(response);
                 var obj = JSON.parse(response);
                 if(obj["estado"] === "error"){
                     mensajesError(obj['mensaje'],"mensajesgenerales")
