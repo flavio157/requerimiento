@@ -25,7 +25,7 @@
                     foreach ($datos as $cabecera) {
                         $cliente = str_replace(' ', '', $cabecera['CLIENTE']);    
                         $html .= '<div class="accordion-item">'.
-                                     '<button class="accordion-button collapsed" data-bs-toggle="collapse" data-bs-target="#'.$cliente.'" aria-expanded="false" id="btnMostaraPedido" aria-controls="'.$cliente.'">'.'N° Contrato: '. $cabecera['NUM_CONTRATO'].'<br>'.
+                                     '<button class="accordion-button collapsed" data-bs-toggle="collapse" data-bs-target="#'.$cliente.'" aria-expanded="false" id="btnMostaraPedido" aria-controls="'.$cliente.'">'.'N° Contrato: '.strtoupper($cabecera['NUM_CONTRATO']).'<br>'.
                                         'Cliente: '. $cabecera['CLIENTE'].'</button> <div id="'.$cliente.'"class="accordion-collapse collapse" aria-labelledby="'.$cliente.'"  data-bs-parent="#acordionresponsive">'.
                                             '<div class="accordion-body" id="'.$cabecera['CODIGO'].'">'.C_ListarPedidos::ItemsPedidios($cabecera['CODIGO'],$tipo,$oficina) .'</div>'.'</div>'.'</div>' ;
                     }
@@ -33,7 +33,7 @@
                     foreach ($datos as $cabecera) {
                         $cliente = str_replace(' ', '', $cabecera['CLIENTE']);    
                         $html .='<tr  data-bs-toggle="collapse" data-bs-target="#'.$cliente.'" class="collapse-row collapsed">'.
-                                    '<td>'.$cabecera['NUM_CONTRATO'].'</td>'.
+                                    '<td>'.strtoupper($cabecera['NUM_CONTRATO']).'</td>'.
                                     '<td>'.$cabecera['CLIENTE'].'</td>'.
                                     '<td>'.$cabecera['DIRECCION'].'</td>'.
                                 '</tr>'.
