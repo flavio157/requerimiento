@@ -350,8 +350,10 @@ function agregarproductos() {
                     for (let l = 1; l <= arrad.length; l++) {
                         if(temp[3].trim() == datos[arrad[l - 1]]['gramos'] &&  _canregun <= temp[5].trim()){
                             datos[arrad[l - 1]]["precio"] = 0;
+                            datos[arrad[l - 1]]["total"] = 0;
                         }else if (temp[4].trim() == datos[arrad[l - 1]]['gramos'] && _canregdo <= temp[6].trim()){
                             datos[arrad[l - 1]]["precio"] = 0;
+                            datos[arrad[l - 1]]["total"] = 0;
                         }
                     } 
                  } 
