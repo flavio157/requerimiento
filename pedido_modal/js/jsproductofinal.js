@@ -13,6 +13,7 @@ var temporalPrecios = [];
 var cumpliopromo = [];
 var gramos;
 var dt = 0;
+var df=0;
 
 $(document).ready(function(){
     obtenerprovincia();
@@ -43,6 +44,7 @@ $(document).ready(function(){
 
     $("#cerrarmodalProducto").click(function name() {
         eliminarArrayTemporal();
+        df = 0;
     })
 
     $('body').on('keydown', function(e){
@@ -143,21 +145,23 @@ $(document).ready(function(){
      
     });
 
-  
-
 
     $("#agregar").on('click',function() {
         dt = arrayproductos.length;
         politicabonos(arrayproductos);
+        df = 0;
    
     });  
 
    $("#closemodal").on('click',function(){
         eliminarArrayTemporal();
+       df=0;
     });
 
     $(document).on('click', '#btneliminar',function (e) {
         var cantidad;
+        var gramaje;
+        var precio;
         var valores = $(this).parents("tr").find("td")[0].innerHTML;
         for (let i = 0; i < arrayproductos.length; i++) {
             if (arrayproductos[i] != undefined) {
@@ -177,6 +181,8 @@ $(document).ready(function(){
                 }else{
                     if (arrayproductos[i]['cod_producto'] === valores) {
                         cantidad = arrayproductos[i]['cantidad'];
+                        gramaje = arrayproductos[i]['gramos'];
+                        precio = arrayproductos[i]['precioproducto']; 
                         var index = arraycodigos.indexOf(valores);
                         if ( index !== -1 ) {
                             arraycodigos.splice( index, 1 );
@@ -186,17 +192,17 @@ $(document).ready(function(){
                         $(this).closest('tr').remove();
                      }
                 }
-
-                
-             
             }   
         }
-       returnPrecio(temporalPrecios,cantidad);
+        
+        if(gramaje == 600 && precio == 120){
+            console.log(gramaje);
+            returnPrecio(temporalPrecios,cantidad);
+        }else{
+            df= 0;
+        }
     }); 
 
-  
-
-   
 
     $("#G_cantidad").on('keyup',function(e){
         cantidad = $("#G_cantidad").val();
@@ -223,8 +229,6 @@ $(document).ready(function(){
             $("#G_total").val('');
          }
     });
-
-
 
 
     $("#nombreproducto").keydown(function(e){
@@ -309,11 +313,6 @@ function returnPrecio(temporalPrecios) {
     }
     
 }
-
-
-
-
-
 
 
 function buscarProducto(nombreproducto,zona) {
@@ -477,10 +476,6 @@ function agregarcombos(dato) {
 }else{
     mensajesError("Ingrese los datos correctamente","mensaje");
 }
-
-
-
-
 }
 
 function agregarproductos() {
@@ -550,8 +545,8 @@ function verificarPrecios(zona,cantidad,arrayproductos) {
                     obj = JSON.parse(response);
                     $('#tabladelProducto').find("tr:gt(0)").remove();
                     $.each(obj['arrayproductos'], function(i, item) {
+                       
                         if(obj['arrayproductos'][i] != null){
-                            item.precioproducto = (item.cantidad == 0) ? 0 : item.precioproducto;
                                 var fila="<tr><td style='display: none;'>"+item.cod_producto+
                             "</td><td>"+item.nombre+ "</td><td>"+item.cantidad+
                             "</td><td>"+item.precioproducto+"</td><td>"+item.promocion+"</td><td style='display: none;'>"+
@@ -613,7 +608,6 @@ function politicaprecios(cantidad,codproducto,tipo) {
                         }
                         if(tipo === 1 && response != ''){
                             if(promocion == ""){promocion = "0"}
-                                precioproducto = (cantidad == 0) ? precioproducto = 0 : precioproducto;
                                 arrayproductos[contador] = {cod_producto,nombre,cantidad,promocion,precioproducto,total};
                                 var fila="<tr><td style='display: none;'>"+cod_producto+
                                     "</td><td>"+nombre+ "</td><td>"+cantidad+
@@ -657,14 +651,6 @@ function PrecioWeb(cod_producto,cantidad) {
                 }
         });
 }
-
-
-
-
-
-
-
-
 
 
 function politicabonos(arrayproductos) {
@@ -1061,12 +1047,15 @@ function verificarRegalo(datos) {
     var zona = $("#vrzona").val();
     var unidad = 600; 
     var precio = 120.00;
+    let arraygramos = [300,140]
+    var cant3 = 0;
+    var cant1 = 0;
     var productoRegalo = 0;
     var arrad = [];
     var temp = [];
     var _canregun = 0;
     var _canregdo = 0;
-    var jungle = [];
+    
     for (let i = 0; i < datos.length; i++) {
         if (datos[i] != undefined) { 
             if(datos[i]['gramos'] >= unidad || datos[i]['precioproducto'] >= precio){
@@ -1076,12 +1065,16 @@ function verificarRegalo(datos) {
             }  
         }      
     }    
+
     if(arrad.length > 0){
-        jungle = [
-            { regalo1: productoRegalo, gramo: datos[arrad[0]]['gramos']},
-        ];    
-    }       
-    
+        for (let i = 0; i < arrad.length; i++) {
+                if(datos[arrad[i]]['gramos'] == arraygramos[0]){
+                    cant3 = Number(cant3) + Number(datos[arrad[i]]['cantidad']) 
+                }else if(datos[arrad[0]]['gramos'] == arraygramos[1]){
+                    cant1 =Number(cant1) + Number(datos[arrad[i]]['cantidad']) 
+                }
+        }
+    }   
 
     $.ajax({
         dataType:'text',
@@ -1094,68 +1087,63 @@ function verificarRegalo(datos) {
             
         },
         success: function(response){
-            var arr = [];
             var count = 0;
-            var cantpro = 0;
+            
             obj = JSON.parse(response);
-            if(arrad.length >= 1){
+           
+            if(arrad.length > 0){
                     $.each(obj['regalo'], function(i, item) {
-                        if(item['3'].trim() == jungle[0]['gramo'] ){
-                            arr.push(obj['regalo'][i]);
-                            cantpro = cantpro + 1;
-                        }
-                    });
-                    
-                
-                if(cantpro >= 2){
-                    if(arrad.length >= 2){
-                        for (let i = 0; i < arr.length; i++) {
-                            if(arr[i]['4'].trim() == datos[arrad[1]]['gramos']){
-                                temp = arr[1];
-                                count = 1;
-                                break;
-                            }else if(arr[i]['4'] == 0){
-                                temp = arr[i];
-                                count = 1;
-                              
-                            }
-                        } 
-                    } 
-                }else{
-                    $.each(obj['regalo'], function(i, item) {
-                        if(item['3'].trim() == jungle[0]['gramo'] ){
+                        if(obj['regalo'][i]['3'].trim() == arraygramos[0] && item['5'].trim() <= cant3 && cant3 != 0 
+                        && obj['regalo'][i]['3'].trim() == datos[arrad[0]]['gramos']){
                             temp = obj['regalo'][i];
-                            count = 1; 
-                       }
+                            count = 1;
+                            return false;
+                    }else if(obj['regalo'][i]['3'].trim() == arraygramos[1] && item['5'].trim() <= cant1 && cant1 != 0
+                        && obj['regalo'][i]['3'].trim() == datos[arrad[0]]['gramos']){
+                            temp = obj['regalo'][i];
+                            count = 1;
+                    }
                     });
-                }
-              
-                if(temp != ""){
+
+                    
+                if(temp != ""){ 
                     for (let i = 1; i <= arrad.length; i++) {
                         if(temp['3'].trim() == datos[arrad[i - 1]]['gramos']){
-                           _canregun++;
+                           _canregun = Number(_canregun) + Number(datos[arrad[i - 1]]['cantidad']);
                         }else if(temp['4'].trim() == datos[arrad[i - 1]]['gramos']){
-                           _canregdo++;
+                           _canregdo = Number(_canregdo) + Number(datos[arrad[i - 1]]['cantidad']);
+                        
                         }
                    }
                 }
             }
-       
+
             if(count == 1){
                 for (let l = 1; l <= arrad.length; l++) {
-                    if(temp[3].trim() == datos[arrad[l - 1]]['gramos'] &&  _canregun <= temp[5].trim()){
-                        if(datos[arrad[l-1]]['cantidad'] > 1){
-                            datos[arrad[l - 1]]["total"] = (datos[arrad[l - 1]]["total"] -  datos[arrad[l - 1]]["precioproducto"]).toFixed(2);
-                        }else{
-                            datos[arrad[l - 1]]["total"] = 0
-                        }
-                    }else if (temp[4].trim() == datos[arrad[l - 1]]['gramos'] && _canregdo <= temp[6].trim()){
-                        if(datos[arrad[l-1]]['cantidad'] > 1){
-                            datos[arrad[l - 1]]["total"] = (datos[arrad[l - 1]]["total"] -  datos[arrad[l - 1]]["precioproducto"]).toFixed(2);
-                        }else{
-                            datos[arrad[l - 1]]["total"] = 0
-                        }
-                    }
+                        if(temp['3'].trim() == datos[arrad[l - 1]]['gramos'] ){
+                            for (let i = 1; i <= datos[arrad[l - 1]]['cantidad']; i++) {
+                                if(temp[5].trim() >= _canregun && datos[arrad[l-1]]['total'] != 0 ){
+                                    datos[arrad[l - 1]]["total"] = (datos[arrad[l - 1]]["total"] -  datos[arrad[l - 1]]["precioproducto"]).toFixed(2);
+                                    df = i;
+                                }else if(datos[arrad[l-1]]['total'] != 0 && df < temp['5'].trim()){
+                                    datos[arrad[l - 1]]["total"] =  ((Number(_canregun) - Number(temp['5'].trim())) * Number(datos[arrad[l - 1]]["precioproducto"])).toFixed(2);
+                                    df = df + i
+                                }
+                            }
+                         }else if(temp['4'].trim() == datos[arrad[l - 1]]['gramos']){
+                            for (let i = 1; i <= datos[arrad[l - 1]]['cantidad']; i++) {
+                                if(temp['6'].trim() >= _canregdo && datos[arrad[l-1]]['total'] != 0 ){
+                                    datos[arrad[l - 1]]["total"] = (datos[arrad[l - 1]]["total"] -  datos[arrad[l - 1]]["precioproducto"]).toFixed(2);
+                                    df = i;
+                                }else if(datos[arrad[l-1]]['total'] != 0 && df <= temp['6'].trim()){
+                                    if((( Number(_canregun) - Number(temp['6'].trim()) )) > 0){
+                                        datos[arrad[l - 1]]["total"] =  ((Number(_canregun) - Number(temp['6'].trim())) * Number(datos[arrad[l - 1]]["precioproducto"])).toFixed(2);
+                                        console.log(df ,temp['6'].trim());
+                                        df = df + i
+                                    }
+                                }
+                            }
+                         }
                 } 
              } 
             agregarProductoRegalo(datos);                        
@@ -1192,5 +1180,4 @@ function agregarProductoRegalo(dat) {
         }
     }
     document.getElementById("frmagregarProducto").reset();
-  
 }
