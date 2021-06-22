@@ -431,7 +431,7 @@ function agregarproductos() {
     var cantidad = $("#G_cantidad").val();
   
     
-    if(nombre !== '' & cantidad !== ''  && cod_producto !== '' ){
+    if(nombre !== '' && cod_producto !== '' ){
         
                 var estado = 1;
                 if (contador >= 0) {
@@ -575,6 +575,7 @@ function politicaprecios(cantidad,codproducto,tipo) {
                    if(tipo === 1 && response != ''){
                     if(promocion == ""){promocion = "0"}
                         precioproducto = (cantidad == 0) ? precioproducto = 0 : precioproducto;
+                        cantidad = (cantidad == '') ? cantidad = 0 : cantidad;
                         arrayproductos[contador] = {cod_producto,nombre,cantidad,promocion,precioproducto,total};
                         var fila="<tr><td style='display: none;'>"+cod_producto+
                             "</td><td>"+nombre+ "</td><td>"+cantidad+
