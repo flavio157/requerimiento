@@ -259,21 +259,8 @@ $(document).ready(function(){
         obtenerDistrito(id);
     });
 
-    $("#verPedidos").on('click',function(params) {
-        /*muestra el modal para vista en celular */
-        var codpersonal = $("#vrcodpersonal").val();
-        var oficina = $("#vroficina").val();
-        $("#ModalMostrarPedidos").modal('show');
-        mostrarPedido("mostrarPedidos","c",codpersonal,oficina);
-    })
+    
 
-    $("#verPedidos2").on('click',function(params) {
-        /*muestra el modal para vista en pc*/
-        var codpersonal = $("#vrcodpersonal").val();
-        var oficina = $("#vroficina").val();
-        $("#ModalMostrarPedidos").modal('show');
-        mostrarPedido("mostrarPedidos","p",codpersonal,oficina);
-    })
 
 
     $("#cerrarmodal").on('click',function (params) {
@@ -882,32 +869,6 @@ function validarTelefono(telefono) {
         } 
         
     }
-}
-
-
-function mostrarPedido(mostrarpedido,tipo,codpersonal,oficina) {
-    var accion = mostrarpedido;
-    $.ajax({
-        dataType:'text',
-        type: 'POST', 
-        url:  '../seguimiento/C_ListarPedidos.php',
-        data: {
-            "accion":  accion,
-            "tipo": tipo,
-            "codpersonal" : codpersonal,
-            "oficina" : oficina
-        },
-        success: function(response){
-          
-            if(tipo == "c"){
-                $('#acordionresponsive').html(response);
-            }else{
-                $('#tbmostrarpedidos').html(response);
-            }
-            
-        }
-    });  
-
 }
 
 

@@ -137,25 +137,10 @@
                     </div>
                 </div>
 
-                <div class="row g-2">
-                    <div class="col text-center ">
+                <div class="d-grid gap-2 col-5 botonguardar mx-auto ">
                         <a class="btn btn-primary btn-lg active" id="grabar" >
                             <i class="icon-save" title="Align Right"></i>
                         </a>
-                    </div>
-                    
-
-                    <div class="col text-center responsive">
-                        <a class="btn btn-primary btn-lg active" id="verPedidos">
-                            <i class="icon-eye" title="Align Right"></i>
-                        </a>
-                    </div>
-
-                    <div class="col text-center noresposive">
-                        <a class="btn btn-primary btn-lg active" id="verPedidos2">
-                                <i class="icon-eye" title="Align Right"></i>
-                         </a>  
-                    </div>
                 </div>
 
         </form>

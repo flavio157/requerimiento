@@ -68,6 +68,11 @@
         text-transform: uppercase;
     }
 
+    .botonguardar.mx-auto {
+        margin-left: unset  !important;
+     }  
+
+
 
 
 @media screen and (max-width:992px){
@@ -129,9 +134,9 @@
     #txtcontrato{
         text-transform: uppercase;
     }
-
-
-
-
+    
+    .botonguardar.mx-auto {
+        margin-left: unset  !important;
+     }  
 
 }
