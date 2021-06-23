@@ -14,6 +14,7 @@ var cumpliopromo = [];
 var gramos;
 var dt = 0;
 var df=0;
+var temp = [];
 
 $(document).ready(function(){
     obtenerprovincia();
@@ -45,6 +46,7 @@ $(document).ready(function(){
     $("#cerrarmodalProducto").click(function name() {
         eliminarArrayTemporal();
         df = 0;
+        temp = [];
     })
 
     $('body').on('keydown', function(e){
@@ -150,12 +152,13 @@ $(document).ready(function(){
         dt = arrayproductos.length;
         politicabonos(arrayproductos);
         df = 0;
-   
+        temp = [];
     });  
 
    $("#closemodal").on('click',function(){
         eliminarArrayTemporal();
        df=0;
+       temp = [];
     });
 
     $(document).on('click', '#btneliminar',function (e) {
@@ -196,11 +199,11 @@ $(document).ready(function(){
         }
         
         if(gramaje == 600 && precio == 120){
-            console.log(gramaje);
             returnPrecio(temporalPrecios,cantidad);
         }else{
             df= 0;
         }
+        temp = [];
     }); 
 
 
@@ -1052,7 +1055,6 @@ function verificarRegalo(datos) {
     var cant1 = 0;
     var productoRegalo = 0;
     var arrad = [];
-    var temp = [];
     var _canregun = 0;
     var _canregdo = 0;
     
@@ -1076,6 +1078,7 @@ function verificarRegalo(datos) {
         }
     }   
 
+
     $.ajax({
         dataType:'text',
         type: 'POST', 
@@ -1088,57 +1091,79 @@ function verificarRegalo(datos) {
         },
         success: function(response){
             var count = 0;
-            
+            var igualdad3 = 0;
+            var igualdad1 = 0
             obj = JSON.parse(response);
            
-            if(arrad.length > 0){
-                    $.each(obj['regalo'], function(i, item) {
-                        if(obj['regalo'][i]['3'].trim() == arraygramos[0] && item['5'].trim() <= cant3 && cant3 != 0 
-                        && obj['regalo'][i]['3'].trim() == datos[arrad[0]]['gramos']){
-                            temp = obj['regalo'][i];
-                            count = 1;
-                            return false;
-                    }else if(obj['regalo'][i]['3'].trim() == arraygramos[1] && item['5'].trim() <= cant1 && cant1 != 0
-                        && obj['regalo'][i]['3'].trim() == datos[arrad[0]]['gramos']){
-                            temp = obj['regalo'][i];
-                            count = 1;
+            if(arrad.length >= 0 && temp == ""){
+                $.each(obj['regalo'], function(i, item) {
+                    if(obj['regalo'][i]['3'].trim() == arraygramos[0]){
+                        igualdad3++;
+                    } else if(obj['regalo'][i]['3'].trim() == arraygramos[1] && arrad != "") {
+                        igualdad1++;
                     }
-                    });
-
-                    
-                if(temp != ""){ 
-                    for (let i = 1; i <= arrad.length; i++) {
-                        if(temp['3'].trim() == datos[arrad[i - 1]]['gramos']){
-                           _canregun = Number(_canregun) + Number(datos[arrad[i - 1]]['cantidad']);
-                        }else if(temp['4'].trim() == datos[arrad[i - 1]]['gramos']){
-                           _canregdo = Number(_canregdo) + Number(datos[arrad[i - 1]]['cantidad']);
-                        
+                });
+                    $.each(obj['regalo'], function(i, item) {
+                        if(igualdad1 == 1 && igualdad3 != 2){
+                            if(obj['regalo'][i]['3'].trim() == arraygramos[0] && (cant3 <= item['5'].trim() || cant3 >= item['5'].trim())&& cant3 != 0){
+                                temp = obj['regalo'][i];
+                                count = 1;
+                                return false;
+                            }else if(obj['regalo'][i]['3'].trim() == arraygramos[1] && (cant1 <= item['5'].trim() || cant1 >= item['5'].trim())&& cant1 != 0){
+                                temp = obj['regalo'][i];
+                                count = 1;
+                                return false;
+                            }   
+                        }else if(igualdad3 >=2 && igualdad1 >= 1){
+                            if(obj['regalo'][i]['3'].trim() == arraygramos[0] && cant3 == item['5'].trim() && cant3 != 0){
+                                temp = obj['regalo'][i];
+                                count = 1;
+                                return false;
+                            }else if(obj['regalo'][i]['3'].trim() == arraygramos[1] && cant1 == item['5'].trim() && cant1 != 0){
+                                temp = obj['regalo'][i];
+                                count = 1;
+                                return false;
+                            }   
                         }
-                   }
-                }
+
+                    });
             }
 
+            if(temp != ""){ 
+                count = 1;
+                for (let i = 1; i <= arrad.length; i++) {
+                    if(temp['3'].trim() == datos[arrad[i - 1]]['gramos']){
+                       _canregun = Number(_canregun) + Number(datos[arrad[i - 1]]['cantidad']);
+                    }else if(temp['4'].trim() == datos[arrad[i - 1]]['gramos']){
+                       _canregdo = Number(_canregdo) + Number(datos[arrad[i - 1]]['cantidad']);
+                    
+                    }
+               }
+            }
+           
             if(count == 1){
                 for (let l = 1; l <= arrad.length; l++) {
+                 
                         if(temp['3'].trim() == datos[arrad[l - 1]]['gramos'] ){
                             for (let i = 1; i <= datos[arrad[l - 1]]['cantidad']; i++) {
                                 if(temp[5].trim() >= _canregun && datos[arrad[l-1]]['total'] != 0 ){
                                     datos[arrad[l - 1]]["total"] = (datos[arrad[l - 1]]["total"] -  datos[arrad[l - 1]]["precioproducto"]).toFixed(2);
                                     df = i;
-                                }else if(datos[arrad[l-1]]['total'] != 0 && df < temp['5'].trim()){
+                                }else if(datos[arrad[l-1]]['total'] != 0 && df < temp[5].trim()){
                                     datos[arrad[l - 1]]["total"] =  ((Number(_canregun) - Number(temp['5'].trim())) * Number(datos[arrad[l - 1]]["precioproducto"])).toFixed(2);
                                     df = df + i
                                 }
                             }
                          }else if(temp['4'].trim() == datos[arrad[l - 1]]['gramos']){
                             for (let i = 1; i <= datos[arrad[l - 1]]['cantidad']; i++) {
-                                if(temp['6'].trim() >= _canregdo && datos[arrad[l-1]]['total'] != 0 ){
+                                if(temp[6].trim() >= _canregdo && datos[arrad[l-1]]['total'] != 0 ){
                                     datos[arrad[l - 1]]["total"] = (datos[arrad[l - 1]]["total"] -  datos[arrad[l - 1]]["precioproducto"]).toFixed(2);
                                     df = i;
-                                }else if(datos[arrad[l-1]]['total'] != 0 && df <= temp['6'].trim()){
-                                    if((( Number(_canregun) - Number(temp['6'].trim()) )) > 0){
-                                        datos[arrad[l - 1]]["total"] =  ((Number(_canregun) - Number(temp['6'].trim())) * Number(datos[arrad[l - 1]]["precioproducto"])).toFixed(2);
-                                        console.log(df ,temp['6'].trim());
+                                }else if(datos[arrad[l-1]]['total'] != 0 && df <= temp[6].trim()){
+                                   
+                                    if((( Number(_canregdo) - Number(temp[6].trim()) )) > 0){
+                                        datos[arrad[l - 1]]["total"] =  ((Number(_canregdo) - Number(temp['6'].trim())) * Number(datos[arrad[l - 1]]["precioproducto"])).toFixed(2);
+                                      
                                         df = df + i
                                     }
                                 }
@@ -1162,8 +1187,6 @@ function agregarProductoRegalo(dat) {
 
     
    for (let j = 0; j < dat.length; j++) {
-      
-     
         if (dat[j] != undefined && j >= dt) { 
             fila="<tr><td style='display: none;'>"+dat[j]['cod_producto']+
             "</td><td>"+dat[j]['nombre']+"</td><td>"+dat[j]['cantidad']+
