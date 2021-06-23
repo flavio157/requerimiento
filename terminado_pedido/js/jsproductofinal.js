@@ -244,17 +244,10 @@ $(document).ready(function(){
         this.value = this.value.replace(/[^0-9a-zA-Z]/g,'');
     });
 
-   $('#txtnumero').keypress(function (e) {
-        if(e.which == 13) {
-            e.preventDefault();
-            
+   $('#txtnumero').blur(function (e) {
             cliente =  $("#txtnumero").val();
             BuscarCLiente(cliente);
-        }
    })
-
-
-
 })
 
 
@@ -947,7 +940,7 @@ function BuscarCLiente(identificacion) {
            
             if(obj != null){
                 $("#vrcodcliente").val(obj[0]['0']);
-                $("#txtcliente").val(obj[0]['1']+" "+obj[0]['2']+" "+obj[0]['3']+" "+obj[0]['4']);
+                $("#txtcliente").val(obj[0]['1']);
                 $("#txtdireccion").val(obj[0]['8']);
                 $("#txtreferencia").val(obj[0]['9']);
                 $("#txttelefono").val(obj[0]['13']);
