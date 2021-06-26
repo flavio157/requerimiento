@@ -1,0 +1,46 @@
+update T_PRODUCTO set EST_PRODUCTO = '1' where COD_PRODUCTO = 'CO0003'
+update T_PRODUCTO set EST_PRODUCTO = '1' where COD_PRODUCTO = 'CO0001'
+update T_PRODUCTO set EST_PRODUCTO = '1' where COD_PRODUCTO = 'CO0002'
+
+
+/*CO1-PLUS JEUNE  -> CO0001*/
+update T_PRODUCTO_PRECIO set PRECIO = '32.86', BONO = '2' where COD_PRODUCTO = 'CO0001' and ZONA = '1' and CANTIDAD = '6'
+update T_PRODUCTO_PRECIO set PRECIO = '32.86', BONO = '5' where COD_PRODUCTO = 'CO0001' and ZONA = '1' and CANTIDAD = '10'
+update T_PRODUCTO_PRECIO set PRECIO = '32.86', BONO = '10' where COD_PRODUCTO = 'CO0001' and ZONA = '1' and CANTIDAD = '20'
+
+update T_PRODUCTO_PRECIO set PRECIO = '32.86', BONO = '2' where COD_PRODUCTO = 'CO0001' and ZONA = '2' and CANTIDAD = '6'
+update T_PRODUCTO_PRECIO set PRECIO = '32.86', BONO = '5' where COD_PRODUCTO = 'CO0001' and ZONA = '2' and CANTIDAD = '10'
+update T_PRODUCTO_PRECIO set PRECIO = '32.86', BONO = '10' where COD_PRODUCTO = 'CO0001' and ZONA = '2' and CANTIDAD = '20'
+
+update T_PRODUCTO_PRECIO set PRECIO = '32.86', BONO = '2' where COD_PRODUCTO = 'CO0001' and ZONA = '3' and CANTIDAD = '6'
+update T_PRODUCTO_PRECIO set PRECIO = '32.86', BONO = '5' where COD_PRODUCTO = 'CO0001' and ZONA = '3' and CANTIDAD = '10'
+update T_PRODUCTO_PRECIO set PRECIO = '32.86', BONO = '10' where COD_PRODUCTO = 'CO0001' and ZONA = '3' and CANTIDAD = '20'
+
+
+/*CO2-ALOE EXFOLIANT -> CO0002*/
+update T_PRODUCTO_PRECIO set PRECIO = '28.74', BONO = '2' where COD_PRODUCTO = 'CO0002' and ZONA = '1' and CANTIDAD = '6'
+update T_PRODUCTO_PRECIO set PRECIO = '28.74', BONO = '5' where COD_PRODUCTO = 'CO0002' and ZONA = '1' and CANTIDAD = '10'
+update T_PRODUCTO_PRECIO set PRECIO = '28.74', BONO = '10' where COD_PRODUCTO = 'CO0002' and ZONA = '1' and CANTIDAD = '20'
+
+update T_PRODUCTO_PRECIO set PRECIO = '28.74', BONO = '2' where COD_PRODUCTO = 'CO0002' and ZONA = '2' and CANTIDAD = '6'
+update T_PRODUCTO_PRECIO set PRECIO = '28.74', BONO = '5' where COD_PRODUCTO = 'CO0002' and ZONA = '2' and CANTIDAD = '10'
+update T_PRODUCTO_PRECIO set PRECIO = '28.74', BONO = '10' where COD_PRODUCTO = 'CO0002' and ZONA = '2' and CANTIDAD = '20'
+
+update T_PRODUCTO_PRECIO set PRECIO = '28.74', BONO = '2' where COD_PRODUCTO = 'CO0002' and ZONA = '3' and CANTIDAD = '6'
+update T_PRODUCTO_PRECIO set PRECIO = '28.74', BONO = '5' where COD_PRODUCTO = 'CO0002' and ZONA = '3' and CANTIDAD = '10'
+update T_PRODUCTO_PRECIO set PRECIO = '28.74', BONO = '10' where COD_PRODUCTO = 'CO0002' and ZONA = '3' and CANTIDAD = '20'
+
+
+
+/*CO3-GIOVENTU -> CO0003*/
+update T_PRODUCTO_PRECIO set PRECIO = '35.61', BONO = '2' where COD_PRODUCTO = 'CO0003' and ZONA = '1' and CANTIDAD = '6'
+update T_PRODUCTO_PRECIO set PRECIO = '35.61', BONO = '5' where COD_PRODUCTO = 'CO0003' and ZONA = '1' and CANTIDAD = '10'
+update T_PRODUCTO_PRECIO set PRECIO = '35.61', BONO = '10' where COD_PRODUCTO = 'CO0003' and ZONA = '1' and CANTIDAD = '20'
+
+update T_PRODUCTO_PRECIO set PRECIO = '35.61', BONO = '2' where COD_PRODUCTO = 'CO0003' and ZONA = '2' and CANTIDAD = '6'
+update T_PRODUCTO_PRECIO set PRECIO = '35.61', BONO = '5' where COD_PRODUCTO = 'CO0003' and ZONA = '2' and CANTIDAD = '10'
+update T_PRODUCTO_PRECIO set PRECIO = '35.61', BONO = '10' where COD_PRODUCTO = 'CO0003' and ZONA = '2' and CANTIDAD = '20'
+
+update T_PRODUCTO_PRECIO set PRECIO = '35.61', BONO = '2' where COD_PRODUCTO = 'CO0003' and ZONA = '3' and CANTIDAD = '6'
+update T_PRODUCTO_PRECIO set PRECIO = '35.61', BONO = '5' where COD_PRODUCTO = 'CO0003' and ZONA = '3' and CANTIDAD = '10'
+update T_PRODUCTO_PRECIO set PRECIO = '35.61', BONO = '10' where COD_PRODUCTO = 'CO0003' and ZONA = '3' and CANTIDAD = '20'
