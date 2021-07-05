@@ -14,7 +14,7 @@
       </div>
       <div class="modal-body">
                <input type="text" name="nombre" id="nombre" style="visibility:hidden">
-               
+             
 
                <div class="row g-2">
                     <center><label for="formTipo" class="form-label">SELECCIONE UN DISPOSITIVO</label></center>
@@ -23,7 +23,7 @@
                          </select>          
                     </div>
                     <div class="col-5">
-                         <a id="boton" class="btn btn-info">Tomar foto</a>
+                         <button id="boton" class="btn btn-info btntomafoto">Tomar foto</button>
                          <p id="estado"></p>
                     </div>
                 </div>

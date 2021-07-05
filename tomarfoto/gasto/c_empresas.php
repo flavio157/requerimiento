@@ -1,5 +1,6 @@
 <?php
     require_once("../funciones/m_empresas.php");
+    require_once("../funciones/m_personal.php");
     $tipo = $_POST['tipo'];
 
     if($tipo == 'listarempresa'){
@@ -12,7 +13,8 @@
         C_Empresas::mostrarimg($mostrarimg);
     }else if($tipo == 'buscarper'){
         $personal = $_POST['personal'];
-        C_Empresas::c_buscarpersonal($personal);
+        $oficina = $_POST['oficina'];
+        C_Empresas::c_buscarpersonal($oficina,$personal);
     }
 
     class C_Empresas
@@ -36,11 +38,7 @@
             $m_proveedor = new M_Empresas();
             $c_buscarproveedor = $m_proveedor->m_proveedor($proveedor); 
             if($c_buscarproveedor > 0){
-                $html="";
-                foreach($c_buscarproveedor as $proveedor){
-                    $html.= '<div><a class="suggest-element" data-val="'.$proveedor['NOM_PROVEEDOR'].'" data="'.$proveedor['DIR_PROVEEDOR'].'"id="'.$proveedor['COD_PROVEEDOR'].'">'.$proveedor['NOM_PROVEEDOR'].'</a></div>';
-                }
-                echo $html; 
+                echo json_encode($c_buscarproveedor,JSON_FORCE_OBJECT);
             }
         }
 
@@ -53,8 +51,8 @@
             print_r($c_mostrarimg['IMAGEN']);
         }
 
-        static function c_buscarpersonal($personal){
-            $m_personal = new M_Empresas();
+        static function c_buscarpersonal($oficina,$personal){
+            $m_personal = new M_buscarpersonal($oficina);
             $c_buscarpersonal = $m_personal->m_buscarpersonal($personal); 
             if($c_buscarpersonal > 0){
                 $html="";
@@ -66,16 +64,29 @@
         }
 
         static function c_guardargasto($codigo,$oficina,$fec_emision,$cod_personal,$tipo_comprobante,$serie_contabilidad,$comp_contabilidad,$identificacion,
-        $cod_proveedor,$nombre,$direccion,$obs_comprovante,$monto_comprobante,$nro_correlativo,$usuario_registro,$caja,$contabilidad,$cod_empresa,$cod_concepto_caja)
+        $cod_proveedor,$nombre,$direccion,$obs_comprovante,$monto_comprobante,$nro_correlativo,$usuario_registro,$caja,$contabilidad,$cod_empresa,$cod_concepto_caja,$concepto,$existepro)
         {
             $m_guardar = new M_Empresas();
             $c_guardargastos = $m_guardar->m_guardargasto($codigo,$oficina,$fec_emision,$cod_personal,$tipo_comprobante,$serie_contabilidad,$comp_contabilidad,$identificacion,
-            $cod_proveedor,$nombre,$direccion,$obs_comprovante,$monto_comprobante,$nro_correlativo,$usuario_registro,$caja,$contabilidad,$cod_empresa,$cod_concepto_caja);
+            $cod_proveedor,$nombre,$direccion,$obs_comprovante,$monto_comprobante,$nro_correlativo,$usuario_registro,$caja,$contabilidad,$cod_empresa,$cod_concepto_caja,$concepto,$existepro);
             return $c_guardargastos;
         }
 
       
+        static function verificardoc($verificardoc)
+        {
+            $m_doc = new M_Empresas();
+            $c_verificardoc = $m_doc->m_verificardoc($verificardoc); 
+            return $c_verificardoc;
+        }
 
+        static function nombreimgn()
+        {
+            $m_img = new M_Empresas();
+            $nombreimg = $m_img -> Generarcodigo();
+            $codigo = generarcorrelativo($nombreimg,1);
+            return $codigo;
+        }
         
     }
     

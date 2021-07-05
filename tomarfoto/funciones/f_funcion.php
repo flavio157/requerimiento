@@ -562,6 +562,15 @@ function f_Cuotas($promedioCuota,$cuotas,$dias){
         return $diasresta;
     }
 
- 
+    function generarcorrelativo($codigo,$tipo){
+        $codigo = ($codigo == "") ? '1': $codigo;
+        if($tipo == 1){
+            $res = str_pad($codigo, 9, '0', STR_PAD_LEFT);
+        }else if($tipo == 2){
+            $res = str_pad($codigo, 5, '0', STR_PAD_LEFT);
+        }
+        return $res;
+    }
+        
 
   ?>

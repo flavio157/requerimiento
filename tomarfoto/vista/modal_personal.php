@@ -2,7 +2,7 @@
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+        <h5 class="modal-title" id="exampleModalLabel">INGRESAR PERSONAL</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
@@ -12,11 +12,7 @@
                         <input type="text" name="txtbuscarpers" id="txtbuscarpers" class="form-control" autocomplete="off" >
                     </div>
                     <div id="buscarpersonal"></div>
-                    <!--<div class="col-2">
-                        <a class="btn btn-primary active btn-block" id="agregarpersonal" >
-                            <i class="icon-check" title="Align Right"></i>
-                        </a>
-                    </div>-->
+                  
             </div>
       </div>
       <div class="modal-footer">

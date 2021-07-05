@@ -1,10 +1,17 @@
 var idpers = "";
 var nompersonal = "";
 var codproveedor = "";
+var existeproveedor = 1;
 $(document).ready(function(){
     listarempresa();
     
-    //estado
+    
+
+    $("#Mostrafoto").on("hidden.bs.modal", function () {
+        $(".btntomafoto").removeAttr('disabled');
+        $estado.innerHTML = '';
+    });
+
 
     $("html").click(function(){
         $('#sugerencias').fadeOut(0); 
@@ -15,6 +22,13 @@ $(document).ready(function(){
         var input=  document.getElementById('txtseriedocument');
             input.addEventListener('input',function(){
                 this.value = this.value.slice(0,4); 
+        })
+    })
+
+    $("#txtnrodocumento").keyup(function(e) {
+        var input=  document.getElementById('txtnrodocumento');
+            input.addEventListener('input',function(){
+                this.value = this.value.slice(0,8); 
         })
     })
 
@@ -34,14 +48,9 @@ $(document).ready(function(){
          buscarpersonal(personal);
      });
 
-    $("#txtproveedor").on('keyup',function () {
-       var proveedor = $("#txtproveedor").val();      
-        buscarproveedor(proveedor);
-    });
-
-    $("#slcempresa").change(function name(params) {
-        var ruc = $(this).find(':selected').data('ruc');
-        $("#txtruc").val(ruc);
+    $("#txtruc").blur(function () {
+        var ruc = $("#txtruc").val();      
+        buscarproveedor(ruc);
     });
 
     $(document).on('click','#mostaraimagen',function name() {
@@ -58,7 +67,7 @@ $(document).ready(function(){
     })
 
     $("#agregarpersonal").click(function () {
-        console.log("ds");
+        
         $("#txtcodpersonal").val(idpers);
         $("#txtnombreper").val(nompersonal); 
         $("#modalpersonal").modal('hide')    
@@ -66,9 +75,16 @@ $(document).ready(function(){
 
     $(document).on('click','#verimg',function name() {
         var nombre = $(this).attr('data-img');
-        alert(nombre);
         buscaimg(nombre);
+        $("#Mostrafoto").modal("hide");
     });
+
+
+
+    $("#btntomafoto").click(function() {
+        validacioninput(1);
+        
+    })
  
 });
 
@@ -77,40 +93,36 @@ function buscarproveedor(proveedor) {
     $.ajax({
         dataType:'text',
         type: 'POST', 
-        url:  './seguimiento/c_empresas.php',
+        url:  './gasto/c_empresas.php',
         data:{
             "tipo" : "buscarpro",
             "proveedor" : proveedor,
         } ,
         success: function name(response) {
-           
-          $("#sugerencias").fadeIn(0).html(response);
-            if(response != ""){
-                $("#sugerencias").height(200);
-                $("#sugerencias").css('overflow','scroll');
+            if(response){
+                obj = JSON.parse(response);
+                $("#txtcod_prove").val(obj[0]);
+                $("#txtproveedor").val(obj[1]);
+                $("#txtdirproveedor").val(obj[2]);
+                existeproveedor = 1;
             }else{
-                $("#sugerencias").height(0);
+                existeproveedor = 0;
             }
-
-               $('.suggest-element').on('click', function(){
-                    codproveedor =  $(this).attr('id');
-                    var datos = $(this).attr('data');
-                    var proveedor = $(this).attr('data-val');
-                    $("#txtdirproveedor").val(datos);
-                    $("#txtproveedor").val(proveedor);
-                });  
+           
         }
     });
 }
 
 function buscarpersonal(personal) {
+    oficina = $("#vroficina").val();
     $.ajax({
         dataType:'text',
         type: 'POST', 
-        url:  './seguimiento/c_empresas.php',
+        url:  './gasto/c_empresas.php',
         data:{
             "tipo" : "buscarper",
             "personal" : personal,
+            "oficina": oficina
         } ,
         success: function name(response) {
            
@@ -136,7 +148,7 @@ function listarempresa() {
  $.ajax({
     dataType:'text',
     type: 'POST', 
-    url:  './seguimiento/c_empresas.php',
+    url:  './gasto/c_empresas.php',
     data: {
         "tipo" : "listarempresa"
     },
@@ -146,38 +158,51 @@ function listarempresa() {
  })
 }
 
-function validacion() {
+function validacion($tipo) {
    var idpersonal = $("#txtcodpersonal").val();
    var oficina = $("#vroficina").val();
    var usuarioregistro = $("#vrcodpersonal").val();
    var caja = $("#slcconcepto").find(':selected').data('caja');
    caja = (caja == undefined) ? ' ' : caja;
    var data = $("#frmcomprovante");
+   var cod_prove = $("#txtcod_prove").val();
     $.ajax({
        dataType:'text',
        type: 'POST', 
-       url:  './seguimiento/c_validacion.php',
-       data: data.serialize()+"&idpersonal="+idpersonal+"&oficina="+oficina+"&usuario="+usuarioregistro+"&codproveedor="+codproveedor
-       +"&tipo="+null+"&caja="+caja,
+       url:  './gasto/c_validacion.php',
+       data: data.serialize()+"&idpersonal="+idpersonal+"&oficina="+oficina
+       +"&usuario="+usuarioregistro+"&codproveedor="+codproveedor
+       +"&tipo="+null+"&caja="+caja+"&codproveedor="+cod_prove+"&existeproveedor="+existeproveedor
+       +"&validarcom="+$tipo,
        success: function(response){
-           console.log(response);
-           obj = JSON.parse(response)
-           console.log(obj['1']);
-            if(obj['1'] == "error"){
-                mensajesError(obj['0'],"mensajesgenerales");
+          
+        obj = JSON.parse(response)
+            if($tipo != 1){
+                if(obj['1'] == "error"){
+                    mensajesError(obj['0'],"mensajesgenerales");
+                }else{
+                    mensajeSuccess(obj['0'],"mensajesgenerales");
+                }
             }else{
-                mensajeSuccess(obj['0'],"mensajesgenerales");
-                document.getElementById("frmcomprovante").reset();
-            }
+                if(obj['1'] == "error"){
+                    mensajesError(obj['0'],"mensajesgenerales");
+                }else{
+                    console.log(obj['0']);
+                    $("#txtnombreimg").val(obj['0']);
+                   $("#Mostrafoto").modal('show');
+                }
+            }    
        }
     })
+
+    
    }
 
    function buscaimg(nombreimg) {
     $.ajax({
        dataType:'text',
        type: 'POST', 
-       url:  './seguimiento/c_empresas.php',
+       url:  './gasto/c_empresas.php',
        data: {
            "tipo" : "mostrarimg",
            "nombreimg" : nombreimg
@@ -213,7 +238,7 @@ function validacion() {
         return ((key >= 48 && key <= 57) || (key==8))
     }
 
-    function validacioninput() {
+    function validacioninput($tipo) {
        
         if($("#slcempresa").val() == ""){
             mensajesError("Seleccione una EMPRESA","mensajesgenerales");
@@ -228,7 +253,6 @@ function validacion() {
         }else if(($("#txtseriedocument").val().length < 4)){
             mensajesError("SERIE DOCUMENTO no puede ser menor a 4 digitos","mensajesgenerales");
         }else{
-            validacion();
+            validacion($tipo);
         }
-       
     }

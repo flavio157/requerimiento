@@ -36,26 +36,7 @@
     color: black;
 } 
 
-  #sugerencias {
-    box-shadow: 2px 2px 8px 0 rgba(0,0,0,.2);
-    background-color:#fff;;
-    height: auto;
-    position: absolute;
-    top: 437px;
-    z-index: 9999;
-    width: 460px;
-}
- 
-    #sugerencias .suggest-element {
-        background-color: #fff;
-        border-top: 1px solid #d6d4d4;
-        cursor: pointer;
-        padding: 8px;
-        width: 100%;
-        float: left;
-        text-decoration: none;
-        color: black;
-    }
+
 /*
     .tablafrmpedidos {
         overflow:scroll;
@@ -111,16 +92,7 @@ input[type=number]::-webkit-outer-spin-button {
         border-width: 1px;
         /*border-radius: 8px; */	
     } 
-    #sugerencias {
-        box-shadow: 2px 2px 8px 0 rgba(0,0,0,.2);
-        background-color:  #fff;
-        box-shadow: 3px 2px 8px 0;
-        height: auto;
-        position: absolute;
-        top: 438px;
-        z-index: 9999;
-        width:300px;
-    }
+
 
     #buscarpersonal{
         box-shadow: 2px 2px 8px 0 rgba(0,0,0,.2);

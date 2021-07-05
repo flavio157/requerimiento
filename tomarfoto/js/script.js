@@ -125,7 +125,7 @@ if($listaDeDispositivos.options.length == 0){
                     //Pausar reproducción
                     $video.pause();
                     validacion();
-                    var nom= $("#slcdocumento").val() +"-"+ $("#txtseriedocument").val() +"-"+ $("#txtnrodocumento").val()+"-"+$("#txtruc").val();
+                 
                     //document.getElementById("nombre").value; 
                     //Obtener contexto del canvas y dibujar sobre él
                     let contexto = $canvas.getContext("2d");
@@ -134,9 +134,11 @@ if($listaDeDispositivos.options.length == 0){
                     contexto.drawImage($video, 0, 0, $canvas.width, $canvas.height);
                     
                     let foto = $canvas.toDataURL(); //Esta es la foto, en base 64
-                     
+
+                    var nom = $("#txtnombreimg").val();
+           
                     $estado.innerHTML = "Enviando foto. Por favor, espera...";
-                    fetch("./seguimiento/guardar_foto.php?nombre="+nom, {
+                    fetch("./gasto/guardar_foto.php?nombre="+nom, {
                             method: "POST",
                             body: encodeURIComponent(foto),
                             headers: {
@@ -148,12 +150,14 @@ if($listaDeDispositivos.options.length == 0){
                             return resultado.text()
                         })
                         .then(nombreDeLaFoto => {
-                            console.log(nombreDeLaFoto);
+                           // console.log(nombreDeLaFoto);
+                            
                             // nombreDeLaFoto trae el nombre de la imagen que le dio PHP --Foto guardada con éxito. Puedes verla href='./${nombreDeLaFoto}
                             //console.log("La foto fue enviada correctamente");
                             $estado.innerHTML = `Foto guardada con éxito. Puedes verla <a target='_blank' class="btn btn-primary active" data-img="${nombreDeLaFoto}" id="verimg">
                             <i class="icon-eye" title="Align Right"></i></a>`;
-                            
+                            document.getElementById("frmcomprovante").reset();
+                            $(".btntomafoto").attr('disabled','true');
                         })
 
                     //Reanudar reproducción

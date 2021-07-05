@@ -34,13 +34,14 @@ $cod = $_SESSION["cod"];
                 <input type="text" id="vroficina" style="display: none;" value="<?php echo $_SESSION["ofi"]?>"/>
                 <input type="text" id="vrzona" style="display: none;" value="<?php echo  $_SESSION["zon"]?>"/>
                 <input type="text" id="vrcodpersonal" style="display: none;" value="<?php echo $_SESSION["cod"]?>"/>
+                <input name="txtnombreimg" id="txtnombreimg" class="form-control" style="display: none;">
                 <div id="mensajesgenerales">
                                    
                 </div>
                 <div class="col-12">
                     <center><label for="formTipo" class="form-label">EMPRESA</label></center>
                         <select class="form-select " name="slcempresa" id="slcempresa"  data-size="5">
-                            <option value="" selected>SELECCIONE EMPRESA</option>            
+                            <option value= " " selected>SELECCIONE EMPRESA</option>            
                         </select>
                 </div>
                 <div class="row g-2">
@@ -79,6 +80,7 @@ $cod = $_SESSION["cod"];
                     </div>
                     <div class="col-6">
                         <center><label for="formTipo" class="form-label">RUC</label></center>
+                        <input name="txtcod_prove" id="txtcod_prove" class="form-control" style="display: none;">
                         <input type="number" name="txtruc" id="txtruc" class="form-control">
                     </div>
                 </div>
@@ -86,7 +88,7 @@ $cod = $_SESSION["cod"];
                     <center><label for="formTipo" class="form-label">PROVEEDOR</label></center>
                      <input type="text" name="txtproveedor" id="txtproveedor" class="form-control">
                 </div>
-                <div id="sugerencias"></div>
+                <!--<div id="sugerencias"></div>-->
                 <div class="col-12">
                     <center><label for="formTipo" class="form-label">DIRECCION DEL PROVEEDOR</label></center>
                      <input type="text" name="txtdirproveedor" id="txtdirproveedor" class="form-control">
@@ -121,22 +123,20 @@ $cod = $_SESSION["cod"];
                 </div>
                 <div class="col-12">
                     <div class="col text-center">
-                        <a class="btn btn-primary active btn-lg" id="btntomafoto" data-bs-toggle="modal" data-bs-target="#Mostrafoto">
+                        <a class="btn btn-primary active btn-lg" id="btntomafoto">
                             <i class="icon-camera" title="Align Right"></i>
                         </a>
                     </div>
 
                
-                        <a class="btn btn-primary active btn-lg" id="pruebag">
-                            <i class="icon-camera" title="Align Right"></i>
-                        </a>
+                      
                
                 </div>
         </form>
         
     <?php include 'vista/modal_personal.php';?>
     <?php include 'vista/modal_foto.php';?>
-    <?php include 'vista/verFoto.php';?>
+    <?php include 'vista/modal_verfoto.php';?>
 
 </body>
 
