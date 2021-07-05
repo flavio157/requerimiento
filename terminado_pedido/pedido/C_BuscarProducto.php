@@ -110,19 +110,20 @@ class C_BuscarProducto
             $promo = 0;
             $tipo=0;
             $dif= "";
+           
             foreach ($dt->arrayproductos as $date){
                 if($date != null){
                     $Bono = $M_politicaBono->M_PoliticaBono($zona,$date->cantidad);  
                     if($date->promocion <= $Bono['BONO'] && $date->promocion != 0){
-                        $tipo = 1;
                         break;
                     }else{
+                        $tipo = 1;
                         break;
                     } 
                 } 
             }
 
-            if($tipo != 1){
+            if($tipo == 1){
                 foreach ($dt->arrayproductos as $date){
                     if(isset($date->cod_producto)){
                         $cantidad += intval($date->cantidad);
@@ -172,8 +173,9 @@ class C_BuscarProducto
                 'dif' => $dif,
                 'tipo' => $tipo
             );
-
+            
             echo json_encode($datos,JSON_FORCE_OBJECT);
+
     }
 
 
