@@ -5,9 +5,11 @@ var existeproveedor = 1;
 $(document).ready(function(){
     listarempresa();
     
-    $("#mostrarimg").click(function name() {
-        console.log("e");
-      buscaimg('000000016');
+    $("#btnbuscarimg").click(function name(e) {
+        e.preventDefault()
+        console.log("ds");
+        img = $("#txtbuscarfoto").val();
+      buscaimg(img);
         //  buscaimg('00006797');
     });
 
@@ -103,7 +105,7 @@ function buscarproveedor(proveedor) {
     $.ajax({
         dataType:'text',
         type: 'POST', 
-        url:  './gasto/c_empresas.php',
+        url:  '../gasto/c_empresas.php',
         data:{
             "tipo" : "buscarpro",
             "proveedor" : proveedor,
@@ -128,7 +130,7 @@ function buscarpersonal(personal) {
     $.ajax({
         dataType:'text',
         type: 'POST', 
-        url:  './gasto/c_empresas.php',
+        url:  '../gasto/c_empresas.php',
         data:{
             "tipo" : "buscarper",
             "personal" : personal,
@@ -158,7 +160,7 @@ function listarempresa() {
  $.ajax({
     dataType:'text',
     type: 'POST', 
-    url:  './gasto/c_empresas.php',
+    url:  '../gasto/c_empresas.php',
     data: {
         "tipo" : "listarempresa"
     },
@@ -179,7 +181,7 @@ function validacion($tipo) {
     $.ajax({
        dataType:'text',
        type: 'POST', 
-       url:  './gasto/c_validacion.php',
+       url:  '../gasto/c_validacion.php',
        data: data.serialize()+"&idpersonal="+idpersonal+"&oficina="+oficina
        +"&usuario="+usuarioregistro+"&codproveedor="+codproveedor
        +"&tipo="+null+"&caja="+caja+"&codproveedor="+cod_prove+"&existeproveedor="+existeproveedor
@@ -209,16 +211,17 @@ function validacion($tipo) {
    }
 
    function buscaimg(nombreimg) {
+       
     $.ajax({
        dataType:'text',
        type: 'POST', 
-       url:  './gasto/c_empresas.php',
+       url:  '../gasto/c_empresas.php',
        data: {
            "tipo" : "mostrarimg",
            "nombreimg" : nombreimg
        },
        success: function(response){
-        
+        console.log(response);
        // dt.setAttribute('src',"data:image/jpg;base64,"+response);
         imgElem.setAttribute('src', "data:image/jpg;base64,"+response);
       

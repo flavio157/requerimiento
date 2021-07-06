@@ -5,7 +5,15 @@ var existeproveedor = 1;
 $(document).ready(function(){
     listarempresa();
     
-    
+    $("#btnbuscarimg").click(function name(e) {
+        e.preventDefault()
+        console.log("ds");
+        img = $("#txtbuscarfoto").val();
+        buscaimg(img);
+    });
+
+
+
 
     $("#Mostrafoto").on("hidden.bs.modal", function () {
         $(".btntomafoto").removeAttr('disabled');
@@ -51,15 +59,18 @@ $(document).ready(function(){
     $("#txtruc").blur(function () {
         var ruc = $("#txtruc").val();      
         buscarproveedor(ruc);
+      
     });
 
-    $(document).on('click','#mostaraimagen',function name() {
+  /*  $(document).on('click','#mostaraimagen',function name() {
         var nombreimg = $(this).attr('data');
-        buscaimg(nombreimg);
-    });
+        //buscaimg(nombreimg);
+        buscaimg('021');
+    });*/
 
     $("#grabar").click(function name(params) {
-        $("#modalpersonal").modal("show");
+         //buscaimg('021');
+       $("#modalpersonal").modal("show");
     });
 
     $("#txtseriedocument").keypress(function (e) {
@@ -82,8 +93,8 @@ $(document).ready(function(){
 
 
     $("#btntomafoto").click(function() {
-        validacioninput(1);
-        
+       validacioninput(1);
+        // $("#Mostrafoto").modal('show');
     })
  
 });
@@ -93,7 +104,7 @@ function buscarproveedor(proveedor) {
     $.ajax({
         dataType:'text',
         type: 'POST', 
-        url:  './gasto/c_empresas.php',
+        url:  '../gasto/c_empresas.php',
         data:{
             "tipo" : "buscarpro",
             "proveedor" : proveedor,
@@ -118,7 +129,7 @@ function buscarpersonal(personal) {
     $.ajax({
         dataType:'text',
         type: 'POST', 
-        url:  './gasto/c_empresas.php',
+        url:  '../gasto/c_empresas.php',
         data:{
             "tipo" : "buscarper",
             "personal" : personal,
@@ -148,7 +159,7 @@ function listarempresa() {
  $.ajax({
     dataType:'text',
     type: 'POST', 
-    url:  './gasto/c_empresas.php',
+    url:  '../gasto/c_empresas.php',
     data: {
         "tipo" : "listarempresa"
     },
@@ -169,13 +180,13 @@ function validacion($tipo) {
     $.ajax({
        dataType:'text',
        type: 'POST', 
-       url:  './gasto/c_validacion.php',
+       url:  '../gasto/c_validacion.php',
        data: data.serialize()+"&idpersonal="+idpersonal+"&oficina="+oficina
        +"&usuario="+usuarioregistro+"&codproveedor="+codproveedor
        +"&tipo="+null+"&caja="+caja+"&codproveedor="+cod_prove+"&existeproveedor="+existeproveedor
        +"&validarcom="+$tipo,
        success: function(response){
-          
+         
         obj = JSON.parse(response)
             if($tipo != 1){
                 if(obj['1'] == "error"){
@@ -187,7 +198,7 @@ function validacion($tipo) {
                 if(obj['1'] == "error"){
                     mensajesError(obj['0'],"mensajesgenerales");
                 }else{
-                    console.log(obj['0']);
+                   
                     $("#txtnombreimg").val(obj['0']);
                    $("#Mostrafoto").modal('show');
                 }
@@ -199,16 +210,20 @@ function validacion($tipo) {
    }
 
    function buscaimg(nombreimg) {
+       
     $.ajax({
        dataType:'text',
        type: 'POST', 
-       url:  './gasto/c_empresas.php',
+       url:  '../gasto/c_empresas.php',
        data: {
            "tipo" : "mostrarimg",
            "nombreimg" : nombreimg
        },
        success: function(response){
-        imgElem.setAttribute('src', "data:image/jpg;base64,"+response);
+      
+            // dt.setAttribute('src',"data:image/jpg;base64,"+response);
+            imgElem.setAttribute('src', "data:image/jpg;base64,"+response);
+        
         $("#modalimg").modal('show');
        }
     }) 

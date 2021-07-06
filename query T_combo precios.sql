@@ -1,12 +1,12 @@
 select * from T_COMBO
 select * from T_COMBO_ITEM
 
-/*CM0005 ya no existe EST_PRODUCTO I*/
+/*CM0005 ya no existe EST_PRODUCTO 0*/
 update T_PRODUCTO set EST_PRODUCTO = '0' where COD_PRODUCTO = 'CM0005'
 /*---------------*/
 
 
-/*Combos que existen EST_PRODUCTO A*/
+/*Combos que existen EST_PRODUCTO 1*/
 update T_PRODUCTO set EST_PRODUCTO = '1' where COD_PRODUCTO = 'CM0001'
 update T_PRODUCTO set EST_PRODUCTO = '1' where COD_PRODUCTO = 'CM0002'
 update T_PRODUCTO set EST_PRODUCTO = '1' where COD_PRODUCTO = 'CM0003'

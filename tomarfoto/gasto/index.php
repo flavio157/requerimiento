@@ -9,31 +9,31 @@ if (session_status() == PHP_SESSION_NONE) {
     exit;
 } */
 date_default_timezone_set('America/Lima');
-$ofi = $_SESSION["ofi"];
+/*$ofi = $_SESSION["ofi"];
 $zon = $_SESSION["zon"];
-$cod = $_SESSION["cod"];
+$cod = $_SESSION["cod"];*/
 ?>
 
 
 <!DOCTYPE html>
 <html lang="en">
 <head>
-        <script type="text/javascript" src="js/jquery-3.3.1.slim.min.js"></script>
-        <script type="text/javascript" src="js/jquery.min.js"></script>
-        <LINK REL=StyleSheet HREF="css/responsive.css" TYPE="text/css" MEDIA=screen>
-        <link rel="STYLESHEET" type="text/css" href="fonts/style.css">
-        <link rel="STYLESHEET" type="text/css" href="css/bootstrap.min.css">
-        <script type="text/javascript" src="js/bootstrap.bundle.min.js"></script>
-        <script  type="text/javascript" src="./js/jsformulario.js"></script>
+        <script type="text/javascript" src="../js/jquery-3.3.1.slim.min.js"></script>
+        <script type="text/javascript" src="../js/jquery.min.js"></script>
+        <LINK REL=StyleSheet HREF="../css/responsive.css" TYPE="text/css" MEDIA=screen>
+        <link rel="STYLESHEET" type="text/css" href="../fonts/style.css">
+        <link rel="STYLESHEET" type="text/css" href="../css/bootstrap.min.css">
+        <script type="text/javascript" src="../js/bootstrap.bundle.min.js"></script>
+        <script  type="text/javascript" src="../js/jsformulario.js"></script>
         <meta name="viewport" content="width=device-width, initial-scale=1.0 ,user-scalable=no">
     <title>Document</title>
 </head>
 <body>
     <div class="main">
         <form class="row g-3"  id="frmcomprovante">
-                <input type="text" id="vroficina" style="display: none;" value="<?php echo $_SESSION["ofi"]?>"/>
-                <input type="text" id="vrzona" style="display: none;" value="<?php echo  $_SESSION["zon"]?>"/>
-                <input type="text" id="vrcodpersonal" style="display: none;" value="<?php echo $_SESSION["cod"]?>"/>
+                <input type="text" id="vroficina" style="display: none;" value="SMP2"/>
+                <input type="text" id="vrzona" style="display: none;" value="1"/>
+                <input type="text" id="vrcodpersonal" style="display: none;" value="0215"/>
                 <input name="txtnombreimg" id="txtnombreimg" class="form-control" style="display: none;">
                 <div id="mensajesgenerales">
                                    
@@ -134,9 +134,9 @@ $cod = $_SESSION["cod"];
                 </div>
         </form>
         
-    <?php include 'vista/modal_personal.php';?>
-    <?php include 'vista/modal_foto.php';?>
-    <?php include 'vista/modal_verfoto.php';?>
+    <?php include '../vista/modal_personal.php';?>
+    <?php include '../vista/modal_foto.php';?>
+    <?php include '../vista/modal_verfoto.php';?>
 
 </body>
 

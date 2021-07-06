@@ -24,7 +24,7 @@ class C_Login
        
 
        if($datosUsuario){*/
-        return header("Location: ../formulario.php");
+        return header("Location: index.php");
     /*   }else{
          return header("Location: ../index.php");
         }*/

@@ -58,7 +58,7 @@
             $contabilidad= '0';
         }
         
-        $registro = C_Empresas::verificardoc($serie_contabilidad);
+        $registro = C_Empresas::verificardoc($serie_contabilidad,$tipo_comprobante,$serie_contabilidad,$identificacion);
         
         if($registro == ""){
             if($validarcom != 1){

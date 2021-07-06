@@ -33,7 +33,7 @@
                <canvas id="canvas" style="display: none;"></canvas>  
                <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    <script src="./js/script.js"></script>
+                    <script src="../js/script.js"></script>
                </div>
       </div>
      

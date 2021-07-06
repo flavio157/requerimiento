@@ -76,10 +76,10 @@
         }
 
       
-        static function verificardoc($verificardoc)
+        static function verificardoc($seriedoc,$tipocompro,$seriecontab,$identificacion)
         {
             $m_doc = new M_Empresas();
-            $c_verificardoc = $m_doc->m_verificardoc($verificardoc); 
+            $c_verificardoc = $m_doc->m_verificardoc($seriedoc,$tipocompro,$seriecontab,$identificacion); 
             return $c_verificardoc;
         }
 

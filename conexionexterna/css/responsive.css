@@ -8,6 +8,23 @@
     
    }
 
+   .mostrarimg{
+    width:90%;
+    margin:0 auto;
+   }
+
+
+    
+   .divtitulo{
+    text-align: center;
+    width: 100%;
+    height: 5%;
+    /* margin: 1px auto; */
+    margin-top: 18px;
+}
+
+
+
    .scrollable-menu{
     height: auto;
     max-height: 200px;
@@ -37,46 +54,7 @@
 } 
 
 
-/*
-    .tablafrmpedidos {
-        overflow:scroll;
-        height: 150px;
-      
-   }
 
-   .productosMomento{
-    font-size: 14px;
-    text-align: center;
-   }
-
-   .tabladelProducto{
-    font-size: 14px;
-    text-align: center;
-   }
-
-   .responsive{display:none;}   
-
-   .noresposive{display: block;}
-
-   #acordionresponsive{display:none ;}
-
-   #tbpedidosRegistrados{display: block;}
-
-   .collapse-row.collapsed + tr {
-        display: none;
-    }
-
-
-
-
-    #txtcontrato{
-        text-transform: uppercase;
-    }
-
-    .botonguardar.mx-auto {
-        margin-left: unset  !important;
-     }  
-*/
 
 input[type=number]::-webkit-inner-spin-button, 
 input[type=number]::-webkit-outer-spin-button { 
@@ -85,8 +63,44 @@ input[type=number]::-webkit-outer-spin-button {
 }
 
 
+.contenedortxt{
+    width: 45%;
+    margin-left: auto;
+    padding: 1em;
+}
+
+
+.contenerdoimg{
+    margin: 0 auto;
+    width: 80%;
+    text-align: center;
+    }
+
+    .contenerdortxtbuscar{
+        float: left;
+        width: 70%;
+    
+       }
+
+
+    .divbtn.mx-auto{
+        margin-right: inherit !important;
+    }
+
+    .divbtnmostrar {
+        padding-left: 33%;
+        margin-left: 12%;
+    }
+
 @media screen and (max-width:992px){
     .main{
+        width:100%;
+        /*border-style: solid;
+        border-width: 1px;
+        /*border-radius: 8px; */	
+    } 
+
+    .mostrarimg{
         width:100%;
         /*border-style: solid;
         border-width: 1px;
@@ -104,60 +118,30 @@ input[type=number]::-webkit-outer-spin-button {
         width: 77%;
    }
 
-/*
-    .tablafrmpedidos {
-        overflow:scroll;
-        height: 150px;
-        
-   }
-
-   .productosMomento{
-       font-size: 14px;
-       text-align: center;
-    }
-
-    .tabladelProducto{
-        font-size: 14px;
-        text-align: center;
-       }
-       
-    .responsive{
-        display:block;
-    }   
-
-    .noresposive{
-        display: none;
-    }
-
-    #acordionresponsive{
-        display: block ;
-    }
-   
-    #tbpedidosRegistrados{
-        display: none;
-    }
-
-    #acordionresponsive {
-        height: 245px;
-        border: 1px solid #ddd;
-        background: #f1f1f1;
-        overflow-y: scroll;
-    }
-    #txtcontrato{
-        text-transform: uppercase;
-    }
-
-     .botonguardar.mx-auto {
-        margin-left: unset !important;
-     }  
-*/
-
 .scrollable-menu{
     height: auto;
     max-height: 200px;
     overflow-x: hidden;
    }
 
+   .contenedortxt {
+    width:100%;
+    margin:0 auto;
+    padding:1em;  
+}
 
+.divtitulo{
+    text-align: center;
+    width: 100%;
+    height: 5%;
+    /* margin: 1px auto; */
+    margin-top: 18px;
+}
+
+.contenerdoimg{
+    width:100%;
+    margin:0 auto;
+    padding:1em;
+}
 
 }

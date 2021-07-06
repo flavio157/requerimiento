@@ -46,13 +46,16 @@
 
         static  function mostrarimg($codigo)
         {
+            
             $m_foto = new M_Empresas();
-            $c_mostrarimg = $m_foto->m_mostrarimg($codigo); 
-            print_r($c_mostrarimg['IMAGEN']);
+            $c_mostrarimg = $m_foto->m_mostrarimg($codigo);
+            print_r(base64_encode($c_mostrarimg['IMAGEN']));
+            
         }
 
+
         static function c_buscarpersonal($oficina,$personal){
-            $m_personal = new M_buscarpersonal($oficina);
+            $m_personal = new M_buscarpersonal();/*$oficina parametro */
             $c_buscarpersonal = $m_personal->m_buscarpersonal($personal); 
             if($c_buscarpersonal > 0){
                 $html="";
@@ -73,14 +76,14 @@
         }
 
       
-        static function verificardoc($verificardoc)
+        static function verificardoc($seriedoc,$tipocompro,$seriecontab,$identificacion)
         {
             $m_doc = new M_Empresas();
-            $c_verificardoc = $m_doc->m_verificardoc($verificardoc); 
+            $c_verificardoc = $m_doc->m_verificardoc($seriedoc,$tipocompro,$seriecontab,$identificacion); 
             return $c_verificardoc;
         }
 
-        static function nombreimgn()
+       static function nombreimgn()
         {
             $m_img = new M_Empresas();
             $nombreimg = $m_img -> Generarcodigo();

@@ -99,9 +99,6 @@ class C_BuscarProducto
     
 
 
-   
-
-
     static function PoliticaBonos($dt,$zona)
     {
             $M_politicaBono = new M_BuscarProductos();

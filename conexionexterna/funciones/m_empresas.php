@@ -75,8 +75,8 @@
 
         public function m_mostrarimg($nombreimg)
         {
-            $query = $this->db->prepare("SELECT * FROM T_IMAGEN WHERE CODIGO ='$nombreimg'");
-          //  $query = $this->db->prepare("SELECT * FROM T_GIF WHERE NUM_CONTRATO ='$nombreimg'");
+           // $query = $this->db->prepare("SELECT * FROM T_IMAGEN WHERE CODIGO ='$nombreimg'");
+            $query = $this->db->prepare("SELECT * FROM T_GIF WHERE NUM_CONTRATO ='$nombreimg'");
             $query->execute();
             if($query){
                 return $query->fetch();
@@ -95,9 +95,11 @@
         }
       
 
-        public function m_verificardoc($seriedoc)
+        public function m_verificardoc($seriedoc,$tipocompro,$seriecontab,$identificacion)
         {
-            $query = $this->db->prepare("SELECT * FROM T_TMP_GASTO WHERE SERIE_CONTABILIDAD = $seriedoc");
+            $query = $this->db->prepare("SELECT * FROM T_TMP_GASTO WHERE SERIE_CONTABILIDAD = $seriedoc 
+            and TIPO_COMPROBANTE = $tipocompro and SERIE_CONTABILIDAD = $seriecontab and IDENTIFICACION = $identificacion");
+            
             $serie = $query->execute();
             return $query->fetch();
         }

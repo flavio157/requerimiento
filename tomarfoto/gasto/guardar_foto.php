@@ -19,21 +19,21 @@ $imagenDecodificada = base64_decode($imagenCodificadaLimpia);
 //$nombreImagenGuardada = "foto_" . uniqid() . ".jpeg";
 //$nombreImagenGuardada = '../ImagenGastos/'.$nom. ".png";
 
-
+$hex = bin2hex($imagenDecodificada);
 //Escribir el archivo
 //file_put_contents($nombreImagenGuardada, $imagenDecodificada);
-
-$estado = guardarfoto($nom,$imagenCodificadaLimpia);
+$hex = '0x'.$hex;
+$estado = guardarfoto($nom,$hex);
 
 function guardarfoto($nombre,$foto){
+    
+    //print_r($foto);
     $m_foto = new M_Empresas();
     $c_guardarfoto = $m_foto->m_guardarfoto($nombre,$foto); 
 }
 
 
 //Terminar y regresar el nombre de la foto
-//exit($nombreImagenGuardada);
 exit($nom);
-//exit($estado);
 ?>
 

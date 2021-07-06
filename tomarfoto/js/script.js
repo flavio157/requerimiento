@@ -132,13 +132,14 @@ if($listaDeDispositivos.options.length == 0){
                     $canvas.width = $video.videoWidth;
                     $canvas.height = $video.videoHeight;
                     contexto.drawImage($video, 0, 0, $canvas.width, $canvas.height);
-                    
+                    $canvas.toDataURL($video, 0.1);
                     let foto = $canvas.toDataURL(); //Esta es la foto, en base 64
 
                     var nom = $("#txtnombreimg").val();
            
+                 
                     $estado.innerHTML = "Enviando foto. Por favor, espera...";
-                    fetch("./gasto/guardar_foto.php?nombre="+nom, {
+                    fetch("../gasto/guardar_foto.php?nombre="+nom, {
                             method: "POST",
                             body: encodeURIComponent(foto),
                             headers: {
