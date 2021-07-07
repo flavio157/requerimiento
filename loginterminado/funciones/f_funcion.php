@@ -375,6 +375,7 @@ function RestriccionOficina($total,$permiso,$tgeneral){
 
 
 function nuevfech($dias,$fechaingreso){
+   
    /* $dias = 2;*/
     date_default_timezone_set('America/Lima');
     $nvafech = explode("-",$fechaingreso);
@@ -390,9 +391,8 @@ function nuevfech($dias,$fechaingreso){
     $fecAct = new DateTime($fechaActual);
    
     $dias1 = (evaluarfechIni($fechaPriquin)) ? $dias + 1 : $dias;
+   
     $dias2 = (evaluarfechIni($fechaSegquin)) ? $dias + 1 : $dias;
-  
-  
 
     if($fecAct >= $fechaPriquicena && $fechaActual <= '26'."-".date("m")."-".date("Y")){
 
@@ -408,25 +408,21 @@ function nuevfech($dias,$fechaingreso){
             return array($fechaPriquin,$fechaActual,$cantidadDias);
         }
     }else if($fecAct >= $fechaSegquincena){
-       
-        
+
         $fech= new DateTime (date("d-m-Y",strtotime($fechaIngOrd."+".$dias."days")));
-        if(date("d") >= 01 && date("d") < 27){
-            $fechaSegquin = '27'."-".$mes."-".date("Y");
-            $fechaSegquincena = new DateTime($fechaSegquin);
-        }else if(date("d") >= 27  ){
-            $fechaSegquin = '27'."-".date("m")."-".date("Y");
-            $fechaSegquincena = new DateTime($fechaSegquin);
-        }
+        $fechaSegquincena = CrearFechaSegQuin();
         $fecqui = new DateTime(date("d-m-Y",strtotime($fechaSegquin."+".$dias2."days")));
-      
+
+       
 
         if($fechaInord >= $fechaSegquincena &&  $fecAct >=  $fech){  
             $cantidadDias =cantidadDias($fechaInord,$fecAct->format("d-m-Y"));
+            
             return array($fechaIngOrd,$fechaActual,$cantidadDias);
             
         }else if($fecAct >= $fecqui &&  $fechaInord <= $fechaSegquincena ){
             $cantidadDias =cantidadDias($fechaSegquincena,$fechaActual );
+           
             return array($fechaSegquincena,$fechaActual,$cantidadDias);
         }
     }
@@ -460,13 +456,48 @@ function cantidadDias($fechaQuincena,$fechaActual){
 }
 
 
-function f_Cuotas($promedioCuota,$cuotas,$dias){
-
+function f_Cuotas($promedioCuota,$cuotas,$oficina){
+  
     date_default_timezone_set('America/Lima');
     $fechaActual = date("d")."-".date("m")."-".date("Y");
+
+    $fechaSegquincena = CrearFechaSegQuin();
+
+    if($cuotas != '0' && $cuotas != null){
+        $fechaActual2 = new DateTime($fechaActual);
+        $restriccion  =  new  DateTime(date("d-m-Y",strtotime($promedioCuota[0]."+".$promedioCuota[2]."days")));
+            $mnt =($oficina == 'SMP2' || $oficina == 'SMP5') ? $cuotas : round($cuotas / $promedioCuota[2],2);
+       //  print_r($cuotas ."/". $promedioCuota[2]);
+            if($fechaActual >= '12'."-".date("m")."-".date("Y") && 
+               $fechaActual <= '26'."-".date("m")."-".date("Y") &&
+               $fechaActual >= date("d-m-Y",strtotime($promedioCuota[0]."+".$promedioCuota[2]."days")) &&
+               $promedioCuota[1] < $mnt)
+            {
+
+                echo nl2br("USUARIO BLOQUEADO.\nSu promedio hasta el momento es de "
+                .$promedioCuota[1].".\n Usted tiene que llegar a ". $mnt.
+                ".\nA Usted le falta ".number_format($mnt - $promedioCuota[1], 2, '.', ' '));
+                
+
+            }else if($fechaActual2 >= $fechaSegquincena && 
+                    $fechaActual2 >= $restriccion &&
+                    $promedioCuota[1] < $mnt ){
+
+                echo nl2br("USUARIO BLOQUEADO.\nSu promedio hasta el momento es de "
+                .$promedioCuota[1].".\n Usted tiene que llegar a ". $mnt.
+                ".\nA Usted le falta ".number_format($mnt - $promedioCuota[1], 2, '.', ' '));
+               
+            }else{
+                echo "SIN RESTRICCION";
+            } 
+        }else{
+              print_r("NO SE ESPECIFICO CUOTA AL USUARIO");
+        }
+}
+
+
+function CrearFechaSegQuin(){
     $mes = (date("m") <= '9')? '0'.(date("m")-1) : (date("m")-1);
-    
-    
     if(date("d") >= 01 && date("d") < 27){
         $fechaSegquin = '27'."-".$mes."-".date("Y");
         $fechaSegquincena = new DateTime($fechaSegquin);
@@ -474,38 +505,8 @@ function f_Cuotas($promedioCuota,$cuotas,$dias){
         $fechaSegquin = '27'."-".date("m")."-".date("Y");
         $fechaSegquincena = new DateTime($fechaSegquin);
     }
-
-    if($cuotas != '0' && $cuotas != null){
-        $fechaActual2 = new DateTime($fechaActual);
-        $restriccion  =  new  DateTime(date("d-m-Y",strtotime($promedioCuota[0]."+".$dias."days")));
-        
-            if($fechaActual >= '12'."-".date("m")."-".date("Y") && 
-               $fechaActual <= '26'."-".date("m")."-".date("Y") &&
-               $fechaActual >= date("d-m-Y",strtotime($promedioCuota[0]."+".$dias."days")) &&
-               $promedioCuota[1] < $cuotas)
-            {
-            
-                return false ;
-                /*print_r("USUARIO BLOQUEADO");*/
-               
-            }else if($fechaActual2 >= $fechaSegquincena && 
-                    $fechaActual2 >= $restriccion &&
-                    $promedioCuota[1] < $cuotas){
-
-               return false;    
-                /* echo "USUARIO BLOQUEADO";  */
-                
-            }else{
-                return true;
-                /*print_r("SIN RESTRICCION");*/
-            } 
-        }else{
-            return false;
-              /*print_r("NO SE ESPECIFICO CUOTA AL USUARIO");/*
-              /*return header("Location:http://localhost:8080/requerimiento/vista/Advertencia.php");*/
-        }
+    return $fechaSegquincena;
 }
-
     
 
 
@@ -539,7 +540,8 @@ function TotalProducto($dataproductos)
 function seguMinu($datoscdr){
     $minutos = $datoscdr / 60;
      return round($minutos,2);
- }   
+    }
+   
 
 
  function verificarCuotaLlamadas($Cantminutos,$CantMinRequeidos){
@@ -560,4 +562,84 @@ function seguMinu($datoscdr){
     return $diasresta;
 }
 
-  ?>
+function diasfalto($dias){
+    $count = 0;
+    $fecha = '';
+    $arrayfec = array();
+    if($dias[1] == '1'){
+        $fecha = '12'."-".date("m")."-".date("Y");
+    }else{
+        $fecha = CrearFechaSegQuin()->format("d-m-Y");
+    }
+  
+    foreach($dias[0] as $fech){
+        $count++;
+        if(strtotime($fech) != strtotime($dias[0][count($dias[0]) - 1])){
+            $fechquin = date("d-m-Y",strtotime($fecha."+".$count."days"));
+                if(strtotime($fechquin) != strtotime($fech)) {
+                    if(date('l',strtotime($fechquin)) != 'Sunday'){
+                        array_push($arrayfec,$fechquin);
+                    }
+                    $count++; //aumenta el contador para igualar la fecha del calendario  
+                }
+        }
+    }
+    return $arrayfec;
+    
+}
+
+
+function diasrestriccion($diaseval){
+    date_default_timezone_set('America/Lima');
+    $fechaActual = date("d")."-".date("m")."-".date("Y");
+    if(date("d") >= 12 && date('d') <= 26){
+        $quincena = '12'."-".date("m")."-".date("Y");
+    }else if(27 >= date('d') || date('d') > 27){
+        $quincena = CrearFechaSegQuin()->format("d-m-Y");
+    }
+    if(evaluarfechIni($quincena)){
+        $diaseval[0] = $diaseval[0] + 1;
+        $diaseval[1] = $diaseval[1] + 1;
+        $diaseval[2] = $diaseval[2] + 1;
+    }
+
+    $res1 = diasdomingos($diaseval[0],$quincena);
+    $res2 = diasdomingos($diaseval[1],$quincena);
+    $res3 = diasdomingos($diaseval[2],$quincena);
+
+    $diaseval[0] = (diasdomingos($diaseval[0],$quincena) != 0) ? $diaseval[0] + $res1 : $diaseval[0];
+    $diaseval[1] = (diasdomingos($diaseval[1],$quincena) != 0) ? $diaseval[1] + $res2 : $diaseval[1];
+    $diaseval[2] = (diasdomingos($diaseval[2],$quincena) != 0) ? $diaseval[2] + $res3 : $diaseval[2];
+
+   
+
+    if($fechaActual == date("d-m-Y",strtotime($quincena."+".$diaseval[0]."days"))){
+        $diasumar = '3';
+    }else if($fechaActual == date("d-m-Y",strtotime($quincena."+".$diaseval[1]."days"))){
+        $diasumar = '6';
+    }else if($fechaActual >= date("d-m-Y",strtotime($quincena."+".$diaseval[2]."days"))){
+        $diasumar = '9';
+    }else{
+        $diasumar = '';
+    }
+    return $diasumar;
+}
+
+function diasdomingos($diaseval,$quincena){
+  
+    $contador = 0;
+    $quincena = new DateTime($quincena);
+    for ($i=1; $i <= $diaseval ; $i++) { 
+        $fechfin =  date("d-m-Y",strtotime($quincena->format("d-m-Y")."+".$i."days"));
+        if(date('l',strtotime($fechfin)) == 'Sunday'){
+            $contador++;
+            
+        }
+    }
+    return $contador;
+}
+
+
+
+?>
+

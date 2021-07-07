@@ -11,11 +11,12 @@ class M_VerificarCuota
         $this->db=DatabaseDinamica::Conectarbd($basedatos);
     }
 
-    public function VerificandoQuincena($cod_vendedor,$dias,$fec_ingreso)
+    public function VerificandoQuincena($cod_vendedor,$diasrestriccion,$fec_ingreso,$inasistenticias)
     {  
         
+        
         $fec = explode(" ",$fec_ingreso);
-        $fechas = nuevfech($dias,$fec[0]);
+        $fechas = nuevfech($diasrestriccion,$fec[0]);
         if($fechas[0] != ""){
             if(!is_string($fechas[0])){
                 $fech1 = $fechas[0]->format("d-m-Y");
@@ -25,8 +26,10 @@ class M_VerificarCuota
         }
        
         $fech2 = $fechas[1];
-        $dias =  $fechas[2];
+        $dias =  $fechas[2] - $inasistenticias ;
 
+        //echo $fech1."  ".$fech2;
+        
          $query=$this->db->prepare("SELECT * FROM V_PEDIDO_MONTO WHERE VENDEDOR =$cod_vendedor AND
          FECHA >= '$fech1' and FECHA < '$fech2'");
          $query->execute();
@@ -36,9 +39,9 @@ class M_VerificarCuota
                 $montoTotal += $result['CANTIDAD'];
              }
         }
-        $promedio = ($dias != 0 ) ? $promedio = round($montoTotal / $dias,2) : 0;
 
-        $arraydato = array($fech1,$promedio); 
+        $promedio = ($dias != 0 ) ? $promedio = round($montoTotal / $dias,2) : 0;
+        $arraydato = array($fech1,$promedio,$diasrestriccion); 
       if($query){
           return $arraydato;
        } 
