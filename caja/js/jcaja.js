@@ -94,16 +94,19 @@ function listarcaja(oficina){
                 obj = JSON.parse(response);
                 var arr = [];
                 $.each(obj['items'], function(i, item) {
+                    
+
                     var items = {};
                     fecha2 = item.FEC_GASTO.split(" "); 
                     fecha = item.FEC_COBRO.split(" "); 
-                   
+                    fecha1 = formato(fecha2[0]);
+                    fecha2 = formato(fecha[0]);
                     items[0] = item.NRO_CORRELATIVO;
                     items[1] = item.COD_PERSONAL;
                     items[2] = item.PERSONAL;
                     items[3] = item.MON_COBRADO;
-                    items[4] = fecha2[0];
-                    items[5] = fecha[0];
+                    items[4] = fecha1;
+                    items[5] = fecha2;
                     items[6] = '<td><a class="btn btn-primary btn-sm" id="verificarpedido"><i class="icon-check" title="Align Right"></i></a></td></tr>';
                     arr.push(items);
 
@@ -181,3 +184,7 @@ function registrarcaja(nro_correlativo,cod_personal,monto,fec_gasto,fec_cobro,vr
     });
 }
 
+
+function formato(texto){
+  return texto.replace(/^(\d{4})-(\d{2})-(\d{2})$/g,'$3-$2-$1');
+}

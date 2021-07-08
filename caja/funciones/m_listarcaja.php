@@ -13,10 +13,8 @@
         
         public function m_mostraritems()
         {
-            $dia = restarDias(new DateTime(),7);
-            $retufch =  date("d-m-Y",strtotime(date("d-m-Y")."-".$dia."days")); 
-            $fecha1 = retunrFechaSql($retufch);
-            $query=$this->db->prepare("SELECT * FROM V_VERIFICAR_PAGO WHERE FEC_GASTO >= '$fecha1' AND FEC_GASTO <= GETDATE()");
+           
+            $query=$this->db->prepare("SELECT * FROM V_VERIFICAR_PAGO");
             $query->execute();
             if ($query) {
                     return $query->fetchAll();

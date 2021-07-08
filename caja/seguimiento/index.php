@@ -77,8 +77,8 @@ $cod = $_SESSION["cod"];
                                         <th scope="row" style="display: none;">codpersonal</th>
                                         <th scope="row">PERSONAL</th>
                                         <th scope="row">MONTO</th>
-                                        <th scope="row">FEC_GASTO</th>
-                                        <th scope="row">FEC_COBRO</th>
+                                        <th scope="row">FECHA CAJA</th>
+                                        <th scope="row">FECHA RECIBIDO</th>
                                         <th scope="row">REGISTRAR</th>
                                     </tr>
                                 </thead>
