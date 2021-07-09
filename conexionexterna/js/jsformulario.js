@@ -7,7 +7,6 @@ $(document).ready(function(){
     
     $("#btnbuscarimg").click(function name(e) {
         e.preventDefault()
-        console.log("ds");
         img = $("#txtbuscarfoto").val();
       buscaimg(img);
         //  buscaimg('00006797');
@@ -221,10 +220,10 @@ function validacion($tipo) {
            "nombreimg" : nombreimg
        },
        success: function(response){
-        console.log(response);
+        
        // dt.setAttribute('src',"data:image/jpg;base64,"+response);
         imgElem.setAttribute('src', "data:image/jpg;base64,"+response);
-      
+        var $img = $("#imgElem").imgViewer();
         $("#modalimg").modal('show');
        }
     }) 

@@ -7,7 +7,6 @@ $(document).ready(function(){
     
     $("#btnbuscarimg").click(function name(e) {
         e.preventDefault()
-        console.log("ds");
         img = $("#txtbuscarfoto").val();
         buscaimg(img);
     });
@@ -209,8 +208,7 @@ function validacion($tipo) {
     
    }
 
-   function buscaimg(nombreimg) {
-       
+   function buscaimg(nombreimg) {  
     $.ajax({
        dataType:'text',
        type: 'POST', 
@@ -223,6 +221,7 @@ function validacion($tipo) {
       
             // dt.setAttribute('src',"data:image/jpg;base64,"+response);
             imgElem.setAttribute('src', "data:image/jpg;base64,"+response);
+            var $img = $("#imgElem").imgViewer();
         
         $("#modalimg").modal('show');
        }
