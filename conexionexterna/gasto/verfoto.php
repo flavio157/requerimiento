@@ -4,18 +4,14 @@
         <script type="text/javascript" src="../js/jquery-3.3.1.slim.min.js"></script>
         <script type="text/javascript" src="../js/jquery.min.js"></script>
 
-        <script type="text/javascript" src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
-		<script type="text/javascript" src="https://unpkg.com/jquery-mousewheel@3.1.13"></script>
-		<script type="text/javascript" src="../js/hammer.min.js"></script>
-		<script type="text/javascript" src="https://unpkg.com/hammerjs@2.0.8"></script>
-		<script type="text/javascript" src="https://unpkg.com/jquery-hammerjs@2.0.0"></script>
-		<script type="text/javascript" src="../js/imgViewer.js"></script>
+        
 
         <LINK REL=StyleSheet HREF="../css/responsive.css" TYPE="text/css" MEDIA=screen>
         <link rel="STYLESHEET" type="text/css" href="../fonts/style.css">
         <link rel="STYLESHEET" type="text/css" href="../css/bootstrap.min.css">
         <script type="text/javascript" src="../js/bootstrap.bundle.min.js"></script>
         <script  type="text/javascript" src="../js/jsformulario.js"></script>
+        <script  type="text/javascript" src="../js/jquery-imagepreviewer.min.js"></script>
 
     <title>Document</title>
 </head>
@@ -42,7 +38,9 @@
 
                 <div class="contenerdoimg">
                         <div class="table-responsive tablafrmpedidos">
-                            <img id="imgElem" class="img-thumbnail"></img>
+                            <section class="article-box">
+                                <img id="imgElem" class="img-thumbnail"></img>
+                            </section>
                         </div>
                 </div>
 
