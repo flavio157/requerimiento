@@ -5,7 +5,7 @@ var existeproveedor = 1;
 $(document).ready(function(){
     listarempresa();
     
-	$(".article-box").imagePreviewer();
+	//$(".article-box").imagePreviewer();
 
 
 
@@ -225,7 +225,7 @@ function validacion($tipo) {
        success: function(response){
       
             // dt.setAttribute('src',"data:image/jpg;base64,"+response);
-            imgElem.setAttribute('src', "data:image/jpg;base64,"+response);
+            imagen.setAttribute('src', "data:image/jpg;base64,"+response);
          
         
         $("#modalimg").modal('show');

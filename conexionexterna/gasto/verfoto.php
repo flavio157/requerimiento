@@ -36,14 +36,9 @@
                     </div>
                 </div>    
 
-                <div class="contenerdoimg">
-                        <div class="table-responsive tablafrmpedidos">
-                            <section class="article-box">
-                                <img id="imgElem" class="img-thumbnail"></img>
-                            </section>
-                        </div>
-                </div>
-
+               
+               <img id="imagen" class="img-thumbnail"></img>
+                 
                 </form>                
 </div> 
 </body>
