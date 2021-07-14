@@ -11,16 +11,13 @@
         <script  type="text/javascript" src="../js/imgViewer.js"></script>
         <script  type="text/javascript" src="../js/imgNotes.js"></script>
         
-        
-	
-
+    
         <LINK REL=StyleSheet HREF="../css/responsive.css" TYPE="text/css" MEDIA=screen>
         <link rel="STYLESHEET" type="text/css" href="../fonts/style.css">
         <link rel="STYLESHEET" type="text/css" href="../css/bootstrap.min.css">
         <script type="text/javascript" src="../js/bootstrap.bundle.min.js"></script>
         <script  type="text/javascript" src="../js/jsformulario.js"></script>
         <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes" />
-        <!--<script  type="text/javascript" src="../js/jquery-imagepreviewer.min.js"></script>-->
 
     <title>Document</title>
 </head>
@@ -51,7 +48,11 @@
                 </form>                
 </div> 
 
-<img id="imagen" class="img-thumbnail noresponsive"  width="100%" ></img>
+<div class="contenedor-img">
+    <img id="imagen" class="img-thumbnail noresponsive img-fluid"  width="100%"></img>
+</div>
+
+
 
 <img id="imagenrp" class="img-thumbnail  responsi"  width="100%" ></img>
 </body>

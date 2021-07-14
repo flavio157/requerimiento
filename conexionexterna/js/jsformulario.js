@@ -223,8 +223,9 @@ function validacion($tipo) {
            "nombreimg" : nombreimg
        },
        success: function(response){
+       
         if(response != ''){
-           imagen.setAttribute('src', "data:image/jpg;base64,"+response);
+            imagen.setAttribute('src', "data:image/jpg;base64,"+response);
             if( navigator.userAgent.match(/Android/i)
                 || navigator.userAgent.match(/webOS/i)
                 || navigator.userAgent.match(/iPhone/i)
@@ -232,13 +233,16 @@ function validacion($tipo) {
                 || navigator.userAgent.match(/iPod/i)
                 || navigator.userAgent.match(/BlackBerry/i)
                 || navigator.userAgent.match(/Windows Phone/i)){
-                imagenrp.setAttribute('src', "data:image/jpg;base64,"+response);   
-                $("#imagenrp").imgNotes({});
+                    imagenrp.setAttribute('src', "data:image/jpg;base64,"+response);   
+                 $("#imagenrp").imgNotes({});
+                
             }
              $("#modalimg").modal('show');
         }else{
             console.log("no se encontro la foto");
         }
+      
+      
        }
     }) 
    }

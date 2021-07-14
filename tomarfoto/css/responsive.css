@@ -111,6 +111,13 @@ input[type=number]::-webkit-outer-spin-button {
         display:none;
     }
     
+    .contenedor-img{
+        margin: auto;
+        flex: 0 0 auto;
+        width: 84%;
+    }
+
+
 @media screen and (max-width:992px){
     .main{
         width:100%;

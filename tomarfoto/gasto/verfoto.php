@@ -50,7 +50,10 @@
                 </form>                
 </div> 
 
-<img id="imagen" class="img-thumbnail noresponsive"  width="100%" ></img>
+
+<div class="contenedor-img">
+    <img id="imagen" class="img-thumbnail noresponsive img-fluid"  width="100%"></img>
+</div>
 
 <img id="imagenrp" class="img-thumbnail  responsi"  width="100%" ></img>
 </body>
