@@ -51,7 +51,7 @@ function personalfalta(){
                 "usuario" : '',
              } ,
             success: function(response){
-                //console.log(response);
+               // console.log(response);
                 lst_cuotabaja();
             }
     });

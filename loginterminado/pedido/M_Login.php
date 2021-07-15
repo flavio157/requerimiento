@@ -34,8 +34,7 @@ class M_Login
 
 
     public function VerificarCallCenter($cod_vendedor,$diaseval,$fec_ingreso,$oficina,$inasistenticias,$cuotas)
-    {  
-        $arraydato = '';
+    {   $arraydato = '';
         $diarestriccion = diasrestriccion($diaseval);
        
         if($diarestriccion != ''){
@@ -75,9 +74,51 @@ class M_Login
         }
             //print_r($arraydato);
            return $arraydato;
-        
       
     }
+
+    public function verificar_couta($cod_vendedor,$oficina,$cuotas,$inasistenticias){
+        $fechaActual = date("d")."-".date("m")."-".date("Y");
+        $fechaPriquin = '12'."-".date("m")."-".date("Y");
+        $fechaSegquincena = CrearFechaSegQuin();
+        $fechaPriquicena = new DateTime($fechaPriquin);
+        $fecAct = new DateTime($fechaActual);
+    
+        if($fecAct >= $fechaPriquicena && $fechaActual <= '26'."-".date("m")."-".date("Y")){
+            $direfencia = $fechaPriquicena->diff($fecAct);
+            $fech1 = $fechaPriquin;
+        }else if($fecAct >= $fechaSegquincena){
+            $direfencia = $fechaSegquincena->diff($fecAct);
+            $fech1 = CrearFechaSegQuin()->format("d-m-Y");
+        }
+
+           $query=$this->db->prepare("SELECT * FROM V_CALL_CENTER  
+            WHERE VENDEDOR = $cod_vendedor AND FECHA_GENERADO >= '$fech1'
+            AND FECHA_GENERADO <= '$fechaActual' AND OFICINA = '$oficina'");
+            $query->execute();
+            $montoTotal=0;
+            
+            while ($result = $query->fetch()) {
+                if($result['MONTO'] != ""){
+                   $montoTotal += $result['MONTO'];
+                }
+            }
+            
+            //se muestra cuanto le falta al usuario es decir cuota se tiene que guardar
+
+            $dias =  intval($direfencia->days) - intval($inasistenticias);
+            $promedio = ($dias != 0 ) ? $promedio = round($montoTotal / ($dias-1),2) : 0; 
+            $cuota = (intval($cuotas) * intval($dias)) - $montoTotal;
+            $arraydato = array($fech1,$promedio,$cod_vendedor,$cuota);  
+           // echo (intval($cuotas) * intval($dias)) - $montoTotal;
+
+          //echo $montoTotal ."   ". ($dias-1);
+       
+            //print_r($arraydato);
+           return $arraydato;
+    }
+
+
 
 
 

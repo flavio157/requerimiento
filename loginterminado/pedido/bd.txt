@@ -1,0 +1,14 @@
+create Table T_ADMINISTRADORES(
+COD_USUARIO char(3),
+NOM_USUARIO varchar(30),
+COD_PERSONAL char(5),
+)
+
+CREATE TABLE T_PERSONAL_ENFALTA(
+	ID int IDENTITY(1,1),
+	FECH_REGISTRO datetime ,
+	COD_PERSONAL char(5),
+	NOM_PERSONAL varchar(60),
+	PROMEDIO numeric (7, 2),
+	OFICINA char(30)
+)
