@@ -6,9 +6,10 @@ require_once("../funciones/f_funcion.php");
 
 
    $cod_usuario = $_POST['usuario'];
- 
+  
+  // print_r($estado);
    
-    if ($cod_usuario!="") {
+    if ($cod_usuario !="") {
         $usu = new C_Login();
         $usu->C_usuario($cod_usuario);
     }else{
@@ -28,7 +29,7 @@ class C_Login
         if($datosUsuario != ''){
             $c_admins = $m_login->Administradores($datosUsuario['COD_PERSONAL']);
             if($c_admins == ''){
-                $fecha = $this->C_Asistenciadias($cod_usuario);
+                $fecha = C_Asistenciadias($cod_usuario);
                 $dias = diasfalto($fecha); 
                 $m_cuotaPersonal = new M_VerificarCuota($datosUsuario['OFICINA']);
                 $montoSMP = $m_cuotaPersonal->CuotaPersonal($cod_usuario);
@@ -39,23 +40,21 @@ class C_Login
                         if(trim($oficina) == 'SMP2' || trim($oficina) == 'SMP5'){
                             $_cuota = new M_VerificarCuota($datosUsuario['OFICINA']);
                             $montoTotal = $_cuota->VerificandoQuincena($datosUsuario['COD_PERSONAL'],$diasrestriccion,
-                            $montoSMP['FEC_INGRESO'],count($dias));
+                            $montoSMP['FEC_INGRESO'],count($dias),$montoSMP['CUOTA']);
                         
                         }else{
                         $montoTotal = $m_login->VerificarCallCenter($datosUsuario['COD_PERSONAL'],$arraydias,
-                        $montoSMP['FEC_INGRESO'],$oficina,count($dias));
+                        $montoSMP['FEC_INGRESO'],$oficina,count($dias),$montoSMP['CUOTA']);
                         }
-                       //print_r($montoSMP['CUOTA']);
-                   //  print_r($montoTotal);
+                     
+                   //   print_r($montoTotal);
                         if($montoTotal != ''){
                           // print_r($montoTotal);
-                            $retur =  f_Cuotas($montoTotal,$montoSMP['CUOTA'],$oficina) ; 
+                           f_Cuotas($montoTotal,$montoSMP['CUOTA'],$oficina) ; 
                             //echo $retur;
                         }else{
                             print_r("SIN RESTRICCION");
                         }  
-                    
-
                 }else{
                     return header("Location: ../index.php");
                 }
@@ -67,20 +66,5 @@ class C_Login
             print_r("usuario no existe");
         }     
     }
-
-
-    public function C_Asistenciadias($cod_usuario){
-        $fechaactual = date("d")."-".date("m")."-".date("Y");
-        $array = array();
-        $m_login = new M_Login(); 
-        $dias = $m_login->Asistencia($cod_usuario);
-       
-        foreach($dias[0] as $d){
-            $fech = explode(" ",$d['FECHA']);
-            array_push($array , $fech[0]);
-        }
-        array_push($array , $fechaactual);
-        return array($array,$dias[1]);
-    } 
 }
 ?>

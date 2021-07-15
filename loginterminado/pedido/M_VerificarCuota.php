@@ -11,11 +11,12 @@ class M_VerificarCuota
         $this->db=DatabaseDinamica::Conectarbd($basedatos);
     }
 
-    public function VerificandoQuincena($cod_vendedor,$diasrestriccion,$fec_ingreso,$inasistenticias)
+    public function VerificandoQuincena($cod_vendedor,$diasrestriccion,$fec_ingreso,$inasistenticias,$cuotas)
     {  
         
         
         $fec = explode(" ",$fec_ingreso);
+       
         $fechas = nuevfech($diasrestriccion,$fec[0]);
         if($fechas[0] != ""){
             if(!is_string($fechas[0])){
@@ -28,7 +29,7 @@ class M_VerificarCuota
         $fech2 = $fechas[1];
         $dias =  $fechas[2] - $inasistenticias ;
 
-        //echo $fech1."  ".$fech2;
+
         
          $query=$this->db->prepare("SELECT * FROM V_PEDIDO_MONTO WHERE VENDEDOR =$cod_vendedor AND
          FECHA >= '$fech1' and FECHA < '$fech2'");
@@ -40,8 +41,10 @@ class M_VerificarCuota
              }
         }
 
-        $promedio = ($dias != 0 ) ? $promedio = round($montoTotal / $dias,2) : 0;
-        $arraydato = array($fech1,$promedio,$diasrestriccion); 
+        $promedio = ($dias != 0 ) ? $promedio = round($montoTotal / ($dias-1),2) : 0; 
+        $cuota = (intval($cuotas) * intval($dias)) - $montoTotal;
+        $arraydato = array($fech1,$promedio,$diasrestriccion,$cod_vendedor,$cuota); 
+        
       if($query){
           return $arraydato;
        } 
@@ -51,7 +54,7 @@ class M_VerificarCuota
     
     public function CuotaPersonal($cod_usuario){
         try {
-            $query=$this->db->prepare("SELECT * FROM V_VERIFICAR_CUOTAPERSONAL WHERE COD_PERSONAL =$cod_usuario");
+            $query=$this->db->prepare("SELECT * FROM T_PERSONAL WHERE COD_PERSONAL =$cod_usuario");
             $query->execute();
             $d_usuario = $query->fetch(PDO::FETCH_ASSOC);
         return $d_usuario;
@@ -60,6 +63,16 @@ class M_VerificarCuota
         }
        
     }
+
+
+    public function personalfaltacouta()
+    {
+        $query=$this->db->prepare("SELECT * FROM T_PERSONAL where COD_AREA = '00003' and EST_PERSONAL = 'A'");
+        $query->execute();
+        $d_usuario = $query->fetchAll();
+        return $d_usuario;
+    }
+
 
 }
 

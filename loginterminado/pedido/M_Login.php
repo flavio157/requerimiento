@@ -29,18 +29,18 @@ class M_Login
             $cod_usuario = $query->fetch(PDO::FETCH_ASSOC);
             if($query){
                 return  $cod_usuario;
-            }
+        }
     }
 
 
-    public function VerificarCallCenter($cod_vendedor,$diaseval,$fec_ingreso,$oficina,$inasistenticias)
+    public function VerificarCallCenter($cod_vendedor,$diaseval,$fec_ingreso,$oficina,$inasistenticias,$cuotas)
     {  
         $arraydato = '';
-        $sumardias = diasrestriccion($diaseval);
-        // print_r($sumardias);
-        if($sumardias != ''){
+        $diarestriccion = diasrestriccion($diaseval);
+       
+        if($diarestriccion != ''){
             $fec = explode(" ",$fec_ingreso);
-            $fechas = nuevfech($sumardias,$fec[0]);
+            $fechas = nuevfech($diarestriccion,$fec[0]);
            
             if(!is_string($fechas[0])){
                 $fech1 =  $fechas[0]->format("d-m-Y");
@@ -49,10 +49,11 @@ class M_Login
             }
             
             $fech2 = $fechas[1];
-            $dias =  $fechas[2] - $inasistenticias;
+            
+            $dias =  $diarestriccion - $inasistenticias;
             //echo nl2br($fech1.".\n".$fech2);
-         
-
+            //echo $dias;
+          //  print_r($inasistenticias);
            $query=$this->db->prepare("SELECT * FROM V_CALL_CENTER  
             WHERE VENDEDOR = $cod_vendedor AND FECHA_GENERADO >= '$fech1'
             AND FECHA_GENERADO < '$fech2' AND OFICINA = '$oficina'");
@@ -64,12 +65,15 @@ class M_Login
                    $montoTotal += $result['MONTO'];
                 }
             }
-                
-            $promedio = ($dias != 0 ) ? $promedio = round($montoTotal / $dias,2) : 0; 
-       
-            $arraydato = array($fech1,$promedio,$sumardias);  
+            
+            $promedio = ($dias != 0 ) ? $promedio = round($montoTotal / ($dias-1),2) : 0; 
+            $cuota = (intval($cuotas) * intval($dias)) - $montoTotal;
+            $arraydato = array($fech1,$promedio,$diarestriccion,$cod_vendedor,$cuota);  
+           // echo (intval($cuotas) * intval($dias)) - $montoTotal;
+
+          //echo $montoTotal ."   ". ($dias-1);
         }
-           // print_r($arraydato);
+            //print_r($arraydato);
            return $arraydato;
         
       
@@ -81,7 +85,6 @@ class M_Login
     public function Asistencia($cod_personal){
         $fechaActual = date("d")."-".date("m")."-".date("Y");
         $fechaPriquin = '12'."-".date("m")."-".date("Y");
-        $mes = (date("m") <= '9')? '0'.(date("m")-1) : (date("m")-1);
         $fechaSegquincena = CrearFechaSegQuin();
         $fechaPriquicena = new DateTime($fechaPriquin);
         $fecAct = new DateTime($fechaActual);
@@ -94,16 +97,42 @@ class M_Login
             $fech = CrearFechaSegQuin()->format("d-m-Y");
             $tipo = '2';
         }
-       
-       // $fech = $fech->format("d-m-Y");
-
         $query=$this->db->prepare("SELECT * FROM T_ASISTENCIAS WHERE FECHA >= '$fech' AND FECHA < '$fechaActual' 
         AND COD_PERSONAL = '$cod_personal'");
         $query->execute();
         $m_asistecia = $query->fetchAll();
-       //print_r($m_asistecia);
-        //return $fech;
         return array($m_asistecia,$tipo);
+    }
+
+
+
+    public function G_Personal_CuotaBaja($personal,$cuota,$oficina){
+            $cod_personal = $personal[0];
+            $nom_personal = $personal[5];
+            $query=$this->db->prepare("INSERT INTO T_PERSONAL_ENFALTA(COD_PERSONAL,NOM_PERSONAL,PROMEDIO,OFICINA)
+            values('$cod_personal','$nom_personal',$cuota,'$oficina')");
+            $query->execute();
+            return $query;
+    }
+
+    public function lst_personal_cuotabaja(){
+        $query=$this->db->prepare("SELECT * FROM T_PERSONAL_ENFALTA");
+        $query->execute();
+        if ($query) {
+                return $query->fetchAll();
+            }
+         
+    }
+
+    public function VerificarListado_Cuotabaja($hoy){
+        
+        $nuevafecha = retunrFechaSql($hoy);
+        $query=$this->db->prepare("SELECT * FROM T_PERSONAL_ENFALTA WHERE FECH_REGISTRO >= '$nuevafecha'");
+        $query->execute();
+        if ($query) {
+            return $query->fetchAll();
+        }
+       
     }
 }
 ?>
