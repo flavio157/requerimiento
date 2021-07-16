@@ -4,10 +4,10 @@ CREATE TABLE T_LATLNG(
 	LATITUD decimal(9, 7),
 	LONGITUD decimal(9, 7),
 	USUARIO char(5),
-    OBSERVACION varchar(100)
+    OBSERVACION varchar(100),
+    DIRECCION varchar(100),
 	FECHA datetime,
 ) 
-
 
 
 create table T_PUNTOPARTIDA(

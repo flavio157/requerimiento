@@ -1,5 +1,5 @@
 <?php
-    date_default_timezone_set('America/Lima');
+ date_default_timezone_set('America/Lima');
     require_once("DataBase.php");
     class  M_direcciones
     {
@@ -7,10 +7,10 @@
             $this->db=DataBase::Conectar();
         }
 
-        public function m_guardarLatlng($contrato,$lat,$lng,$usuario)
+        public function m_guardarLatlng($contrato,$lat,$lng,$usuario,$direccion)
         {
-            $query = $this->db->prepare("INSERT INTO T_LATLNG(NUM_CONTRATO,LATITUD,LONGITUD,USUARIO) 
-            values('$contrato',$lat,$lng,'$usuario')");
+            $query = $this->db->prepare("INSERT INTO T_LATLNG(NUM_CONTRATO,LATITUD,LONGITUD,USUARIO,DIRECCION) 
+            values('$contrato',$lat,$lng,'$usuario','$direccion')");
             $resultado = $query->execute();
             if($resultado){
                 return $resultado;

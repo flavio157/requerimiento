@@ -26,14 +26,14 @@ $cod = $_SESSION["cod"];
     <script src="https://polyfill.io/v3/polyfill.min.js?features=default"></script>
     <link rel="stylesheet" type="text/css" href="../css/responsive.css" />
     <script async
-      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCcyoqHeBQU9jKb3MzMKu86mXtzI89V_Cg&callback=initMap">
+      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCcyoqHeBQU9jKb3MzMKu86mXtzI89V_Cg">
     </script>
-    <script src="../js/jsmap.js"></script>
+    <script src="../js/jslugares.js"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0 ,user-scalable=no">
- 
+<!--&callback=initMap-->
   </head>
   <body>
-    <form>
+  <form>
       <input type="text" id="vroficina" style="display: none;" value="<?php echo $ofi?>"/>
       <input type="text" id="vrzona" style="display: none;" value="<?php echo  $zon?>"/>
       <input type="text" id="vrcodpersonal" style="display: none;" value="<?php echo  $cod?>"/>
@@ -42,7 +42,7 @@ $cod = $_SESSION["cod"];
       </div>
 
       <div class="divtitulo">
-          <h5><label for="formdescripcion" class="form-label">MARCAR DIRECCIONES</label></h5>
+          <h5><label for="formdescripcion" class="form-label">Lugares</label></h5>
       </div>
      
       <div class="contenedorbs">
@@ -56,14 +56,14 @@ $cod = $_SESSION["cod"];
                        <div class="gap-2 divbtn col-6 mx-auto">
                                <div class="col divbtnmostrar">
                                <!--  <button class="btn btn-primary" id="lstcoordenadas">Mostrar</button>-->
-                                   <button class="btn btn-primary" id="coordenadas">GUARDAR</button>
+                                   <button class="btn btn-primary" id="btnobtenerdireccions">Obtener</button>
                                </div>
                        </div>
                    </div>
                </div>
       </div>  
      </form> 
-      <div class="contenedormap">
+      <div class="contenedormaprutas">
           <div id="map">
           </div>
       </div>

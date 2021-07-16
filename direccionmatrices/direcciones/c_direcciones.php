@@ -8,7 +8,8 @@
        $lng = $_POST['lng'];
        $contrato = $_POST['contrato'];
        $usuario = $_POST['txtusuario'];
-       c_direcciones::guardarlatlng($contrato,$lat,$lng,$usuario);     
+       $direccion = $_POST['direccion'];
+       c_direcciones::guardarlatlng($contrato,$lat,$lng,$usuario,$direccion);     
     }else if($accion == 'lst'){
         $usuario = $_POST['txtusuario'];
         $oficina = $_POST['oficina'];
@@ -29,10 +30,10 @@
 
     class c_direcciones
     {
-        static function guardarlatlng($contrato,$lat,$lng,$usuario){
+        static function guardarlatlng($contrato,$lat,$lng,$usuario,$direccion){
             $contrato = completarcontrato($contrato);
             $dir = new M_direcciones();
-            $guardar = $dir->m_guardarLatlng($contrato,$lat,$lng,$usuario);
+            $guardar = $dir->m_guardarLatlng($contrato,$lat,$lng,$usuario,$direccion);
             print_r($guardar);
         }
 
@@ -47,7 +48,7 @@
             array_push($arraylatlng,$partida);
             for ($i=0; $i < count($latlng); $i++) {
                 if($latlng[$i][2] != '' && $latlng[$i][3] != ''){
-                    $datos = $latlng[$i][2] .','. $latlng[$i][3].','.$latlng[$i][1];
+                    $datos = $latlng[$i][2] .','. $latlng[$i][3].','.$latlng[$i][1].','.$latlng[$i][5];
                     array_push($arraylatlng,$datos);
                 }
             }
@@ -79,7 +80,7 @@
         static function verificarobsevacion($usuario,$contrato){
             $dir = new M_direcciones();
             $observacion = $dir->m_verificarobservacion($usuario,$contrato);
-            print_r($observacion[6]);
+            print_r($observacion[5]);
         }
 
     }

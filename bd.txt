@@ -616,12 +616,13 @@ CREATE TABLE T_PERSONAL_ENFALTA(
 	OFICINA char(30)
 )
 
-
 CREATE TABLE T_LATLNG(
 	ID int IDENTITY(1,1), 
 	NUM_CONTRATO char(9),
 	LATITUD decimal(9, 7),
 	LONGITUD decimal(9, 7),
 	USUARIO char(5),
-	FECHA datetime
+    OBSERVACION varchar(100),
+    DIRECCION varchar(100),
+	FECHA datetime,
 ) 

@@ -25,11 +25,11 @@ $cod = $_SESSION["cod"];
    
     <script src="https://polyfill.io/v3/polyfill.min.js?features=default"></script>
     <link rel="stylesheet" type="text/css" href="../css/responsive.css" />
-    <script src="../js/jsrutas.js"></script>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0 ,user-scalable=no">
-   <script async
+    <script async
       src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCcyoqHeBQU9jKb3MzMKu86mXtzI89V_Cg">
     </script>
+    <script src="../js/jsrutas.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0 ,user-scalable=no">
 <!--&callback=initMap-->
   </head>
   <body>

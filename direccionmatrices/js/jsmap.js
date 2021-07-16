@@ -5,6 +5,7 @@ var array=[];
 var html = '';
 var lat = "";
 var infowindow;
+var direccion = '';
 
 $(document).ready(function(){
  // puntopartida();
@@ -24,6 +25,7 @@ function initMap() {
       center: { lat: -11.9712774, lng: -77.0711738},
       zoom: 20,
     });
+    geocoder = new google.maps.Geocoder();
     infowindow = new google.maps.InfoWindow({
       minWidth: 251,
     });
@@ -42,8 +44,22 @@ $(document).on('click','#coordenadas',function(e){
     if ("geolocation" in navigator){ 
         navigator.geolocation.getCurrentPosition(function(position){
          if(contrato != 0){
-            contrato = $('#txtcontrato').val()
-            addcoordenadas(position.coords.latitude,position.coords.longitude,contrato);
+            contrato = $('#txtcontrato').val();
+
+            latlng = {
+              lat: parseFloat(position.coords.latitude,),
+              lng: parseFloat(position.coords.longitude),
+            };
+              geocoder.geocode({
+                  'latLng': latlng
+              }, function(results, status) {
+                  if (status == google.maps.GeocoderStatus.OK) {
+                    direccion = results[0].formatted_address;
+                    addcoordenadas(position.coords.latitude,position.coords.longitude,contrato,direccion);
+                  }
+              });
+              //alert(direccion);
+         //   
          }else{
            console.log("ingrese numero de contrato");
           }
@@ -54,7 +70,7 @@ $(document).on('click','#coordenadas',function(e){
 });
 
 
-function addcoordenadas(lat,lng,contrato){
+function addcoordenadas(lat,lng,contrato,direccion){
   usuario = $("#vrcodpersonal").val();
   $.ajax({
     dataType:'text',
@@ -65,7 +81,8 @@ function addcoordenadas(lat,lng,contrato){
             "lat" : lat,
             "lng" : lng,
             "contrato" : contrato,
-            "txtusuario":usuario
+            "txtusuario":usuario,
+            "direccion" : direccion
         },
         success: function(response){   
           if(response == 1){

@@ -8,6 +8,9 @@ var infowindow;
 var txtcontrato = '';
 const labels = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 let labelIndex = 0;
+var marker2;
+
+//var yellowIcon ='https://raw.githubusercontent.com/Concept211/Google-Maps-Markers/master/images/marker_yellow.png';
 
 $(document).ready(function(){
     puntopartida();
@@ -67,9 +70,9 @@ $(document).ready(function(){
     coordenadas =[];
     contrato = [];
    $.each(lat, function(i, item) {
-      
+     // console.log(lat);
       $latlng = lat[i].split(',');
-      contrato.push(lat[i],$latlng[2]);
+      contrato.push(lat[i],$latlng[2],);
         coordenadas.push({location: { lat: Number($latlng[0]), lng: Number($latlng[1])}, stopover: true});
     })
 
@@ -95,6 +98,7 @@ $(document).ready(function(){
           });
           
           for (var i = 0; i < contrato.length; i++) {
+           
             if(i % 2 == 0) {
               if((contrato.length / 2) != ((i/2) + 1)){
                 letra = labels[i - (i / 2)]; 
@@ -107,10 +111,12 @@ $(document).ready(function(){
                     Title: lng[2],
                 });
                 modalmarkert(marker,lng[2]);
+                if(letra != 'A' && lng[3] != ''){
+                  marker.setIcon(pinSymbol('orange'));
+                }
               }
             }
             
-          
         } 
       } else {
         window.alert('fallo la comunicacion con el mapa: ' + status);
@@ -123,6 +129,7 @@ $(document).ready(function(){
   function modalmarkert(marker, mensaje) {
     if(mensaje != 0 ){
           marker.addListener("click", () => {
+            marker2 = marker
             consulobservacion(marker.getTitle());
             const frm = '<form>'+
             '<div class="form-group">'+
@@ -147,32 +154,37 @@ $(document).ready(function(){
               marker.get("map"), marker
               );
           });
+          
       }
+
   }
   
   
   $(document).on('click','#btnactualizar',function(e){
     e.preventDefault();
     txtobservacion = $("#txtobservacion").val();
-    observacion(txtobservacion,txtcontrato);
+    observacion(txtobservacion,txtcontrato,marker2);
   });
   
   
-  function observacion(observacion,txtcontrato) {
-    $.ajax({
-      dataType:'text',
-      type: 'POST', 
-      url:  './c_direcciones.php',
-      data: {
-          "accion":  'obs',
-          "txtobservacion":observacion,
-          "txtcontrato" : txtcontrato
-      },
-        success: function(response){ 
-          $("#btnactualizar").hide();
-          
-        }
-    });
+  function observacion(observacion,txtcontrato,marker) {
+    if(observacion.length != 0){
+        $.ajax({
+          dataType:'text',
+          type: 'POST', 
+          url:  './c_direcciones.php',
+          data: {
+              "accion":  'obs',
+              "txtobservacion":observacion,
+              "txtcontrato" : txtcontrato
+          },
+            success: function(response){
+              $("#btnactualizar").hide();
+              marker.setIcon(pinSymbol('orange'));
+            }
+        });
+    }
+    
   }
   
   
@@ -212,7 +224,6 @@ $(document).ready(function(){
       },
         success: function(response){ 
           latlng = response.split(',');
-          initMap(latlng[0],latlng[1]);
           lstLatLng();
         }
     });
@@ -229,14 +240,29 @@ $(document).ready(function(){
           "usuario": usuario,
           "contrato" : contrato
       },
-        success: function(response){ 
-         
+        success: function(response){
             if(response != ''){
               $("#btnactualizar").hide();
               $("#txtobservacion").val(response);
+             
             }
-           
-
         }
     });
   }
+
+
+  function pinSymbol(color) {
+    return {
+        path: 'M 0,0 C -2,-20 -10,-22 -10,-30 A 10,10 0 1,1 10,-30 C 10,-22 2,-20 0,0 z',
+        scaledSize: new google.maps.Size(50, 50),
+        fillColor: color,
+        fillOpacity: 1,
+        strokeColor: '#fff',
+        strokeWeight: 1,
+        scale: 1.1,
+        labelOrigin: new google.maps.Point(0,-29),
+    };
+
+
+   
+}
