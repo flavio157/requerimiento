@@ -45,6 +45,7 @@ $(document).ready(function(){
             "oficina":oficina,
         },
           success: function(response){ 
+            console.log(response);
             obj = JSON.parse(response);  
             latlng = obj['items'][0].split(',');
             initMap(latlng[0],latlng[1]);
