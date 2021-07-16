@@ -61,15 +61,8 @@ $cod = $_SESSION["cod"];
                    </div>
                </div>
       </div>  
-
-
-
-
-
-
-      
      </form> 
-      <div class="main">
+      <div class="contenedormap">
           <div id="map">
           </div>
       </div>

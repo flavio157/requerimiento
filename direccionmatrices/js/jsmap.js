@@ -4,22 +4,32 @@ var  lat = "";
 var array=[];
 var html = '';
 var lat = "";
-var prev_infowindow =false;
+var infowindow;
+
+$(document).ready(function(){
+ // puntopartida();
+  $("#txtcontrato").keyup(function(e) {
+    var input=  document.getElementById('txtcontrato');
+        input.addEventListener('input',function(){
+            this.value = this.value.slice(0,8); 
+    })
+    $("#txtcontrato").val($("#txtcontrato").val().toUpperCase());
+  })
+});
 
 //var marker =[];
 
 function initMap() {
-  
     map = new google.maps.Map(document.getElementById("map"), {
-      center: { lat: -11.9618213, lng: -77.1271862},
+      center: { lat: -11.9712774, lng: -77.0711738},
       zoom: 20,
     });
-    /*map.addListener("click", (e) => {
+    infowindow = new google.maps.InfoWindow({
+      minWidth: 251,
+    });
+    map.addListener("click", (e) => {
         addmarker(e.latLng, map);
-    });*/
-
-
-
+    });
 };
 
 
@@ -68,7 +78,7 @@ function addcoordenadas(lat,lng,contrato){
   });
 }
 
-
+/*
 function lstLatLng(){
   usuario = $('#vrcodpersonal').val();
   oficina = $('#vroficina').val();
@@ -96,9 +106,9 @@ $(document).on('click','#lstcoordenadas',function(e){
   lstLatLng();
   initMap()
   
-});
+});*/
 
-
+/*
 function dibujar(lat){
   coordenadas =[];
   contrato = [];
@@ -132,17 +142,14 @@ function dibujar(lat){
           suppressMarkers: true,
           suppressInfoWindowsse : true,
         });
-
-        var infowindow = new google.maps.InfoWindow();
         
-
         for (var i = 0; i < contrato.length; i++) {
-         
           lng = contrato[i].split(',');
           const marker = new google.maps.Marker({
               position:  new google.maps.LatLng(lng[0], lng[1]),
               draggable:false,
-              map: map
+              map: map,
+              Title: lng[2]
           });
           modalmarkert(marker,lng[2]);
       } 
@@ -151,43 +158,38 @@ function dibujar(lat){
     }
   });
 
-}
+}*/
 
- 
+ /*
 function modalmarkert(marker, mensaje) {
-  const frm = '<form>'+
-  '<div class="form-group">'+
-    '<label for="exampleFormControlInput1">CONTRATO</label>'+
-    '<input class="form-control" id="txtcontrato" name="txtcontrato" type="text" value='+mensaje+'  style="display: none;"></input>'+
-  '</div>'+
-  '<div class="form-group">'+
-  '<input class="form-control" id="txtcontrat" name="txtcontrat" type="text" value='+mensaje+' ></input>'+
-  '</div>'+
-  '<div class="form-group">'+
-    '<label for="exampleFormControlSelect2">Observación</label>'+
-  '</div>'+
-  '<div class="form-group">'+
-    '<textarea class="form-control" id="txtobservacion" rows="3"></textarea>'+
-  '</div>'+
-  '<div class="form-group">'+
-    '<botton class="btn btn-primary" id="btnactualizar">Registrar</botton>'+
-  '</div>'+
-'</form>';
-  //infowindow.close();
-  const infowindow = new google.maps.InfoWindow({
-    minWidth:200,
-    content: frm,
-  });
-  
-  marker.addListener("click", () => {
-    if (prev_infowindow == true) {
-      infowindow.close();
+  if(mensaje != 0 ){
+        marker.addListener("click", () => {
+          const frm = '<form>'+
+          '<div class="form-group">'+
+            '<label for="exampleFormControlInput1">CONTRATO</label>'+
+            '<input class="form-control" id="txtcontrato" name="txtcontrato" type="text" value='+marker.getTitle()+'  style="display: none;"></input>'+
+          '</div>'+
+          '<div class="form-group">'+
+          '<input class="form-control" id="txtcontrat" name="txtcontrat" type="text" value='+mensaje+' ></input>'+
+          '</div>'+
+          '<div class="form-group">'+
+            '<label for="exampleFormControlSelect2">Observación</label>'+
+          '</div>'+
+          '<div class="form-group">'+
+            '<textarea class="form-control" id="txtobservacion" rows="3"></textarea>'+
+          '</div>'+
+          '<div class="d-grid gap-3 col-5 btnactobservacion mx-auto">'+
+            '<botton class="btn btn-primary" id="btnactualizar">Registrar</botton>'+
+          '</div>'+
+        '</form>';
+        infowindow.setContent(frm);
+          infowindow.open(
+            marker.get("map"), marker
+            );
+        });
     }
-    infowindow.open(marker.get("map"), marker);
-    prev_infowindow = true
-  });
 }
-
+*/
 
 function addmarker(latLng, map,coordenadas) {
   new google.maps.Marker({
@@ -200,7 +202,7 @@ function addmarker(latLng, map,coordenadas) {
 }
 
 
-
+/*
 
 $(document).on('click','#btnactualizar',function(e){
   e.preventDefault();
@@ -208,9 +210,9 @@ $(document).on('click','#btnactualizar',function(e){
   contrato = $("#txtcontrat").val()
   
   observacion(txtobservacion,contrato);
-});
+});*/
 
-
+/*
 function observacion(observacion,contrato) {
   $.ajax({
     dataType:'text',
@@ -225,7 +227,7 @@ function observacion(observacion,contrato) {
         console.log(response);
       }
   });
-}
+}*/
 
 
 function mensajeSuccess(texto,id) {
@@ -246,5 +248,27 @@ function mensajesError(texto,id) {
    $('#'+id).html(mensaje);
    window.scrollTo(0, 0);
 }
+/*
+function closeInfoWindow() {
+  infowindow.close();
+}*/
 
-
+/*
+function puntopartida() {
+  oficina = $("#vroficina").val();
+  console.log(oficina);
+  $.ajax({
+    dataType:'text',
+    type: 'POST', 
+    url:  './c_direcciones.php',
+    data: {
+        "accion":  'puntopartida',
+        "oficina": oficina,
+    },
+      success: function(response){ 
+        latlng = response.split(',');
+        console.log(latlng[0],latlng[1]);
+        initMap(latlng[0],latlng[1]);
+      }
+  });
+}*/

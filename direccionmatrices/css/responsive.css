@@ -43,7 +43,7 @@
   /* Optional: Makes the sample page fill the window. */
   html,
   body {
-    height: 90%;
+    height: 99%;
     margin: 0;
     padding: 0;
   }
@@ -99,6 +99,25 @@
 }
 
 
+.btnactobservacion{
+  margin-left: auto!important;
+  padding: 9px;
+  padding-left: 54%;
+}
+
+
+.contenedormap{
+  width: 100%;
+  margin: 0 auto;
+  padding: 0.2em;
+  height: 90%;
+}
+
+.contenedormaprutas{
+  width: 100%;
+  height: 100%;
+}
+
 @media screen and (max-width:992px){
     .main{
         width:100%;
@@ -132,5 +151,22 @@
     padding: 5px;
   }
 
+  .btnactobservacion{
+    margin-left: auto!important;
+    padding: 9px;
+    padding-left: 54%;
+  }
 
+
+  .contenedormap{
+    width: 100%;
+    margin: 0 auto;
+    padding: 0.2em;
+    height: 90%;
+  }
+
+  .contenedormaprutas{
+    width: 100%;
+    height: 100%;
+  }
 }

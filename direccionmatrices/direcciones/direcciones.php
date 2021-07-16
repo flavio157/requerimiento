@@ -25,12 +25,11 @@ $cod = $_SESSION["cod"];
    
     <script src="https://polyfill.io/v3/polyfill.min.js?features=default"></script>
     <link rel="stylesheet" type="text/css" href="../css/responsive.css" />
-    <script src="../js/jsrutas.js"></script>
+    <script src="../js/jsdirecciones.js"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0 ,user-scalable=no">
    <script async
-      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCcyoqHeBQU9jKb3MzMKu86mXtzI89V_Cg">
+      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCcyoqHeBQU9jKb3MzMKu86mXtzI89V_Cg&callback=initMap">
     </script>
-<!--&callback=initMap-->
   </head>
   <body>
     <form>
@@ -40,8 +39,30 @@ $cod = $_SESSION["cod"];
       <div id="mensajesgenerales">
                                    
       </div>
+
+      <div class="divtitulo">
+          <h5><label for="formdescripcion" class="form-label">OBTENER DIRECCIONES</label></h5>
+      </div>
+     
+      <div class="contenedorbs">
+
+              <span id="latitud" ></span>
+               <div class="mb-3 contenerdorslc">
+                 <!-- <input type="text" class="form-control" id="txtcontrato" name="txtcontrato">-->
+               </div>
+               <div class="contenedorboton">
+                   <div class="mb-3">
+                       <div class="gap-2 divbtn col-6 mx-auto">
+                               <div class="col divbtnmostrar">
+                               <!--  <button class="btn btn-primary" id="lstcoordenadas">Mostrar</button>
+                                   <button class="btn btn-primary" id="coordenadas">Obtener</button>-->
+                               </div>
+                       </div>
+                   </div>
+               </div>
+      </div>  
      </form> 
-      <div class="contenedormaprutas">
+      <div class="contenedormap">
           <div id="map">
           </div>
       </div>
