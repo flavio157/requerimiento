@@ -1,4 +1,5 @@
 <?php
+    date_default_timezone_set('America/Lima');
     require_once("DataBase.php");
     class  M_direcciones
     {
