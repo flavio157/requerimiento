@@ -23,7 +23,7 @@ $cod = $_SESSION["cod"];
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="author" content="ZXing for JS">
 
-  <title>ZXing TypeScript | Decoding from camera stream</title>
+  <title>Lector de Codigo de barras</title>
   <script type="text/javascript" src="../js/jquery-3.3.1.slim.min.js"></script>
    <script type="text/javascript" src="../js/jquery.min.js"></script>
   <link rel="stylesheet" rel="preload" as="style" onload="this.rel='stylesheet';this.onload=null"
@@ -42,11 +42,6 @@ $cod = $_SESSION["cod"];
     <main class="wrapper" style="padding-top:2em">
 
       <section class="container" id="demo-content">
-        <div>
-       <!-- <a class="button" id="startButton">Start</a>
-         <a class="button" id="resetButton">Reset</a>-->
-        </div>
-
         <div id="sourceSelectPanel" style="display:none">
           <label for="sourceSelect">Camaras del Dispositivo</label>
           <select id="sourceSelect" style="max-width:400px">
@@ -56,7 +51,7 @@ $cod = $_SESSION["cod"];
         <div>
           <video id="video" width="490" height="500" style="border: 1px solid;padding: 6px;width: 100%;"></video>
         </div>
-        <label>Result:</label>
+        <label>Resultado:</label>
         <pre><code id="result"></code></pre>
       </section>
       <canvas id="videoCanvas"></canvas>
@@ -67,7 +62,6 @@ $cod = $_SESSION["cod"];
   <!--<script type="text/javascript" src="https://unpkg.com/@zxing/library@0.18.3-dev.7656630/umd/index.js"></script>
 -->
 <script type="text/javascript" src="../js/jszxing.js"></script>
-<!--<script type="text/javascript" src="../js/zxing.js"></script>-->
 <script type="text/javascript" src="../js/jsescaner.js"></script>
 </body>
 
