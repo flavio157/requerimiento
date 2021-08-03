@@ -1,0 +1,12 @@
+CREATE TABLE android(
+	Latitud varchar(10) NULL,
+	Longitud varchar(10) NULL,
+	Bateria int NULL,
+	cod_personal varchar(5) NULL,
+	fecha datetime NULL
+) 
+
+CREATE TABLE T_PARAMETRO(
+	ID int IDENTITY(1,1) NOT NULL,
+	TIEMPO_RESET varchar(5) NULL
+) 
