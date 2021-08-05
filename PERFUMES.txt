@@ -1,0 +1,32 @@
+/*CO0004 PERFUME DE HOMBRE CO4-HOMME DE FER*/
+
+update T_PRODUCTO set EST_PRODUCTO = 1 where COD_PRODUCTO = 'CO0004'  /*ACTIVAR PRODUCTO*/
+
+insert into T_PRODUCTO_PRECIO values('CO0004','1','6','2','40.97')
+insert into T_PRODUCTO_PRECIO values('CO0004','1','10','5','40.97')
+insert into T_PRODUCTO_PRECIO values('CO0004','1','20','10','40.97')
+insert into T_PRODUCTO_PRECIO values('CO0004','2','6','2','40.97')
+insert into T_PRODUCTO_PRECIO values('CO0004','2','10','5','40.97')
+insert into T_PRODUCTO_PRECIO values('CO0004','2','20','10','40.97')
+insert into T_PRODUCTO_PRECIO values('CO0004','3','6','2','40.97')
+insert into T_PRODUCTO_PRECIO values('CO0004','3','10','5','40.97')
+insert into T_PRODUCTO_PRECIO values('CO0004','3','20','10','40.97')
+
+
+
+
+
+
+/*00569 PERFUME DE MUJER PERFUME DELICAT*/
+
+update T_PRODUCTO set EST_PRODUCTO = 1 where COD_PRODUCTO = '00569'  /*ACTIVAR PRODUCTO*/
+
+insert into T_PRODUCTO_PRECIO values('00569','1','6','2','40.97')
+insert into T_PRODUCTO_PRECIO values('00569','1','10','5','40.97')
+insert into T_PRODUCTO_PRECIO values('00569','1','20','10','40.97')
+insert into T_PRODUCTO_PRECIO values('00569','2','6','2','40.97')
+insert into T_PRODUCTO_PRECIO values('00569','2','10','5','40.97')
+insert into T_PRODUCTO_PRECIO values('00569','2','20','10','40.97')
+insert into T_PRODUCTO_PRECIO values('00569','3','6','2','40.97')
+insert into T_PRODUCTO_PRECIO values('00569','3','10','5','40.97')
+insert into T_PRODUCTO_PRECIO values('00569','3','20','10','40.97')
