@@ -8,17 +8,21 @@ ESTADO char(1)
 
 select * from T_CAB_MENU
 
-/*tabla todavia no creada*/
+/*tabla creada*/
 
-create table T_SUB_MENU(
-ID int identity,
-ID_MENU char(6),
-ID_SUBMENU char(6),
-NOMBRE_MENU varchar(100),
-NOMBRE_SUBMENU varchar(100),
-URL varchar(100),
-ESTADO char(1)
-)
+
+CREATE TABLE T_SUB_MENUS(
+	ID int IDENTITY(1,1) NOT NULL,
+	ID_MENU char(3) NULL,
+	ID_SUBMENU1 char(3) NULL,
+	SUB_NOMBRE1 varchar(100) NULL,
+	URL1 varchar(100) NULL,
+	IDSUBMENU1 char(3),
+	SUB_NOMBRE2 varchar(100),
+	URL2 varchar(100) NULL,
+	ESTADO char(1) NULL
+) 
+
 /***/
 
 /*esta es la tabla usando*/

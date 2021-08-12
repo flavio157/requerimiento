@@ -17,7 +17,8 @@ class M_Login
         $query=$this->db->prepare("SELECT * FROM T_USUARIO_CALL where NOM_USUARIO = '$nom_usuario'");
         $query->execute();
         $cod_usuario = $query->fetchAll();
-        f_regSession($cod_usuario['ANEXO_USUARIO'],$cod_usuario['COD_PERSONAL'],$cod_usuario['NOM_USUARIO'],$cod_usuario['OFICINA'],$cod_usuario['ZONA']); 
+       
+        f_regSession($cod_usuario[0]['ANEXO_USUARIO'],$cod_usuario[0]['COD_PERSONAL'],$cod_usuario[0]['NOM_USUARIO'],$cod_usuario[0]['OFICINA'],$cod_usuario[0]['ZONA']); 
         if(count($cod_usuario) == 1){
             
         }
@@ -42,6 +43,12 @@ class M_Login
 
     public function m_listasubmenus($idmenu){
         $query = $this->db->prepare("SELECT * FROM T_SUB_MENUS WHERE ID_MENU = '$idmenu' AND ESTADO = '1'");
+        $query->execute();
+        return $query->fetchAll();
+    }
+
+    public function m_listarSubmenus2($idsubmenu){
+        $query = $this->db->prepare("SELECT * FROM T_SUB_MENUS WHERE IDSUBMENU1 = '$idsubmenu' AND ESTADO = '1'");
         $query->execute();
         return $query->fetchAll();
     }

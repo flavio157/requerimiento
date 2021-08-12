@@ -37,6 +37,7 @@ header nav ul li {
 
 header nav ul li:hover {
 	background: #054361;
+	cursor:pointer;
 	/*background:#E6344A;*/
 }
 
@@ -63,9 +64,13 @@ header nav ul li .children {
 	z-index:100;
 }
 
+nav li li .dropdown-menu{
+	display: none;
+}
+
 header nav ul li .children li {
 	display:block;
-	overflow: hidden;
+	/*overflow: hidden;*/
 	border-bottom: 1px solid rgba(255,255,255,.5);
 }
 
@@ -79,6 +84,7 @@ header nav ul li .children li a span {
 	top:3px;
 	margin-right:0;
 	margin-left:10px;
+	
 }
 
 header nav ul li .caret {
@@ -90,7 +96,7 @@ header nav ul li .caret {
 
 /*css de las vista configuracion*/
 .contenedorbs{
-	width: 45%;
+
 	margin-left: auto;
 	padding: 1em;
 	display: inline-block;
@@ -165,6 +171,21 @@ header nav ul li .caret {
 		border-bottom:1px solid rgba(255,255,255,.5);
 	}
 
+
+/*para los sub sub menus color*/
+	header nav ul .children li:hover {
+		background: rgba(6, 148, 243, 0.63);
+		/*background:#E6344A;*/
+	}
+
+	header nav ul li .children ul li{
+		background:#011826;
+	}
+/*fin*/
+
+
+
+
 	header nav ul li a {
 		display: block;
 	}
@@ -179,7 +200,8 @@ header nav ul li .caret {
 	}
 
 	header nav ul li .children li a {
-		margin-left:20px;
+		/*margin-left:20px;**/
+		text-indent: 14px;
 	}
 
 	header nav ul li .caret {
@@ -195,4 +217,12 @@ header nav ul li .caret {
         padding:1em;  
    }
    /**/
+
+ 
+
+	nav li li .dropdown-menu{
+		display: none;
+	}
+
+
 }
