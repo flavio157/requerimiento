@@ -94,7 +94,7 @@ header nav ul li .caret {
 	margin-right:0px;
 }
 
-/*css de las vista configuracion*/
+
 .contenedorbs{
 
 	margin-left: auto;
@@ -120,7 +120,7 @@ header nav ul li .caret {
 
 
 
-/**/
+
 @media screen and (max-width: 800px) {
 	body {
 		padding-top:80px;
@@ -134,7 +134,7 @@ header nav ul li .caret {
 		background:#023859;
 	}
 
-	/*.menu-bar .bt-menu*/
+	
 	.menu_barras .div-menu {
 		display: block;
 		padding: 20px;
@@ -172,7 +172,7 @@ header nav ul li .caret {
 	}
 
 
-/*para los sub sub menus color*/
+
 	header nav ul .children li:hover {
 		background: rgba(6, 148, 243, 0.63);
 		/*background:#E6344A;*/
@@ -181,7 +181,7 @@ header nav ul li .caret {
 	header nav ul li .children ul li{
 		background:#011826;
 	}
-/*fin*/
+
 
 
 
@@ -209,14 +209,14 @@ header nav ul li .caret {
 	}
 
 
-	/*css de la vista configuracion*/
+	
 
 	.contenedorbs {
         width:100%;
         margin:0 auto;
         padding:1em;  
    }
-   /**/
+
 
  
 
