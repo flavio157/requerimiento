@@ -1,5 +1,5 @@
 <?php
-
+require_once("c_variable_globales.php");
 if (session_status() == PHP_SESSION_NONE) {
 	session_start();
   }
@@ -18,15 +18,20 @@ $cod = $_SESSION["cod"];
 	<meta charset="UTF-8">
 	<title>Menu</title>
 	
-	<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/flavio157/requerimiento@main/dise%C3%B1o/css/menu.css">
-	<link rel="stylesheet" href="../fonts/style.css">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
 	<script src="https://code.jquery.com/jquery-latest.js"></script>
+	<!--<script src="https://cdn.jsdelivr.net/gh/flavio157/requerimiento@main/dise%C3%B1o/js/menu1.js"></script>-->
 	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6" crossorigin="anonymous">
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js" integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf" crossorigin="anonymous"></script>
-
-	<script src="../js/menu.js"></script>
+	
+	<link rel="STYLESHEET" type="text/css" href="../fonts/style.css">
+	<?php
+		echo "<link rel='STYLESHEET' type='text/css' href=".ROOT_PATH."/css/menu.css>";
+		echo "<script  src=".ROOT_PATH."/js/menu.js></script>";
+	?>
+	
+	
+	<!--<link rel="stylesheet" href="//cdn.jsdelivr.net/gh/flavio157/requerimiento@main/dise%C3%B1o/css/menu1.css" crossorigin="anonymous">-->
 	<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
 </head>
 <body>	
@@ -34,48 +39,20 @@ $cod = $_SESSION["cod"];
 	
 
 
-/*li:hover */
-	nav li li:hover .dropdown-menu {
-		
-	display:block;	
-	top: 0;
-    left: 100%;
-    margin-top:-2px;
-	padding-top: 0px;
-	background:#011826;
-	padding: 0px !important;
-	}
-
-	
-
-
- /* …
-    <menupadre>
-      …
-        <ul>
-          …
-            <li :hover>
-              …
-                <element class="dropdown-menu">
-	
-	#nav li li:hover ul {
-  margin-left:200px;
-  margin-top:-35px; 
-  display:block;
-  }
-	
-	*/
 
 
 </style>
 
-<header>		
+<header>
+	<?php
+	
+	?>		
 		<div class="menu_barras">
 			<div class="div-menu">
-				<a href="#" class="bt-menu"><span class="icon-menu"></a>
+				<a class="bt-menu"><span class="icon-menu"></a>
 			</div>
 		</div>
-		<nav>
+		<nav style="border-top: 0.5px solid;">
 			<ul class="menulateral"> 
 				<?php 
 					for ($i=0; $i < count($menu); $i++) { 
@@ -90,7 +67,7 @@ $cod = $_SESSION["cod"];
 									
 									if($menu[$i][0] == $submenu[$l][0]){
 										if($submenu[$l][2] != '' ){
-											echo "<li><a href='".$submenu[$l][2]."' class='submenulista '>".$submenu[$l][1]."<span class='icon-dot'></span></a>";
+											echo "<li><a href='".ROOT_PATH.$submenu[$l][2]."' class='submenulista '>".$submenu[$l][1]."<span class='icon-dot'></span></a>";
 										}else{
 											echo "<li><a class='submenulista '>".$submenu[$l][1]."<span class='icon-dot'></span></a>";
 										}	
@@ -101,7 +78,7 @@ $cod = $_SESSION["cod"];
 													echo "<ul class='dropdown-menu sub-menu'>";
 														
 														for ($k=0; $k < count($submenu2) ; $k++) { 
-															echo "<li><a href='".$submenu2[$k][2]."'>".$submenu2[$k][1]."</a></li>";
+															echo "<li><a href='".ROOT_PATH.$submenu2[$k][2]."'>".$submenu2[$k][1]."</a></li>";
 														}
 													echo "</ul>";
 												}	
@@ -146,7 +123,9 @@ $cod = $_SESSION["cod"];
 		echo('</pre>');
 	}
 
-
+	/*
+	INSERT INTO T_PPEDIDO_CANTIDAD(CODIGO,COD_PRODUCTO,CANTIDAD,BONO,PRECIO,CCAN,CBON) 
+	 						VALUES(125,'00481',12,0,,12,0)*/
 	?>
 	<!--
 		<ul class='children'>

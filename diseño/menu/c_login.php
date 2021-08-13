@@ -1,4 +1,5 @@
 <?php
+
 date_default_timezone_set('America/Lima');
 require_once("../funciones/m_Login.php");
 require_once("../funciones/f_funcion.php");
@@ -38,7 +39,7 @@ class C_Login
                     $submenu = $m_login->m_listasubmenus($cabmenu[$l][0]);
                    
                    for ($k=0; $k < count($submenu); $k++) { 
-                       $submenu2 = $m_login->m_listarSubmenus2($submenu[0][5]);
+                       $submenu2 = $m_login->m_listarSubmenus2($submenu[$l][5]);
 
                        for ($n=0; $n < count($submenu2); $n++) {
                            if($submenu[$k][2] == $submenu2[$n][5]){
@@ -59,6 +60,9 @@ class C_Login
            $_SESSION["menu"] = $menu;
            $_SESSION["submenu"] = $sub;
            $_SESSION["subsub"] = $subSub;
+
+           header("Location: index.php");
+           die();
        }else{
           print_r("Error");
         }

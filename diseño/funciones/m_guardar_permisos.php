@@ -9,7 +9,10 @@
         }
             
         public function m_consultar_permisos($anexo){
-                
+            $query = $this->db->prepare("SELECT * FROM T_PERMISOS WHERE ANEXO = '$anexo'");
+            $query->execute();
+            $permisos = $query->fetchAll();
+            return  $permisos;
         }
 
         public function m_guardar_permisos(){
@@ -20,10 +23,6 @@
         public function m_actualizar_permisos(){
 
         }
-
-      
-       
-      
     }
     
     
