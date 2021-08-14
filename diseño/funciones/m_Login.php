@@ -50,7 +50,6 @@ class M_Login
     public function m_listarSubmenus2($idsubmenu){
         $query = $this->db->prepare("SELECT * FROM T_SUB_MENUS WHERE IDSUBMENU1 = '$idsubmenu' AND ESTADO2 = '1' ");
         $query->execute();
-        //print_r($query);
         return $query->fetchAll();
     }
    

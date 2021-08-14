@@ -22,14 +22,14 @@
                 if($subitems == ""){
                     $html.= '<li>
                                 <label>
-                                    <input type="checkbox" data="'.$listado[$i][0].'" style="width: 18px;height: 18px;"/> '
+                                    <input class="padre" type="checkbox" data="'.$listado[$i][0].'" style="width: 18px;height: 18px;"/> '
                                     .$listado[$i][1].
                                 '</label>
                             </li>';
                 }else{
                     $html .= '<li>
                                 <label>
-                                    <input type="checkbox"  style="width: 18px;height: 18px;"/> '
+                                    <input class="padre" type="checkbox"  data="'.$listado[$i][0].'" style="width: 18px;height: 18px;"/> '
                                     .$listado[$i][1] .
                                 '</label>'.
                                 '<ul>'.
@@ -55,14 +55,14 @@
                 if($subitems2 == ""){
                     $html.='<li>
                         <label>
-                            <input type="checkbox" data="'.$listadosub[$i][2].'"  style="width: 18px;height: 18px;"/> '
+                            <input class="submenu1" type="checkbox" data="'.$listadosub[$i][2].'"  style="width: 18px;height: 18px;"/> '
                             .$listadosub[$i][3].
                        '</label>
                         </li>';
                 }else{
                     $html.='<li>
                             <label>
-                                <input type="checkbox" data="'.$listadosub[$i][2].'" style="width: 18px;height: 18px;"/> '
+                                <input class="submenu1" type="checkbox" data="'.$listadosub[$i][2].'" style="width: 18px;height: 18px;"/> '
                                 .$listadosub[$i][3].
                             '</label>
                             <ul>'.
@@ -79,18 +79,17 @@
 
         static function c_listarSubmenu2($idmenu,$idsubmenu){
             $menu = new M_Login(); 
-            $listadosub2 = $menu->m_listarSubmenus2($idmenu,$idsubmenu);
+            $listadosub2 = $menu->m_listarSubmenus2($idsubmenu);
             $html = "";
                 for ($i=0; $i < Count($listadosub2); $i++) { 
                     if($listadosub2[$i][1] == $idmenu){
                         $html.= '<li>
                             <label>
-                                <input type="checkbox" data="precio"  style="width: 18px;height: 18px;"/> '
-                                    .$listadosub2[$i][6].
+                                <input class="submenu2" type="checkbox" datasub="'.$idsubmenu.'" data="'.$listadosub2[$i][6].'"  style="width: 18px;height: 18px;"/> '
+                                    .$listadosub2[$i][7].
                             '</label>
                         </li>';
                     }
-                    
                 }
             return $html;
         }

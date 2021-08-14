@@ -22,7 +22,7 @@ list-style: none;
 
 </style>
 
-<form>
+<form id="frmpermisos">
     <div style="padding:1em ; padding-left: var(--bs-gutter-x,.75rem);">
             <div class="row g-3 align-items-center" style="float: right;">
                 <div class="col-auto">

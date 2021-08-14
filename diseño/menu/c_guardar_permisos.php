@@ -29,7 +29,11 @@ class c_guardar_permisos
     static function c_buscar_anexo($anexo){
         $m_permisos = new m_guardar_permisos();
         $c_permisos = $m_permisos->m_consultar_permisos($anexo);
-        print_r($c_permisos); 
+        $dato = array(
+            'estado' => 'ok',
+            'datos' => $c_permisos,
+            );
+            echo json_encode($dato,JSON_FORCE_OBJECT);
     }
 
 
