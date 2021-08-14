@@ -32,7 +32,7 @@ CREATE TABLE [dbo].[T_PERMISOS](
 	[SUB_MENU1] [char](3) NULL,
 	[SUB_MENU2] [char](3) NULL
 ) ON [PRIMARY]
-
+     
 
 
 insert into T_PERMISOS values('2000','001','001','001')
