@@ -446,6 +446,7 @@ function agregarproductos() {
                             }
                         }
                         cantidadPrecio = cantidad;
+                      
                         politicaprecios(cantidad,cod_producto,1);
                     }
                 }
@@ -540,6 +541,7 @@ function verificarPrecios(zona,cantidad,arrayproductos) {
 
 
 function politicaprecios(cantidad,codproducto,tipo) {
+    console.log(cantidad,codproducto,tipo);
     var cod_producto =$("#cod_producto").val();
     var nombre = $("#nombreproducto").val();
     var cantidad = $("#G_cantidad").val();

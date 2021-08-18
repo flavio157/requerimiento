@@ -14,22 +14,22 @@
             $i = 0;
             $html = "";
             $menu = new M_Login(); 
-            $listado = $menu->m_listaMenu();
+            $listado = $menu->m_listaMenuthree();
             $subitems = "";
 
             for ($i=0; $i < count($listado) ; $i++) { 
               $subitems = c_menu::c_listarSubmenus($listado[$i][0]);
                 if($subitems == ""){
                     $html.= '<li>
-                                <label>
-                                    <input class="padre" type="checkbox" data="'.$listado[$i][0].'" style="width: 18px;height: 18px;"/> '
+                                <label class="font lblmenuthree">
+                                    <input class="general menuthree nopadre form-check-input" type="checkbox" datamenu="'.$listado[$i][0].'" /> '
                                     .$listado[$i][1].
                                 '</label>
                             </li>';
                 }else{
                     $html .= '<li>
-                                <label>
-                                    <input class="padre" type="checkbox"  data="'.$listado[$i][0].'" style="width: 18px;height: 18px;"/> '
+                                <label class="font lblmenuthree">
+                                    <input class="general menuthree padre form-check-input" type="checkbox"  datamenu="'.$listado[$i][0].'" /> '
                                     .$listado[$i][1] .
                                 '</label>'.
                                 '<ul>'.
@@ -47,26 +47,26 @@
 
         static function c_listarSubmenus($idmenu){
             $menu = new M_Login(); 
-            $listadosub = $menu->m_listasubmenus($idmenu);
+            $listadosub = $menu->m_listasubmenusthree($idmenu);
             $html = "";
             for ($i=0; $i < Count($listadosub); $i++) { 
                 $subitems2 = c_menu::c_listarSubmenu2($idmenu,$listadosub[$i][2]);
                
                 if($subitems2 == ""){
                     $html.='<li>
-                        <label>
-                            <input class="submenu1" type="checkbox" data="'.$listadosub[$i][2].'"  style="width: 18px;height: 18px;"/> '
+                        <label class="font lblsubmenu1">
+                            <input class="cls submenu1 nopadre form-check-input" type="checkbox" datamenu="'.$idmenu.'"  datasub="'.$listadosub[$i][2].'"/> '
                             .$listadosub[$i][3].
                        '</label>
                         </li>';
                 }else{
                     $html.='<li>
-                            <label>
-                                <input class="submenu1" type="checkbox" data="'.$listadosub[$i][2].'" style="width: 18px;height: 18px;"/> '
+                            <label class="font lblsubmenu1">
+                                <input class="cls submenu1 padre form-check-input" type="checkbox"  datamenu="'.$idmenu.'" datasub="'.$listadosub[$i][2].'"/> '
                                 .$listadosub[$i][3].
                             '</label>
-                            <ul>'.
-                                $subitems2.
+                            <ul>'
+                                .$subitems2.
                             '</ul>
                         </li>';  
                 }
@@ -79,13 +79,13 @@
 
         static function c_listarSubmenu2($idmenu,$idsubmenu){
             $menu = new M_Login(); 
-            $listadosub2 = $menu->m_listarSubmenus2($idsubmenu);
+            $listadosub2 = $menu->m_listarSubmenus2three($idsubmenu);
             $html = "";
                 for ($i=0; $i < Count($listadosub2); $i++) { 
                     if($listadosub2[$i][1] == $idmenu){
                         $html.= '<li>
-                            <label>
-                                <input class="submenu2" type="checkbox" datasub="'.$idsubmenu.'" data="'.$listadosub2[$i][6].'"  style="width: 18px;height: 18px;"/> '
+                            <label class="font lblsubmenu2">
+                                <input class="cls submenu2 nopadre form-check-input" type="checkbox" datamenu="'.$idmenu.'" datasub="'.$idsubmenu.'" datasub2="'.$listadosub2[$i][6].'" /> '
                                     .$listadosub2[$i][7].
                             '</label>
                         </li>';

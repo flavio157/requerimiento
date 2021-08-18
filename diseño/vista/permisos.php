@@ -44,9 +44,23 @@ list-style: none;
             </ul>
 
         </div>
-            
-    </div>     
+        <div class="row g-3 align-items-center" style="float: right;">
+            <div class=" class="col-auto" style="float: right;">
+                <button class="btn btn-primary" id="btnguardar">Registrar</button>    
+            </div>
+            <div class="col-auto">
+                
+            </div>
+        </div>
+
+
+    
 </form>
+
+
+
+
+
     <script src="../js/jsconfiguracion.js"></script>
     <script src="../js/jsqueryThree.js"></script>
        <script>

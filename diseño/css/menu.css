@@ -6,6 +6,27 @@
 	box-sizing: border-box;
 }
 
+.lblmenuthree{
+	color: #121665;
+	/*color: #206aa0;
+	color: #112627;;*/
+	/*font-weight: 700;*/
+}
+
+.lblsubmenu1{
+	color: #0973b4;
+	/*color: #4891bc;
+	color: #125053;*/
+	/*font-weight: 700;*/
+}
+
+.lblsubmenu2{
+	/*color: #3da6cd;
+	color: #8cc4dd;*/
+	color: #00abec;;
+	/*font-weight: 700;*/
+}
+
 body {background:#FEFEFE;}
 
 .menu_barras {
@@ -17,12 +38,16 @@ header {
 }
 
 header nav {
-	background:#6aa5bc;
-	/*background-color: rgba(100,224,245,0);*/
-    /*background: linear-gradient(27deg, rgb(104 218 236) 0%, rgb(76 84 165) 100%);*/
+	/*background:#6aa5bc;*/
+	/*background:linear-gradient(107deg,rgb(65 132 212) 41%, rgb(39 34 72) 100%);*/
+    background:linear-gradient(15deg, #13547a 0%, #80d0c7 100%);
 	z-index:1000;
 	width:auto;
 }
+.font{
+	font-family: arial;
+}
+
 
 header nav ul {
 	list-style:none;
@@ -35,7 +60,7 @@ header nav ul li {
 }
 
 header nav ul li:hover {
-	background: #6aa5bc;
+	background:  #519ba6;
 	/*background: linear-gradient(27deg, rgb(76 84 165) 0%, rgb(104 218 236) 100%);*/
 	cursor:pointer;
 }
@@ -57,7 +82,7 @@ header nav ul li:hover .children {
 
 header nav ul li .children {
 	display: none;
-	background:#5e8392;
+	background:#347a92;
 	position: absolute;
 	width: 150%;
 	z-index:100;
@@ -124,8 +149,9 @@ nav li li:hover .dropdown-menu {
     left: 100%;
     margin-top:-2px;
 	padding-top: 0px;
-	background:#5e8392;
+	background:#0077a2;
 	padding: 0px !important;
+	border: 0px;
 	}
 
 
@@ -133,8 +159,10 @@ nav li li:hover .dropdown-menu {
 @media screen and (max-width: 800px) {
 
 	header nav ul li:hover {
-		background:#5e8392;
+		/*background:#5e8392;*/
 		/*background: linear-gradient(27deg, rgb(76 84 165) 0%, rgb(104 218 236) 100%);*/
+		/*background:#41a2c5 ;*/
+	/*	background: #0077a2;*/
 		cursor:pointer;
 	}
 
@@ -147,9 +175,11 @@ nav li li:hover .dropdown-menu {
 		width:100%;
 		position: fixed;
 		top:0;
+		background:linear-gradient(15deg,  #80d0c7 0%,#13547a 100%);
+
 		/*background: linear-gradient(27deg, rgb(76 84 165) 0%, rgb(104 218 236) 100%);*/
-		background:#6aa5bc;
-	/*	#023859*/
+		/*background:#6aa5bc;
+		#023859*/
 	}
 
 	/*.menu-bar .bt-menu*/
@@ -195,11 +225,12 @@ nav li li:hover .dropdown-menu {
 	/*	background: linear-gradient(
 			27deg
 			, rgb(104 218 236) 0%, rgb(76 84 165) 100%);*/
-		background:#6aa5bc;
+		background:#41889a;
 	}
 
 	header nav ul li .children ul li{
-		background:#5497b1;
+		background: #58a3ab;
+	/*	background:#438a9c ;*/
 	}
 /*fin*/
 

@@ -36,10 +36,6 @@ $cod = $_SESSION["cod"];
 </head>
 <body>	
 <style>
-	
-
-
-
 
 </style>
 
@@ -52,36 +48,35 @@ $cod = $_SESSION["cod"];
 				<a class="bt-menu"><span class="icon-menu"></a>
 			</div>
 		</div>
-		<nav style="border-top: 0.5px solid;">
+		<nav>
 			<ul class="menulateral"> 
 				<?php 
 					for ($i=0; $i < count($menu); $i++) { 
 						
 						if($menu[$i][2] == ''){
 							
-							echo "<li class='menupadre' id='$i'><a><span class='icon-house'></span>".$menu[$i][1]."</a>";
-								
+							echo "<li class='menupadre' id='$i'><a class='font'><span class='icon-house' ></span>".$menu[$i][1]."</a>";
 								echo "<ul class='children sub-menu'>";
-								
 								for ($l=0; $l < count($submenu) ; $l++) { 
-									
 									if($menu[$i][0] == $submenu[$l][0]){
+										
 										if($submenu[$l][2] != '' ){
-											echo "<li><a href='".ROOT_PATH.$submenu[$l][2]."' class='submenulista '>".$submenu[$l][1]."<span class='icon-dot'></span></a>";
+											echo "<li><a href='".ROOT_PATH.$submenu[$l][2]."' class='submenulista font'>".$submenu[$l][1]."<span class='icon-dot'></span></a>";
 										}else{
-											echo "<li><a class='submenulista '>".$submenu[$l][1]."<span class='icon-dot'></span></a>";
+											echo "<li><a class='submenulista font'>".$submenu[$l][1]."<span class='icon-dot'></span></a>";
 										}	
 										for ($k=0; $k < count($submenu2) ; $k++) { 
-
-												if($submenu[$l][3] == $submenu2[$k][0]){
+												if($menu[$i][0] == $submenu2[$k][0] && $submenu[$l][3] == $submenu2[$k][1] ){
 												
 													echo "<ul class='dropdown-menu sub-menu'>";
-														
-														for ($k=0; $k < count($submenu2) ; $k++) { 
-															echo "<li><a href='".ROOT_PATH.$submenu2[$k][2]."'>".$submenu2[$k][1]."</a></li>";
+													
+														for ($j=0; $j < count($submenu2) ; $j++) { 
+															if($menu[$i][0] == $submenu2[$j][0] && $submenu[$l][3] == $submenu2[$j][1]){
+																echo "<li><a href='".ROOT_PATH.$submenu2[$j][4]."'class='font'>".$submenu2[$j][3]."</a></li>";
+															}
 														}
 													echo "</ul>";
-												}	
+												}
 											}
 										echo "</li>";
 									}
@@ -90,7 +85,7 @@ $cod = $_SESSION["cod"];
 							echo "</li>";	
 						}else{
 							echo "<li class='menupadre' id='$i'>
-							<a  class='url'><span class='icon-house'></span>".$menu[$i][1]."</a>";
+							<a href='".ROOT_PATH.$menu[$i][2]."' class='url font'><span class='icon-house'></span>".$menu[$i][1]."</a>";
 							echo "</li>";	
 						}		
 					}
@@ -103,33 +98,14 @@ $cod = $_SESSION["cod"];
 
 	</div>
 	<?php
-	
-	/*	for ($i=0; $i < count($menu); $i++) { 
-			echo "<li class='submenu' id='$i'><a><span class='icon-house'></span>".$menu[$i][1]."</a>";
-			for ($l=0; $l < count($submenu) ; $l++) { 
-				if($menu[$i][0] == $submenu[$l][0]){
-					echo	"<ul class='children'>";
-					echo		"<li><a href='".$submenu[$l][2]."'>".$submenu[$l][1]."<span class='icon-dot'></span></a></li>";
-					echo	"</ul>";
-				}	
-			}
-			"</li>";		
-		}*/	
 
 		
-	function printe($array){
+	/*function printe($array){
 		echo('<pre>');
 		print_r($array);
 		echo('</pre>');
-	}
+	}*/
 
-	/*
-	INSERT INTO T_PPEDIDO_CANTIDAD(CODIGO,COD_PRODUCTO,CANTIDAD,BONO,PRECIO,CCAN,CBON) 
-	 						VALUES(125,'00481',12,0,,12,0)*/
 	?>
-	<!--
-		<ul class='children'>
-			<li><a href='../vista/vistaprueba.php'>SubElemento #1 <span class='icon-dot'></span></a></li>
-		</ul>
-	-->
+	
 </body>
