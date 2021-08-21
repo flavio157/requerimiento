@@ -2,7 +2,6 @@
 $fechaactual = getdate()
 ?>
 
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -10,7 +9,8 @@ $fechaactual = getdate()
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
 	<script src="https://code.jquery.com/jquery-latest.js"></script>
-	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6" crossorigin="anonymous">
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6" crossorigin="anonymous">
     <link rel="STYLESHEET" type="text/css" href="css/styles.css">
     <script type="text/javascript" src="js/jsreclamo.js"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -19,19 +19,22 @@ $fechaactual = getdate()
 <body>
     <div class="main">
         <form class="row g-3"  id="frmreclamos">
+        <div id="mensaje">
+                                    
+        </div>
             <div class="row g-2">
                 <div class="col">
                    <div  style="background: #808080;"><center>LIBRO DE RECLAMACIONES</center></div>
                     <div class="input-group border">
                         <span class="input-group-text">FECHA</span>
-                        <input type="text" id="txtdiareclamo" name="txtdiareclamo"  class="form-control text-center" value="<?php echo $fechaactual["mday"]?>">
-                        <input type="text" id="txtmesreclamo" name="txtmesreclamo"  class="form-control text-center" value="<?php echo $fechaactual["mon"]?>">
-                        <input type="text" id="txtanoreclamo" name="txtanoreclamo"  class="form-control text-center" value="<?php echo $fechaactual["year"]?>">
+                        <input type="text" id="txtdiareclamo" name="txtdiareclamo" disabled class="form-control text-center" value="<?php echo date("d")?>">
+                        <input type="text" id="txtmesreclamo" name="txtmesreclamo" disabled class="form-control text-center" value="<?php echo date("m")?>">
+                        <input type="text" id="txtanoreclamo" name="txtanoreclamo" disabled class="form-control text-center" value="<?php echo date("Y")?>">
                     </div>
                 </div>
                 <div class="col border">
                     <center>HOJA DE RECLAMACIONES</center>    
-                    <center> N<sup>ro  </sup><label id="nroreclamo"> </label> </center>      
+                    <center> N<sup>ro  </sup><label id="nroreclamo"></label>-<?php echo date("Y")?> </center>      
                 </div>
             </div>
             <div class="col-12 border">
@@ -45,9 +48,9 @@ $fechaactual = getdate()
                 </div>
                 <div class="input-group mb-3">
                     <span class="input-group-text">RUC</span>
-                    <input type="text" class="form-control" aria-label="Username">
+                    <input type="text" class="form-control" id="txtruc" name="txtruc">
                     <span class="input-group-text">IDENTIFICACION</span>
-                    <input type="text" class="form-control" aria-label="Username">
+                    <input type="text" class="form-control" id="txtidentificacion" name="txtidentificacion">
                 </div>
             </div>
             <div class="col-12 border">
@@ -105,12 +108,12 @@ $fechaactual = getdate()
                 <div class="input-group mb-3">
                     <label style="padding-right: 50px;"> 3.DETALLE DE LA RECLAMACION Y PEDIDO DEL CONSUMIDOR</label>
                     <div class="form-check form-check-inline">
-                    <label class="form-check-label" for="txtreclamo">RECLAMO<sup>1</sup></label>
-                    <input class="form-check-input" type="radio" name="txtreclamo" id="txtreclamo" value="1" for="txtreclamo">
+                        <input class="form-check-input" type="radio" name="txtreclamo" id="txtreclamo" value="1" >
+                        <label class="form-check-label" for="txtreclamo">RECLAMO<sup>1</sup></label>
                     </div>
                     <div class="form-check form-check-inline">
-                    <label class="form-check-label" for="txtqueja">QUEJA<sup>2</sup></label>
-                    <input class="form-check-input" type="radio" name="txtqueja" id="txtqueja" value="2" for="txtqueja">
+                        <input class="form-check-input" type="radio" name="txtreclamo" id="txtqueja" value="2">
+                        <label class="form-check-label" for="txtqueja">QUEJA<sup>2</sup></label>
                     </div>
                 </div>
                 <div class="input-group">

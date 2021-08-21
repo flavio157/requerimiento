@@ -563,5 +563,12 @@ function f_Cuotas($promedioCuota,$cuotas,$dias){
     }
 
 
+    function diasdelMes(){
+        $anioActual = date("Y");
+        $mesActual = date("n");
+        $cantidadDias = cal_days_in_month(CAL_GREGORIAN, $mesActual, $anioActual);
+        return $cantidadDias;
+    }
+
 
   ?>
