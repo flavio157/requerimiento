@@ -1,0 +1,14 @@
+archivo nombre de la funcion 
+carpeta js -> jsproductoprecio.js
+
+
+archivo y funciones que se usan para buscar  precios y bono segun zona
+
+archivo -> C_BuscarProducto -> funcion -> PoliticaPrecios.
+archivo -> M_BuscarProducto -> funcion -> M_PoliticaPrecios.
+
+
+archivo y funciones que se usan parabuscar el regalo segun zona 
+
+archivo -> C_BuscarProducto -> funcion -> VerificarProductoRegalo.
+archivo -> M_BuscarProducto -> funcion -> M_VerificarRegalo.
