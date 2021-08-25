@@ -6,6 +6,7 @@ CREATE TABLE T_PERMISOS(
 	SUB_MENU2 char(3) NULL
 ) 
 
+
 CREATE TABLE T_CAB_MENU(
 	ID_MENU char(3) NULL,
 	NOMBRE varchar(100) NULL,
@@ -14,11 +15,12 @@ CREATE TABLE T_CAB_MENU(
 ) 
 
 
+
 CREATE TABLE T_SUB_MENUS(
 	ID int IDENTITY(1,1) NOT NULL,
 	ID_MENU char(3) NULL,
 	ID_SUBMENU1 char(3) NULL,
-	SUB_NOMBRE1 varchar(100) NULL,
+	SUB_NOMBRE1 varchar](100) NULL,
 	URL1 varchar(100) NULL,
 	IDSUBMENU1 char(3) NULL,
 	IDSUBMENU2 char(3) NULL,
@@ -26,4 +28,51 @@ CREATE TABLE T_SUB_MENUS(
 	URL2 varchar(100) NULL,
 	ESTADO1 char(1) NULL,
 	ESTADO2 char(1) NULL
-) 
+)
+
+
+
+
+Insert into T_CAB_MENU values('001','Ventas','',1)
+Insert into T_CAB_MENU values('002','Cobranza','',1)
+Insert into T_CAB_MENU values('003','Producción de Plásticos','',1)
+Insert into T_CAB_MENU values('004','Oficina','',1)
+Insert into T_CAB_MENU values('005','Administración','',1)
+Insert into T_CAB_MENU values('006','Configuración','',1)
+
+
+Insert into T_SUB_MENUS values('001','001','Pedidos','','','','','','1','')
+Insert into T_SUB_MENUS values('001','002','Enpadron','','','','','','1','')
+Insert into T_SUB_MENUS values('001','003','Evaluación','','','','','','1','')
+Insert into T_SUB_MENUS values('001','004','Contrato','','','','','','1','')
+
+Insert into T_SUB_MENUS values('001','005','Reportes','','005','001','Reportes de ventas','','1','1')
+Insert into T_SUB_MENUS values('','','','','005','001','Reportes de ventas','','1','1')
+Insert into T_SUB_MENUS values('','','','','005','002','Reportes de pedidos','','1','1')
+Insert into T_SUB_MENUS values('','','','','005','003','Reportes de Empadron','','1','1')
+Insert into T_SUB_MENUS values('','','','','005','004','Reportes de Evaluación','','1','1')
+Insert into T_SUB_MENUS values('','','','','005','005','Reportes de contrato','','1','1')
+
+Insert into T_SUB_MENUS values('002','006','Recorrido','','','','','','1','')
+Insert into T_SUB_MENUS values('002','007','Consultas','','','','','','1','')
+Insert into T_SUB_MENUS values('002','008','Reportes','','008','006','Reportes de cobranza','','1','1')
+Insert into T_SUB_MENUS values('','','','','008','007','Reportes de recorrido','','1','1')
+Insert into T_SUB_MENUS values('','','','','008','008','Reportes de Consulta','','1','1')
+
+
+Insert into T_SUB_MENUS values('003','009','Almacen','','','','','','1','')
+Insert into T_SUB_MENUS values('003','010','Productos terminados','','','','','','1','')
+Insert into T_SUB_MENUS values('003','011','Almacén de insumos','','','','','','1','')
+Insert into T_SUB_MENUS values('003','012','Kardex','','','','','','1','')
+Insert into T_SUB_MENUS values('003','013','Ficha de producción','','','','','','1','')
+
+
+Insert into T_SUB_MENUS values('004','014','Supervición de contrato','','','','','','1','')
+Insert into T_SUB_MENUS values('004','015','Telefonista','','','','','','1','')
+Insert into T_SUB_MENUS values('004','016','Padrón','','','','','','1','')
+
+
+Insert into T_SUB_MENUS values('005','017','Agregar movimiento caja','','','','','','1','')
+Insert into T_SUB_MENUS values('005','018','Supervición de efectivos','','','','','','1','')
+
+Insert into T_SUB_MENUS values('006','019','Permisos','','','','','','1','')
