@@ -1,0 +1,6 @@
+c:\users\user\documents\visual studio 2015\Projects\huellero\huellero\bin\Debug\huellero.dll
+c:\users\user\documents\visual studio 2015\Projects\huellero\huellero\bin\Debug\huellero.pdb
+c:\users\user\documents\visual studio 2015\Projects\huellero\huellero\bin\Debug\libzkfpcsharp.dll
+c:\users\user\documents\visual studio 2015\Projects\huellero\huellero\obj\Debug\huellero.dll
+c:\users\user\documents\visual studio 2015\Projects\huellero\huellero\obj\Debug\huellero.pdb
+C:\Users\User\Documents\Visual Studio 2015\Projects\huellero\huellero\obj\Debug\huellero.csprojResolveAssemblyReference.cache
