@@ -15,7 +15,7 @@ namespace csomss
         string Subject; //asunto
         List<string> Archivo = new List<string>(); //lista de archivos a enviar
         string DE = "izuma.san.98@gmail.com"; //nuestro usuario de smtp
-        string PASS = "SolisPacotaipe"; //nuestro password de smtp
+        string PASS = "**********"; //nuestro password de smtp
  
         System.Net.Mail.MailMessage Email;
  
