@@ -9,6 +9,7 @@ using System.Drawing;
 using System.Threading.Tasks;
 using System.IO;
 using System.Drawing.Imaging;
+using System.Collections;
 
 namespace huellero
 {
@@ -17,7 +18,6 @@ namespace huellero
     [ClassInterface(ClassInterfaceType.None)]
     public class Conectar
     {
-       
         IntPtr mDBHandle = IntPtr.Zero;
         zkfp fpInstance = new zkfp();
         String strShow;
@@ -28,9 +28,10 @@ namespace huellero
         public IntPtr FormHandle = IntPtr.Zero;
         public Thread captureThread;
         bool bIsTimeToDie = false;
-       
+        ArrayList listhuella = new ArrayList();
+
         String valor;
-        byte[][] RegTmps = new byte[3][];
+
         int iniciarllamado;
 
         public const String MESSAGE_CAPTURED_OK ="hecho";
@@ -39,7 +40,7 @@ namespace huellero
         public int mfpWidth = 0;
         public int mfpHeight = 0;
 
-
+        //busca,conecta e inicia el huellero
         public String IniciarDispositivo()
         {
             int init = 0;
@@ -66,13 +67,7 @@ namespace huellero
                         valor = "Dispositivo conectado pero sin acceso";
                         return valor;
                     }
-
-                    for (int i = 0; i < 3; i++)
-                    {
-
-                        RegTmps[i] = new byte[2048];
-                    }
-
+                    
                     byte[] paramValue = new byte[4];
                     int size = 4;
 
@@ -108,7 +103,7 @@ namespace huellero
             return valor;
         }
 
-
+        //crea un hilo para detectar cuando se captura la huella
         private void DoCapture()
         {
             while (!bIsTimeToDie)
@@ -124,15 +119,16 @@ namespace huellero
             }
         }
 
+
+        
         [ComVisible(true)]
         public void limpiarhuella()
         {
-            Huella = "";
-            
+            Huella = ""; 
         }
 
 
-
+        //combierte la huella captura a base64 string
         [ComVisible(true)]
         public void mostrarhuella()
         {
@@ -143,6 +139,66 @@ namespace huellero
                 DisplayFingerPrintImage(strShow);
             }
 
+        }
+
+        //guarda la huellas para compara huellas que se guardaron en un arrayList 
+        [ComVisible(true)]
+        public int SaveMemori(String huellas)
+        {
+            int reft = 50; 
+            int cantidad = listhuella.Count;
+            int est = -1;
+            if (cantidad == 0)
+            {
+                listhuella.Add(huellas); // Add is your push
+                est = 0;
+            }
+            else
+            {
+                //int nivel1 = ;
+                for (int i = 0; i < cantidad; i++)
+                {
+                    if (compararhuellas(listhuella[0].ToString(), huellas) > reft)
+                    {
+                        listhuella.Add(huellas);
+                        est = 0;
+                    }
+                    else
+                    {
+                        est = -1;
+                    }
+                }
+               
+            }
+            return est;
+        }
+
+        [ComVisible(true)]
+        public void clear()
+        {
+            listhuella.Clear();
+        }
+
+
+        private String pathbuilder;
+
+        [ComVisible(true)]
+        public String Pathbuilder
+        {
+            get
+            {
+                return pathbuilder;
+            }
+
+            set
+            {
+                pathbuilder = value;
+            }
+        }
+
+        public void pathpowerbuilder(String path)
+        {
+            Pathbuilder = path;
         }
 
         
@@ -163,6 +219,7 @@ namespace huellero
         }
 
 
+        //genera la imagen de la huella para guardar
         private void DisplayFingerPrintImage(String huella)
         {
              DisplayFingerPrintImage(FPBuffer, mfpWidth, mfpHeight, huella);
@@ -188,7 +245,7 @@ namespace huellero
         }
 
 
-
+        //convierte la huella a bitmap
         private void DisplayFingerPrintImage(byte[] FPBuffer, int mfpWidth, int mfpHeight, String huella)
         {
             MemoryStream ms = new MemoryStream();
@@ -197,9 +254,10 @@ namespace huellero
             guardarimg(bmp);
         }
 
+        //guarda la huella en el sistema
         public void guardarimg(Bitmap myBitmap)
         {
-            string path = "C:\\Users\\User\\Documents\\WindowsPowerShell\\Shapes025.jpg";
+            string path = Pathbuilder+"\\Shapes025.jpg";
             bool result = File.Exists(path);
             if (result == true)
             {
@@ -236,10 +294,12 @@ namespace huellero
         }
 
 
-        public int compararhuellas(String huella2)
+        [ComVisible(true)]
+        public int compararhuellas(String huella1 ,String huella2)
         {
-            byte[] blob1 = Convert.FromBase64String(huella2.Trim());
-            byte[] blob2 = Convert.FromBase64String(Huella.Trim());
+           
+            byte[] blob1 = Convert.FromBase64String(huella2.ToString().Trim());
+            byte[] blob2 = Convert.FromBase64String(huella1.ToString().Trim());
 
             int ret = zkfp2.DBMatch(mDBHandle, blob1, blob2);
 
@@ -248,4 +308,3 @@ namespace huellero
         
     }
 }
-
