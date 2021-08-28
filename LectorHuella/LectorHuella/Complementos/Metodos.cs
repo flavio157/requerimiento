@@ -15,10 +15,10 @@ namespace LectorHuella
     class Metodos
     {
 
-        public SqlDataReader verificarHuella(String oficina)
+        public SqlDataReader verificarHuella()
         {
 
-            DatabaseDinamica cn = new DatabaseDinamica(oficina);
+            DatabaseDinamica cn = new DatabaseDinamica();
             String cadena = "SELECT * FROM T_HUELLA";
             SqlCommand comando = new SqlCommand(cadena, cn.AbrirConexion());
             SqlDataReader registros = comando.ExecuteReader();
@@ -27,18 +27,18 @@ namespace LectorHuella
         }
 
 
-        public void RegistrarHuella(String cod_personal, String huella, String usu_registro, String oficina)
+        public void RegistrarHuella(String cod_personal, String huella, String usu_registro)
         {
-            DatabaseDinamica cn = new DatabaseDinamica(oficina);
+            DatabaseDinamica cn = new DatabaseDinamica();
             String cadena = "INSERT INTO T_HUELLA(COD_PERSONAL,HUELLA,USU_REGISTRO) VALUES('" + cod_personal + "','" + huella + "','" + usu_registro + "')";
             SqlCommand comando = new SqlCommand(cadena, cn.AbrirConexion());
             comando.ExecuteNonQuery();
         }
 
 
-        public SqlDataReader BuscarPersonalcodigo(String oficina, String dni_persona)
+        public SqlDataReader BuscarPersonalcodigo(String dni_persona)
         {
-            DatabaseDinamica cn = new DatabaseDinamica(oficina);
+            DatabaseDinamica cn = new DatabaseDinamica();
             String cadena = "SELECT * FROM T_PERSONAL WHERE DNI_PERSONAL ='" + dni_persona + "'";
             SqlCommand comando = new SqlCommand(cadena, cn.AbrirConexion());
             SqlDataReader Personal = comando.ExecuteReader();
@@ -54,40 +54,40 @@ namespace LectorHuella
             return bmp;
         }
 
-        public SqlDataReader VerificarRegistro(String Oficina,String cod_personal)
+        public SqlDataReader VerificarRegistro(String cod_personal)
         {
-            DatabaseDinamica cn = new DatabaseDinamica(Oficina);
+            DatabaseDinamica cn = new DatabaseDinamica();
             String cadena = "SELECT * FROM T_HUELLA WHERE COD_PERSONAL ='" +cod_personal+ "'";
             SqlCommand comando = new SqlCommand(cadena, cn.AbrirConexion());
             SqlDataReader Personal = comando.ExecuteReader();
             return Personal;
         }
 
-        public void RegistrarAsistencia(String Oficina, String cod_personal)
+        public void RegistrarAsistencia(String cod_personal)
         {
             String hora = DateTime.Now.ToString("hh:mm");
             String fecha = DateTime.Now.ToString("yyyy-dd-MM").ToString();
-            DatabaseDinamica cn = new DatabaseDinamica(Oficina);
+            DatabaseDinamica cn = new DatabaseDinamica();
             String cadena = "INSERT INTO T_ASISTENCIAS(FECHA,COD_PERSONAL,HORA_INGRESO)VALUES('"+fecha+"','"+ cod_personal + "','" + hora + "')";
             SqlCommand comando = new SqlCommand(cadena, cn.AbrirConexion());
             comando.ExecuteNonQuery();
         }
 
-        public SqlDataReader verifircarAsistencia(String Oficina, String cod_personal)
+        public SqlDataReader verifircarAsistencia(String cod_personal)
         {
             String fecha = this.fecha();
-            DatabaseDinamica cn = new DatabaseDinamica(Oficina);
+            DatabaseDinamica cn = new DatabaseDinamica();
             String cadena = "SELECT TOP 1 * FROM T_ASISTENCIAS WHERE COD_PERSONAL ='" + cod_personal + "'AND FECHA='"+fecha+ "' order by CODIGO desc";
             SqlCommand comando = new SqlCommand(cadena, cn.AbrirConexion());
             SqlDataReader Personal = comando.ExecuteReader();
             return Personal;
         }
 
-        public void RegistrarSalida(String Oficina,String cod_personal)
+        public void RegistrarSalida(String cod_personal)
         {
             String fecha = this.fecha();
             String hora = this.hora();
-            DatabaseDinamica cn = new DatabaseDinamica(Oficina);
+            DatabaseDinamica cn = new DatabaseDinamica();
             String cadena = "UPDATE T_ASISTENCIAS SET HORA_SALIDA ='"+hora+"' WHERE COD_PERSONAL = '" +cod_personal+ "' AND FECHA ='" +fecha+ "'";
             SqlCommand comando = new SqlCommand(cadena, cn.AbrirConexion());
             comando.ExecuteNonQuery();
@@ -122,18 +122,18 @@ namespace LectorHuella
         }
 
 
-        public SqlDataReader Turnos(String oficina,String cod_personal)
+        public SqlDataReader Turnos(String cod_personal)
         {
-            DatabaseDinamica cn = new DatabaseDinamica(oficina);
+            DatabaseDinamica cn = new DatabaseDinamica();
             String cadena = "SELECT TOP 1 * FROM T_PERSONAL_HORARIO WHERE COD_PERSONAL='" + cod_personal + "' AND ESTADO = 'A' AND SITUACION != 1";
             SqlCommand comando = new SqlCommand(cadena, cn.AbrirConexion());
             SqlDataReader Personal = comando.ExecuteReader();
             return Personal;
         }
         
-        public void UpdateEstadoTurno(String oficina, String cod_personal)
+        public void UpdateEstadoTurno( String cod_personal)
         {
-            DatabaseDinamica cn = new DatabaseDinamica(oficina);
+            DatabaseDinamica cn = new DatabaseDinamica();
             String cadena = "UPDATE TOP(1) T_PERSONAL_HORARIO set SITUACION = 1 WHERE COD_PERSONAL = '" + cod_personal+ "'AND ESTADO = 'A' AND SITUACION != 0";
             SqlCommand comando = new SqlCommand(cadena, cn.AbrirConexion());
             comando.ExecuteNonQuery();

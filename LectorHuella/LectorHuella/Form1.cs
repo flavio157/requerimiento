@@ -81,15 +81,22 @@ namespace LectorHuella
 
         private void Form1_FormClosed(object sender, FormClosedEventArgs e)
         {
-            zkfp fpInstance = new zkfp();
-            panel1.Controls.Remove(huellero);
-            Thread.Sleep(1000);
-            int result = fpInstance.CloseDevice();
-            huellero.captureThread.Abort();
-            Thread.Sleep(1000);
-            result = fpInstance.Finalize();
-            Application.Exit();
-            //this.Close();
+            try
+            {
+                zkfp fpInstance = new zkfp();
+                panel1.Controls.Remove(huellero);
+                Thread.Sleep(1000);
+                int result = fpInstance.CloseDevice();
+                huellero.captureThread.Abort();
+                Thread.Sleep(1000);
+                result = fpInstance.Finalize();
+                Application.Exit();
+                //this.Close();
+            }
+            catch  {
+                //MessageBox.Show("Error dispotivo no conectado"+ e);
+            }
+
         }
     }
 }

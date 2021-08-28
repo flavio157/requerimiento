@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Data.SqlClient;
+using LectorHuella.Complementos;
 
 namespace Registro.conexion
 {
@@ -11,9 +12,10 @@ namespace Registro.conexion
     {
       private static String Oficina;
       private SqlConnection Con;
-        public DatabaseDinamica(String ofici)
+        Oficina o = new Oficina();
+        public DatabaseDinamica()
         {
-            Oficina = ofici;   
+            Oficina = o.valOficina;   
         }
         
 

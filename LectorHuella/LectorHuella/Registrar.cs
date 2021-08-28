@@ -67,7 +67,7 @@ namespace LectorHuella
             {
                 m = new Metodos();
                 SqlDataReader personal;
-                personal = m.BuscarPersonalcodigo(ofi, txtbperson);
+                personal = m.BuscarPersonalcodigo(txtbperson);
                 if (personal.HasRows)
                 {
                     while (personal.Read())
@@ -153,11 +153,11 @@ namespace LectorHuella
             if (huella != "")
             {
                 SqlDataReader personal;
-               personal  = m.VerificarRegistro(CbmOficina.SelectedItem.ToString(),txtcodigo.Text);
+               personal  = m.VerificarRegistro(txtcodigo.Text);
                 if (!personal.HasRows)
                 {
                     String usuario_registro = "";
-                    m.RegistrarHuella(txtcodigo.Text, huella, usuario_registro, Valoficina);
+                    m.RegistrarHuella(txtcodigo.Text, huella, usuario_registro);
                     statusbar.BackColor = Color.FromArgb(79, 208, 154);
                     statusbar.Text = "SE REGISTRO AL USUARIO";
                     statusbar.ForeColor = Color.White;

@@ -186,8 +186,7 @@ namespace LectorHuella
           
             m = new Metodos();
             Boolean verifico = false;
-            Oficina ofc = new Oficina();
-            SqlDataReader registros = m.verificarHuella(ofc.valOficina);
+            SqlDataReader registros = m.verificarHuella();
            
             while (registros.Read())
             {
@@ -203,20 +202,22 @@ namespace LectorHuella
                 if (ret >= 50)
                 {
                     
-                    SqlDataReader asistencia=  m.verifircarAsistencia(ofc.valOficina,registros["COD_PERSONAL"].ToString());
+                    SqlDataReader asistencia=  m.verifircarAsistencia(registros["COD_PERSONAL"].ToString());
 
                     //if (!asistencia.HasRows)
                    // {
-                        SqlDataReader turno = m.Turnos(ofc.valOficina, registros["COD_PERSONAL"].ToString());
-                        if (!turno.HasRows)
-                        {
-                            mensajes("error", "NO TIENE TURNOS");
-                            return;
-                        }
+                        SqlDataReader turno = m.Turnos(registros["COD_PERSONAL"].ToString());
+                       
 
                         if (!asistencia.HasRows)
                         {
-                            m.RegistrarAsistencia(ofc.valOficina, registros["COD_PERSONAL"].ToString());
+                            if (!turno.HasRows)
+                            {
+                                mensajes("error", "NO TIENE TURNOS");
+                                return;
+                            }
+                            m.RegistrarAsistencia(registros["COD_PERSONAL"].ToString());
+                            m.UpdateEstadoTurno(registros["COD_PERSONAL"].ToString());
                             mensajes("echo", "SE REGISTRO ASISTENCIA");
                             return;
                         }
@@ -237,8 +238,7 @@ namespace LectorHuella
                             {
                                 if (hor == "")
                                 {
-                                    m.RegistrarSalida(ofc.valOficina, registros["COD_PERSONAL"].ToString());
-                                    m.UpdateEstadoTurno(ofc.valOficina, registros["COD_PERSONAL"].ToString());
+                                    m.RegistrarSalida(registros["COD_PERSONAL"].ToString());
                                     mensajes("echo", "SE REGISTRO SU SALIDA");
                                     return;
                                 }
@@ -251,7 +251,13 @@ namespace LectorHuella
                         }
                         else
                         {
-                            m.RegistrarAsistencia(ofc.valOficina, registros["COD_PERSONAL"].ToString());
+                            if (!turno.HasRows)
+                            {
+                                mensajes("error", "NO TIENE TURNOS");
+                                return;
+                            }
+                            m.RegistrarAsistencia(registros["COD_PERSONAL"].ToString());
+                            m.UpdateEstadoTurno(registros["COD_PERSONAL"].ToString());
                             mensajes("echo", "SE REGISTRO ASISTENCIA");
                             return;
                         }
