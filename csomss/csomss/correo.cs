@@ -1,114 +1,139 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Net;
 using System.Net.Mail;
+using System.Net.Security;
+using System.Runtime.InteropServices;
+using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 
 namespace csomss
 {
+    [ComVisible(true)]
+    [ProgId("csomss.correo")]
+    [ClassInterface(ClassInterfaceType.None)]
     public class correo
     {
         string From = ""; //de quien procede, puede ser un alias
         string To;  //a quien vamos a enviar el mail
         string Message;  //mensaje
         string Subject; //asunto
-        List<string> Archivo = new List<string>(); //lista de archivos a enviar
+        ArrayList Archivo = new ArrayList(); //lista de archivos a enviar
         string DE = "izuma.san.98@gmail.com"; //nuestro usuario de smtp
-        string PASS = "**********"; //nuestro password de smtp
- 
-        System.Net.Mail.MailMessage Email;
+        string PASS = "SolisPacotaipe"; //nuestro password de smtp
+        string archivo;
+        MailMessage Email;
  
         public string error = "";
- 
-        /// <summary>
-        /// constructor
-        /// </summary>
-        /// <param name="FROM">Procedencia</param>
-        /// <param name="Para">Mail al cual se enviara</param>
-        /// <param name="Mensaje">Mensaje del mail</param>
-        /// <param name="Asunto">Asunto del mail</param>
-        /// <param name="ArchivoPedido_">Archivo a adjuntar, no es obligatorio</param>
-        public correo(string FROM, string Para, string Mensaje, string Asunto, List<string> ArchivoPedido_ = null)
+
+        [ComVisible(true)]
+        public void smss(string FROM, string Para, string Mensaje, string Asunto,string txtarchivo)
         {
             From = FROM;
             To = Para;
             Message = Mensaje;
             Subject = Asunto;
-            Archivo = ArchivoPedido_;
- 
         }
- 
-        /// <summary>
-        /// metodo que envia el mail
-        /// </summary>
-        /// <returns></returns>
-        public bool enviaMail()
+
+        [ComVisible(true)]
+        public void adjuntararchivos(string txtarchivo)
         {
- 
-            //una validación básica
+            Archivo.Add(txtarchivo);
+        }
+        
+
+        public bool enviar()
+        {
+            bool valor = enviaMail();
+            return valor;
+        }
+
+        private bool enviaMail()
+        {
             if (To.Trim().Equals("") || Message.Trim().Equals("") || Subject.Trim().Equals(""))
             {
                 error = "El mail, el asunto y el mensaje son obligatorios";
                 return false;
             }
- 
-            //aqui comenzamos el proceso
-            //comienza-------------------------------------------------------------------------
+  
+
             try
             {
-                //creamos un objeto tipo MailMessage
-                //este objeto recibe el sujeto o persona que envia el mail,
-                //la direccion de procedencia, el asunto y el mensaje
-                Email = new System.Net.Mail.MailMessage(From, To, Subject, Message);
- 
-                //si viene archivo a adjuntar
-                //realizamos un recorrido por todos los adjuntos enviados en la lista
-                //la lista se llena con direcciones fisicas, por ejemplo: c:/pato.txt
-                if (Archivo != null)
-                {
-                    //agregado de archivo
-                    foreach (string archivo in Archivo)
-                    {
-                        //comprobamos si existe el archivo y lo agregamos a los adjuntos
-                        if (System.IO.File.Exists(@archivo))
-                            Email.Attachments.Add(new Attachment(@archivo));
- 
-                    }
-                }
- 
+                Email = new MailMessage();
+                  if (Archivo != null)
+                  {
+                      //agregado de archivo
+                      foreach (string archivo in Archivo)
+                      {
+                          //comprobamos si existe el archivo y lo agregamos a los adjuntos
+                          if (System.IO.File.Exists(@archivo))
+                              Email.Attachments.Add(new Attachment(@archivo));
+                      }
+                  }
+
                 Email.IsBodyHtml = true; //definimos si el contenido sera html
-                Email.From = new MailAddress(From); //definimos la direccion de procedencia
- 
-                //aqui creamos un objeto tipo SmtpClient el cual recibe el servidor que utilizaremos como smtp
-                //en este caso me colgare de gmail
+                Email.From = new MailAddress(From, "LABSABELL", System.Text.Encoding.UTF8); //definimos la direccion de procedencia
+                Email.To.Add(To); //Correo destino
+                Email.Subject = Subject; //Asunto
+                Email.Body = Message; //Mensaje del correo
+
                 System.Net.Mail.SmtpClient smtpMail = new System.Net.Mail.SmtpClient("smtp.gmail.com");
- 
-                smtpMail.EnableSsl = false;//le definimos si es conexión ssl
+
+                Email.Priority = MailPriority.Normal;
                 smtpMail.UseDefaultCredentials = false; //le decimos que no utilice la credencial por defecto
                 smtpMail.Host = "smtp.gmail.com"; //agregamos el servidor smtp
-                smtpMail.Port = 465; //le asignamos el puerto, en este caso gmail utiliza el 465
+                smtpMail.Port = 25; //le asignamos el puerto, en este caso gmail utiliza el 465
                 smtpMail.Credentials = new System.Net.NetworkCredential(DE, PASS); //agregamos nuestro usuario y pass de gmail
- 
-                //enviamos el mail
+                ServicePointManager.ServerCertificateValidationCallback = delegate (object s, X509Certificate certificate, X509Chain chain, SslPolicyErrors sslPolicyErrors) { return true; };
+                smtpMail.EnableSsl = true;//True si el servidor de correo permite ssl
                 smtpMail.Send(Email);
- 
-                //eliminamos el objeto
                 smtpMail.Dispose();
- 
-                //regresamos true
                 return true;
             }
             catch (Exception ex)
             {
-                //si ocurre un error regresamos false y el error
                 error = "Ocurrio un error: " + ex.Message;
                 return false;
             }
- 
-            return false;
- 
         }
-    
+
+
+
+        [ComVisible(true)]
+        public String openfile()
+        {
+            var fileContent = string.Empty;
+            var filePath = string.Empty;
+            
+            using (OpenFileDialog openFileDialog = new OpenFileDialog())
+            {
+                openFileDialog.Multiselect = true;
+                openFileDialog.InitialDirectory = "c:\\";
+                openFileDialog.Filter = "txt files (*.txt)|*.txt|All files (*.*)|*.*";
+                openFileDialog.FilterIndex = 2;
+                openFileDialog.RestoreDirectory = true;
+
+                if (openFileDialog.ShowDialog() == DialogResult.OK)
+                {
+                    /*foreach (String file in openFileDialog.FileNames)
+                    {
+                        FileInfo fi = new FileInfo(file);
+                        var nombre = fi.Name;
+                        MessageBox.Show("File Content at path: " + nombre);
+                    }*/
+                    filePath = openFileDialog.FileName;
+                }
+            }
+
+            archivo = filePath;
+            return filePath;
+        }
+
+
     }
 }

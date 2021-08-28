@@ -1,0 +1,4 @@
+C:\Users\User\Documents\Visual Studio 2015\Projects\csomss\csomss\bin\Debug\csomss.dll
+C:\Users\User\Documents\Visual Studio 2015\Projects\csomss\csomss\bin\Debug\csomss.pdb
+C:\Users\User\Documents\Visual Studio 2015\Projects\csomss\csomss\obj\Debug\csomss.dll
+C:\Users\User\Documents\Visual Studio 2015\Projects\csomss\csomss\obj\Debug\csomss.pdb
