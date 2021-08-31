@@ -19,20 +19,33 @@ namespace csomss
     [ClassInterface(ClassInterfaceType.None)]
     public class correo
     {
+
+        private String nombresArchivo;
+
+
         string From = ""; //de quien procede, puede ser un alias
         string To;  //a quien vamos a enviar el mail
         string Message;  //mensaje
         string Subject; //asunto
         ArrayList Archivo = new ArrayList(); //lista de archivos a enviar
-        string DE = "izuma.san.98@gmail.com"; //nuestro usuario de smtp
-        string PASS = "SolisPacotaipe"; //nuestro password de smtp
-        string archivo;
+        string DE; //nuestro usuario de smtp
+        string PASS; //nuestro password de smtp
+
         MailMessage Email;
- 
+
+        public void Conexion(String UsuarioSmtp, String PassSmpt)
+        {
+            DE = UsuarioSmtp;
+            PASS = PassSmpt;
+        }
+
+
+
+
         public string error = "";
 
         [ComVisible(true)]
-        public void smss(string FROM, string Para, string Mensaje, string Asunto,string txtarchivo)
+        public void smss(string FROM, string Para, string Mensaje, string Asunto)
         {
             From = FROM;
             To = Para;
@@ -45,7 +58,7 @@ namespace csomss
         {
             Archivo.Add(txtarchivo);
         }
-        
+
 
         public bool enviar()
         {
@@ -55,26 +68,26 @@ namespace csomss
 
         private bool enviaMail()
         {
-            if (To.Trim().Equals("") || Message.Trim().Equals("") || Subject.Trim().Equals(""))
+            if (From.Trim().Equals("") || To.Trim().Equals("") || Message.Trim().Equals("") || Subject.Trim().Equals(""))
             {
                 error = "El mail, el asunto y el mensaje son obligatorios";
                 return false;
             }
-  
+
 
             try
             {
                 Email = new MailMessage();
-                  if (Archivo != null)
-                  {
-                      //agregado de archivo
-                      foreach (string archivo in Archivo)
-                      {
-                          //comprobamos si existe el archivo y lo agregamos a los adjuntos
-                          if (System.IO.File.Exists(@archivo))
-                              Email.Attachments.Add(new Attachment(@archivo));
-                      }
-                  }
+                if (Archivo != null)
+                {
+                    //agregado de archivo
+                    foreach (string archivo in Archivo)
+                    {
+                        //comprobamos si existe el archivo y lo agregamos a los adjuntos
+                        if (System.IO.File.Exists(@archivo))
+                            Email.Attachments.Add(new Attachment(@archivo));
+                    }
+                }
 
                 Email.IsBodyHtml = true; //definimos si el contenido sera html
                 Email.From = new MailAddress(From, "LABSABELL", System.Text.Encoding.UTF8); //definimos la direccion de procedencia
@@ -105,11 +118,11 @@ namespace csomss
 
 
         [ComVisible(true)]
-        public String openfile()
+        public void openfile()
         {
             var fileContent = string.Empty;
             var filePath = string.Empty;
-            
+
             using (OpenFileDialog openFileDialog = new OpenFileDialog())
             {
                 openFileDialog.Multiselect = true;
@@ -120,20 +133,32 @@ namespace csomss
 
                 if (openFileDialog.ShowDialog() == DialogResult.OK)
                 {
-                    /*foreach (String file in openFileDialog.FileNames)
+                    foreach (String file in openFileDialog.FileNames)
                     {
                         FileInfo fi = new FileInfo(file);
-                        var nombre = fi.Name;
-                        MessageBox.Show("File Content at path: " + nombre);
-                    }*/
-                    filePath = openFileDialog.FileName;
+                        nombresArchivo = fi.Name + " - " + nombresArchivo;
+                        Archivo.Add(fi.ToString());
+                        //rutaarchivo.Add(fi.ToString());
+                    }
                 }
+
             }
 
-            archivo = filePath;
-            return filePath;
         }
 
+        [ComVisible(true)]
+        public String NombresArchivo
+        {
+            get { return nombresArchivo; }
+            set { nombresArchivo = value; }
+        }
+
+        [ComVisible(true)]
+        public void limpiarvariables()
+        {
+            nombresArchivo = "";
+            Archivo.Clear();
+        }
 
     }
 }

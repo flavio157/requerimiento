@@ -4,7 +4,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{B2EC359C-86FD-4699-B8F0-0CE56987BED9}</ProjectGuid>
+    <ProjectGuid>{0B310DDE-3AC8-422E-9D12-BB81C61C6FE1}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>csomss</RootNamespace>
