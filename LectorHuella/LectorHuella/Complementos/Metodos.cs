@@ -134,7 +134,7 @@ namespace LectorHuella
         public void UpdateEstadoTurno( String cod_personal)
         {
             DatabaseDinamica cn = new DatabaseDinamica();
-            String cadena = "UPDATE TOP(1) T_PERSONAL_HORARIO set SITUACION = 1 WHERE COD_PERSONAL = '" + cod_personal+ "'AND ESTADO = 'A' AND SITUACION != 0";
+            String cadena = "UPDATE TOP(1) T_PERSONAL_HORARIO set SITUACION = 1 WHERE COD_PERSONAL = '" + cod_personal+ "'AND ESTADO = 'A' AND SITUACION != 1";
             SqlCommand comando = new SqlCommand(cadena, cn.AbrirConexion());
             comando.ExecuteNonQuery();
         }

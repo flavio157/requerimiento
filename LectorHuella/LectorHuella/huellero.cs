@@ -213,11 +213,13 @@ namespace LectorHuella
                         {
                             if (!turno.HasRows)
                             {
+                                MessageBox.Show("NO TIENE TURNOS", "MENSAJE", MessageBoxButtons.OK,MessageBoxIcon.Error);
                                 mensajes("error", "NO TIENE TURNOS");
                                 return;
                             }
                             m.RegistrarAsistencia(registros["COD_PERSONAL"].ToString());
                             m.UpdateEstadoTurno(registros["COD_PERSONAL"].ToString());
+                            MessageBox.Show("SE REGISTRO ASISTENCIA", "MENSAJE", MessageBoxButtons.OK,MessageBoxIcon.Exclamation);
                             mensajes("echo", "SE REGISTRO ASISTENCIA");
                             return;
                         }
@@ -239,12 +241,15 @@ namespace LectorHuella
                                 if (hor == "")
                                 {
                                     m.RegistrarSalida(registros["COD_PERSONAL"].ToString());
+                                    MessageBox.Show("SE REGISTRO SU SALIDA", "MENSAJE", MessageBoxButtons.OK,MessageBoxIcon.Exclamation);
                                     mensajes("echo", "SE REGISTRO SU SALIDA");
                                     return;
                                 }
                             }
                             else
                             {
+                                MessageBox.Show("YA REGISTRO SU ASISTENCIA", "MENSAJE", MessageBoxButtons.OK,
+                                   MessageBoxIcon.Error);
                                 mensajes("error", "YA REGISTRO SU ASISTENCIA");
                                 return;
                             }
@@ -253,11 +258,15 @@ namespace LectorHuella
                         {
                             if (!turno.HasRows)
                             {
+                                MessageBox.Show("NO TIENE TURNOS", "MENSAJE", MessageBoxButtons.OK,
+                                MessageBoxIcon.Error);
                                 mensajes("error", "NO TIENE TURNOS");
                                 return;
                             }
                             m.RegistrarAsistencia(registros["COD_PERSONAL"].ToString());
                             m.UpdateEstadoTurno(registros["COD_PERSONAL"].ToString());
+                            MessageBox.Show("SE REGISTRO ASISTENCIA", "MENSAJE", MessageBoxButtons.OK,
+                                 MessageBoxIcon.Exclamation);
                             mensajes("echo", "SE REGISTRO ASISTENCIA");
                             return;
                         }
@@ -269,6 +278,8 @@ namespace LectorHuella
 
             if (!verifico)
             {
+                MessageBox.Show("NO SE ENCONTRO AL USUARIO", "MENSAJE", MessageBoxButtons.OK,
+                                MessageBoxIcon.Error);
                 mensajes("error","NO SE ENCONTRO AL USUARIO");
                 return;
             }
