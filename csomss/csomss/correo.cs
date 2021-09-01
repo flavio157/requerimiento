@@ -23,13 +23,14 @@ namespace csomss
         private String nombresArchivo;
 
 
-        string From = ""; //de quien procede, puede ser un alias
+        string From = "usuario@gmail.com"; //de quien procede, puede ser un alias
         string To;  //a quien vamos a enviar el mail
         string Message;  //mensaje
         string Subject; //asunto
         ArrayList Archivo = new ArrayList(); //lista de archivos a enviar
         string DE; //nuestro usuario de smtp
         string PASS; //nuestro password de smtp
+        String Empresa;
 
         MailMessage Email;
 
@@ -45,12 +46,12 @@ namespace csomss
         public string error = "";
 
         [ComVisible(true)]
-        public void smss(string FROM, string Para, string Mensaje, string Asunto)
-        {
-            From = FROM;
+        public void smss(string Para, string Mensaje, string Asunto,String empresa)
+        { 
             To = Para;
             Message = Mensaje;
             Subject = Asunto;
+            Empresa = empresa;
         }
 
         [ComVisible(true)]
@@ -68,7 +69,7 @@ namespace csomss
 
         private bool enviaMail()
         {
-            if (From.Trim().Equals("") || To.Trim().Equals("") || Message.Trim().Equals("") || Subject.Trim().Equals(""))
+            if (To.Trim().Equals("") || Message.Trim().Equals("") || Subject.Trim().Equals(""))
             {
                 error = "El mail, el asunto y el mensaje son obligatorios";
                 return false;
@@ -90,7 +91,7 @@ namespace csomss
                 }
 
                 Email.IsBodyHtml = true; //definimos si el contenido sera html
-                Email.From = new MailAddress(From, "LABSABELL", System.Text.Encoding.UTF8); //definimos la direccion de procedencia
+                Email.From = new MailAddress(From, Empresa, System.Text.Encoding.UTF8); //definimos la direccion de procedencia
                 Email.To.Add(To); //Correo destino
                 Email.Subject = Subject; //Asunto
                 Email.Body = Message; //Mensaje del correo
