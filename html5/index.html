@@ -1,0 +1,54 @@
+<html>
+<head>
+    <title>Html-Qrcode Demo</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<body>
+    <div id="reader" style="width:500px"></div>
+    <div id="qr-reader-results"></div>
+</body>
+<script src="prueba.js"></script>
+
+<script>
+    function docReady(fn) {
+        // see if DOM is already available
+        if (document.readyState === "complete"
+            || document.readyState === "interactive") {
+            // call on next available tick
+            setTimeout(fn, 1);
+        } else {
+            document.addEventListener("DOMContentLoaded", fn);
+        }
+    }
+
+    docReady(function () {
+        var resultContainer = document.getElementById('qr-reader-results');
+       
+        var lastResult, countResults = 0;
+        function onScanSuccess(decodedText, decodedResult) {
+            if (decodedText !== lastResult) {
+                ++countResults;
+                lastResult = decodedText;
+               
+                // Handle on success condition with the decoded message.
+                alert(`Scan result ${decodedText}`, decodedResult);
+                //console.log(`Scan result ${decodedText}`, decodedResult);
+            }
+        }
+
+        let html5QrcodeScanner = new Html5QrcodeScanner(
+                "reader", 
+                { 
+                    fps: 0,
+                    qrbox: 250,
+                    // Use this flag to turn on the feature.
+                    experimentalFeatures: {
+                        useBarCodeDetectorIfSupported: true
+                    }
+                });
+            html5QrcodeScanner.render(onScanSuccess);
+        
+    });
+</script>
+</head>
+</html>
