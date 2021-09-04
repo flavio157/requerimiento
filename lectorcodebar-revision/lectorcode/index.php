@@ -45,12 +45,12 @@ $cod = $_SESSION["cod"];
 
 
 <body>
-  <div class="main">
+  <div >
     <form>
         <input type="text" id="vroficina" style="display: none;" value="<?php echo $ofi?>"/>
         <input type="text" id="vrzona" style="display: none;" value="<?php echo  $zon?>"/>
         <input type="text" id="vrcodpersonal" style="display: none;" value="<?php echo  $cod?>"/>
-      <main class="wrapper" style="padding-top:2em;width: 500px;"> 
+      <main class="wrapper" style="padding-top:2em;width: 500px;min-height: 500px"> 
 
         <section class="container" id="demo-content">
           <div id="sourceSelectPanel" style="display:none">
@@ -59,9 +59,9 @@ $cod = $_SESSION["cod"];
             </select>
           </div>
           
-          <div id="contentcanvas">
+          <div id="contentcanvas" style="width:500px">
         <!-- <canvas id="videoCanvas" width="600" height="300"></canvas>-->
-            <video class="dstImg" id="video"  style="border: 1px solid;width: 100%;"></video>
+            <video class="dstImg" id="video"  style="width: 100%;"></video>
           
           </div>
           <label>Resultado:</label>
@@ -69,15 +69,15 @@ $cod = $_SESSION["cod"];
         
         </section>
       
-      <div>
-
-      </div>
+     
     
 
       </main>
     </form>
   </div>
+
  
+  <!--top:50px;left: 50px;-->
   <!--<script type="text/javascript" src="https://unpkg.com/@zxing/library@0.18.3-dev.7656630/umd/index.js"></script>
 -->
 

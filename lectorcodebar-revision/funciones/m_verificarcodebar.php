@@ -21,9 +21,14 @@
         }
 
         public function m_actualizarcodebar($codlote,$fecha,$estado,$cod_auditoria_registro){
+            date_default_timezone_set('America/Lima');
+            $hora = getdate();
+            $hora = $hora['hours'] .":". $hora['minutes'];
+           
             $fechpistole = retunrFechaSqlphp(date("Y-m-d"));
             $query = $this->db->prepare("UPDATE T_DETALLE_AUDITORIA set EST_AUDITORIA = '$estado' 
-            ,COD_AUDITOR_REGISTRO = '$cod_auditoria_registro',FECHA = '$fecha',FEC_PISTOLEO = '$fechpistole'
+            ,COD_AUDITOR_REGISTRO = '$cod_auditoria_registro',FECHA = '$fecha',FEC_PISTOLEO = '$fechpistole',
+            HOR_PISTOLEO = '$hora' 
             where NUM_LOTE = '$codlote' AND (ESTADO = 'A' OR ESTADO = 'R')");
           
             $valor = $query->execute();

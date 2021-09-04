@@ -57,7 +57,6 @@ $(document).ready(function(){
             //alert(result);
           //console.log(result)
           document.getElementById('result').textContent = e.text.trim();
-          alert(e.text);
           _readcodebar(e.text);
         }
         if (err && !(err instanceof ZXing.NotFoundException)) {
@@ -83,7 +82,7 @@ $(document).ready(function(){
             "codebar": codebar 
         },
           success: function(response){
-            //alert(response);
+            alert(response);
             if(response == 1){
               //alert("Producto encontrado y actualizado");
             }else{

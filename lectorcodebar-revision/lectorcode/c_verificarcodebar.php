@@ -18,7 +18,7 @@
            // c_codigobarra::verificarCodBar($codebar);
             $verificar = new m_codigobarra($oficina);
             $auditorias = $verificar->m_auditoriaPendi($oficina);
-            if(strlen($codebar) == 10){
+          //  if(strlen($codebar) == 10){
                 if(sizeof($auditorias) == 1){
                     $code = $verificar->m_verificarcodebar($codebar,$auditorias[0]['COD_AUDITORIA']);
                     if(sizeof($code) == 1 && $code[0][5] != 1){
@@ -55,9 +55,9 @@
                 }else{
                     print_r("No hay auditorias pendientes");
                 }
-            }else{
-                print_r("Error codigo Invalido ");
-            }    
+            //}else{
+             //   print_r("Error codigo Invalido ");
+            //}    
         }
     }
     

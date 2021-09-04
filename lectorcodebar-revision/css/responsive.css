@@ -5,11 +5,25 @@
     border-radius: 8px;
     
    }
-   #qr-shaded-region{
-        border-width: 2px 2px 269px 2px;
-    }
+  /* #qr-shaded-region{
+        border-width: 2px 2px 269px 2px !important;
+    }*/
 
 @media screen and (max-width:992px){
+    .main{
+        width:100%;
+    } 
+  /* #qr-shaded-region{
+    
+        border-Bottom: 500px solid #0000007a !important;
+        border-right: 2px solid #0000007a !important;
+        border-top: 10px solid #0000007a !important;
+        
+    }*/
+}
+
+/*
+@media screen and (max-width:700px){
     .main{
         width:100%;
     } 
@@ -20,4 +34,4 @@
         border-top: 10px solid #0000007a !important;
         
     }
-}
+}*/

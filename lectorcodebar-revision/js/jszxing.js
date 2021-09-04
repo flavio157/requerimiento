@@ -3092,14 +3092,13 @@
                
                // x: (A - t) / 2,
                // y: (e - t) / 2,
-                x : 80,
+               x : 80,
                 y: 0,
                 width: t,
                 height: t
             }
         }
         
-
 
         /*A=250, e=250 t=undefined*/
         createCanvasElement(A, e, t) {
@@ -3116,7 +3115,15 @@
                 var i = document.createElement("div");
                 //para modificar la posicion del centro donde se lee el codigobar
                // if (i.style.position = "absolute", i.style.borderLeft = (e - g) / 2 + "px solid #0000007a", i.style.borderRight = (e - g) / 2 + "px solid #0000007a", i.style.borderTop = (t - g) / 2 + "px solid #0000007a", i.style.borderBottom = (t - g) / 2 + "px solid #0000007a", i.style.boxSizing = "border-box", i.style.top = "0px", i.style.bottom = "0px", i.style.left = "0px", i.style.right = "0px", i.id = "qr-shaded-region", e - g < 11 || t - g < 11) this.hasBorderShaders = !1;
-               if (i.style.position = "absolute", i.style.borderLeft = "2px solid #0000007a", i.style.borderRight = "2px solid #0000007a", i.style.borderTop = "120px solid #0000007a", i.style.borderBottom = "350px solid #0000007a", i.style.boxSizing = "border-box", i.style.top = "0px", i.style.bottom = "0px", i.style.left = "0px", i.style.right = "0px", i.id = "qr-shaded-region", e - g < 11 || t - g < 11) this.hasBorderShaders = !1;
+              if(screen.width > screen.height){
+                var l = Number( screen.width - screen.height);
+                
+              }else{
+                var l = Number(screen.height - screen.width) + 20;
+              }
+              
+             //alert(l+"px solid #0000007a");
+               if (i.style.position = "absolute", i.style.borderLeft = "6px solid #0000007a", i.style.borderRight ="6px solid #0000007a", i.style.borderTop = "6px solid #0000007a", i.style.borderBottom = l+"px solid #0000007a", i.style.boxSizing = "border-box", i.style.top = "0px", i.style.bottom = "0px", i.style.left = "0px", i.style.right = "0px", i.id = "qr-shaded-region", e - g < 11 || t - g < 11) this.hasBorderShaders = !1;
                else {
                     var n = 40;
                     //this.insertShaderBorders(i, n, 5, -5, 0, !0), this.insertShaderBorders(i, n, 5, -5, 0, !1), this.insertShaderBorders(i, n, 5, g + 5, 0, !0), this.insertShaderBorders(i, n, 5, g + 5, 0, !1), this.insertShaderBorders(i, 5, 45, -5, -5, !0), this.insertShaderBorders(i, 5, 45, g + 5 - n, -5, !0), this.insertShaderBorders(i, 5, 45, -5, -5, !1), this.insertShaderBorders(i, 5, 45, g + 5 - n, -5, !1), this.hasBorderShaders = !0
@@ -3586,6 +3593,7 @@
             var targetSize =  100;
             const videoWidth = Math.ceil(srcElement.videoWidth);
             const videoHeight = Math.ceil(srcElement.videoHeight);
+         //   alert(videoWidth + " / " + videoHeight);
             const targetLeft = (videoWidth - targetSize) / 2;
             const targetTop = (videoHeight - targetSize) / 2;
             //console.log(videoWidth + " " + videoHeight + " " + targetLeft + " "+targetTop);
@@ -3606,16 +3614,18 @@
 
                 //obtiene el context 
             var C = I.getContext("2d");
+            $("#contentcanvas").append(canvasElementContext);
             $("#contentcanvas").append(I);
                 // console.log(document.getElementById("contentcanvas"));
-                //inserta el canvas
+                console.log(this.qrRegion);
                 //this.possiblyInsertShadingElement(document.getElementById("contentcanvas"), A, e, g),
-            C.canvas.width = o.width, C.canvas.height = o.height, $("#contentcanvas").append(I), i && this.possiblyInsertShadingElement(document.getElementById("contentcanvas"), A, e, g), this.qrRegion = o, this.context = C, this.canvasElement = I
+           C.canvas.width = o.width, C.canvas.height = o.height, $("#contentcanvas").append(I), i && this.possiblyInsertShadingElement(document.getElementById("contentcanvas"), A, e, g), this.qrRegion = o, this.context = C, this.canvasElement = I
         }
             //canvasElementContext.drawImage(srcElement, targetLeft, targetTop, targetSize, targetSize, 0, 0, targetSize, targetSize);
    // ctx.drawImage(image, 33, 71, 104, 124, 0, 0, 200, 200);
-
-           canvasElementContext.drawImage(srcElement, 0, 80);
+           
+            canvasElementContext.drawImage(srcElement,0,80);
+          // canvasElementContext.drawImage(srcElement, 0, 0);
         }
         /**
          * Call the encapsulated readers decode
@@ -3645,18 +3655,15 @@
                     height = mediaElement.naturalHeight || mediaElement.height;
                 }
             }
+           // alert(width);
            var targetSize = 320
-           alert(targetSize);
+           //alert(targetSize);
          //   alert(targetSize);
-            canvasElement.style.width = width+'px';
-            canvasElement.style.height = 320 + 'px';
-           canvasElement.top ='18%';
-           //canvasElement.position = 'absolute';
-            canvasElement.left = '18%';
+            canvasElement.style.width = 600+'px';
+            canvasElement.style.height = targetSize + 'px';
 
-            canvasElement.width = width;
-            canvasElement.height = 320;
-            console.log(canvasElement);
+            canvasElement.width = 600;
+            canvasElement.height = targetSize;
             return canvasElement;
         }
         /**
@@ -11130,6 +11137,7 @@
         static shiftPoint(point, to, div) {
             let x = (to.getX() - point.getX()) / (div + 1);
             let y = (to.getY() - point.getY()) / (div + 1);
+            
             return new ResultPoint(point.getX() + x, point.getY() + y);
         }
         static moveAway(point, fromX, fromY) {
@@ -11317,6 +11325,7 @@
         }
         static sampleGrid(image, topLeft, bottomLeft, bottomRight, topRight, dimensionX, dimensionY) {
             const sampler = GridSamplerInstance.getInstance();
+           
             return sampler.sampleGrid(image, dimensionX, dimensionY, 0.5, 0.5, dimensionX - 0.5, 0.5, dimensionX - 0.5, dimensionY - 0.5, 0.5, dimensionY - 0.5, topLeft.getX(), topLeft.getY(), topRight.getX(), topRight.getY(), bottomRight.getX(), bottomRight.getY(), bottomLeft.getX(), bottomLeft.getY());
         }
         /**
