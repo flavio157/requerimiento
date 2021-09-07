@@ -48,17 +48,19 @@
     }
 
     #qr-shaded-region{
-        border-left: 5px solid #0000007a;
-        border-right: 9px solid #0000007a;
-        border-top: 6px solid #0000007a;
-        
+        border-left: 10px solid #0000007a;
+        border-right: 10px solid #0000007a;
+        border-top: 20px solid #0000007a;
         box-sizing: border-box;
+        margin-left: 11px;
+        margin-right: 11px;
+        margin-top: 11px;
     }
 
     .contenedor {
         width:100%;
         margin:0 auto;
-        padding:1em;  
+      
     }
 
     .dstImg{

@@ -67,11 +67,11 @@ $cod = $_SESSION["cod"];
         
           
              
-              <div id="contentcanvas" class="contenedor">
-              <!-- <canvas id="videoCanvas" width="600" height="300"></canvas>-->
-                <video class="dstImg" id="video"></video>
-              </div>
-              </div>
+                <div id="qr-shaded-region" class="contenedor">
+                <!-- <canvas id="videoCanvas" width="600" height="300"></canvas>-->
+                  <video  id="video"></video>
+                </div>
+             
               
             
      

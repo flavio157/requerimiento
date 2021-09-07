@@ -57,6 +57,7 @@ $(document).ready(function(){
             //alert(result);
           //console.log(result)
           document.getElementById('result').textContent = e.text.trim();
+          alert(e.text.length);
           _readcodebar(e.text);
         }
         if (err && !(err instanceof ZXing.NotFoundException)) {

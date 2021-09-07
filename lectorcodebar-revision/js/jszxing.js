@@ -3117,17 +3117,17 @@
                // if (i.style.position = "absolute", i.style.borderLeft = (e - g) / 2 + "px solid #0000007a", i.style.borderRight = (e - g) / 2 + "px solid #0000007a", i.style.borderTop = (t - g) / 2 + "px solid #0000007a", i.style.borderBottom = (t - g) / 2 + "px solid #0000007a", i.style.boxSizing = "border-box", i.style.top = "0px", i.style.bottom = "0px", i.style.left = "0px", i.style.right = "0px", i.id = "qr-shaded-region", e - g < 11 || t - g < 11) this.hasBorderShaders = !1;
               if(screen.width > screen.height){
               
-                var l = screen.height /3;
+                var l = screen.width - screen.height;
                 
               }else{
-                var cb = document.getElementById("contentcanvas").clientHeight;
-                var j = screen.width / 3;
-                var l = (cb / 2) + j;
+                
+                var l = (screen.height - screen.width) - 100;
               }
 
-              
+              console.log((screen.width - screen.height));
+               
              //alert(l+"px solid #0000007a");
-               if (i.style.position = "absolute", i.style.borderBottom = l+"px solid #0000007a", i.id = "qr-shaded-region", e - g < 11 || t - g < 11) this.hasBorderShaders = !1;
+             if (i.style.position = "absolute", i.style.borderLeft = 11 + "px solid #0000007a", i.style.borderRight = 11 + "px solid #0000007a", i.style.borderTop = 11 + "px solid #0000007a", i.style.borderBottom = l + "px solid #0000007a", i.style.boxSizing = "border-box", i.style.top = "0px", i.style.bottom = "0px", i.style.left = "0px", i.style.right = "0px", i.id = "qr-shaded-region", e - g < 11 || t - g < 11) this.hasBorderShaders = !1;
                else {
                     var n = 40;
                     //this.insertShaderBorders(i, n, 5, -5, 0, !0), this.insertShaderBorders(i, n, 5, -5, 0, !1), this.insertShaderBorders(i, n, 5, g + 5, 0, !0), this.insertShaderBorders(i, n, 5, g + 5, 0, !1), this.insertShaderBorders(i, 5, 45, -5, -5, !0), this.insertShaderBorders(i, 5, 45, g + 5 - n, -5, !0), this.insertShaderBorders(i, 5, 45, -5, -5, !1), this.insertShaderBorders(i, 5, 45, g + 5 - n, -5, !1), this.hasBorderShaders = !0
@@ -3618,7 +3618,7 @@
 
                 //obtiene el context 
             var C = I.getContext("2d");
-            $("#contentcanvas").append(canvasElementContext);
+           $("#contentcanvas").append(canvasElementContext);
             $("#contentcanvas").append(I);
                 // console.log(document.getElementById("contentcanvas"));
              //   console.log(this.qrRegion);
@@ -3627,7 +3627,7 @@
         }
             //canvasElementContext.drawImage(srcElement, targetLeft, targetTop, targetSize, targetSize, 0, 0, targetSize, targetSize);
    // ctx.drawImage(image, 33, 71, 104, 124, 0, 0, 200, 200);
-           
+       
             canvasElementContext.drawImage(srcElement,0,80);
           // canvasElementContext.drawImage(srcElement, 0, 0);
         }
