@@ -101,7 +101,10 @@ $cod = $_SESSION["cod"];
             </div>    
         </form>
     </div>
-   
+   <!--<canvas id="canva">
+
+   </canvas>-->
+
 </body>
 <script type="text/javascript" src="../js/jszxing.js"></script>
 <script type="text/javascript" src="../js/jsescaner.js"></script>
