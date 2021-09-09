@@ -7,6 +7,13 @@
             $this->db=DataBase::Conectar();
         }
 
+        public function m_verificarProcAlmaXofi($num_lote,$oficina){
+            $query = $this->db->prepare("SELECT * FROM T_ALMACEN_PRODUCTOS where NUM_LOTE = '$num_lote' AND COD_ALMACEN = '$oficina'");
+            $query->execute();
+            $valor = $query->fetchAll();
+            return $valor;
+        }
+
         public function m_verificarProcAlma($num_lote){
             $query = $this->db->prepare("SELECT * FROM T_ALMACEN_PRODUCTOS where NUM_LOTE = '$num_lote'");
             $query->execute();

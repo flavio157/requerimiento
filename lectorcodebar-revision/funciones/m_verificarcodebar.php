@@ -62,6 +62,16 @@
             return $query->fetchAll();
         }
 
+        public function m_actualizarNINGR($num_lote){
+            $query = $this->db->prepare("UPDATE T_CODIGOS_NINGR SET EST_AUDITORIA = '1' WHERE NUM_LOTE ='$num_lote'");
+            $query->execute();
+        }
+
+        public function CerrarAuditoria($cod_auditoria)
+        {
+            $query = $this->db->prepare("UPDATE T_CAB_AUDITORIA SET SITUACION = '1' where COD_AUDITORIA = '$cod_auditoria'");
+            $query->execute();
+        }
         
     }
     

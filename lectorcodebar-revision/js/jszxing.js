@@ -3131,24 +3131,24 @@
              if (i.style.position = "absolute", i.style.borderLeft = 11 + "px solid #0000007a", i.style.borderRight = 11 + "px solid #0000007a", i.style.borderTop = l/2 + "px solid #0000007a", i.style.borderBottom = l/2 + "px solid #0000007a", i.style.boxSizing = "border-box", i.style.top = "0px", i.style.bottom = "0px", i.style.left = "0px", i.style.right = "0px", i.id = "qr-shaded-region", e - g < 11 || t - g < 11) this.hasBorderShaders = !1;
                else {
                   
-                    //var n = 40;
+                    var n = 40;
                     //var w = $(i).css("border-bottom-width");
                     //console.log(w);
                     //90px
                    // console.log(i);
                     //console.log(i +","+ 5 +","+ 45+","+ (l/2) +"+"+ 5 +"-"+ n+","+-5);
                     //esquinas superiores
-                   /* this.insertShaderBorders(i, (l/10), 5, -5, 0, !0),
-                    this.insertShaderBorders(i, (l/10), 5, -5, 0, !1), 
-                    this.insertShaderBorders(i, 5, (l/8), -5, -5, !0), 
-                    this.insertShaderBorders(i, 5, (l/8), -5, -5, !1), */
+                    this.insertShaderBorders(i, (l/10), 5, -5, 0, !0,'top','border1'),
+                    this.insertShaderBorders(i, (l/10), 5, -5, 0, !1,'top','border2'), 
+                    this.insertShaderBorders(i, 5, (l/8), -5, -5, !0,'top','border3'), 
+                    this.insertShaderBorders(i, 5, (l/8), -5, -5, !1,'top','border4'), 
                     //esquinas inferiores
-                   // this.insertShaderBorders(i, (l/10), 5, 90 , 0, !0), 
-                    //this.insertShaderBorders(i, (l/10), 5, 90 , 0, !1), 
-                    
-                    //this.insertShsaderBorders(i, 5, (l/8), (l/2) + 5 - n, -5, !0),
-                    //this.insertShaderBorders(i, 5, (l/8), (l/2) + 5 - n, -5, !1), 
-                    //this.hasBorderShaders = !0
+                    this.insertShaderBorders(i, (l/10), 5, -3 , 0, !0,'bottom','border5'), 
+                    this.insertShaderBorders(i, (l/10), 5, -3 , 0, !1,'bottom','border6'), 
+                   
+                  /**/  this.insertShaderBorders(i, 5, (l/8),-3, -5, !0,'bottom','border7'),
+                        this.insertShaderBorders(i, 5, (l/8), -3, -5, !1,'bottom','border8'), 
+                    this.hasBorderShaders = !0
                 }
                // console.log(A);
                 A.append(i)
@@ -3157,12 +3157,17 @@
 
       
 
-     /*   insertShaderBorders(A, e, t, g, i, n) {
+       insertShaderBorders(A, e, t, g, i, n,tipo,id) {
             var o = document.createElement("div");
-            o.style.position = "absolute", o.style.backgroundColor =  "#ffffff", o.style.width = e + "px", o.style.height = t + "px", o.style.top = g + "px", n ? o.style.left = i + "px" : o.style.right = i + "px", this.borderShaders || (this.borderShaders = []), this.borderShaders.push(o), A.appendChild(o)
+            if(tipo == 'top'){
+                o.id=id, o.style.position = "absolute", o.style.backgroundColor =  "#ffffff", o.style.width = e + "px", o.style.height = t + "px", o.style.top = g + "px", n ? o.style.left = i + "px" : o.style.right = i + "px", this.borderShaders || (this.borderShaders = []), this.borderShaders.push(o), A.appendChild(o)
+            }else if(tipo == 'bottom'){
+                o.id=id,o.style.position = "absolute", o.style.backgroundColor =  "#ffffff", o.style.width = e + "px", o.style.height = t + "px", o.style.bottom = g + "px", n ? o.style.left = i + "px" : o.style.right = i + "px", this.borderShaders || (this.borderShaders = []), this.borderShaders.push(o), A.appendChild(o)
+            }
+           
         }
 
-*/
+
         /** 
          * fin de las funciones creadas
         */
@@ -3185,7 +3190,7 @@
             return __awaiter(this, void 0, void 0, function* () {
                 this.reset();
                 const video = yield this.attachStreamToVideo(stream, videoSource);
-               // alert(video.htm());
+                
                 return yield this.decodeContinuously(video, callbackFn);
             });
         }
@@ -3543,19 +3548,39 @@
                 }
                 try {
                     const result = this.decode(element);
+                    // aqui alert(result);  "rgb(90, 193, 56)"
+                     
                     callbackFn(result, null);
                     setTimeout(loop, this.timeBetweenScansMillis);
+                    $("#border1").css('background-color','rgb(90, 193, 56)');
+                    $("#border2").css('background-color','rgb(90, 193, 56)');
+                    $("#border3").css('background-color','rgb(90, 193, 56)');
+                    $("#border4").css('background-color','rgb(90, 193, 56)');
+                    $("#border5").css('background-color','rgb(90, 193, 56)');
+                    $("#border6").css('background-color','rgb(90, 193, 56)');
+                    $("#border7").css('background-color','rgb(90, 193, 56)');
+                    $("#border8").css('background-color','rgb(90, 193, 56)');
                 }
                 catch (e) {
                     callbackFn(null, e);
                     const isChecksumOrFormatError = e instanceof ChecksumException || e instanceof FormatException;
                     const isNotFound = e instanceof NotFoundException;
                     if (isChecksumOrFormatError || isNotFound) {
+                        $("#border1").css('background-color','rgb(255, 255, 255)');
+                        $("#border2").css('background-color','rgb(255, 255, 255)');
+                        $("#border3").css('background-color','rgb(255, 255, 255)');
+                        $("#border4").css('background-color','rgb(255, 255, 255)');
+                        $("#border5").css('background-color','rgb(255, 255, 255)');
+                        $("#border6").css('background-color','rgb(255, 255, 255)');
+                        $("#border7").css('background-color','rgb(255, 255, 255)');
+                        $("#border8").css('background-color','rgb(255, 255, 255)');
                         // trying again
                         setTimeout(loop, this._timeBetweenDecodingAttempts);
                     }
                 }
             };
+           
+            //result != "" ? $("#brd").css('background-color','rgb(90, 193, 56)') : $("#brd").css('background-color','rgb(255, 255, 255)')
             loop();
         }
         /**
@@ -3637,7 +3662,7 @@
               
            C.canvas.width = o.width, C.canvas.height = o.height, $("#contentcanvas").append(I), i && this.possiblyInsertShadingElement(document.getElementById("contentcanvas"), A, e, g), this.qrRegion = o, this.context = C, this.canvasElement = I
         }
-            canvasElementContext.drawImage(srcElement,10,150, 700, 700, 0, 0, 800,800);
+            canvasElementContext.drawImage(srcElement,10,280, 700, 700, 0, 0, 800,800);
           // canvasElementContext.drawImage(srcElement, 0, 80);
         }
         /**
@@ -3668,7 +3693,7 @@
                     height = mediaElement.naturalHeight || mediaElement.height;
                 }
             }
-           var targetSize = 320
+           var targetSize = 100
             canvasElement.style.width = 600+'px';
             canvasElement.style.height = targetSize + 'px';
 
