@@ -1,3 +1,5 @@
+var dt = [];
+var tipo = 0;
 $(document).ready(function(){
     let selectedDeviceId;
     const codeReader = new ZXing.BrowserMultiFormatReader()
@@ -43,9 +45,9 @@ $(document).ready(function(){
 
      
      
-      $("#startButton").on('click',function(){
+     /* $("#startButton").on('click',function(){
         _readcodebar('CM1000055');
-      });/**/
+      });*/
       
   });
 
@@ -58,18 +60,24 @@ $(document).ready(function(){
           //console.log(result)
           document.getElementById('result').textContent = e.text.trim();
         //  alert(e.text.length);
-          _readcodebar(e.text);
+          //alert(dt.indexOf(e.text.trim()));
+          tipo = dt.indexOf(e.text.trim()); 
+          if(dt.indexOf(e.text.trim()) == -1){
+            dt.push(e.text.trim());
+          }
+
+          _readcodebar(e.text,tipo);
         }
         if (err && !(err instanceof ZXing.NotFoundException)) {
             alert('error al obtener codigo de barra');
-          //console.error(err)
-          document.getElementById('result').textContent = err
+            //console.error(err)
+            document.getElementById('result').textContent = err
         }
       })
       //alert(`Started continous decode from camera with id ${selectedDeviceId}`)
   }
 
-  function _readcodebar(codebar){
+  function _readcodebar(codebar,tipo){
       oficina = $('#vroficina').val();
       usuario = $('#vrcodpersonal').val();
       $.ajax({
@@ -80,7 +88,9 @@ $(document).ready(function(){
             "accion":  'verificar',
             "oficina" : oficina,
             "usuario" : usuario,
-            "codebar": codebar 
+            "codebar": codebar,
+            "tipo" : tipo 
+
         },
           success: function(response){
             alert(response);

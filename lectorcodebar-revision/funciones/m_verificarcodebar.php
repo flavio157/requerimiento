@@ -21,10 +21,7 @@
         }
 
         public function m_actualizarcodebar($codlote,$fecha,$estado,$cod_auditoria_registro){
-            date_default_timezone_set('America/Lima');
-            $hora = getdate();
-            $hora = $hora['hours'] .":". $hora['minutes'];
-           
+            $hora = gethora();
             $fechpistole = retunrFechaSqlphp(date("Y-m-d"));
             $query = $this->db->prepare("UPDATE T_DETALLE_AUDITORIA set EST_AUDITORIA = '$estado' 
             ,COD_AUDITOR_REGISTRO = '$cod_auditoria_registro',FECHA = '$fecha',FEC_PISTOLEO = '$fechpistole',
@@ -35,15 +32,8 @@
             if($valor){
                 return $valor;
             }
+           
           
-        }
-
-        public function m_guardarcodebar(){
-            $query = $this->db->prepare();
-            $valor = $query->execute();
-            if($valor){
-                return $valor;
-            }
         }
 
         public function m_guardarlote($num_lote,$cod_registro,$cod_auditoria,$estado,$cod_producto,$est_auditoria){
@@ -62,17 +52,37 @@
             return $query->fetchAll();
         }
 
-        public function m_actualizarNINGR($num_lote){
-            $query = $this->db->prepare("UPDATE T_CODIGOS_NINGR SET EST_AUDITORIA = '1' WHERE NUM_LOTE ='$num_lote'");
+        public function m_actualizarNINGR($num_lote,$cod_usuario){
+            $hora = gethora();
+            $fechpistole = retunrFechaSqlphp(date("Y-m-d"));
+            $query = $this->db->prepare("UPDATE T_CODIGOS_NINGR SET EST_AUDITORIA = '1',COD_USUARIO = '$cod_usuario',
+            FEC_PISTOLEO = '$fechpistole',HOR_PISTOLEO = '$hora' WHERE NUM_LOTE ='$num_lote' ");
             $query->execute();
         }
 
-        public function CerrarAuditoria($cod_auditoria)
+
+
+        public function m_CerrarAuditoria($cod_auditoria)
         {
-            $query = $this->db->prepare("UPDATE T_CAB_AUDITORIA SET SITUACION = '1' where COD_AUDITORIA = '$cod_auditoria'");
-            $query->execute();
+            
+            if($this->m_listarCodigosNing()[0] == 0 && $this->m_listarDetalleAud()[0] == 0){
+                $query = $this->db->prepare("UPDATE T_CAB_AUDITORIA SET SITUACION = '1' where COD_AUDITORIA = '$cod_auditoria'");
+                $query->execute();
+            }
         }
         
+
+        public function m_listarCodigosNing(){
+            $query = $this->db->prepare("SELECT COUNT(*) FROM T_CODIGOS_NINGR WHERE EST_AUDITORIA = 0");
+            $query->execute();
+            return $query->fetch();
+        }
+
+        public function m_listarDetalleAud(){
+            $query = $this->db->prepare("SELECT COUNT(*) FROM T_DETALLE_AUDITORIA WHERE EST_AUDITORIA = 0");
+            $query->execute();
+            return $query->fetch();
+        }
     }
     
 ?>

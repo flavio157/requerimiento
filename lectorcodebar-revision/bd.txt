@@ -1,29 +1,29 @@
 create table T_ALMACEN_PRODUCTOS(
-COD_INGRESO char(9),
-COD_PRODUCTO char(6),
-COD_ALMACEN char(5),
-COD_PRODUCCION char(9),
-NUM_LOTE char(9),
-NUM_CONTRATO char(9),
-COD_GUIA char(9),
-FEC_INGRESO datetime,
-FEC_SALIDA datetime,
-FEC_VENCIMIENTO datetime,
-EST_DET_PRODUCTO char(1),
-N_CAJA numeric(9,0),
-EST_CAJA char(1),
-CONFIRMACION char(1),
-COD_CONFIRMACION char(5),
-FEC_CONFIRMACION datetime,
-FEC_MOVIMIENTO datetime,
-PRECIO numeric(18,0),
-COBRADO numeric(18,0),
-COD_PERSONAL char(6),
-FEC_EMISION datetime,
-OBSERVACION varchar(50),
-PROVEEDOR char(1),
-FEC_PISTOLEO datetime,
-INTERNO char(1)
+	COD_INGRESO char(9),
+	COD_PRODUCTO char(6),
+	COD_ALMACEN char(5),
+	COD_PRODUCCION char(9),
+	NUM_LOTE char(9),
+	NUM_CONTRATO char(9),
+	COD_GUIA char(9),
+	FEC_INGRESO datetime,
+	FEC_SALIDA datetime,
+	FEC_VENCIMIENTO datetime,
+	EST_DET_PRODUCTO char(1),
+	N_CAJA numeric(9,0),
+	EST_CAJA char(1),
+	CONFIRMACION char(1),
+	COD_CONFIRMACION char(5),
+	FEC_CONFIRMACION datetime,
+	FEC_MOVIMIENTO datetime,
+	PRECIO numeric(18,0),
+	COBRADO numeric(18,0),
+	COD_PERSONAL char(6),
+	FEC_EMISION datetime,
+	OBSERVACION varchar(50),
+	PROVEEDOR char(1),
+	FEC_PISTOLEO datetime,
+	INTERNO char(1)
 )
 
 
@@ -34,11 +34,12 @@ CREATE TABLE [dbo].[T_CAB_AUDITORIA](
 	[HOR_INICIA] [char](10) NULL,
 	[HOR_FIN] [char](10) NULL,
 	[SITUACION] [char](1) NULL
-) 
+) ON [PRIMARY]
+
 
 
 CREATE TABLE [dbo].[T_DETALLE_AUDITORIA](
-	[CODIGO] [decimal](18, 0) NULL,
+	[CODIGO] [decimal](18, 0) IDENTITY(1,1) NOT NULL,
 	[COD_AUDITORIA] [decimal](7, 2) NULL,
 	[NUM_LOTE] [char](11) NULL,
 	[COD_USUARIO] [char](30) NULL,
@@ -47,20 +48,23 @@ CREATE TABLE [dbo].[T_DETALLE_AUDITORIA](
 	[COD_PRODUCTO] [char](6) NULL,
 	[ESTADO] [char](1) NULL,
 	[FEC_PISTOLEO] [datetime] NULL,
-	[COD_AUDITOR_REGISTRO] [char](6) NULL
+	[COD_AUDITOR_REGISTRO] [char](6) NULL,
+	[HOR_PISTOLEO] [char](8) NULL
 ) ON [PRIMARY]
 
-GO
 
 
-Create table T_CODIGOS_NINGR(
-	CODIGO decimal(18,0),
-	NUM_LOTE char(11),
-	FECHA datetime,
-	COD_REGISTRO char(30),
-	COD_AUDITORIA decimal(18,0),
-	ESTADO char(1),
-	COD_PRODUCTO char(6),
-	FEC_AUDITORIA datetime,
-	EST_AUDITORIA char(1)
-)
+CREATE TABLE [dbo].[T_CODIGOS_NINGR](
+	[CODIGO] [decimal](18, 0) IDENTITY(1,1) NOT NULL,
+	[NUM_LOTE] [char](11) NULL,
+	[FECHA] [datetime] NULL,
+	[COD_REGISTRO] [char](30) NULL,
+	[COD_AUDITORIA] [decimal](18, 0) NULL,
+	[ESTADO] [char](1) NULL,
+	[COD_PRODUCTO] [char](6) NULL,
+	[FEC_AUDITORIA] [datetime] NULL,
+	[EST_AUDITORIA] [char](1) NULL,
+	[COD_USUARIO] [char](5) NULL,
+	[FEC_PISTOLEO] [datetime] NULL,
+	[HOR_PISTOLEO] [char](8) NULL
+) ON [PRIMARY]

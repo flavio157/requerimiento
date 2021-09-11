@@ -3083,7 +3083,7 @@
         }
 
         /** 
-         * se creo para probras los limites del lector
+         * se creo para probrar los limites del lector
          * 
         */
          getShadedRegionBounds(A, e, t) {
