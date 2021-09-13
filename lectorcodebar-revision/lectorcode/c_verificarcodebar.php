@@ -73,7 +73,8 @@
                                 print_r("El producto no existe");
                             }
 
-                    }                  
+                    }            
+                      
                     if($tipo == -1){
                         $verificar->m_CerrarAuditoria($auditorias[0]['COD_AUDITORIA']);
                     }

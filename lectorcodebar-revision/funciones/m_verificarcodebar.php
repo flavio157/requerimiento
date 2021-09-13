@@ -65,7 +65,7 @@
         public function m_CerrarAuditoria($cod_auditoria)
         {
             
-            if($this->m_listarCodigosNing()[0] == 0 && $this->m_listarDetalleAud()[0] == 0){
+            if($this->m_listarCodigosNing()[0] == 0 && $this->m_listarDetalleAud()[0] == 0 && $this->m_listar()[0] > 0){
                 $query = $this->db->prepare("UPDATE T_CAB_AUDITORIA SET SITUACION = '1' where COD_AUDITORIA = '$cod_auditoria'");
                 $query->execute();
             }
@@ -80,6 +80,12 @@
 
         public function m_listarDetalleAud(){
             $query = $this->db->prepare("SELECT COUNT(*) FROM T_DETALLE_AUDITORIA WHERE EST_AUDITORIA = 0");
+            $query->execute();
+            return $query->fetch();
+        }
+
+        public function m_listar(){
+            $query = $this->db->prepare("SELECT COUNT(*) FROM T_CODIGOS_NINGR");
             $query->execute();
             return $query->fetch();
         }
