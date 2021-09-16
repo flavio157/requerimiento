@@ -75,8 +75,8 @@
 
         public function m_mostrarimg($nombreimg)
         {
-           // $query = $this->db->prepare("SELECT * FROM T_IMAGEN WHERE CODIGO ='$nombreimg'");
-            $query = $this->db->prepare("SELECT * FROM T_GIF WHERE NUM_CONTRATO ='$nombreimg'");
+            $query = $this->db->prepare("SELECT * FROM T_IMAGEN WHERE CODIGO ='$nombreimg'");
+            //$query = $this->db->prepare("SELECT * FROM T_GIF WHERE NUM_CONTRATO ='$nombreimg'");
             $query->execute();
             if($query){
                 return $query->fetch();

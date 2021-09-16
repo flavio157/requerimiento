@@ -7,6 +7,7 @@ class DatabaseDinamica
         try {
            
             $server = "vpnprevilife.ddns.net";
+            //"sqlsrv:server=$server;database=$database","Flavio","Flavio2021"
             $base_de_datos = new PDO("sqlsrv:server=$server;database=$database","Flavio","Flavio2021");
             $base_de_datos->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
             return $base_de_datos;

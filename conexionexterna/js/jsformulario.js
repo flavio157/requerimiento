@@ -2,17 +2,16 @@ var idpers = "";
 var nompersonal = "";
 var codproveedor = "";
 var existeproveedor = 1;
+var esta1 = 0;
+var esta2 = 0;
 $(document).ready(function(){
     listarempresa();
-
-   
     
     $("#btnbuscarimg").click(function name(e) {
-        e.preventDefault()
-        console.log("ds");
+        e.preventDefault();
         img = $("#txtbuscarfoto").val();
       buscaimg(img);
-        //  buscaimg('00006797');
+    
     });
 
 
@@ -213,7 +212,9 @@ function validacion($tipo) {
    }
 
    function buscaimg(nombreimg) {
-    $("#imagen").attr("src",'');
+    var b = document.getElementById("imagenrp");
+    
+   // $("#imagen").attr("src",'');
     $.ajax({
        dataType:'text',
        type: 'POST', 
@@ -225,7 +226,7 @@ function validacion($tipo) {
        success: function(response){
        
         if(response != ''){
-            imagen.setAttribute('src', "data:image/jpg;base64,"+response);
+           // imagen.setAttribute('src', "data:image/jpg;base64,"+response);
             if( navigator.userAgent.match(/Android/i)
                 || navigator.userAgent.match(/webOS/i)
                 || navigator.userAgent.match(/iPhone/i)
@@ -233,16 +234,30 @@ function validacion($tipo) {
                 || navigator.userAgent.match(/iPod/i)
                 || navigator.userAgent.match(/BlackBerry/i)
                 || navigator.userAgent.match(/Windows Phone/i)){
-                    imagenrp.setAttribute('src', "data:image/jpg;base64,"+response);   
-                 $("#imagenrp").imgNotes({});
-                
+                    //imagenrp.setAttribute('src', "data:image/jpg;base64,"+response);   
+                b.setAttribute('src', "data:image/jpg;base64,"+response); 
+                    // $("#imagenrp").imgNotes({});
+                   
             }
-             $("#modalimg").modal('show');
+           
+            b.setAttribute('src', "data:image/jpg;base64,"+response); 
+            $('img.imagenrp').lightzoom({
+                zoomPower   : 2,    //Default
+                glassSize   : 300,  //Default
+            });
+           
+          //console.log(response);
+          if(response != ""){
+          
+           // console.log("d");
+          }
+             $("#staticBackdrop").modal('show');
+             
         }else{
             console.log("no se encontro la foto");
         }
       
-      
+       
        }
     }) 
    }
