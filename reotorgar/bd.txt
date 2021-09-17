@@ -1,0 +1,11 @@
+CREATE TABLE [dbo].[T_PERMISO_REOTORGAR](
+	[FECHA] [datetime] NULL,
+	[OFICINA] [char](30) NULL,
+	[COD_PERSONAL] [char](5) NULL
+) 
+
+Create table T_PRODUCTO_OBSERVACION_GUIA(
+ COD_PERSONAL CHAR(5),
+ OFICINA char(30),
+ FECHA datetime
+)
