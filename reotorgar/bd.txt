@@ -9,3 +9,13 @@ Create table T_PRODUCTO_OBSERVACION_GUIA(
  OFICINA char(30),
  FECHA datetime
 )
+
+
+///* se creo una vista para los ver los combos en el almacen
+create view V_BUSCAR_ITEM_COMBO
+AS
+select c.CODIGO,c.IDENTIFICADOR,c.NUM_LOTE as LOTECOMBO,
+a.COD_PRODUCTO AS COD_PROD_ALMACEN,a.COD_ALMACEN,a.NUM_LOTE AS LOTE_PROD,a.EST_DET_PRODUCTO 
+from T_COMBOSPRODUCTO as  c
+inner join T_ALMACEN_PRODUCTOS as a 
+on c.NUM_LOTE = a.NUM_LOTE

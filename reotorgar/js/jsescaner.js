@@ -58,7 +58,7 @@ $(document).ready(function(){
         if (e) {
           
           document.getElementById('result').textContent = e.text.trim();
-       
+        //alert($("#nroguia").val());
            
           if($("#nroguia").val() == "" && e.text != ""){
             _agregar(e.text)
@@ -79,6 +79,7 @@ $(document).ready(function(){
   function _agregar($codebar){
     oficina = $("#vroficina").val();
     codpersonal = $("#vrcodpersonal").val();
+
     $.ajax({
         dataType:'text',
         type: 'POST', 
@@ -93,7 +94,13 @@ $(document).ready(function(){
         success: function(response){
           alert(response);
             obj = JSON.parse(response);
-            $("#nroguia").val(obj['1']);
+            if(obj['1'] == 'l'){
+              alert("Se registro el producto");
+            
+            }else{
+              $("#nroguia").val(obj['1']);
+            }
+           
         }
     });
 }
@@ -101,7 +108,7 @@ $(document).ready(function(){
 
   function _readcodebar(codebar){
       oficina = $('#vroficina').val();
-      usuario = $('#vrcodpersonal').val();
+      personal = $('#vrcodpersonal').val();
       codguia = $('#nroguia').val();
    
       $.ajax({
@@ -112,11 +119,19 @@ $(document).ready(function(){
             "accion":  'insertItem',
             "oficina" : oficina,
             "codguia" : codguia,
-            "codebar": codebar
+            "codebar": codebar,
+            "codpersonal" : personal
         },
           success: function(response){
-            alert(response);
-            console.log(response);
+           
+            if(response == 0){
+              alert("el producto no existe");
+            }
+            if(response == 1){
+              alert("se registro el producto");
+            }else if(response == 3){
+              alert("el producto ya fue agregado");
+            }
           }
     });
 
