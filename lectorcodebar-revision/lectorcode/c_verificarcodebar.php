@@ -14,11 +14,8 @@
 
     class c_codigobarra
     {
-      
-       
-
+    
         static function verificarcodebar($codebar,$oficina,$usuario,$tipo){
-           
             $verificar = new m_codigobarra($oficina);
             $auditorias = $verificar->m_auditoriaPendi($oficina);
             
