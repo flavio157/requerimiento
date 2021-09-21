@@ -7,9 +7,7 @@ $(document).ready(function(){
     codeReader.listVideoInputDevices()
       .then((videoInputDevices) => {
         const sourceSelect = document.getElementById('sourceSelect')
-       // alert(videoInputDevices.length);
         selectedDeviceId = videoInputDevices[0].deviceId
-       // console.log(selectedDeviceId);
         if (videoInputDevices.length >= 1) {
           videoInputDevices.forEach((element) => {
             const sourceOption = document.createElement('option')
@@ -45,10 +43,11 @@ $(document).ready(function(){
 
      
      
-     /* $("#startButton").on('click',function(){
-        _readcodebar('CM1000055');
-      });*/
-      
+      /*$("#startButton").on('click',function(){
+        codigo = ' CM1000028 '
+        _readcodebar(codigo,'-1');
+      });
+      */
   });
 
 
@@ -56,11 +55,8 @@ $(document).ready(function(){
     
      codeReader.decodeFromVideoDevice(selectedDeviceId, 'video', (e, err) => {
         if (e) {
-            //alert(result);
-          //console.log(result)
           document.getElementById('result').textContent = e.text.trim();
-        //  alert(e.text.length);
-          //alert(dt.indexOf(e.text.trim()));
+
           tipo = dt.indexOf(e.text.trim()); 
           if(dt.indexOf(e.text.trim()) == -1){
             dt.push(e.text.trim());
@@ -70,11 +66,10 @@ $(document).ready(function(){
         }
         if (err && !(err instanceof ZXing.NotFoundException)) {
             alert('error al obtener codigo de barra');
-            //console.error(err)
+         
             document.getElementById('result').textContent = err
         }
       })
-      //alert(`Started continous decode from camera with id ${selectedDeviceId}`)
   }
 
   function _readcodebar(codebar,tipo){
@@ -93,7 +88,8 @@ $(document).ready(function(){
 
         },
           success: function(response){
-            alert(response);
+            
+             alert(response);
             if(response == 1){
               //alert("Producto encontrado y actualizado");
             }else{

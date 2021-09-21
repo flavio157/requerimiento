@@ -42,13 +42,6 @@ $(document).ready(function(){
       .catch((err) => {
         console.error(err)
       })
-
-     
-     
-     /* $("#startButton").on('click',function(){
-        _readcodebar('CM1000055');
-      });*/
-      
   });
 
 
@@ -58,8 +51,8 @@ $(document).ready(function(){
         if (e) {
           
           document.getElementById('result').textContent = e.text.trim();
-        //alert($("#nroguia").val());
-           
+      
+        
           if($("#nroguia").val() == "" && e.text != ""){
             _agregar(e.text)
           }else{
@@ -68,12 +61,10 @@ $(document).ready(function(){
           
         }
         if (err && !(err instanceof ZXing.NotFoundException)) {
-            alert('error al obtener codigo de barra');
-            //console.error(err)
+            alert('error al obtener codigo de barra');   
             document.getElementById('result').textContent = err
         }
       })
-      //alert(`Started continous decode from camera with id ${selectedDeviceId}`)
   }
 
   function _agregar($codebar){
@@ -93,14 +84,11 @@ $(document).ready(function(){
         },
         success: function(response){
           alert(response);
-            obj = JSON.parse(response);
-            if(obj['1'] == 'l'){
-              alert("Se registro el producto");
-            
-            }else{
-              $("#nroguia").val(obj['1']);
-            }
-           
+          obj =JSON.parse(response);
+          if(obj[1] != ''){
+            alert(obj['msj']);
+            $("#nroguia").val(obj[1]);
+          }  
         }
     });
 }
@@ -123,14 +111,10 @@ $(document).ready(function(){
             "codpersonal" : personal
         },
           success: function(response){
-           
-            if(response == 0){
-              alert("el producto no existe");
-            }
-            if(response == 1){
-              alert("se registro el producto");
-            }else if(response == 3){
-              alert("el producto ya fue agregado");
+            alert(response);
+            obj =JSON.parse(response);
+            if(obj['msj'] != ''){
+              alert(obj['msj']);
             }
           }
     });

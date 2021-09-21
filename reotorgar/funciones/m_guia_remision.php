@@ -41,7 +41,7 @@
               
                 $guardado = $this->bd->commit();
 
-                return $guardado;
+                return $cod;
             } catch (Exception $e) {
                 $this->bd->rollBack();
                 echo $e;
@@ -61,9 +61,8 @@
                 $item = $query->execute();
                 if($item){
                     $almacen = new m_almacen_productos();
-                    $almacen->m_actualizar_alamcen_proc($fecha_registro,$oficina,$cod_personal,$cod_guia,$num_lote);
-                }   
-               
+                    $almacen->m_actualizar_alamcen_proc($oficina,$cod_personal,$cod_guia,$num_lote);
+                }
                 return $item; 
             } catch (Exception $e) {
                 $this->bd->rollBack();
@@ -76,16 +75,6 @@
             $query->execute();
             $cod = $query->fetchAll();
             return $cod;
-        }
-    
-
-
-        public function m_guardar_noOrtogado($cod_personal,$oficina){
-            $fecha = retunrFechaSql(date("d-m-Y"));
-            $query = $this->bd->prepare("INSERT INTO TABLA(COD_PERSONAL,OFICINA,FECHA) 
-            Values('$cod_personal','$oficina','$fecha')");
-            $noOtorgado = $query->execute();
-            return $noOtorgado;
         }
 
         public function m_verificar_item_guia($num_lote){

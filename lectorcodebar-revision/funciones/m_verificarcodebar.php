@@ -16,7 +16,6 @@
             $query = $this->db->prepare("SELECT * FROM T_DETALLE_AUDITORIA where NUM_LOTE = '$codproducto'
             and COD_AUDITORIA = '$cod_auditoria'");
             $query->execute();
-            //print_r($query);
             return $query->fetchAll();
         }
 
@@ -32,8 +31,6 @@
             if($valor){
                 return $valor;
             }
-           
-          
         }
 
         public function m_guardarlote($num_lote,$cod_registro,$cod_auditoria,$estado,$cod_producto,$est_auditoria){
@@ -63,8 +60,7 @@
 
 
         public function m_CerrarAuditoria($cod_auditoria)
-        {
-            
+        { 
             if($this->m_listarCodigosNing()[0] == 0 && $this->m_listarDetalleAud()[0] == 0 && $this->m_listar()[0] > 0){
                 $query = $this->db->prepare("UPDATE T_CAB_AUDITORIA SET SITUACION = '1' where COD_AUDITORIA = '$cod_auditoria'");
                 $query->execute();

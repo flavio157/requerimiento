@@ -1,6 +1,7 @@
 <?php
     require_once("DataBase.php");
     require_once("cod_almacenes.php");
+    require_once("f_funcion.php");
     class m_almacen_productos 
     {
         private $bd;
@@ -21,23 +22,25 @@
         }
 
         public function m_guardar_observacion_Proc($cod_personal,$oficina,$codebar){
-            //print_r($cod_personal."/".$oficina."/".$codebar);
             $fecha = retunrFechaSql(date("d-m-Y"));
             $codebar = trim($codebar);
-            $query = $this->bd->prepare("INSERT INTO T_PRODUCTO_OBSERVACION_GUIA(COD_PERSONAL,OFICINA,FECHA,NUM_LOTE)
-            VALUES('$cod_personal','$oficina','$fecha','$codebar')");
-           
+            $hora =date("H:i:s"); 
+            $query = $this->bd->prepare("INSERT INTO T_PRODUCTO_OBSERVACION_GUIA(COD_PERSONAL,OFICINA,
+            FECHA,NUM_LOTE,HOR_REGISTRO)
+            VALUES('$cod_personal','$oficina','$fecha','$codebar','$hora')");
             $observacion = $query->execute();
             return $observacion;
-            //return;
         }
 
 
-        public function m_actualizar_alamcen_proc($fec_emision,$oficina,$cod_personal,$cod_guia,
+        public function m_actualizar_alamcen_proc($oficina,$cod_personal,$cod_guia,
                                                   $num_lote){
+            $fecha_emision = sumarfecha(1);
+            $fecha_emision = retunrFechaSql($fecha_emision);
             $cod_almacen = oficiona($oficina);
-            $query = $this->bd->prepare("UPDATE T_ALMACEN_PRODUCTOS set FEC_EMISION = '$fec_emision',
-            COD_ALMACEN='$cod_almacen',COD_PERSONAL = '$cod_personal',COD_GUIA='$cod_guia',COD_CONFIRMACION = '1',
+            $query = $this->bd->prepare("UPDATE T_ALMACEN_PRODUCTOS set FEC_EMISION = '$fecha_emision',EST_DET_PRODUCTO = 'O',
+            COD_ALMACEN='$cod_almacen',COD_PERSONAL = '$cod_personal',EST_CAJA = 'O',N_CAJA='1'
+            ,COD_GUIA='$cod_guia',COD_CONFIRMACION = '1',
             OBSERVACION ='PISTOLEADO POR WEB' where NUM_LOTE= '$num_lote'");
 
             $almacen = $query->execute();

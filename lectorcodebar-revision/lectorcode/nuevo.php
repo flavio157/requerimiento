@@ -101,6 +101,7 @@ $cod = $_SESSION["cod"];
             </div>    
         </form>
     </div>
+    <!--<button id="startButton">pruebas</button>-->
    <!--<canvas id="canva">
 
    </canvas>-->
@@ -109,3 +110,4 @@ $cod = $_SESSION["cod"];
 <script type="text/javascript" src="../js/jszxing.js"></script>
 <script type="text/javascript" src="../js/jsescaner.js"></script>
 </html>
+
