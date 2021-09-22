@@ -83,5 +83,17 @@
             $lote = $query->fetchAll();
             return $lote;
         }
+
+
+        public function m_guardar_observacion_Proc($cod_personal,$oficina,$codebar){
+            $fecha = retunrFechaSql(date("d-m-Y"));
+            $codebar = trim($codebar);
+            $hora =date("H:i:s"); 
+            $query = $this->bd->prepare("INSERT INTO T_PRODUCTO_OBSERVACION_GUIA(COD_PERSONAL,OFICINA,
+            FECHA,NUM_LOTE,HOR_REGISTRO)
+            VALUES('$cod_personal','$oficina','$fecha','$codebar','$hora')");
+            $observacion = $query->execute();
+            return $observacion;
+        }
     }
 ?>

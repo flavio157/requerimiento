@@ -158,7 +158,7 @@
 
 
         static function c_guardar_observacion_Proc($cod_personal,$oficina,$codebar){
-            $almacen = new m_almacen_productos();
+            $almacen = new m_guia_remision($oficina);
             $oficina = trim($oficina);
             $observacion = $almacen->m_guardar_observacion_Proc($cod_personal,$oficina,$codebar);
             //print_r($observacion);
