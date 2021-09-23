@@ -74,13 +74,24 @@
                                     print_r("Se Creo el Producto.\n");
                                     return;
                             }else if (sizeof($ningr) == 1 && $ningr[0][8] != 1 && $tipo == -1) {
-                                $verificar->m_actualizarNINGR(trim($codebar),$usuario);   
-                                print_r("Se Registro el pistoleo del producto.\n");
+                                $estado = $verificaral->m_verificarProcAlma(trim($codebar));
+                                if($estado[0][10] == 'C'){
+                                    print_r("Producto esta vendido".$codebar."debe estar Activo\n");
+                                }else{
+                                    $verificar->m_actualizarNINGR(trim($codebar),$usuario);
+                                    print_r("Se Registro el pistoleo del producto.\n");
+                                }
+                                
+                               //si el estado en C en la tabla T_PRODUCTO_ALMACENES entonces
+                               //despues de registrar en NINGR actualiza el estado caso contrario manda
+                               //mensaje que me van a proporcionar => Producto esta vendido AP8005067 debe estar Activo
+
                                // return;
                             }else if(sizeof($ningr) == 1 && $ningr[0][8] == 1){
                                 print_r("El producto ya fue pistoleado.\n"); 
                             }else if(sizeof($ningr) > 0 && $ningr[0][8] == 0){
                                 print_r("El producto ya fue creado.\n"); 
+                                print_r(sizeof($ningr) ."== 1 && ".$ningr[0][8] ."!= 1 &". $tipo ."== -1");
                             }else{
                                 print_r("El producto no existe.\n");
                             }

@@ -53,8 +53,9 @@
             $hora = gethora();
             $fechpistole = retunrFechaSqlphp(date("Y-m-d"));
             $query = $this->db->prepare("UPDATE T_CODIGOS_NINGR SET EST_AUDITORIA = '1',COD_USUARIO = '$cod_usuario',
-            FEC_PISTOLEO = '$fechpistole',HOR_PISTOLEO = '$hora' WHERE NUM_LOTE ='$num_lote' ");
-            $query->execute();
+            FEC_PISTOLEO = '$fechpistole',HOR_PISTOLEO = '$hora' WHERE NUM_LOTE ='$num_lote'");
+            $valor = $query->execute();
+            return $valor;
         }
 
 
