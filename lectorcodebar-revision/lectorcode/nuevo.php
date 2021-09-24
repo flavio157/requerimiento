@@ -100,6 +100,49 @@ $cod = $_SESSION["cod"];
                 </div>
             </div>    
         </form>
+
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <td>
+                        CODIGOS ESCANEADO
+                    </td>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>
+                        CP00001
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        CP00001
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        CP00001
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        CP00001
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        CP00001
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        CP00001
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
     </div>
     <!--<button id="startButton">pruebas</button>-->
    <!--<canvas id="canva">

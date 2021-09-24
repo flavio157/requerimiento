@@ -58,28 +58,24 @@
                                 $dias = diferenciaFechas($fecha[0],date("Y-m-d"));
                                 if($dias >= 4 && sizeof($ningr) != 1){
                                     $verificar->m_guardarlote($dato[0][4],$usuario,$auditorias[0][0],'M',$dato[0][1], '0');
-                                    print_r("Se Creo el Producto.\n");
+                                    
                                     return;
                                 }else if(sizeof($ningr) != 1) {
                                     if($dato[0][10] == 'A' || $dato[0][10] == 'R')$estado = 'A';
                                     else if($dato[0][10] == 'O') $estado = 'M';
                                     else if($dato[0][10] == 'I') $estado = 'C';
-                                   
                                     $verificar->m_guardarlote($dato[0][4],$usuario,$auditorias[0][0],$estado,$dato[0][1], '0');
-                                    print_r("Se Creo el Producto.\n");
                                     return;
                                 }
                             }else if(sizeof($dato = $verificaral->m_verificarProcAlma(trim($codebar))) == 1 && count($ningr) == 0) {
                                     $verificar->m_guardarlote($dato[0][4],$usuario,$auditorias[0][0],'F',$dato[0][1],'0');   
-                                    print_r("Se Creo el Producto.\n");
                                     return;
                             }else if (sizeof($ningr) == 1 && $ningr[0][8] != 1 && $tipo == -1) {
                                 $estado = $verificaral->m_verificarProcAlma(trim($codebar));
-                                if($estado[0][10] == 'C'){
+                                if($estado[0][10] == 'I'){
                                     print_r("Producto esta vendido".$codebar."debe estar Activo\n");
                                 }else{
                                     $verificar->m_actualizarNINGR(trim($codebar),$usuario);
-                                    print_r("Se Registro el pistoleo del producto.\n");
                                 }
                                 
                                //si el estado en C en la tabla T_PRODUCTO_ALMACENES entonces
