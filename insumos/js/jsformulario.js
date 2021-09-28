@@ -1,9 +1,15 @@
 var prod = "";
 var ingreso = "";
+var insu="";
 $(document).ready(function(){
     $("#btnfiltrar").on('click',function (params) {
+        $('#tbinsumo').find("tr:gt(0)").remove();
         insumos($("#fech_ini").val(),$("#fech_fin").val());
+        envaces($("#fech_ini").val(),$("#fech_fin").val());
     });
+
+
+ 
 });
 
 function insumos(fech_ini,fech_fin){
@@ -17,58 +23,52 @@ function insumos(fech_ini,fech_fin){
             'fech_fin':fech_fin
         },
         success: function(response){
-        
             obj = JSON.parse(response);
             $.each(obj['insumo'] ,function name(i,e) {
-                prod +="<div><strong>INSUMO: </strong>"+e[0]+"</div>"; 
-                ingreso +="<div><strong>INGRESO: </strong>"+e[1]+"</div>"; 
+                if(e['ingreso'] < e['salida']){
+                    total = Number(e['salida'] - e['ingreso'])
+                }else{
+                    total = Number(e['ingreso'] - e['salida'])
+                }
+                __ins(e['id'],e['nombre'],e['salida'],e['ingreso'],total.toFixed(2))
             });
-            
-            __ins(prod,ingreso)
-            //$('#prc').html(prod);
-           /* obj = JSON.parse(response);
-            var l = "";
-            $.each(obj['prod'], function(i, it){
-                prod += "<div>"+
-                it[1]+" CANTIDAD: "+it[2];
-                    $.each(obj['insumo'], function(i, a){
-                        if(a[1] == it[0]){
-                            prod +="<div id='insu'>"+a[3]+"----- CANTIDAD: "+a[4]+"</div>"
-                        
-                            $.each(obj['envases'], function(i, e){
-                                if(e[1] == a[0] && l != it[0]){
-                                    prod +="<div id='insu'>"+e[2]+"----- CANTIDAD: "+it[2]+"</div>"
-                                }
-                            });
-                            l = it[0];
-                        }
-                    });
-                    prod +="</div>" 
-                
-            });
-            $('#prc').html(prod);  */ 
         }
     });
 }
 
-function __ins(producto,ingreso) {
-   var insu = "<div id='prc' class='row align-items-start'>"+
-                    "<div class='col'>"+
-                        producto+
-                    "</div>"+    
-                    "<div class='col'>"+
-                        ingreso+
-                    "</div>"+  
-            "</div>";
-    $('#contenerdor').html(insu);
-  
+
+function envaces(fech_ini,fech_fin){
+    $.ajax({
+        dataType:'text',
+        type: 'POST', 
+        url:  '../insumos/c_insumoventas.php',
+        data: {
+            'accion':'envaces',
+            'fech_ini':fech_ini,
+            'fech_fin':fech_fin
+        },
+        success: function(response){
+            obj = JSON.parse(response);
+            $.each(obj['envases'] ,function name(i,e) {
+                var total
+                if(e['ingreso'] < e['salida']){
+                    total = Number(e['salida'] - e['ingreso'])
+                }else{
+                    total = Number(e['ingreso'] - e['salida'])
+                }
+                 
+                __ins(e['id'],e['nombre'],e['salida'],e['ingreso'],total.toFixed(2))
+            });
+        }
+    });
 }
 
-/*
-function __det(id,ins,cant) {
-   // console.log(id);
-    insu +="<div>"+"<strong>INSUMO: </strong>"+
-    ins+"<strong>CANTIDAD: </strong>"+cant+"</div>";
-    //return insu;
-    $('#'+id).html(insu);
-}*/
+function __ins(cod_prod,nombre,salida,entrada,total) {
+    var fila="<tr><td class='tdproducto' style='display: none;'>"+cod_prod+
+    "</td><td>"+nombre+ "</td><td>"+salida+
+    "</td><td>"+entrada+"</td>"+
+    "<td>"+total+"</td></tr>";
+    var btn = document.createElement("TR");
+    btn.innerHTML=fila;
+    document.getElementById("tdinsumo").appendChild(btn);
+}

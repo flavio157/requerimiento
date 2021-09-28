@@ -8,9 +8,20 @@
  #insu{
      padding-left: 14px;
  }
+
+ .tbinsumo {
+    overflow:scroll;
+    height: 750px;
+  
+}
+
 @media screen and (max-width:992px){
     .main{
         width:100%;
-    } 
- 
+    }
+
+    .tbinsumo {
+        overflow:scroll;
+        height: 520px;  
+   }
 }
