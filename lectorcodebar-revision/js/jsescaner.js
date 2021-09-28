@@ -1,5 +1,6 @@
 var dt = [];
 var tipo = 0;
+var codbar=[];
 $(document).ready(function(){
     let selectedDeviceId;
     const codeReader = new ZXing.BrowserMultiFormatReader()
@@ -41,13 +42,27 @@ $(document).ready(function(){
         console.error(err)
       })
 
-     
+      $('#mdbar').modal({
+        backdrop: 'static', keyboard: false
+    })
      
       /*$("#startButton").on('click',function(){
         codigo = ' CM1000028 '
         _readcodebar(codigo,'-1');
       });
       */
+
+      $("#btaceptar").click(function (params) {
+         $("#mdbar").modal('hide');
+      });
+
+      $("#btcancelar").click(function (params) {
+         $('#tablacodebar').find("tr:gt(0)").remove();
+      });
+
+      $("#close").click(function () {
+         $('#tablacodebar').find("tr:gt(0)").remove();
+      });
   });
 
 
@@ -55,14 +70,32 @@ $(document).ready(function(){
     
      codeReader.decodeFromVideoDevice(selectedDeviceId, 'video', (e, err) => {
         if (e) {
-          document.getElementById('result').textContent = e.text.trim();
-
-          tipo = dt.indexOf(e.text.trim()); 
-          if(dt.indexOf(e.text.trim()) == -1){
-            dt.push(e.text.trim());
+         
+          var filas = $("#tbbar  tr");
+          if(filas.length < 9){
+            if(codbar.indexOf(e.text.trim()) == -1){
+                var fila="<tr><td>"+e.text+ "</td></tr>";
+                var btn = document.createElement("TR");
+                btn.innerHTML=fila;
+                document.getElementById("tbbar").appendChild(btn);
+                
+                document.getElementById('result').textContent = e.text.trim();
+    
+                tipo = dt.indexOf(e.text.trim()); 
+                if(dt.indexOf(e.text.trim()) == -1){
+                  dt.push(e.text.trim());
+                }
+              _readcodebar(e.text,tipo);
+              codbar.push(e.text.trim());
+            }else{
+              alert("codigo ya pistoleado");
+            }
+           
+          }else{
+              $("#mdbar").modal('show');
           }
-
-          _readcodebar(e.text,tipo);
+          
+          
         }
         if (err && !(err instanceof ZXing.NotFoundException)) {
             alert('error al obtener codigo de barra');
@@ -89,7 +122,7 @@ $(document).ready(function(){
         },
           success: function(response){
             
-             alert(response);
+             //alert(response);
             if(response == 1){
               //alert("Producto encontrado y actualizado");
             }else{

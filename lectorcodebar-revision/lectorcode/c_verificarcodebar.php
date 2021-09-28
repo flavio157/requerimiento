@@ -87,7 +87,7 @@
                                 print_r("El producto ya fue pistoleado.\n"); 
                             }else if(sizeof($ningr) > 0 && $ningr[0][8] == 0){
                                 print_r("El producto ya fue creado.\n"); 
-                                print_r(sizeof($ningr) ."== 1 && ".$ningr[0][8] ."!= 1 &". $tipo ."== -1");
+                               // print_r(sizeof($ningr) ."== 1 && ".$ningr[0][8] ."!= 1 &". $tipo ."== -1");
                             }else{
                                 print_r("El producto no existe.\n");
                             }
