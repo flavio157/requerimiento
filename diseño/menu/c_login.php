@@ -55,6 +55,7 @@ class C_Login
                 if(!in_array(array($permisos[$i][2],$permisos[$i][3],$permisos[$i][4]), $ArrSubmenu2)){
                     array_push($ArrSubmenu2,array($permisos[$i][2],$permisos[$i][3],$permisos[$i][4]));
                     $submenu2 = $m_login->m_listasubmenus2($permisos[$i][2],$permisos[$i][3],$permisos[$i][4]);
+                    
                     for ($j=0; $j <count($submenu2) ; $j++) { 
                         $subSub[$contS2] = [$submenu2[$j][0],$submenu2[$j][1],$submenu2[$j][1],$submenu2[$j][3],$submenu2[$j][4]];
                         $contS2++;
@@ -63,6 +64,7 @@ class C_Login
 
             }
           
+        
            $_SESSION["menu"] = $menu;
            $_SESSION["submenu"] = $sub;
            $_SESSION["subsub"] = $subSub;
@@ -73,6 +75,7 @@ class C_Login
           print_r("Error");
         }
     }
+
 }
 
 ?>

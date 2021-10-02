@@ -42,9 +42,6 @@
     }
 
 
-
-
-
         static function c_listarSubmenus($idmenu){
             $menu = new M_Login(); 
             $listadosub = $menu->m_listasubmenusthree($idmenu);

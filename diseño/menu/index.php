@@ -25,9 +25,11 @@ $cod = $_SESSION["cod"];
 	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6" crossorigin="anonymous">
 	
 	<link rel="STYLESHEET" type="text/css" href="../fonts/style.css">
+	<link rel='STYLESHEET' type='text/css' href="../css/menu.css">
+	<script  src="../js/menu.js"></script>
 	<?php
-		echo "<link rel='STYLESHEET' type='text/css' href=".ROOT_PATH."/css/menu.css>";
-		echo "<script  src=".ROOT_PATH."/js/menu.js></script>";
+	/*	echo "<link rel='STYLESHEET' type='text/css' href=".ROOT_PATH."/css/menu.css>";
+		echo "<script  src=".ROOT_PATH."/js/menu.js></script>";*/
 	?>
 	
 	
@@ -51,10 +53,10 @@ $cod = $_SESSION["cod"];
 		<nav>
 			<ul class="menulateral"> 
 				<?php 
+				
 					for ($i=0; $i < count($menu); $i++) { 
 						
 						if($menu[$i][2] == ''){
-							
 							echo "<li class='menupadre' id='$i'><a class='font'><span class='icon-house' ></span>".$menu[$i][1]."</a>";
 								echo "<ul class='children sub-menu'>";
 								for ($l=0; $l < count($submenu) ; $l++) { 
@@ -65,19 +67,13 @@ $cod = $_SESSION["cod"];
 										}else{
 											echo "<li><a class='submenulista font'>".$submenu[$l][1]."<span class='icon-dot'></span></a>";
 										}	
-										for ($k=0; $k < count($submenu2) ; $k++) { 
-												if($menu[$i][0] == $submenu2[$k][0] && $submenu[$l][3] == $submenu2[$k][1] ){
-												
-													echo "<ul class='dropdown-menu sub-menu'>";
-													
-														for ($j=0; $j < count($submenu2) ; $j++) { 
-															if($menu[$i][0] == $submenu2[$j][0] && $submenu[$l][3] == $submenu2[$j][1]){
-																echo "<li><a href='".ROOT_PATH.$submenu2[$j][4]."'class='font'>".$submenu2[$j][3]."</a></li>";
-															}
+											echo "<ul class='dropdown-menu sub-menu'>";
+													for ($j=0; $j < count($submenu2) ; $j++) { 
+														if($menu[$i][0] == $submenu2[$j][0] && $submenu[$l][3] == $submenu2[$j][1]){
+															echo "<li><a href=".ROOT_PATH.$submenu2[$j][4]."class='font'>".$submenu2[$j][3]."</a></li>";
 														}
-													echo "</ul>";
-												}
-											}
+													}
+											echo "</ul>";
 										echo "</li>";
 									}
 								}
@@ -85,7 +81,7 @@ $cod = $_SESSION["cod"];
 							echo "</li>";	
 						}else{
 							echo "<li class='menupadre' id='$i'>
-							<a href='".ROOT_PATH.$menu[$i][2]."' class='url font'><span class='icon-house'></span>".$menu[$i][1]."</a>";
+							<a href=".ROOT_PATH.$menu[$i][2]."' class='url font'><span class='icon-house'></span>".$menu[$i][1]."</a>";
 							echo "</li>";	
 						}		
 					}
@@ -100,11 +96,11 @@ $cod = $_SESSION["cod"];
 	<?php
 
 		
-	/*function printe($array){
+	function printe($array){
 		echo('<pre>');
 		print_r($array);
 		echo('</pre>');
-	}*/
+	}
 
 	?>
 	

@@ -3,8 +3,8 @@
 ?>
 
 <script>
-        var url = "";
-        $.getScript(url);
+        /*var url = "";
+        $.getScript(url);*/
 </script>
 <style>
 .child-check{
