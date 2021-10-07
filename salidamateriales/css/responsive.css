@@ -3,7 +3,7 @@
 }
 
 
-#txtnroserie{
+#txtseriematerial{
     text-transform: var(--mayuscula);
 }
 
@@ -36,7 +36,6 @@
     z-index: 9999;
     width: 93% !important;
     right: 18px;*/
-    
 }
 .sugerenciaspersonal{
     box-shadow: 2px 2px 8px 0 rgba(0,0,0,.2);
@@ -60,10 +59,17 @@
     color: black;
 }
 
-
+.btnsin{
+    font-size: 0.6rem !important;
+}
 
 .titulos{
     font-family: arial;
+    font-weight: 600;
+}
+
+.thtitulo{
+    font-weight: 500;
 }
 
 .materiales{
@@ -129,4 +135,7 @@ input[type=number]::-webkit-outer-spin-button {
        /* height: 150px;*/
    }
 
+    .btnsin{
+        font-size: .875rem !important;
+    }
 }

@@ -582,4 +582,27 @@ function f_Cuotas($promedioCuota,$cuotas,$dias){
         return $fecha;
     }
 
+    
+    function update($user_datos){
+        $i = 0;
+        $valores = "";
+        foreach ($user_datos as $key => $value) {
+            $coma = (count($user_datos)!=($i+1)) ? "," : "" ;
+            $valores .= $key." = '".$value."'".$coma."\n";
+            $i++;
+        }
+        return $valores;
+    }
+
+    function select_where($user_datos){
+        $i = 0;
+        $valores = "";
+        foreach ($user_datos as $key => $value) {
+            $coma = (count($user_datos)!=($i+1)) ? "AND" : "" ;
+            $valores .= $key." = '".$value."'".$coma."\n";
+            $i++;
+        }
+        return $valores;
+    }
+
   ?>
