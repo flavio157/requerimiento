@@ -6,20 +6,19 @@ $(document).ready(function() {
         retornar()
         limpiar();
     })
+    
     $("#aentrega").on('click',function() {
         sre = $("#txtseriematerial").val();
         filas = $("#tdmaterialentrega  tr");
-        if(filas.length > 0){
             for (let l = 0; l <filas.length ; l++) {
-                if($(filas[l]).find("td")[2].innerHTML != sre.toUpperCase().trim()){
-                    _stock($("#txtcodmaterial").val(),$("#vroficina").val());
-                }else{
-                   Mensaje1("Nro de serie ya registrado",'error');
+                if($(filas[l]).find("td")[2].innerHTML != ""){
+                    if($(filas[l]).find("td")[2].innerHTML == sre.toUpperCase().trim()){
+                        Mensaje1("Nro de serie ya registrado",'error');
+                        return;    
+                    }
                 }
             }
-        }else{
-            _stock($("#txtcodmaterial").val(),$("#vroficina").val());
-        }
+        _stock($("#txtcodmaterial").val(),$("#vroficina").val());
         $("#txtcanmaterial").val('');
     });
     
@@ -47,19 +46,21 @@ $(document).ready(function() {
     });
 
     $(document).on('click','#btneliminar',function() {
-        cod = $("#tbmaterialentrega tr").find('td')[0].innerHTML;
-        cant = $("#tbmaterialentrega tr").find('td')[3].innerHTML;
-        _devolverStock(cod,cant,'');
+        cod = $(this).parents('tr').find('td:first-child').text();
+        cant = $(this).parents('tr').find('td:nth-child(4)').text();
+        $("#txtmaterial").val('');
+        $("#txtstckmaterial").val('');
+        _devolverStock(cod,cant,'1');
         $(this).closest('tr').remove();
     });
 
     $(document).on('click','#btnmodificar',function() {
-        cod = $("#tbmaterialentrega tr").find('td')[0].innerHTML;
-              $("#txtcodmaterial").val($("#tbmaterialentrega tr").find('td')[0].innerHTML);
-              $("#txtmaterial").val($("#tbmaterialentrega tr").find('td')[1].innerHTML);
-              $("#txtseriematerial").val($("#tbmaterialentrega tr").find('td')[2].innerHTML);
-              $("#txtcanmaterial").val($("#tbmaterialentrega tr").find('td')[3].innerHTML)
-       cant = $("#tbmaterialentrega tr").find('td')[3].innerHTML
+        cod = $(this).parents('tr').find('td:first-child').text();
+              $("#txtcodmaterial").val($(this).parents('tr').find('td:first-child').text());
+              $("#txtmaterial").val($(this).parents('tr').find('td:nth-child(2)').text());
+              $("#txtseriematerial").val($(this).parents('tr').find('td:nth-child(3)').text());
+              $("#txtcanmaterial").val($(this).parents('tr').find('td:nth-child(4)').text());
+       cant = $(this).parents('tr').find('td:nth-child(4)').text();
       
        _devolverStock(cod,cant,'');
        $(this).closest('tr').remove();
@@ -84,8 +85,12 @@ $(document).ready(function() {
         _guardar(tds);
     })
 
-    $("#txtcanmaterial").on("keydown",function(e) {
+    $("#txtcanmaterial").bind('keypress', function(e) {
         return _numeros(e);
+    });
+
+    $("#txtdescripcion").bind('keypress', function(e) {
+        return letras(e)    
     });
 });
 
@@ -102,12 +107,21 @@ function _devolverStock(cod,cant,l) {
             "cantidad" : cant,
         } ,
         success:  function(response){
-            console.log(l);
-            if(l ==''){
-                $("#txtstckmaterial").val(Number(response).toFixed(2));
-            } 
+            console.log(response);
+            v = response.split("/");
+            console.log(v);
+            if(l == ""){
+                if(v[1] == 0){
+                    $("#txtseriematerial").removeAttr('disabled');
+                    $("#txtcanmaterial").attr('disabled','true');  
+                }else{
+                    $("#txtcanmaterial").removeAttr('disabled');
+                    $("#txtseriematerial").attr('disabled','true');  
+                }
+                $("#txtstckmaterial").val(Number(v[0]).toFixed(2));
+            }
         }
-    });  
+    }); 
 }
 
 
@@ -161,12 +175,33 @@ function _stock(cdmaterial,almacen) {
         } ,
         success:  function(response){
             v = response.split("/");
-            if(v[0] > 0.00) _entrega(v[0],v[1]);
-            else
-            Mensaje1(v[0],'error');
+            c = 0;
+            if(v[2] == 2){
+                c = datosrepetidos("tdmaterialentrega",v[0],v[1]);
+            }
+            if(c != 1){
+                if(v[0] > 0.00) _entrega(v[0],v[1]);
+                else
+                Mensaje1(v[0],'error');
+            }
         }
     });  
 }
+
+function datosrepetidos(tabla,stock,cantidad) {
+    console.log(cantidad);
+    filas = $("#"+tabla+" tr");
+    for (let l = 0; l < filas.length; l++) {
+        if($(filas[l]).find("td")[0].innerHTML == $("#txtcodmaterial").val()){
+            $(filas[l]).find("td")[3].innerHTML = Number($(filas[l]).find("td")[3].innerHTML) + Number(cantidad);    
+            $("#txtseriematerial").val('');
+            $("#txtstckmaterial").val(Number(stock).toFixed(2)); 
+            return 1;
+        }
+    }
+    return 0;
+}
+
 
 function _entrega(stock,cantidad) {
     b1 =  "<a id='btneliminar' class='btn btn-danger btn-sm'>"+
@@ -235,11 +270,6 @@ function sugerecias(response,id) {
     });
 }
 
-function _numeros(e) {
-    var key = window.Event ? e.which : e.keyCode
-    return ((key >= 48 && key <= 57) || (key==8))
-}
-
 function _createtable(td,idtbttabla) {
     var fila="<tr>";
     for (let i = 0; i < td.length; i++) {
@@ -252,9 +282,12 @@ function _createtable(td,idtbttabla) {
 }
 
 function _guardar(tds) {
-    console.log($("#txtdescripcion").val().trim().replace(/\s+/gi, ' ').split(' ').length < 10);
+    if($("#txtdescripcion").val().trim().split(' ').length < 10){
+        Mensaje1('Campo descripcion debe tener almenos 10 palabras','error')
+        return;
+    };
 
-   /* var codig = $("#txtcodigoper").val();
+    var codig = $("#txtcodigoper").val();
     var descripcion = $("#txtdescripcion").val();
     var perregistro = $("#vrcodpersonal").val();
     var materiales = {tds};
@@ -277,7 +310,7 @@ function _guardar(tds) {
                         Mensaje1("Error al registrar",'error')
                     }
                 }
-            });  */  
+            });  
 }
 
 function limpiar() {
@@ -328,4 +361,22 @@ function Mensaje1(texto,icono){
   //toast:true,
   //position:'top'	
   });
+}
+
+function letras(e) {
+    var regex = new RegExp("^[a-zA-Z ]+$");
+    var key = String.fromCharCode(!e.charCode ? e.which : e.charCode);
+    if (!regex.test(key)) {
+      e.preventDefault();
+      return false;
+    }
+};
+
+function _numeros(e) {
+    var regex = new RegExp("^[0-9]+$");
+    var key = String.fromCharCode(!e.charCode ? e.which : e.charCode);
+    if (!regex.test(key)) {
+      e.preventDefault();
+      return false;
+    }
 }

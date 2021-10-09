@@ -30,6 +30,7 @@ require_once("f_funcion.php");
         public function m_update($tabla,$valores,$where)
         {
             $query = $this->bd->prepare("UPDATE $tabla SET $valores WHERE $where");
+            /* print_r($query);*/
             $resp = $query->execute();
             return $resp;
         }

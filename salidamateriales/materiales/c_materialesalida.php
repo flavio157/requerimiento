@@ -88,12 +88,14 @@ require_once("../funciones/cod_almacenes.php");
 
         static function c_verificarstock($codmaterial,$codalmacen,$cantidad,$serie,$material,$codper)
         {  
+            $tipo = "";
             $m_material = new m_materiasalida();
             if($codmaterial == "" || $material == "") {print_r("Ingrese material"); return;}
             $codalmacen = oficiona($codalmacen);
             $materiales = c_materialesalida::materialAlmacen($codmaterial,$codalmacen);
             if($materiales[0][4] == "0.00"){print_r("Noy hay Stock"); return;}
             if($materiales[0]['1'] == '00001'){
+                $tipo = 1;
                 $user_datos = array(
                     'CODIGO_PER' => $codper,
                     'CODIGO' => $codmaterial,
@@ -116,6 +118,7 @@ require_once("../funciones/cod_almacenes.php");
                 }
                 $cant = 1;
             }else{
+                $tipo = 2;
                 if($cantidad == "" || $cantidad <= 0 || !is_numeric($cantidad)){
                     print_r("ingrese cantidad del material");
                     return;
@@ -124,11 +127,13 @@ require_once("../funciones/cod_almacenes.php");
             }
             if($materiales[0][4] < $cant){print_r("Stock insuficiente");return;}
             $tock = c_materialesalida::c_update_stock($codmaterial,$materiales[0][4],$cant,$codalmacen);
-            print_r($tock.'/'.$cant);
+            print_r($tock.'/'.$cant.'/'.$tipo);
         }
 
         static function c_guardar($codpersonal,$perregistro,$des,$items)
         {
+           $des = str_replace(' ', '', $des);
+           if(!ctype_alpha(trim($des))){print_r("error descripcion invalida"); return;}
            $material = new m_materiasalida();
            $materiales = $material->m_guardar($codpersonal,$perregistro,$des,$items);
            print_r($materiales);
@@ -171,10 +176,10 @@ require_once("../funciones/cod_almacenes.php");
         }
 
         static function c_return_stock($codmaterial,$codalmacen,$cant)
-        {
-           $codalmacen = oficiona($codalmacen);
-            $material = c_materialesalida::materialAlmacen($codmaterial,$codalmacen);
-            $stock =  intval($material[0][4])  + intval($cant);
+        {   $tipo = 1;
+            $codalmacen = oficiona($codalmacen);
+            $materiales = c_materialesalida::materialAlmacen($codmaterial,$codalmacen);
+            $stock =  intval($materiales[0][4])  + intval($cant);
             $material = new m_materiasalida();
             $user_datos = array(
                 'STOCK_ACTUAL' => $stock,
@@ -186,7 +191,8 @@ require_once("../funciones/cod_almacenes.php");
             );
            $where = select_where($wher);
            $material->m_update('T_ALMACEN_INSUMOS',$valores,$where);
-           print_r($stock);
+           if($materiales[0][1] == '00001') $tipo = 0;
+           print_r($stock."/".$tipo);
         }
 
         static function materialAlmacen($codmaterial,$codalmacen)
