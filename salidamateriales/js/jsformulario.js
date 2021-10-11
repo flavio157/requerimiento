@@ -1,3 +1,4 @@
+
 $(document).ready(function() {
     $(window).on("beforeunload", function() { 
       retornar();
@@ -204,11 +205,11 @@ function datosrepetidos(tabla,stock,cantidad) {
 
 
 function _entrega(stock,cantidad) {
-    b1 =  "<a id='btneliminar' class='btn btn-danger btn-sm'>"+
-    "<i class='icon-trash'></i>"+
-  "</a>"+ "<a id='btnmodificar' class='btn btn-primary btn-sm' style='float: right;'>"+
-    "<i class='icon-pencil'></i>"+
-  "</a>"
+    b1 = "<a id='btneliminar' class='btn btn-danger  btn-sm' style='float: right;'>"+
+        "<i class='icon-trash'></i>"+
+        "</a>"+ "<a id='btnmodificar' class='btn btn-primary btn-sm'>"+
+            "<i class='icon-pencil'></i>"+
+        "</a>" ;
     array = [
         a = [$("#txtcodmaterial").val(),'none'],
         b = [$("#txtmaterial").val().toUpperCase(),''],
@@ -286,7 +287,6 @@ function _guardar(tds) {
         Mensaje1('Campo descripcion debe tener almenos 10 palabras','error')
         return;
     };
-
     var codig = $("#txtcodigoper").val();
     var descripcion = $("#txtdescripcion").val();
     var perregistro = $("#vrcodpersonal").val();
@@ -303,14 +303,15 @@ function _guardar(tds) {
             "items" : JSON.stringify(materiales)
             } ,
             success:  function(response){
+                console.log(response);
                 if(response == 1){
                      Mensaje1("Se registro Correctamente",'success')
                         limpiar();
                     }else{
-                        Mensaje1("Error al registrar",'error')
+                        Mensaje1(response,'error')
                     }
                 }
-            });  
+        });
 }
 
 function limpiar() {
@@ -333,9 +334,12 @@ function _update(codigo,serie,tb) {
         } ,
         success:  function(response){
             console.log(response);
-            if(response == 1)
-            tb.closest('tr').remove();
-
+            if(response == 1){
+                tb.closest('tr').remove();
+                Mensaje1("Se registro la devolucion","success");
+            }else{
+                Mensaje1("Error al registrar","error");
+            }
         }
     }); 
   

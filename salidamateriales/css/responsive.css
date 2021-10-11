@@ -27,7 +27,7 @@
     background-color:#fff;;
     height: auto;
     position: absolute;
-    top: 322px;
+    top: 347px;
     z-index: 9999;
     width: 39% !important;
     /*right: 0px;
@@ -111,7 +111,7 @@ input[type=number]::-webkit-outer-spin-button {
        /*  top: 79px;
         z-index: 9999;
        width: 93% !important;*/
-        top: 323px;
+        top: 347px;
         z-index: 9999;
         width: 56% !important;
         right: 0px;

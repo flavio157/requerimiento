@@ -10,60 +10,129 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <title>Ingreso de Materiales</title>
 </head>
 <body>
-    <div class="main">
-        <form class="row g-3">
-            <input type="text" id="vroficina" style="display: none;" value="<?php echo $ofi?>"/>
-            <input type="text" id="vrzona" style="display: none;" value="<?php echo  $zon?>"/>
-            <input type="text" id="vrcodpersonal" style="display: none;" value="<?php echo  $cod?>"/>
-            <div class="row">
-                <div class="col g-3" style="padding-bottom: 8px;">
-                    <center><label class="titulos">Registro de Comprobante</label></center>
-                </div>    
-            </div>
-            <div class="row">
-                <div class="col-md-4">
-                    <label for="inputPassword4" class="form-label">Orden Compra</label>
-                    <input type="text" class="form-control" id="specificSizeInputGroupUsername">
+   <header>
+        <title>Ingreso de Materiales</title>
+   </header>
+   <section>  
+        <div class="main"> 
+            <form>
+                <input type="text" id="vroficina" style="display: none;" value="<?php echo $ofi?>"/>
+                <input type="text" id="vrzona" style="display: none;" value="<?php echo  $zon?>"/>
+                <input type="text" id="vrcodpersonal" style="display: none;" value="<?php echo  $cod?>"/>
+                <div class="row">
+                    <div class="col g-3">
+                    <center><label class="titulos">Registro de material de salida</label></center>
+                    </div>    
                 </div>
-                <div class="col-md-4">
-                        <label for="inputState" class="form-label">Fecha Entrega</label>
-                        <input type="date" class="form-control" >
+                    
+                <div class="row">
+                    <div class="col g-4">
+                        <label class="thtitulo">Personal Solicitante</label>
+                    </div>    
+                </div>  
+                <div class="mb-3">
+                    <div class="row">
+                        <div class="col-4 g-4" style="padding-right: 6px;">
+                            <input type="text" class="form-control" name="txtcodigoper" id="txtcodigoper" disabled>
+                        </div> 
+                        <div class="col-8 g-4" style="padding-left: 0px;">
+                            <div class="input-group mb-3">
+                                <input type="text" class="form-control" placeholder="Recipient's username" disabled>
+                                <a class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#mdpersonal">
+                                    <i class="icon-magnifying-glass" title="Alinear a la derecha"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div> 
+                </div>
+                <div class="mb-3">
+                    <label for="exampleFormControlTextarea1" class="form-label">Descripción</label>
+                    <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
                 </div>
 
-            </div>
-            
-            <div class="row">
-                <div class="col-md-6">
-                    <label for="inputCity" class="form-label">Personal</label>
-                    <div class="input-group mb-3">
-                        <input type="text" class="form-control">
-                        <span class="input-group-text" style="padding: 0px !important;" id="basic-addon2"> <a class="btn btn-info" data-bs-toggle="modal" data-bs-target="#mdpersonal">
-                        <i class="icon-plus" title="Alinear a la derecha"></i>
-                    </a></span>
-                    </div>
+                <div class="row">
+                    <div class="col g-4">
+                        <label class="thtitulo">Material Solicitado</label>
+                    </div>    
                 </div>
-                <div class="col-md-3">
-                    <label for="inputState" class="form-label">Fecha Entrega</label>
-                    <input type="date" class="form-control" >
-                </div>
-                <div class="col-md-3">
-                    <label for="inputZip" class="form-label">Tipo Comprobante</label>
-                    <input type="text" class="form-control" id="inputZip">
-                </div>
+
+
+
+
+
                 
-                <div class="col-12">
-                    <button type="submit" class="btn btn-primary">Sign in</button>
+                <div class="mb-3">
+                    <div class="row">
+                        <div class="col-7 g-4" style="padding-right: 6px;">
+                            <input type="text" class="form-control" name="txtcodigoper" id="txtcodigoper">
+                        </div> 
+
+                        <div class="col-5 g-4" style="padding-left: 0px;">
+                            <div class="input-group mb-3" >
+                                <input type="text" class="form-control" placeholder="Nro Serie">
+                                <a class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#mdpersonal">
+                                    <i class="icon-plus" title="Alinear a la derecha"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div> 
                 </div>
-            </div>
-            
-    <?php
-        include "../vista/modalpersonal.php";
-    ?>
-        </form>    
-    </div>
+
+                <div class="row">
+                        <div class="col-4" style="padding-right: 0px;">
+                            <label for="exampleFormControlTextarea1" class="form-label">Cantidad</label>
+                            <input type="text" class="form-control" placeholder="First name" aria-label="First name">
+                        </div>
+                        <div class="col-4" style="padding-left: 6px;">
+                            <label for="exampleFormControlTextarea1" class="form-label">Stock</label>
+                            <input type="text" class="form-control" placeholder="Last name" aria-label="Last name">
+                        </div>
+                </div>
+
+                <div  class="row">
+                    <div class="col">
+                        <div class="col g-1 titulos materiales"><center>Material a entregar</center></div>    
+                        <div class="table-responsive">  
+                            <table id="tbmaterialentrega" class="table table-striped">
+                                <thead>
+                                    <tr>
+                                        <th class="thtitulo" scope="col">Material</th>
+                                        <th class="thtitulo" scope="col">Serie</th>
+                                        <th class="thtitulo" scope="col">cantidad</th>
+                                        <th class="thtitulo" scope="col">Acciones</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="tdmaterialentrega">
+                                </tbody>
+                            </table>
+                        </div>  
+                    </div> 
+                    <div class="col">  
+                        <div class="col g-1 titulos materiales"><center>Materiales a devolver</center>
+                        </div> 
+                        <div class="table-responsive">  
+                            <table id="tbmaterialsalida" class="table table-striped">
+                                <thead>
+                                    <tr>
+                                        <th class="thtitulo" scope="col">Material</th>
+                                        <th class="thtitulo" scope="col">Serie</th>
+                                        <th class="thtitulo" scope="col">Acciones</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="tbmaterial">
+                                </tbody>
+                            </table>
+                        </div>     
+                    </div> 
+                    
+                   
+                </div>
+
+
+            </form>  
+        </div>     
+    </section>
 </body>
 </html>

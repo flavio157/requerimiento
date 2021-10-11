@@ -132,8 +132,12 @@ require_once("../funciones/cod_almacenes.php");
 
         static function c_guardar($codpersonal,$perregistro,$des,$items)
         {
-           $des = str_replace(' ', '', $des);
-           if(!ctype_alpha(trim($des))){print_r("error descripcion invalida"); return;}
+           if(count($items->tds)==0){print_r("Error ingrese material"); return;} 
+           $regName = '/^(?!.*([A-Za-z])\1{2})/';
+           if(strlen(str_replace(" ", "", $des)) < 30){print_r("Error descripcion invalida"); return;}
+           if(preg_match($regName,$des) == 0){print_r("Error descripcion invalida"); return;}
+           $desc = str_replace(' ', '', $des);
+           if(!ctype_alpha(trim($desc))){print_r("Error descripcion invalida"); return;}
            $material = new m_materiasalida();
            $materiales = $material->m_guardar($codpersonal,$perregistro,$des,$items);
            print_r($materiales);
