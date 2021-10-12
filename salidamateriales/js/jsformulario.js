@@ -98,6 +98,10 @@ $(document).ready(function() {
         guardarProducto();
     })
 
+    $("#btncerrarprod").on('click',function () {
+        document.getElementById("frmagregarProducto").reset();
+    });
+
 });
 
 function _devolverStock(cod,cant,l) {
