@@ -56,27 +56,13 @@ $cod = $_SESSION["cod"];
                         <div class="col-8" style="padding-left: 0px;">
                             <div class="input-group mb-3">
                             <input type="text" class="form-control" name="txtnombrepersonal" id="txtnombrepersonal" disabled>
-                                <a class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#mdpersonal">
+                                <a class="btn btn-success" data-bs-toggle="modal" data-bs-target="#mdpersonal">
                                     <i class="icon-add-user" title="Buscar Personal"></i>
                                 </a>
                             </div>
                         </div>
                     </div> 
                 </div>
-
-                <!--<div class="row g-1">
-                    <div class="col-3">
-                        <input type="text" class="form-control" name="txtcodigoper" id="txtcodigoper" disabled>
-                    </div>
-                    <div class="col-7">
-                        <input type="text" class="form-control" name="txtnombrepersonal" id="txtnombrepersonal" disabled>
-                    </div>
-                    <div class="col-1">
-                        <a class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#mdpersonal">
-                            <i class="icon-plus" title="Alinear a la derecha"></i>
-                        </a>
-                    </div>
-                </div>-->
 
                 <div class="mb-3">
                     <label for="exampleFormControlTextarea1" class="form-label thtitulo">Descripción</label>
@@ -109,41 +95,6 @@ $cod = $_SESSION["cod"];
                     </div> 
                 </div>
                 
-                
-                
-                
-            <!-- <div class="row g-1">
-                    <div class="col-7">
-                    <input type="text" class="form-control" name="txtcodmaterial" id="txtcodmaterial" style="display: none;">
-                    <input type="text" class="form-control" name="txtmaterial" id="txtmaterial" placeholder="Material">
-                    </div>
-                    <div class="col-3">
-                        <input type="text" class="form-control" name="txtseriematerial" id="txtseriematerial" placeholder="Nro Serie">
-                    </div>
-                    <div class="col-1">
-                        <a class="btn  btn-primary" id="aentrega">
-                            <i class="icon-plus" title="Alinear a la derecha"></i>
-                        </a>
-                    </div>
-                    <div id='material' class="sugerencias"></div>
-                </div>--> 
-                
-                
-
-                <!--<div class="row">
-                    <div class="col g-4">
-                    </div>    
-                </div>
-                <div class="row g-1">
-                    <div class="col-4">
-                        <label class="thtitulo">Cantidad</label>
-                        <input type="text" class="form-control" name="txtcanmaterial" id="txtcanmaterial" placeholder="cantidad">
-                    </div>
-                    <div class="col-4">
-                        <label class="thtitulo">Stock</label>
-                        <input type="text" class="form-control" name="txtstckmaterial" id="txtstckmaterial" disabled>
-                    </div>
-                </div>-->
 
                 <div class="row">
                     <div class="col-4" style="padding-right: 0px;">
@@ -155,9 +106,6 @@ $cod = $_SESSION["cod"];
                         <input type="text" class="form-control" name="txtstckmaterial" id="txtstckmaterial" disabled>
                     </div>
                 </div>
-
-
-
 
                 <div  class="row">
                     <div class="col">
