@@ -1,19 +1,28 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    
+    
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js" integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf" crossorigin="anonymous"></script>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6" crossorigin="anonymous">
+   
+    <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
+    <script src="https://code.jquery.com/ui/1.13.0/jquery-ui.js"></script>
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.13.0/themes/base/jquery-ui.css">
+    
+    <script src="../js/jsmolde.js"></script>
     <link rel="STYLESHEET" type="text/css" href="../fonts/style.css">
     <link rel="STYLESHEET" type="text/css" href="../css/responsive.css">
+    
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
-<body>
+<body style="background: #f5f5f5;">
    <header>
-        <title>Ingreso de Materiales</title>
+        <title>Moldes</title>
    </header>
    <section>  
         <div class="main"> 
@@ -23,7 +32,7 @@
                 <input type="text" id="vrcodpersonal" style="display: none;" value="<?php echo  $cod?>"/>
                 <div class="row">
                     <div class="col g-3">
-                    <center><label class="titulos">Registro de material de salida</label></center>
+                    <center><label class="titulos">Registro Fabricacion de molde</label></center>
                     </div>    
                 </div>
                     
@@ -39,8 +48,8 @@
                         </div> 
                         <div class="col-8 g-4" style="padding-left: 0px;">
                             <div class="input-group mb-3">
-                                <input type="text" class="form-control" placeholder="Recipient's username" disabled>
-                                <a class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#mdpersonal">
+                                <input type="text" class="form-control" id="tags">
+                                <a class="btn btn-success" data-bs-toggle="modal" data-bs-target="#mdpersonal">
                                     <i class="icon-magnifying-glass" title="Alinear a la derecha"></i>
                                 </a>
                             </div>
@@ -58,11 +67,6 @@
                     </div>    
                 </div>
 
-
-
-
-
-                
                 <div class="mb-3">
                     <div class="row">
                         <div class="col-7 g-4" style="padding-right: 6px;">
@@ -93,7 +97,7 @@
 
                 <div  class="row">
                     <div class="col">
-                        <div class="col g-1 titulos materiales"><center>Material a entregar</center></div>    
+                        <div class="col g-1 titulos materiales"><center>Material Necesario</center></div>    
                         <div class="table-responsive">  
                             <table id="tbmaterialentrega" class="table table-striped">
                                 <thead>
@@ -110,7 +114,7 @@
                         </div>  
                     </div> 
                     <div class="col">  
-                        <div class="col g-1 titulos materiales"><center>Materiales a devolver</center>
+                        <div class="col g-1 titulos materiales"><center>Personal Encargados</center>
                         </div> 
                         <div class="table-responsive">  
                             <table id="tbmaterialsalida" class="table table-striped">
@@ -126,11 +130,7 @@
                             </table>
                         </div>     
                     </div> 
-                    
-                   
                 </div>
-
-
             </form>  
         </div>     
     </section>

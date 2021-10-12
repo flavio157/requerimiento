@@ -93,6 +93,11 @@ $(document).ready(function() {
     $("#txtdescripcion").bind('keypress', function(e) {
         return letras(e)    
     });
+
+    $("#btnguardarprod").on('click',function () {
+        guardarProducto();
+    })
+
 });
 
 function _devolverStock(cod,cant,l) {
@@ -383,4 +388,42 @@ function _numeros(e) {
       e.preventDefault();
       return false;
     }
+}
+
+function guardarProducto() {
+   var perregistro = $("#vrcodpersonal").val();
+   var producto = $("#mtxtnombreproducto").val();
+   var unidad = $("#mtxtunimedida").val();
+   var codigopro = $("#mtxtcodigopro").val();
+   var stock = $("#mtxtstock").val();
+   var abre = $("#mtxtabreviatura").val();
+   var contable = $("#mtxtcontable").val();
+   var neto = $("#mtxtneto").val();
+   var clase = $("#slclase").val();
+    $.ajax({
+        dataType:'text',
+        type: 'POST', 
+        url:  '../materiales/c_materialesalida.php',
+        data:{
+            "accion" : 'guardarproc',
+            "producto" : producto,
+            "unidad" : unidad,
+            "codigopro" :codigopro,
+            "abre" : abre,
+            "contable" :contable,
+            "neto" : neto,
+            "stock" : stock,
+            "clase" : clase,
+            "personal" : perregistro
+        } ,
+            success:  function(response){
+                console.log(response);
+                if(response == 1){
+                     Mensaje1("Se registro Correctamente",'success');
+                     document.getElementById("frmagregarProducto").reset();
+                }else{
+                    Mensaje1("Error ingrese los datos correctamente",'error')
+                }
+            }
+    });
 }

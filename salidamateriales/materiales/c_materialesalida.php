@@ -51,6 +51,17 @@ require_once("../funciones/cod_almacenes.php");
         $almacen = $_POST['almacen']; 
         $cantidad = $_POST['cantidad'];
         c_materialesalida::c_return_stock($codmaterial,$almacen,$cantidad);
+    }else if($accion == "guardarproc"){
+        $producto = $_POST['producto'];
+        $unidad = $_POST['unidad'];
+        $codigopro = $_POST['codigopro'];
+        $abre = $_POST['abre'];
+        $contable = $_POST['contable'];
+        $neto = $_POST['neto'];
+        $clase = $_POST['clase'];
+        $stock =$_POST['stock']; 
+        $personal = $_POST['personal'];
+        c_materialesalida::guardarproducto($producto,$unidad,$codigopro,$abre,$contable,$neto,$clase,$personal,$stock);
     }   
 
     
@@ -210,6 +221,13 @@ require_once("../funciones/cod_almacenes.php");
             $valores = select_where($user_datos);
             $materiales = $material->m_buscar('V_VERIFICAR_STOCK',$valores);
             return $materiales;
+        }
+
+
+        static function guardarproducto($producto,$unidad,$codigopro,$abre,$contable,$neto,$clase,$personal,$stock){
+            $material = new m_materiasalida(); 
+            $c_guardarprod = $material->m_guardarprod($producto,$unidad,$codigopro,$abre,$contable,$neto,$clase,$personal,$stock);
+            print_r($c_guardarprod);
         }
 
     }

@@ -74,8 +74,24 @@ require_once("f_funcion.php");
             return $res;
         }
 
+        public function m_guardarprod($producto,$unidad,$codigopro,$abre,$contable,$neto,$clase,$personal,$stock)
+        {
+            /*cambiar esta haci solo por el momento*/
+            $producto = strtoupper($producto);
+            $fech_registro = retunrFechaSqlphp(date("Y-m-d"));
+            $query = $this->bd->prepare("INSERT INTO T_PRODUCTO (COD_PRODUCTO,COD_CATEGORIA
+            ,DES_PRODUCTO,UNI_MEDIDA,STOCK_MINIMO,ABR_PRODUCTO,PRE_PRODUCTO,EST_PRODUCTO,USU_REGISTRO,
+            FEC_REGISTRO,MAQUINA,COD_EMPRESA,COD_CONTABLE,PESO_NETO,COD_CLASE) 
+            VALUES('$codigopro','00003','$producto','$unidad',
+            $stock,'$abre',0,'A','$personal','$fech_registro','','00001','$contable','$neto','$clase')");
+            $resp  = $query->execute();  
+
+            $query2 = $this->bd->prepare("INSERT INTO T_ALMACEN_INSUMOS (COD_ALIN,COD_ALMACEN,COD_PRODUCTO,STOCK_ACTUAL,COD_CLASE) 
+            VALUES('7','00028','$codigopro',$stock,'$clase')");
+            $resp2  = $query2->execute();
+            return $resp2;
+        }
+
 
     }
-
-
 ?>

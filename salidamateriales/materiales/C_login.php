@@ -25,7 +25,6 @@ class C_Login
         if($datosUsuario){
             return header("Location: index.php");
            }else{
-           // return header("Location: ../index.php");
            print_r("USTED NO TIENE PERMISO");
         }
     }

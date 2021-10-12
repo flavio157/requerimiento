@@ -63,6 +63,7 @@ $cod = $_SESSION["cod"];
                         </div>
                     </div> 
                 </div>
+        
 
                 <div class="mb-3">
                     <label for="exampleFormControlTextarea1" class="form-label thtitulo">Descripción</label>
@@ -79,7 +80,13 @@ $cod = $_SESSION["cod"];
                     <div class="row">
                         <div class="col-7" style="padding-right: 6px;">
                             <input type="text" class="form-control" name="txtcodmaterial" id="txtcodmaterial" style="display: none;">
-                            <input type="text" class="form-control" name="txtmaterial" id="txtmaterial" placeholder="Material">
+                            <div class="input-group mb-3" >
+                                <input type="text" class="form-control" name="txtmaterial" id="txtmaterial" placeholder="Material">
+                                <a class="btn  btn-primary" id="addmaterial"  data-bs-toggle="modal" data-bs-target="#mdmaterial">
+                                    <i class="icon-squared-plus" title="Registrar Material"></i>
+                                </a>
+                            </div>
+                            
                             <div id='material' class="sugerencias"></div>
                         </div> 
 
@@ -94,7 +101,6 @@ $cod = $_SESSION["cod"];
                         </div>
                     </div> 
                 </div>
-                
 
                 <div class="row">
                     <div class="col-4" style="padding-right: 0px;">
@@ -106,6 +112,7 @@ $cod = $_SESSION["cod"];
                         <input type="text" class="form-control" name="txtstckmaterial" id="txtstckmaterial" disabled>
                     </div>
                 </div>
+
 
                 <div  class="row">
                     <div class="col">
