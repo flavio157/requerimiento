@@ -27,6 +27,7 @@
            $lstinsumos = new m_insumos();
            $prodvent = $lstinsumos->m_formulaxProd($fech_ini,$fech_fin,'V_COMP_VENTA','FECHA_CPVE');
          
+         
            for ($i=0; $i <sizeof($prodvent) ; $i++) { 
                $insumXproc =c_insumoventas::insumoXproduc($prodvent[$i][2]);
               
@@ -43,18 +44,18 @@
                }
            }
            $compra_insu = $lstinsumos->m_insum_compra($fech_ini,$fech_fin,'0','');
-           
-           for ($k=0; $k < sizeof($compra_insu); $k++) { //si no esta en el primer for es por que no se vendio ningun producto que nesecite el insumo
+          
+            for ($k=0; $k < sizeof($compra_insu); $k++) { //si no esta en el primer for es por que no se vendio ningun producto que nesecite el insumo
                 if(!in_array($compra_insu[$k][0],$insucod)){
                     
                     array_push($insarray,array($compra_insu[$k][0],$compra_insu[$k][1],0,$compra_insu[$k][2]));
                 } 
-            } 
+            }
 
             
            $agrupado = c_insumoventas::agrupar($insarray);
            
-           $dato = array(
+            $dato = array(
                 'insumo' => $agrupado,
             );
             echo json_encode($dato,JSON_FORCE_OBJECT);
@@ -110,8 +111,8 @@
                     }
                 }
                 if($repeat==false)
-                    $result[] = array('id' => $t[0],'nombre' => $t[1],'salida' => round($t[2],2) ,
-                    'ingreso' => round($t[3],2));
+                    $result[] = array('id' => $t[0],'nombre' => $t[1],'salida' => round($t[2],3) ,
+                    'ingreso' => round($t[3],3));
             }
             return $result;     
         }

@@ -7,9 +7,6 @@ $(document).ready(function(){
         insumos($("#fech_ini").val(),$("#fech_fin").val());
         envaces($("#fech_ini").val(),$("#fech_fin").val());
     });
-
-
- 
 });
 
 function insumos(fech_ini,fech_fin){
@@ -23,6 +20,7 @@ function insumos(fech_ini,fech_fin){
             'fech_fin':fech_fin
         },
         success: function(response){
+            console.log(response +"aqui");
             obj = JSON.parse(response);
             $.each(obj['insumo'] ,function name(i,e) {
                 if(e['ingreso'] < e['salida']){
@@ -30,7 +28,7 @@ function insumos(fech_ini,fech_fin){
                 }else{
                     total = Number(e['ingreso'] - e['salida'])
                 }
-                __ins(e['id'],e['nombre'],e['salida'],e['ingreso'],total.toFixed(2))
+                __ins(e['id'],e['nombre'],Number(e['salida']).toFixed(3),Number(e['ingreso']).toFixed(3),total.toFixed(3))
             });
         }
     });

@@ -18,6 +18,7 @@
                                         SUM(CANTIDAD) as CANTIDAD , SUM(PRECIO) as PRECIO
                                         FROM $vista WHERE 
                                         $campo  >= '$fech_ini' and $campo <= '$fech_fin' group by COD_PRODUCTO");
+           
             $query->execute(); 
             $venta = $query->fetchAll();
             return $venta;
