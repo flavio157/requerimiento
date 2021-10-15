@@ -1,4 +1,4 @@
-//este es el archivo 
+//este es el archivo   
 
 var prod = "";
 var ingreso = "";
