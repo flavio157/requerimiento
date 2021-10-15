@@ -24,31 +24,42 @@
         {  
            $insarray = array();
            $insucod= array();
+           $inscom = array();
            $lstinsumos = new m_insumos();
            $prodvent = $lstinsumos->m_formulaxProd($fech_ini,$fech_fin,'V_COMP_VENTA','FECHA_CPVE');
-         
+          
          
            for ($i=0; $i <sizeof($prodvent) ; $i++) { 
                $insumXproc =c_insumoventas::insumoXproduc($prodvent[$i][2]);
               
                for ($l=0; $l < sizeof($insumXproc); $l++) { 
                     array_push($insucod,$insumXproc[$l][3]);
-                    $compra_insu = $lstinsumos->m_insum_compra($fech_ini,$fech_fin,'1',$insumXproc[$l][3]);
-                    $totalinsu = $insumXproc[$l][2] * $insumXproc[$l][5] / $prodvent[$i][4];
+                   
+                        $compra_insu = $lstinsumos->m_insum_compra($fech_ini,$fech_fin,'1',$insumXproc[$l][3]);
                         
-                   if(sizeof($compra_insu) > 0){ 
-                        array_push($insarray,array($insumXproc[$l][3],$insumXproc[$l][4],round($totalinsu,2),$compra_insu[0][2]));  
-                   }else{
-                    array_push($insarray,array($insumXproc[$l][3],$insumXproc[$l][4],round($totalinsu,2),0)); 
-                   }
+                        $totalinsu = ($insumXproc[$l][2] * $insumXproc[$l][5]) / $prodvent[$i][4];
+                   
+                        if(sizeof($compra_insu) > 0){ 
+                            if(!in_array(trim($insumXproc[$l][3]),$inscom)){
+                                array_push($inscom,trim($insumXproc[$l][3]));
+                                array_push($insarray,array($insumXproc[$l][3],$insumXproc[$l][4],$totalinsu,$compra_insu[0][2])); 
+                            } else{
+                                array_push($insarray,array($insumXproc[$l][3],$insumXproc[$l][4],$totalinsu,0));
+                            } 
+                        }else{
+                         array_push($insarray,array($insumXproc[$l][3],$insumXproc[$l][4],$totalinsu,0)); 
+                        }
+                    
+                  
                }
            }
            $compra_insu = $lstinsumos->m_insum_compra($fech_ini,$fech_fin,'0','');
           
             for ($k=0; $k < sizeof($compra_insu); $k++) { //si no esta en el primer for es por que no se vendio ningun producto que nesecite el insumo
                 if(!in_array($compra_insu[$k][0],$insucod)){
-                    
-                    array_push($insarray,array($compra_insu[$k][0],$compra_insu[$k][1],0,$compra_insu[$k][2]));
+                    if(!in_array(trim($compra_insu[$k][0]),$inscom)){
+                        array_push($insarray,array($compra_insu[$k][0],$compra_insu[$k][1],0,$compra_insu[$k][2]));
+                    }
                 } 
             }
 
@@ -116,5 +127,9 @@
             }
             return $result;     
         }
+		
+       
+    
+
     }
 ?>

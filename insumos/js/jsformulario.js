@@ -20,14 +20,9 @@ function insumos(fech_ini,fech_fin){
             'fech_fin':fech_fin
         },
         success: function(response){
-            console.log(response +"aqui");
             obj = JSON.parse(response);
             $.each(obj['insumo'] ,function name(i,e) {
-                if(e['ingreso'] < e['salida']){
-                    total = Number(e['salida'] - e['ingreso'])
-                }else{
-                    total = Number(e['ingreso'] - e['salida'])
-                }
+                    total = Number(e['ingreso'] - e['salida']);
                 __ins(e['id'],e['nombre'],Number(e['salida']).toFixed(3),Number(e['ingreso']).toFixed(3),total.toFixed(3))
             });
         }
@@ -49,12 +44,7 @@ function envaces(fech_ini,fech_fin){
             obj = JSON.parse(response);
             $.each(obj['envases'] ,function name(i,e) {
                 var total
-                if(e['ingreso'] < e['salida']){
-                    total = Number(e['salida'] - e['ingreso'])
-                }else{
-                    total = Number(e['ingreso'] - e['salida'])
-                }
-                 
+                 total = Number(e['ingreso'] - e['salida'])
                 __ins(e['id'],e['nombre'],e['salida'],e['ingreso'],total.toFixed(2))
             });
         }
