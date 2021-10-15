@@ -1,3 +1,5 @@
+//este es el archivo
+
 var prod = "";
 var ingreso = "";
 var insu="";
