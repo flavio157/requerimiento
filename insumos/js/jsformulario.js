@@ -1,4 +1,4 @@
-//archivo modificado
+//archivo modificado js
 
 var prod = "";
 var ingreso = "";
