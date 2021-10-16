@@ -1,4 +1,4 @@
-//este es el archivo   
+//archivo modificado
 
 var prod = "";
 var ingreso = "";
@@ -7,7 +7,7 @@ $(document).ready(function(){
     $("#btnfiltrar").on('click',function (params) {
         $('#tbinsumo').find("tr:gt(0)").remove();
         insumos($("#fech_ini").val(),$("#fech_fin").val());
-        envaces($("#fech_ini").val(),$("#fech_fin").val());
+        //envaces($("#fech_ini").val(),$("#fech_fin").val());
     });
 });
 
@@ -31,7 +31,7 @@ function insumos(fech_ini,fech_fin){
     });
 }
 
-
+/*
 function envaces(fech_ini,fech_fin){
     $.ajax({
         dataType:'text',
@@ -43,6 +43,7 @@ function envaces(fech_ini,fech_fin){
             'fech_fin':fech_fin
         },
         success: function(response){
+           console.log(response);
             obj = JSON.parse(response);
             $.each(obj['envases'] ,function name(i,e) {
                 var total
@@ -51,7 +52,7 @@ function envaces(fech_ini,fech_fin){
             });
         }
     });
-}
+}*/
 
 function __ins(cod_prod,nombre,salida,entrada,total) {
     var fila="<tr><td class='tdproducto' style='display: none;'>"+cod_prod+
