@@ -1,26 +1,14 @@
 <?php
 date_default_timezone_set('America/Lima');
-require_once("../funciones/m_materialsalida.php");
+require_once("m_materialsalida.php");
 require_once("../funciones/f_funcion.php");
 require_once("../funciones/cod_almacenes.php");
     $accion = $_POST['accion'];
     if($accion == "personal"){
-        $dato = $_POST['dato'];
-        $user_datos = array(
-            'EST_PERSONAL' => 'A',
-        );
-        $valores = select_where($user_datos);
-        c_materialesalida::c_buscarlike('T_PERSONAL','NOM_PERSONAL1',$valores,$accion,$dato);
+        c_materialesalida::c_filtarpersonal();
     }else if($accion == "material"){
-        $dato = $_POST['dato'];
         $codalmacen = oficiona($_POST['almacen']);
-        $user_datos = array(
-            'ALMACEN' => $codalmacen,
-            'EST_PRODUCTO' => 'A',
-            'COD_CATEGORIA' => '00003',
-        );
-        $valores = select_where($user_datos);
-        c_materialesalida::c_buscarlike('V_BUSCAR_MATERIALES','DES_PRODUCTO',$valores,$accion,$dato);
+        c_materialesalida::c_filtarproducto($codalmacen);
     }else if($accion == "sindevolver"){
         $cod_pers = $_POST['dato'];
         c_materialesalida::c_mat_sin_devolver($cod_pers);
@@ -67,21 +55,50 @@ require_once("../funciones/cod_almacenes.php");
     
     class c_materialesalida
     {
-        static function c_buscarlike($tabla,$campolike,$valores,$tipo,$dato){
-                $material = new m_materiasalida();
-                $buscar = $material->m_buscarlike($tabla,$campolike,$valores,$dato);
-                if($tipo == 'personal')$lista = self::listar($buscar,0,5,0,0,0);
-                else $lista = self::listar($buscar,0,1,2,7,5);
-                echo $lista; 
-        }  
-        
-        static function listar($buscar,$c1,$c2,$c3,$c4,$c5){
-            $html = "";
-            foreach($buscar as $c){
-                $html.= '<div><a class="suggest-element" datstc="'.$c[$c5].'" datalm="'.$c[$c4].'" datatip="'.$c[$c3].'" dataid="'.$c[$c1].'" data="'.$c[$c2].'">'.$c[$c2].'</a></div>';
+        static function c_filtarpersonal()
+        {
+            $personal = array();
+            $m_personal = new m_materiasalida();
+            $wher = array(
+                'EST_PERSONAL' => 'A',
+            );   
+            $valores = select_where($wher);
+            $c_personal = $m_personal->m_buscar('T_PERSONAL',$valores);
+            for ($i=0; $i < count($c_personal) ; $i++) { 
+                array_push($personal,array(
+                    "code" => $c_personal[$i][0],
+                    "label" => $c_personal[$i][5]));
             }
-            return $html;
-        }
+            $dato = array(
+                'dato' => $personal
+            );
+            echo json_encode($dato,JSON_FORCE_OBJECT);
+        } 
+
+        static function c_filtarproducto($codalmacen)
+        {
+            $material = array();
+            $m_personal = new m_materiasalida();
+            $user_datos = array(
+                'ALMACEN' => $codalmacen,
+                'EST_PRODUCTO' => 'A',
+            );
+            $valores = select_where($user_datos);
+            $c_material = $m_personal->m_buscar('V_BUSCAR_MATERIALES',$valores);
+            for ($i=0; $i < count($c_material) ; $i++) { 
+                array_push($material,array(
+                    "code" => $c_material[$i][0],
+                    "label" => $c_material[$i][1],
+                    "clase" => $c_material[$i][2],
+                    "stock" => $c_material[$i][5],
+                    "alma" => $c_material[$i][7]));
+            }
+            $dato = array(
+                'dato' => $material
+            );
+            echo json_encode($dato,JSON_FORCE_OBJECT);
+        } 
+        
 
         static function c_mat_sin_devolver($cod_personal)
         {

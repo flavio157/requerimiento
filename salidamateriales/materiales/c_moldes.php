@@ -17,7 +17,9 @@
             $valores = select_where($wher);
             $c_personal = $m_personal->m_buscar('T_PERSONAL',$valores);
             for ($i=0; $i < count($c_personal) ; $i++) { 
-                array_push($personal,$c_personal[$i][5]);
+                array_push($personal,array(
+                    "code" => $c_personal[$i][0],
+                    "label" => $c_personal[$i][5]));
             }
             $dato = array(
                 'dato' => $personal

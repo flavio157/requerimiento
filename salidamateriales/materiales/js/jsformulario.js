@@ -1,5 +1,30 @@
-
+var sugepersonal = [];
+var sugematerial = [];
 $(document).ready(function() {
+    buscarpersonal();
+    $("#txtpersonal").autocomplete({
+      source: sugepersonal,
+        select: function (event, ui) {
+          $("#txtcodpersonal").val(ui.item.code);
+        }
+    });
+    buscarmaterial();
+    $("#txtmaterial").autocomplete({
+        source: sugematerial,
+          select: function (event, ui) {
+            $("#txtcodmaterial").val(ui.item.code);
+            $("#txtstckmaterial").val(ui.item.stock);
+            if(ui.item.clase == '00001'){
+                $("#txtcanmaterial").attr('disabled','true');
+                $("#txtseriematerial").removeAttr('disabled');
+            }else{
+                $("#txtcanmaterial").removeAttr('disabled');
+                $("#txtseriematerial").attr('disabled','true');
+            }
+          }
+    });
+  
+
     $(window).on("beforeunload", function() { 
       retornar();
     })
@@ -23,14 +48,6 @@ $(document).ready(function() {
         $("#txtcanmaterial").val('');
     });
     
-    $("#txtpersonal").on('keyup',function() {
-        _buscarsugerencia($(this),'personal');
-    })
-
-    $("#txtmaterial").on('keyup',function() {
-        _buscarsugerencia($(this),'material');
-    })
-
     $("html").click(function(){
         $('#personal').fadeOut(0);
         $('#material').fadeOut(0); 
@@ -101,7 +118,6 @@ $(document).ready(function() {
     $("#btncerrarprod").on('click',function () {
         document.getElementById("frmagregarProducto").reset();
     });
-
 });
 
 function _devolverStock(cod,cant,l) {
@@ -233,52 +249,44 @@ function _entrega(stock,cantidad) {
     $("#txtstckmaterial").val(Number(stock).toFixed(2)); 
 }
 
-function _buscarsugerencia(elemt,idelemt) {
-    if(elemt.val().length == 0)$('#'+idelemt).fadeOut(0); 
-    else  buscarlike(idelemt,elemt.val()); 
-}
-
-function buscarlike($accion,$campo) {
+function buscarpersonal($accion,$campo) {
     var oficina = $("#vroficina").val();
     $.ajax({
         dataType:'text',
         type: 'POST', 
         url:  '../materiales/c_materialesalida.php',
         data:{
-            "accion" : $accion,
-            "dato" : $campo,
+            "accion" : 'personal',
             "almacen" : oficina
         } ,
         success:  function(response){
-            sugerecias(response,$accion);
+            obj = JSON.parse(response);
+            $.each(obj['dato'], function(i, item) {
+                sugepersonal.push(item); 
+            });
         }
     });   
 }
-function sugerecias(response,id) {
-    $("#"+id).fadeIn(0).html(response);
-       if(response != ""){
-            $("#"+id).height(300);
-            $("#"+id).css('overflow','scroll');
-        }else{
-            $("#"+id).height(0);
+
+function buscarmaterial($accion,$campo) {
+    var oficina = $("#vroficina").val();
+    $.ajax({
+        dataType:'text',
+        type: 'POST', 
+        url:  '../materiales/c_materialesalida.php',
+        data:{
+            "accion" : 'material',
+            "almacen" : oficina
+        } ,
+        success:  function(response){
+            obj = JSON.parse(response);
+            $.each(obj['dato'], function(i, item) {
+                sugematerial.push(item); 
+            });
         }
-            $('#'+id).fadeIn(0).html(response);            
-            $('.suggest-element').on('click', function(){
-            $("#txtstck"+id).val($(this).attr('datstc'));
-            if($(this).attr('datatip') == '00001'){
-                $("#txtcan"+id).attr('disabled','true');
-                $("#txtserie"+id).removeAttr('disabled');
-            }else{
-                $("#txtcan"+id).removeAttr('disabled');
-                $("#txtserie"+id).attr('disabled','true');
-            }
-            $("#txtcan"+id).val('');
-            $("#txtserie"+id).val('');
-            $("#txtcod"+id).val($(this).attr('dataid'));
-            $("#txt"+id).val($(this).attr('data'));
-            $('#'+id).fadeOut(0);
-    });
+    });   
 }
+
 
 function _createtable(td,idtbttabla) {
     var fila="<tr>";
@@ -292,8 +300,8 @@ function _createtable(td,idtbttabla) {
 }
 
 function _guardar(tds) {
-    if($("#txtdescripcion").val().trim().split(' ').length < 10){
-        Mensaje1('Campo descripcion debe tener almenos 10 palabras','error')
+    if($("#txtdescripcion").val().trim().split(' ').length < 5){
+        Mensaje1('Campo descripcion debe tener almenos 5 palabras','error')
         return;
     };
     var codig = $("#txtcodigoper").val();

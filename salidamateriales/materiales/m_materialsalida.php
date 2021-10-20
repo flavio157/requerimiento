@@ -1,23 +1,23 @@
 <?php
 date_default_timezone_set('America/Lima');
-require_once("DataBase.php");
-require_once("f_funcion.php");
+require_once("../funciones/DataBasePlasticos.php");
+require_once("../funciones/f_funcion.php");
     class m_materiasalida 
     {
         private $bd;
 
         public function __construct()
         {
-            $this->bd=DataBase::Conectar();
+            $this->bd=DataBasePlasticos::Conectar();
         }
 
-        public function m_buscarlike($tabla,$columna2,$valores,$dato){
+        /*public function m_buscarlike($tabla,$columna2,$valores,$dato){
             $query = $this->bd->prepare("SELECT * FROM $tabla where 
             $columna2 LIKE '%$dato%' AND $valores");
             $query->execute();
             $datos = $query->fetchAll();
             return $datos;
-        }
+        }*/
 
         public function m_buscar($tabla,$dato)
         {

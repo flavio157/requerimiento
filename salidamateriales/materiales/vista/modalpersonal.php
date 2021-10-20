@@ -12,7 +12,7 @@
             <div class="col">
               <input type="text" id="txtpersonal" class="form-control" autocomplete="off">
             </div>
-            <div id="personal" class="sugerenciaspersonal"></div>
+            <!--<div id="personal" class="sugerenciaspersonal"></div>-->
         </div>   
       </div>
       <div class="modal-footer">

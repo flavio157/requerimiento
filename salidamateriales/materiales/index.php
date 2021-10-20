@@ -13,17 +13,38 @@ $cod = $_SESSION["cod"];
 <head>
     <meta charset="UTF-8">
 
-    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+   <!-- <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>-->
+    <!--<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>-->
     <link rel="STYLESHEET" type="text/css" href="../fonts/style.css">
-	<link rel="STYLESHEET" type="text/css" href="../css/responsive.css">
-    <script src="../js/jsformulario.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js" integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf" crossorigin="anonymous"></script>
+	<link rel="STYLESHEET" type="text/css" href="./css/responsive.css">
+    <script src="../js/jquery-3.3.1.slim.min.js"></script>
+    <script src="../js/jquery.min.js"></script>
+    <script src="./js/jsformulario.js"></script>
+    <script src="../js/bootstrap5.bundel.min.js"></script>
+    <!--<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js" integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf" crossorigin="anonymous"></script>-->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6" crossorigin="anonymous">
-    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="../js/sweetalert2@11.js"></script>
+    <!--<script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>-->
+
+    <!--<script src="https://code.jquery.com/jquery-3.6.0.js"></script>-->
+    <!--<script src="https://code.jquery.com/ui/1.13.0/jquery-ui.js"></script>-->
+    <script src="../js/jquery-ui-autocompletar.js"></script>
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.13.0/themes/base/jquery-ui.css">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
+<style>
+ul.ui-autocomplete {
+    z-index: 1100;
+}
+.ui-autocomplete.ui-front {
+    max-height: 300px;
+    width: 100px;
+    overflow-y: auto;   
+    overflow-x: hidden; 
+    z-index:1100 !important;
+}
+</style>
 <body style="background: #f5f5f5;">
     <header>
         <title>Ingreso de Materiales</title>
@@ -87,7 +108,7 @@ $cod = $_SESSION["cod"];
                                 </a>
                             </div>
                             
-                            <div id='material' class="sugerencias"></div>
+                           
                         </div> 
 
                         <div class="col-5" style="padding-left: 0px;">
@@ -167,8 +188,8 @@ $cod = $_SESSION["cod"];
                 </form>  
 
                 <?php 
-                    include("../vista/modalpersonal.php");
-                    include("../vista/modalmaterial.php");
+                    include("./vista/modalpersonal.php");
+                    include("./vista/modalmaterial.php");
                 ?>
         </div>
    </section>
