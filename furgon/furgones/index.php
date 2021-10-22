@@ -1,3 +1,19 @@
+<?php
+
+if (session_status() == PHP_SESSION_NONE) {
+    session_start();
+}
+
+/*if(!isset($_SESSION['zona'])){
+    header('Location: index.php');
+    exit;
+} */
+date_default_timezone_set('America/Lima');
+$fcha = date("Y-m-d",strtotime(date("Y-m-d")."+ 1 days"));
+$ofi = $_SESSION["ofi"];
+$zon = $_SESSION["zon"];
+$cod = $_SESSION["cod"];
+?>
 <html lang="en"><head>
   <meta charset="UTF-8">
   
@@ -11,15 +27,19 @@
 </head>
   
 <body translate="no">
+        <input type="text" id="vroficina" style="display: none;" value="<?php echo $ofi?>"/>
+        <input type="text" id="vrzona" style="display: none;" value="<?php echo  $zon?>"/>
+        <input type="text" id="vrcodpersonal" style="display: none;" value="<?php echo  $cod?>"/>
+        <input type="text" id="vrcodcliente" style="display: none;"/>
     <div class="contenradio">
         <div class="d-flex">
             <div class="form-check form-check-inline" style="color: #fff;">
                 <input class="form-check-input" type="radio" name="inlineRadioOptions" id="rdoficinas" value="Oficinas">
-                <label class="form-check-label" for="rdoficinas">Oficina</label>
+                <label class="form-check-label" for="rdoficinas">General</label>
             </div>
             <div class="form-check form-check-inline" style="color: #fff;">
                 <input class="form-check-input" type="radio" name="inlineRadioOptions" id="rdvendedor" value="Vendedor">
-                <label class="form-check-label" for="rdvendedor">Vendedor</label>
+                <label class="form-check-label" for="rdvendedor">Oficina</label>
             </div>
         </div>
     </div>
@@ -39,7 +59,7 @@
                 </div>
             </form>
 
-            <div class="col-md-12">
+            <div class="col-md-12" id="divtabla">
                 <div class="card">
                         <div class="card-header" >
                             REPORTE DE FURGON
@@ -60,11 +80,22 @@
                     </div>
                 </div> 
             </div>
+            <div class="row" id="divcomentario">
+                <div class="col g-4">
+                    <button  type="button" id="btnmodalcomen" class="btn btn-primary mb-2"  style="float: right;"
+                             data-bs-toggle="modal" data-bs-target="#modalcomentario">
+                    <i class="icon-save" title="Guardar datos"></i>Comentario</button>
+                </div> 
+            </div>
         </div>
+
+        <?php
+            include "./modal/modalComentario.php";
+        ?>
+
+
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-       
         <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.0.0/js/bootstrap.min.js"></script>
-       
         <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.3/css/dataTables.bootstrap5.min.css" />
         <script src="https://cdn.datatables.net/1.11.3/js/jquery.dataTables.min.js"></script>
         <script src="https://cdn.datatables.net/1.11.3/js/dataTables.bootstrap5.min.js"></script>

@@ -12,51 +12,76 @@ document.querySelector('#rdoficinas').checked = true;
     }else if(radion == 1){
         fechafin = $("#findtfecha").val();
         if(fechafin == ''){Mensaje1("Ingrese fecha fin","error"); return;};
-        lstvenfurgon(fechaini,fechafin);
+        if($("#selectofi").val() == ''){Mensaje1("Ingrese oficina","error"); return;}
+        lstvenfurgon(fechaini,fechafin,$("#selectofi").val());
     }   
  });
 
 $("input[id=rdvendedor]").change(function () {	 
-    html =  "<div class='col-auto' id='divfechfin'>"+
+    fech =  "<div class='col-auto' id='divfechfin'>"+
                 "<div class='input-group input-group mb-3'  style='margin-bottom: 0px !important;'>"+
                     "<span class='input-group-text' id='inputGroup-sizing-default'>F. Fin &nbsp&nbsp&nbsp</span>"+
                     "<input type='date' class='form-control' id='findtfecha' aria-label='Sizing example input' aria-describedby='inputGroup-sizing-sm'>"+
                 "</div>"+
             "</div>";
-  //  reiniciar();
-    $("#divfechini").after(html);
-    /*if($("#tbprincipal tr").length > 1){
-        data
-        .clear()
-        .draw();
-    };*/
+    selec = "<div class='col-auto' id='divselect'>"+
+                "<div class='input-group input-group mb-3' style='margin-bottom: 0px !important;'>"+
+                "<span class='input-group-text' id='inputGroup-sizing-default'>Oficina &nbsp</span>"+
+                "<select class='form-select' id='selectofi' aria-label=''>"+
+                    "<option value='' selected >Oficina</option>"+
+                    "<option value='SMP'>SMP</option>"+
+                    "<option value='SMP3'>SMP3</option>"+
+                    "<option value='SMP4'>SMP4</option>"+
+                    "<option value='SMP5'>SMP5</option>"+
+                    "<option value='SMP6'>SMP6</option>"+
+                    "<option value='SMP7'>SMP7</option>"+
+                    "<option value='SMP8'>SMP8</option>"+
+                    "<option value='SMP9'>SMP9</option>"+
+                    "<option value='SMP10'>SMP10</option>"+
+                "</select>"+
+            "</div>"+
+            "</div>";
+    $("#divfechini").after(fech);
+    $("#divfechfin").after(selec);
+  //  lstoficina();
+  
     $('#tbprincipal').find("tr").remove();
     radion = 1;
     $("#iniciodtfecha").val('');
     $("#findtfecha").val();
-   
-   
+    document.getElementById("divcomentario").remove();
 });
 
 $("input[id=rdoficinas]").change(function () {	 
     document.getElementById("divfechfin").remove();
+    document.getElementById("divselect").remove();
     reiniciar();
-   /* if($("#tbprincipal tr").length > 1){
-        console.log($("#tbprincipal tr").length);
-        data
-        .clear()
-        .draw();
-    };*/
+ 
     $('#tbprincipal').find("tr").remove();
     radion = 0;
     $("#iniciodtfecha").val('');
     $("#findtfecha").val();
-    
+    divcomen = "<div class='row' id='divcomentario'>"+
+                    "<div class='col g-4'>"+
+                        "<button  type='button' id='btnmodalcomen' class='btn btn-primary mb-2'  style='float: right;'"+
+                        "data-bs-toggle='modal' data-bs-target='#modalcomentario'>"+
+                        "<i class='icon-save' title='Guardar datos'></i>Comentario</button>"+
+                    "</div>"+
+                "</div>";
+    $("#divtabla").after(divcomen);
 });
+
+$("#btnguarcomentario").on('click',function () {
+    g_comentario($("#txtcomentario").val(),$("#vrcodpersonal").val());
+});
+
+$("#btnmodalcomen").on('click',function() {
+    lstcomentario();
+})
 
 });
 
-function lstvenfurgon(fecini,fecfin) {
+function lstvenfurgon(fecini,fecfin,select) {
     $.ajax({
         dataType:'text',
         type: 'POST', 
@@ -64,7 +89,8 @@ function lstvenfurgon(fecini,fecfin) {
         data:{
             "accion" : 'vendedor',
             "fechini" : fecini,
-            "fechfin" : fecfin  
+            "fechfin" : fecfin,
+            "select" : select  
         } ,
         success:  function(response){
             obj = JSON.parse(response);
@@ -78,6 +104,7 @@ function lstvenfurgon(fecini,fecfin) {
             });
             var dataSet = arr;
            data = $("#tbcabecera").DataTable({
+                "order": [[2,'desc']],
                 destroy: true,
                 "paging": true,
                 "data": dataSet,
@@ -85,7 +112,7 @@ function lstvenfurgon(fecini,fecfin) {
                 "bLengthChange": false,
                 "bFilter": false,
                 "bInfo": false,
-                "ordering": false,
+                "ordering": true,
                 language: {
                     "paginate": {
                         "first": "Primero",
@@ -99,6 +126,7 @@ function lstvenfurgon(fecini,fecfin) {
     });    
 }
 
+
 function lstfurgon(fecha){
     $.ajax({
         dataType:'text',
@@ -111,6 +139,24 @@ function lstfurgon(fecha){
         success:  function(response){
           obj = JSON.parse(response);
           tablacompleja(obj['furgon'],obj['agrupado']); 
+        }
+    });   
+}
+
+
+function lstoficina() {
+    $.ajax({
+        dataType:'text',
+        type: 'POST', 
+        url:  'c_furgon.php',
+        data:{
+            "accion" : 'oficina',
+        } ,
+        success:  function(response){
+            obj = JSON.parse(response);
+            $.each(obj['dato'], function(id, name) {
+                $("#selectofi").append('<option value='+name+'>'+name+'</option>');
+              });
         }
     });   
 }
@@ -198,17 +244,6 @@ function reiniciar() {
    
 }
 
-/* function tablanormal(idtbttabla ,fila) {
-       var  fila ="<tr><td></td>"+
-                    "<td>"+f[1]+"</td>"+
-                    "<td>"+f[2]+"</td></tr>";
-                    tablanormal("tbprincipal" ,fila);   
-    var btn = document.createElement("TR");
-    btn.innerHTML=fila;
-    document.getElementById(idtbttabla).appendChild(btn);   
-}*/ 
-
-
 function Mensaje1(texto,icono){
     Swal.fire({
      icon: icono,
@@ -221,3 +256,44 @@ function Mensaje1(texto,icono){
      });
 }
 
+function g_comentario(comentario,usuario) {
+    $.ajax({
+        dataType:'text',
+        type: 'POST', 
+        url:  'c_furgon.php',
+        data:{
+            "accion" : 'guardar',
+            "comen" : comentario,
+            "usuario" : usuario
+        } ,
+        success:  function(response){
+            if(response == 1){ 
+                Mensaje1("Se guardo el registro","success");
+                //$("#txtcomentario").val('');
+                $("#txtcomentario").attr("disabled","true")  
+            }else{
+                Mensaje1(response,"error")
+            };
+        }
+    });   
+}
+
+function lstcomentario() {
+    $.ajax({
+        dataType:'text',
+        type: 'POST', 
+        url:  'c_furgon.php',
+        data:{
+            "accion" : 'lstcomentario',
+        } ,
+        success:  function(response){
+            obj = JSON.parse(response);
+            if(obj['dato'][0] != undefined){
+                 $("#txtcomentario").val(obj['dato'][0][1]);
+                 $("#txtcomentario").attr("disabled","true")   
+            }else{
+                $("#txtcomentario").removeAttr("disabled")   
+            } 
+        }
+    });   
+}
