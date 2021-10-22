@@ -20,7 +20,9 @@ $cod = $_SESSION["cod"];
 <title>Reporte de Furgon</title>
 <link rel="STYLESHEET" type="text/css" href="./css/style.css">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.0.0/css/bootstrap.min.css">
-<script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<!--<script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>-->
+<script src="../js/sweetalert2@11.js"></script>
+
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 </script>
@@ -94,11 +96,15 @@ $cod = $_SESSION["cod"];
         ?>
 
 
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.0.0/js/bootstrap.min.js"></script>
+        <!--<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>-->
+        <script src="../js/ajquery.min.js"></script>
+       <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.0.0/js/bootstrap.min.js"></script>-->
+        <script src="../js/abootstrap.min.js"></script>
         <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.3/css/dataTables.bootstrap5.min.css" />
-        <script src="https://cdn.datatables.net/1.11.3/js/jquery.dataTables.min.js"></script>
-        <script src="https://cdn.datatables.net/1.11.3/js/dataTables.bootstrap5.min.js"></script>
+       <!--<script src="https://cdn.datatables.net/1.11.3/js/jquery.dataTables.min.js"></script>-->
+        <script src="../js/jquery.dataTables.min.js"></script>
+       <!-- <script src="https://cdn.datatables.net/1.11.3/js/dataTables.bootstrap5.min.js"></script>-->
+        <script src="../js/dataTables.bootstrap5.min.js"></script>
          <script src="./js/table.js"></script>
     </body>
 </html>
