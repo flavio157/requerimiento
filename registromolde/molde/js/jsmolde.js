@@ -15,6 +15,7 @@ $(function() {
         select: function (event, ui) {
           $("#txtcodmolde").val(ui.item.code);
           $("#txtmedmolde").val(ui.item.medida);
+          $('#tbdmaterialmolde').find("tr").remove();
           lstmateriales(ui.item.code)
         }
     });
