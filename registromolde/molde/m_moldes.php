@@ -48,7 +48,7 @@
                     $query2 = $this->bd->prepare("INSERT INTO T_PERSONAL_INVOLUCRADO
                     (COD_FABRICACION,COD_PERSONAL,
                     OBSERVACION,FEC_INICIO,FEC_FIN,HORAS_TRABAJADAS,COSTO_HORA) 
-                    VALUES('$codigo','$dato[0]','','$fecini','$fecfin','',0.00)");
+                    VALUES('$codigo','$dato[0]','$dato[3]','$fecini','$fecfin','$dato[4]',$dato[5])");
                     $query2->execute(); 
                             if($query2->errorCode()>0){	
                                 $this->bd->rollBack();
@@ -80,8 +80,5 @@
             }
            
         }
-
-       
-
     }
 ?>

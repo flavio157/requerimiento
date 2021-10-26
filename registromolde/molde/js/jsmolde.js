@@ -1,6 +1,11 @@
 var supersonal = [];
 var sumolde = [];
 $(function() {
+  $('body').on('keydown', function(e){
+    if( e.which == 38 ||  e.which == 40) {
+      return false;
+    }
+  });
     personal();
     $("#txtpersonalmolde").autocomplete({
       source: supersonal,
@@ -20,39 +25,35 @@ $(function() {
         }
     });
 
-    $("#addpersonal").click(function (params) {
+    $("#addpersonal").click(function () {
+        ini = _verifec($("#txtfechini").val(),$("#txtfecinipers").val());
+        if(ini == -1){Mensaje1('Fecha inicio del personal no puede ser menor a fecha inicio del molde','error'); return;}
+        f = _verifec($("#txtfecfinpers").val(),$("#txtfechfin").val());
+        if(f == -1){Mensaje1('Fecha fin del personal no puede ser mayor a fecha fin del molde','error'); return;}
         tabla = $("#tbdpersonalmolde  tr");
         for (let i = 0; i < tabla.length; i++) { 
           if($(tabla[i]).find("td")[0].innerHTML == $("#txtcodpermolde").val()){
             Mensaje1('Personal ya agregado','error'); return;
           }
         }
-        var date1 = new Date($("#txtfecinipers").val());
-        var date2 = new Date($("#txtfecfinpers").val());
         if($("#txtfecinipers").val() == '' || $("#txtfecfinpers").val() == '' ){
           Mensaje1('Seleccione fecha del personal','error'); return;}
-        if($("#txtcodpermolde").val() == '' || $("#txtpersonalmolde").val() == ''){
-          Mensaje1('Ingrese personal','error'); return;
-        }  
-
-        if(date1 > date2){Mensaje1('Error fecha de inicio no puede ser mayor a fecha fin','error'); return;}
+        l = _verifec($("#txtfecinipers").val(),$("#txtfecfinpers").val());
+        if(l==-1){Mensaje1('Error fecha de inicio no puede ser mayor a fecha fin','error'); return;}
         b1 = "<a id='btneliminarPer' class='btn btn-danger  btn-sm'>"+
-                    "<i class='icon-trash'></i></a>";
-        
+              "<i class='icon-trash'></i></a>";
         array = [
             a = [$("#txtcodpermolde").val(),'none'],
             b = [$("#txtpersonalmolde").val().toUpperCase(),''],
             c = [$("#txtfecinipers").val(),''],
             d = [$("#txtfecfinpers").val(),''],
-           // e = ['',''],
-            f = [b1,''],
+            e = [b1,''],
+            f = [$("#texobservacion").val(),'none'],
+            g = [$("#txthortrab").val(),'none'],
+            h = [$("#txtcosthora").val(),'none'],
         ];
-        _createtable(array,'tbdpersonalmolde');
-        $("#txtcodpermolde").val('');
-        $("#txtpersonalmolde").val('');
-        $("#txtfecinipers").val('');
-        $("#txtfecfinpers").val('');
-        $("#texobservacion").val('');
+        validar(array);
+       
     });
 
     $("#txtdesmolde").keydown(function(e){
@@ -61,12 +62,10 @@ $(function() {
       }
     });
 
-
+  
     $("#btng_molde").on('click',function () {
-      var date1 = new Date($("#txtfechini").val());
-      var date2 = new Date($("#txtfechfin").val());
-      if(date1 > date2){Mensaje1('Error fecha de inicio no puede ser mayor a fecha fin','error'); return;}
-      if(date1 > date2){Mensaje1('Error fecha de inicio no puede ser mayor a fecha fin','error'); return;}
+      l = _verifec($("#txtfechini").val(),$("#txtfechfin").val());
+      if(l == -1){Mensaje1('Error fecha de inicio no puede ser mayor a fecha fin','error'); return;}
       if($("#txtfechini").val() == '' || $("#txtfechfin").val() == '' ){
         Mensaje1('Seleccione fecha de inicio y fin','error'); return;}
       if($("#txtcodmolde").val() == '' || $("#txtdesmolde").val() == '' || $("#txtmedmolde").val() == ''){
@@ -94,7 +93,10 @@ $(function() {
             tds[l] =[
                 $(td[l]).find("td")[0].innerHTML,
                 $(td[l]).find("td")[2].innerHTML,
-                $(td[l]).find("td")[3].innerHTML
+                $(td[l]).find("td")[3].innerHTML,
+                $(td[l]).find("td")[5].innerHTML,
+                $(td[l]).find("td")[6].innerHTML,
+                $(td[l]).find("td")[7].innerHTML
             ]
         }
       }  
@@ -110,6 +112,13 @@ $(function() {
       limpiar();
     });
 
+    $("#txthortrab").bind('keypress',function(e){
+      return _numeros(e);
+    })
+
+    $("#txtcosthora").bind('keypress',function(e){
+      return _numeros(e);
+    })
 });
 
 
@@ -180,7 +189,7 @@ function lstmateriales(dato) {
   }); 
 }
 
-  function _createtable(td,idtbttabla) {
+function _createtable(td,idtbttabla) {
     var fila="<tr>";
     for (let i = 0; i < td.length; i++) {
         fila +="<td class='tdcontent' style=display:"+td[i][1]+">"+td[i][0]+"</td>";
@@ -210,7 +219,7 @@ function _guardardatos(idmolde,fecini,fecfin,tds,codmat) {
     } ,
     success:  function(response){
       if(response == 1){
-       Mensaje1("Se registraron los datos correctamente","success");
+       Mensaje1("Datos registrados correctamente","success");
        limpiar();
       }else{
         Mensaje1(response,"error");
@@ -225,6 +234,38 @@ function limpiar() {
   document.getElementById("frmfabricacion").reset();
 }
 
+function validar(array){
+ cod = $("#txtcodpermolde").val()
+ nomper = $("#txtpersonalmolde").val()
+ fecin =  $("#txtfechini").val();
+ fecfin =  $("#txtfechfin").val();
+ obser = $("#texobservacion").val()
+ hora = $("#txthortrab").val()
+ costo =  $("#txtcosthora").val()
+  $.ajax({
+    dataType:'text',
+    type: 'POST', 
+    url:  'c_moldes.php',
+    data:{
+        "accion" : 'validarpersonal',
+        "cod" : cod,
+        "nomper":nomper,
+        "fecin" : fecin,
+        "fecfin" :fecfin,
+        "obser" : obser,
+        "hora" : hora,
+        "costo" : costo,
+    } ,
+    success:  function(response){
+      if(response == 1){
+        _createtable(array,'tbdpersonalmolde');
+        resetpersonal();
+      }else{
+        Mensaje1(response,"error")
+      }
+    }
+}); 
+}
 
 function Mensaje1(texto,icono){
   Swal.fire({
@@ -236,4 +277,34 @@ function Mensaje1(texto,icono){
    //toast:true,
    //position:'top'	
    });
- }
+}
+
+function _numeros(e) {
+  var regex = new RegExp("^[0-9]+$");
+  var key = String.fromCharCode(!e.charCode ? e.which : e.charCode);
+  if (!regex.test(key)) {
+    e.preventDefault();
+    return false;
+  }
+}
+
+function _verifec(fecha1,fecha2){
+  var date1 = new Date(fecha1);
+  var date2 = new Date(fecha2);
+  if(date1 > date2){
+    return -1;
+  }else{
+    return 0;
+  }
+}
+
+function resetpersonal(){
+  $("#txtcodpermolde").val('');
+  $("#txtpersonalmolde").val('');
+  $("#txtfecinipers").val('');
+  $("#txtfecfinpers").val('');
+  $("#texobservacion").val('');
+  $("#texobservacion").val('');
+  $("#txthortrab").val('');
+  $("#txtcosthora").val('');
+}

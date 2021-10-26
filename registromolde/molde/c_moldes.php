@@ -17,6 +17,15 @@
         $personal = json_decode($_POST['lstpersonal']);
         $codmaterial = json_decode($_POST['codmaterial']);
         c_moldes::c_guardar($idmolde,$fecini,$fecfin,$usuario,$personal,$codmaterial);
+    }else if($accion == 'validarpersonal'){
+        $cod = $_POST['cod'];
+        $nomper = $_POST['nomper'];
+        $fecin = $_POST['fecin'];
+        $fecfin = $_POST['fecfin'];
+        $obser = $_POST['obser'];
+        $hora = $_POST['hora'];
+        $costo = $_POST['costo'];
+        c_moldes::verifidatosPersonal($cod,$nomper,$fecin,$fecfin,$obser,$hora,$costo);
     }
 
     class c_moldes 
@@ -94,6 +103,30 @@
                 }
             }
             return $c_material;
+        }
+
+        static function verifidatosPersonal($cod,$nomper,$fecin,$fecfin,$obser,$hora,$costo)
+        {
+            if($fecin == "" || $fecfin == ""){
+                print_r("Ingrese fecha inicio y fecha fin del molde");
+                return;
+            }
+            if($nomper == "" || $cod == ""){
+                print_r("Ingrese Personal");
+                return;
+            }
+            if (!is_numeric($hora) || $hora == "") {
+                print_r("Campo hora es invalido");
+                return;
+            }   
+            if(!is_numeric($costo) || $costo == ""){
+                print_r("Campo costo es invalido");
+                return;
+            }
+            if(strlen(str_replace(" ", "", $obser)) < 10){print_r("Descripcion debe tener 10 caracteres"); return;}
+            $pattern = "/^[a-zA-Z\sñáéíóúÁÉÍÓÚ]+$/";
+            if(preg_match($pattern,$obser) == 0){print_r("Error descripcion invalida"); return;}
+            print_r(1);
         }
     }
 ?>
