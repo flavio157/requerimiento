@@ -1,5 +1,7 @@
 <?php
 require_once("../funciones/DataBasePlasticos.php");
+require_once("../funciones/cod_almacenes.php");
+require_once("../funciones/f_funcion.php");
 class m_comprobante
 {
     private $bd;
@@ -26,23 +28,28 @@ class m_comprobante
         return $res;
     }
 
-    public function m_guardarprod($producto,$unidad,$codigopro,$abre,$neto,$clase,$personal,$stock,$oficina)
+    public function m_guardarprod($codpro,$codcateg,$despro,$unimedpro,$stockmin,$abre,$usuregi,$pesoneto,$codclase,$oficina)
     {        $this->bd->beginTransaction();
             try {
-                $producto = strtoupper($producto);
+                $producto = strtoupper($despro);
+                $abre = strtoupper($abre);
+                $codpro = strtoupper($codpro);
+                $unimedpro = strtoupper($unimedpro);
                 $fech_registro = retunrFechaSqlphp(date("Y-m-d"));
                 $query = $this->bd->prepare("INSERT INTO T_PRODUCTO (COD_PRODUCTO,COD_CATEGORIA
                 ,DES_PRODUCTO,UNI_MEDIDA,STOCK_MINIMO,ABR_PRODUCTO,PRE_PRODUCTO,EST_PRODUCTO,USU_REGISTRO,
-                FEC_REGISTRO,MAQUINA,COD_EMPRESA,PESO_NETO,COD_CLASE) 
-                VALUES('$codigopro','00003','$producto','$unidad',
-                $stock,'$abre',0,'A','$personal','$fech_registro','','00001','$neto','$clase')");
+                FEC_REGISTRO,MAQUINA,PESO_NETO,COD_CLASE) 
+                VALUES('$codpro','$codcateg','$producto','$unimedpro',
+                $stockmin,'$abre',0,'A','$usuregi','$fech_registro','','$pesoneto','$codclase')");
             
                 $query->execute();  
                 
+                $oficina = oficiona($oficina);
                 $correlativo = $this->m_select_generarcodigo('COD_ALIN','T_ALMACEN_INSUMOS');
-                $query2 = $this->bd->prepare("INSERT INTO T_ALMACEN_INSUMOS (COD_ALIN,COD_ALMACEN,COD_PRODUCTO,COD_CLASE,STOCK_MINIMO) 
-                VALUES('$correlativo','$oficina','$codigopro',$stock,'$clase')");
-                $resp2  = $query2->execute();
+                $query2 = $this->bd->prepare("INSERT INTO T_ALMACEN_INSUMOS (COD_ALIN,COD_ALMACEN,
+                                            COD_PRODUCTO,COD_CLASE,STOCK_MINIMO) 
+                VALUES('$correlativo','$oficina','$codpro','$codclase',$stockmin)");
+                $query2->execute();
 
                 $guardado = $this->bd->commit();
                 return $guardado;
@@ -54,7 +61,5 @@ class m_comprobante
     
     }
 }
-
-
 
 ?>
