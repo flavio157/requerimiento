@@ -2,6 +2,9 @@ var radion = 0;
 var data = "";
 $(document).ready(function() {
 
+//lstvercomet();
+$("#txtcomentarioactua").attr("disabled","true") 
+
 document.querySelector('#rdoficinas').checked = true;
 
  $("#btnfiltrar").on('click',function(){
@@ -43,8 +46,8 @@ $("input[id=rdvendedor]").change(function () {
             "</div>";
     $("#divfechini").after(fech);
     $("#divfechfin").after(selec);
-  //  lstoficina();
-  
+
+    
     $('#tbprincipal').find("tr").remove();
     radion = 1;
     $("#iniciodtfecha").val('');
@@ -63,8 +66,7 @@ $("input[id=rdoficinas]").change(function () {
     $("#findtfecha").val();
     divcomen = "<div class='row' id='divcomentario'>"+
                     "<div class='col g-4'>"+
-                        "<button  type='button' id='btnmodalcomen' class='btn btn-primary mb-2'  style='float: right;'"+
-                        "data-bs-toggle='modal' data-bs-target='#modalcomentario'>"+
+                        "<button  type='button' id='btnmodalcomen' class='btn btn-primary mb-2'  style='float: right;'>"+
                         "<i class='icon-save' title='Guardar datos'></i>Comentario</button>"+
                     "</div>"+
                 "</div>";
@@ -72,12 +74,24 @@ $("input[id=rdoficinas]").change(function () {
 });
 
 $("#btnguarcomentario").on('click',function () {
-    g_comentario($("#txtcomentario").val(),$("#vrcodpersonal").val());
+    fecha = $("#iniciodtfecha").val();
+    g_comentario($("#txtcomentario").val(),$("#vrcodpersonal").val(),fecha);
 });
 
-$("#btnmodalcomen").on('click',function() {
-    lstcomentario();
+$(document).on('click','#btnmodalcomen',function (params) {
+    if($("#iniciodtfecha").val() == ""){Mensaje1("Seleccione fecha", "error");return;}
+ 
+    lstcomentario($("#iniciodtfecha").val());
 })
+
+
+$('#btnactuestadocom').on('click',function () {
+    $("#txtcomentarioactua").val('');
+})
+
+$("#iniciodtfecha").change(function (params) {
+    $('#tbprincipal').find("tr").remove();
+});
 
 });
 
@@ -98,7 +112,7 @@ function lstvenfurgon(fecini,fecfin,select) {
            $.each(obj['json'], function(i, f) {
             var items = {};
                 items[0] = '';
-                items[1] = f[1];
+                items[1] = sindato(f[1]);
                 items[2] = f[2];
                 arr.push(items);
             });
@@ -138,28 +152,13 @@ function lstfurgon(fecha){
         } ,
         success:  function(response){
           obj = JSON.parse(response);
-          tablacompleja(obj['furgon'],obj['agrupado']); 
+          $('#tbprincipal').find("tr:gt(0)").remove();
+         
+          tablacompleja(obj['furgon'],obj['agrupado']);
         }
     });   
 }
 
-
-function lstoficina() {
-    $.ajax({
-        dataType:'text',
-        type: 'POST', 
-        url:  'c_furgon.php',
-        data:{
-            "accion" : 'oficina',
-        } ,
-        success:  function(response){
-            obj = JSON.parse(response);
-            $.each(obj['dato'], function(id, name) {
-                $("#selectofi").append('<option value='+name+'>'+name+'</option>');
-              });
-        }
-    });   
-}
 
 /**funcion para crear la tabla */
 //si cambia el id "tbprincipal" debe cambiar tambien el id al final de esta funcion
@@ -175,10 +174,10 @@ function tablacompleja(furgon,agrupado) {
                     "</tr>";
              $.each(furgon,function(e,a){
                  //0                 //0
-                if(a[3] != null && a[3].trim() == f[0].trim()){
+                if(a[0] != null && a[0].trim() == f[0].trim()){
                      c = "<tr>"+
                             "<td colspan='12' class='hiddenRow'>"+
-                                "<div class='accordian-body collapse' id="+a[3]+" aria-expanded='false' style='height: 0px;'>"+
+                                "<div class='accordian-body collapse' id="+a[0]+" aria-expanded='false' style='height: 0px;'>"+
                                     "<table class='table' style='margin-bottom: 0px;'>"+ 
                                         "<tbody>"+
                                             "<tr data-bs-toggle='collapse' class='accordion-toggle collapsed' data-bs-target=#"+a[1]+" aria-expanded='false'>"+
@@ -193,31 +192,30 @@ function tablacompleja(furgon,agrupado) {
                                                         "<table class='table' style='margin-bottom: 0px;'>"+
                                                             "<tbody>"+
                                                                 "<tr>"+
-                                                                    "<td>"+a[5]+"</td>"+
-                                                                    "<td>"+a[6]+"</td>"+
+                                                                    "<td>"+sindato(a[4])+"</td>"+
+                                                                    "<td>"+sinvalors(a[5])+"</td>"+
                                                                 "</tr>"+
                                                                 "<tr>"+
-                                                                    "<td>"+a[8]+"</td>"+
-                                                                    "<td>"+a[9]+"</td>"+
+                                                                    "<td>"+sindato(a[7])+"</td>"+
+                                                                    "<td>"+sinvalors(a[8])+"</td>"+
                                                                 "</tr>"+
                                                                 "<tr>"+
-                                                                    "<td>"+a[11]+"</td>"+
-                                                                    "<td>"+a[12]+"</td>"+
+                                                                    "<td>"+sindato(a[10])+"</td>"+
+                                                                    "<td>"+sinvalors(a[11])+"</td>"+
                                                                 "</tr>"+
                                                                 "<tr>"+
-                                                                    "<td>"+a[14]+"</td>"+
-                                                                    "<td>"+a[15]+"</td>"+
+                                                                    "<td>"+sindato(a[13])+"</td>"+
+                                                                    "<td>"+sinvalors(a[14])+"</td>"+
                                                                 "</tr>"+
                                                                 "<tr>"+
-                                                                    "<td>"+a[17]+"</td>"+
-                                                                    "<td>"+a[18]+"</td>"+
+                                                                    "<td>"+sindato(a[16])+"</td>"+
+                                                                    "<td>"+sinvalors(a[17])+"</td>"+
                                                                 "</tr>"+
                                                             "</tbody>"+
                                                         "</table>"+
                                                     "</div>"+	 
                                                 "</td>"+
                                             "</tr>"+
-
                                         "</tbody>"+
                                     "</table>"+
                                 "</div>"+
@@ -228,6 +226,22 @@ function tablacompleja(furgon,agrupado) {
             });   
     });
  $('#tbprincipal').html(tabla);
+}
+
+function sindato(valor) {
+    if(valor == null){
+        dato = 'SIN DATO';
+    }else if( valor == ''){
+        dato = 'SIN NOMBRE ASIGNADO'
+    }else{
+        dato = valor;
+    }
+    return dato;
+}
+
+function sinvalors(valor) {
+    emp = (valor == null) ? 0:valor;
+    return emp;
 }
 
 function reiniciar() {
@@ -256,7 +270,7 @@ function Mensaje1(texto,icono){
      });
 }
 
-function g_comentario(comentario,usuario) {
+function g_comentario(comentario,usuario,fecha) {
     $.ajax({
         dataType:'text',
         type: 'POST', 
@@ -264,7 +278,8 @@ function g_comentario(comentario,usuario) {
         data:{
             "accion" : 'guardar',
             "comen" : comentario,
-            "usuario" : usuario
+            "usuario" : usuario,
+            "fecha" : fecha
         } ,
         success:  function(response){
             if(response == 1){ 
@@ -278,22 +293,30 @@ function g_comentario(comentario,usuario) {
     });   
 }
 
-function lstcomentario() {
+function lstcomentario(fecha) {
     $.ajax({
         dataType:'text',
         type: 'POST', 
         url:  'c_furgon.php',
         data:{
             "accion" : 'lstcomentario',
+            "fecha" : fecha
         } ,
         success:  function(response){
             obj = JSON.parse(response);
             if(obj['dato'][0] != undefined){
                  $("#txtcomentario").val(obj['dato'][0][1]);
-                 $("#txtcomentario").attr("disabled","true")   
+                 $("#txtcomentario").attr("disabled","true");
+                 $("#btnguarcomentario").attr("disabled","true");
             }else{
-                $("#txtcomentario").removeAttr("disabled")   
+                $("#txtcomentario").removeAttr("disabled");
+                $("#btnguarcomentario").removeAttr("disabled");
+                $("#txtcomentario").val('');
+               
             } 
+            $("#modalcomentario").modal("show");
+            
         }
     });   
 }
+

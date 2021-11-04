@@ -11,7 +11,7 @@
     </head>
     <body>
         <div class="main">
-        <form method="POST" action="furgones/c_login.php">
+        <form method="POST" action="c_login.php">
             <div class="mb-2">
                 <label for="exampleInputEmail1" class="form-label">Usuario</label>
                 <input type="text" class="form-control" id="exampleInputEmail1" name="usuario" aria-describedby="emailHelp">

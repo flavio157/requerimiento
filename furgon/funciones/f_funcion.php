@@ -559,8 +559,7 @@ function f_Cuotas($promedioCuota,$cuotas,$dias){
 
     function gethora(){
         date_default_timezone_set('America/Lima');
-        $hora = getdate();
-        $hora = $hora['hours'] .":". $hora['minutes'];
+        $hora = date("H") .":". date("i");
         return $hora;
     }
 
@@ -583,26 +582,6 @@ function f_Cuotas($promedioCuota,$cuotas,$dias){
     }
 
     
-    function update($user_datos){
-        $i = 0;
-        $valores = "";
-        foreach ($user_datos as $key => $value) {
-            $coma = (count($user_datos)!=($i+1)) ? "," : "" ;
-            $valores .= $key." = '".$value."'".$coma."\n";
-            $i++;
-        }
-        return $valores;
-    }
-
-    function select_where($user_datos){
-        $i = 0;
-        $valores = "";
-        foreach ($user_datos as $key => $value) {
-            $coma = (count($user_datos)!=($i+1)) ? "AND" : "" ;
-            $valores .= $key." = '".$value."'".$coma."\n";
-            $i++;
-        }
-        return $valores;
-    }
+  
 
   ?>

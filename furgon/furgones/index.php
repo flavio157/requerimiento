@@ -3,17 +3,11 @@
 if (session_status() == PHP_SESSION_NONE) {
     session_start();
 }
-
-/*if(!isset($_SESSION['zona'])){
-    header('Location: index.php');
-    exit;
-} */
-date_default_timezone_set('America/Lima');
-$fcha = date("Y-m-d",strtotime(date("Y-m-d")."+ 1 days"));
 $ofi = $_SESSION["ofi"];
 $zon = $_SESSION["zon"];
 $cod = $_SESSION["cod"];
 ?>
+
 <html lang="en"><head>
   <meta charset="UTF-8">
   
@@ -32,7 +26,7 @@ $cod = $_SESSION["cod"];
         <input type="text" id="vroficina" style="display: none;" value="<?php echo $ofi?>"/>
         <input type="text" id="vrzona" style="display: none;" value="<?php echo  $zon?>"/>
         <input type="text" id="vrcodpersonal" style="display: none;" value="<?php echo  $cod?>"/>
-        <input type="text" id="vrcodcliente" style="display: none;"/>
+       
     <div class="contenradio">
         <div class="d-flex">
             <div class="form-check form-check-inline" style="color: #fff;">
@@ -56,7 +50,7 @@ $cod = $_SESSION["cod"];
                         <input type="date" class="form-control" id="iniciodtfecha" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm">
                     </div>
                 </div>
-                <div class="col-auto">
+                <div class="col-auto" id="divfiltrar">
                     <button type="button" id="btnfiltrar" class="btn btn-primary mb-3">Filtrar</button>
                 </div>
             </form>
@@ -84,16 +78,57 @@ $cod = $_SESSION["cod"];
             </div>
             <div class="row" id="divcomentario">
                 <div class="col g-4">
-                    <button  type="button" id="btnmodalcomen" class="btn btn-primary mb-2"  style="float: right;"
-                             data-bs-toggle="modal" data-bs-target="#modalcomentario">
+                    <button  type="button" id="btnmodalcomen" class="btn btn-primary mb-2"  style="float: right;">
                     <i class="icon-save" title="Guardar datos"></i>Comentario</button>
                 </div> 
             </div>
         </div>
 
-        <?php
-            include "./modal/modalComentario.php";
-        ?>
+        <div class="modal fade" id="modalcomentario" tabindex="-1" data-bs-backdrop="static" aria-labelledby="exampleModalLabel" data-bs-keyboard="false" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Registrar Comentario</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form>
+                    <div class="mb-3">
+                        <label for="message-text" class="col-form-label">Comentario</label>
+                        <textarea class="form-control" id="txtcomentario"></textarea>
+                    </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cerrar</button>
+                    <button type="button" id="btnguarcomentario" class="btn btn-primary">Guardar</button>
+                </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal fade" id="mverificarcomen" tabindex="-1" data-bs-backdrop="static" aria-labelledby="exampleModalLabel" data-bs-keyboard="false" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Verificar comentario</h5>
+                </div>
+                <div class="modal-body">
+                    <form id="frmactucomentario">
+                        <div class="mb-3">
+                            <label for="message-text" class="col-form-label">Comentario</label>
+                            <textarea class="form-control" id="txtcomentarioactua"></textarea>
+                            <input type="text" id="cod_comentario" style="display: none;"/>
+                            <input type="text" id="est_comentario" style="display: none;"/>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" id="btnactuestadocom" data-bs-dismiss="modal" class="btn btn-primary">OK</button>
+                </div>
+                </div>
+            </div>
+        </div>
 
 
         <!--<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>-->
