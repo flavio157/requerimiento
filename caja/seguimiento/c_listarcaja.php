@@ -86,7 +86,7 @@
             if(count($c_comentario) == 0){return;}
             $dato = array(
                "dato" => $c_comentario,
-               "b" => false
+               "b" => true
             );
             
             echo json_encode($dato , JSON_FORCE_OBJECT);

@@ -1,9 +1,8 @@
 <?php
-    require_once("DataDinamica.php");
-    require_once("f_funcion.php");
+    require_once("../funciones/DataDinamica.php");
+    require_once("../funciones/f_funcion.php");
     class m_listarcaja 
     {
-       
         private $db;
         
         public function __construct($db)

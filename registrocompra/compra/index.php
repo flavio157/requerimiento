@@ -16,7 +16,6 @@ $cod = $_SESSION["cod"];
     <script src="../js/jquery-3.3.1.slim.min.js"></script>
     <script src="../js/ajquery.min.js"></script>
     <script src="./js/jscompra.js"></script>
-    <script src="../js/bootstrap5.bundel.min.js"></script>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6" crossorigin="anonymous">
     <script src="../js/sweetalert2@11.js"></script>
     <script src="../js/jquery-ui-autocompletar.js"></script>
@@ -72,34 +71,32 @@ $cod = $_SESSION["cod"];
                         <div>Personal</div>
                         <div class="input-group g-4">
                             <input type="text" class="form-control" id="txtcomcodpers" name="txtcomcodpers" style="display: none;">
-                            <input type="text" class="form-control" id="txtcompersonal" name="txtcompersonal" placeholder="BUSCAR PERSONAL">
+                            <input type="text" class="form-control mayu" id="txtcompersonal" name="txtcompersonal" placeholder="BUSCAR PERSONAL">
+                            <a class="btn btn-success" id="addproducto" data-bs-toggle="modal" data-bs-target="#mdpersonal">
+                                <i class="icon-add-user" title="Nuevo personal"></i>
+                            </a>
                         </div>    
                     </div>
                 </div>
-
-               
                 <div class="row" >
                     
                     <div class="col g-4">
                         <div>comprobante</div>
                         <select id="slctipocompr" name="slctipocompr" class="form-select">
-                            <option value="" selected>Tipo  Comprobante</option>
-                            <option value="1">Factura</option>
-                            <option value="2">Boleta</option>
-                            <option value="3">Nota de debito</option>
-                            <option value="4">Nota de credito</option>
-                            <option value="5">Ticket</option>
+                            <option value="" selected>TIPO COMPROBANTE</option>
+                            <option value="F">FACTURA</option>
+                            <option value="B">BOLETA</option>
+                            <option value="R">RECIBO</option>
+                            <option value="T">TICKET</option>
                         </select>
                     </div> 
                     <div class="col g-4">
                         <div>F. pago</div>
                         <select  id="slcformpago" name="slcformpago" class="form-select">
-                            <option value="" selected>Forma Pago</option>
-                            <option value="1">Depósitos en cuenta</option>
-                            <option value="2">Transferencia de fondos</option>
-                            <option value="3">Tarjetas de débito</option>
-                            <option value="3">Tarjetas de crédito</option>
-                            <option value="3">Cheques</option>
+                            <option value="" selected>FORMA DE PAGO</option>
+                            <option value="E">EFECTIVO</option>
+                            <option value="B">TRASNFERENCIA</option>
+                            <option value="C">CHEQUE</option>
                         </select>
                     </div>
                 </div>    
@@ -107,18 +104,18 @@ $cod = $_SESSION["cod"];
                     <div class="col g-4">
                         <div>Moneda</div>
                         <select id="slcmoneda" name="slcmoneda" class="form-select">
-                            <option value="" selected>Moneda</option>
-                            <option value="1">Soles</option>
-                            <option value="2">Dolares</option>
+                            <option value="" selected>MONEDA</option>
+                            <option value="S">SOLES</option>
+                            <option value="D">DOLARES</option>
                         </select>
                     </div> 
                     <div class="col g-4">
                         <div>Tipo cambio</div>
-                        <input type="number" id="txttipocambio" name="txttipocambio" class="form-control">
+                        <input type="number" id="txttipocambio" name="txttipocambio" class="form-control" placeholder="0.000">
                     </div> 
                 </div>
                     <div class=" form-check-inline">
-                        <label class="form-check-label" for="inlineRadio3">Contiene IGV</label>
+                        <label class="form-check-label" for="inlineRadio3">Incluye IGV</label>
                     </div>
                     <div class="form-check form-check-inline ">
                         <input class="form-check-input" type="radio" name="rdnigv" id="rdnsi">
@@ -139,39 +136,49 @@ $cod = $_SESSION["cod"];
                         <div class="input-group mb-3">
                             <input type="text" id="txtcompclase" name="txtcompclase" style="display: none;">
                             <input type="text" id="txtcompcodPro" name="txtcompcodPro" style="display: none;">
-                            <input type="text" class="form-control" id="txtcompprod" name="txtcompprod" placeholder="BUSCAR PRODUCTO">
+                            <input type="text" class="form-control mayu" id="txtcompprod" name="txtcompprod" placeholder="BUSCAR PRODUCTO">
                             <a class="btn btn-success" id="addproducto" data-bs-toggle="modal" data-bs-target="#mdmaterial">
-                                <i class="icon-shopping-basket" title="agregar derecha"></i>
+                                <i class="icon-shopping-basket" title="Nuevo material"></i>
                             </a>
                         </div>
                     </div>
                     
                 </div>
                 <div class="row" >
-                    <div class="col g-4">
+                    <div class="col g-4" style="margin-top: 3px;">
                         <label class="form-label">Cantidad</label>
                         <input type="number" class="form-control" id="txtcomcantidad" name="txtcomcantidad" placeholder="CANTIDAD"></input>
                     </div>  
-                     <div class="col g-4">
+                     <div class="col g-4" style="margin-top: 3px;">
                          <label class="form-label">Precio</label>
                         <div class="input-group mb-3">
                             <input type="number" class="form-control" id="txtcomprecio" name="txtcomprecio" placeholder="PRECIO">
                         </div>
                     </div>
-                    <div class="col g-4">
+                    <div class="col g-4" style="margin-top: 3px;">
                         <label class="form-label">Nro serie</label>
                         <input type="text" style="text-transform: uppercase;" id="txtcomserie" name="txtcomserie" class="form-control" placeholder="NRO SERIE"></input>
                     </div>  
                 </div>
-                <div class="row mb-3" style="float: right;">
-                    <div class="col-auto g-4">
-                        <button  type="button" id="btnatproduc"  class="btn btn-primary mb-2 pull-left">
-                                <i class="icon-plus" title="agregar productos"></i>
-                        </button>
+
+                <div class="row mb-3">
+                    <div class="col g-4 divbotones" style="margin-top: 3px;">
+                        <div class="input-group mb-3">
+                            <span class="input-group-text" id="basic-addon1">Total</span>
+                            <input type="text" class="form-control" placeholder="0.00" id="txttotalcomp" disabled>
+                        </div>
                     </div>
-                </div>
-                <div class="g-4">
-                    <table id="tbmaterialmolde" class="table table-sm">
+                    <div class="col g-4 divbotones" style="margin-top: 3px;">
+                        <div class="col-auto g-4">
+                            <button  type="button" id="btnatproduc"  class="btn btn-primary" style="float: right;">
+                                    <i class="icon-plus" title="agregar productos"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div> 
+          
+                <div class="g-4" class="table-responsive">
+                    <table id="tbmaterialcompro" class="table table-sm">
                         <thead>
                             <tr>
                                 <th class="thtitulo" scope="col" style="display: none;">Codigo</th>
@@ -179,9 +186,10 @@ $cod = $_SESSION["cod"];
                                 <th class="thtitulo" scope="col">N. serie</th>
                                 <th class="thtitulo" scope="col">Cantidad</th>
                                 <th class="thtitulo" scope="col">Precio</th>
+                                <th class="thtitulo" scope="col">Acciones</th>
                             </tr>
                         </thead>
-                        <tbody id="tbdmaterialmolde">
+                        <tbody id="tbdmaterialcompro">
                         </tbody>
                     </table>
                 </div>
@@ -214,17 +222,17 @@ $cod = $_SESSION["cod"];
                     <div class="row g-2">
                         <div class="col">
                             <label for="formfpago" class="form-label">Codigo Producto</label>
-                            <input type="text" style="text-transform:uppercase" class="form-control" name="mtxtcodigopro" id="mtxtcodigopro" maxlength="6" autocomplete="off">
+                            <input type="text"  class="form-control mayu" name="mtxtcodigopro" id="mtxtcodigopro" maxlength="6" autocomplete="off">
                         </div> 
                         <div class="col">
                             <label for="formcantidad"  class="form-label">Unidad Medida</label>
-                            <input type="text" style="text-transform:uppercase"  class="form-control"  name="mtxtunimedida" id="mtxtunimedida" maxlength="10" autocomplete="off">
+                            <input type="text"  class="form-control mayu"  name="mtxtunimedida" id="mtxtunimedida" maxlength="10" autocomplete="off">
                         </div>
                     </div> 
                     <div class="row g-2">
                         <div class="col">
                             <label for="formfpago" class="form-label">Nombre del Producto</label>
-                            <input type="text" style="text-transform:uppercase" class="form-control" name="mtxtnombreproducto" id="mtxtnombreproducto">
+                            <input type="text" class="form-control mayu" name="mtxtnombreproducto" id="mtxtnombreproducto" autocomplete="off">
                         </div>  
                     </div> 
                     <div class="row g-2">
@@ -238,11 +246,11 @@ $cod = $_SESSION["cod"];
                         <div class="row g-2">
                             <div class="col">
                                 <label for="formpromocion"  class="form-label">Abreviatura</label>
-                                <input type="text" style="text-transform:uppercase" class="form-control" name="mtxtabreviatura" id="mtxtabreviatura" maxlength="4" autocomplete="off">
+                                <input type="text"  class="form-control mayu" name="mtxtabreviatura" id="mtxtabreviatura" maxlength="4" autocomplete="off">
                             </div>
                             <div class="col">
                                 <label for="formpromocion"  class="form-label">Stock minimo</label>
-                                <input type="number" style="text-transform:uppercase" class="form-control" name="mtxtstockmin" id="mtxtstockmin" autocomplete="off">
+                                <input type="number" class="form-control mayu" name="mtxtstockmin" id="mtxtstockmin" autocomplete="off">
                             </div>
                         </div>
                         <div class="row g-2">
@@ -267,6 +275,114 @@ $cod = $_SESSION["cod"];
         </div>
     </div>
 </div>
+
+
+<div class="modal fade" id="mdpersonal" tabindex="-1"  data-bs-backdrop="static" data-bs-keyboard="false" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <center><h5 class="modal-title">Registro de nuevo personal</h5></center>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="frmgudarpers" name="frmgudarpers">
+                    <div class="row g-2">
+                        <div class="col">
+                            <label for="formfpago" class="form-label">Fecha Ingreso</label>
+                            <input type="date"  class="form-control" name="mtxtfecingreso" id="mtxtfecingreso">
+                        </div>
+                        <div class="col">
+                            <label for="formfpago" class="form-label">DNI</label>
+                            <input type="number"  class="form-control mayu" name="mtxtdniper" id="mtxtdniper" maxlength="8" autocomplete="off">
+                        </div> 
+                    </div> 
+                    <div class="row g-2">
+                        <div class="col">
+                            <label for="formfpago" class="form-label">Nombre Completo</label>
+                            <input type="text" class="form-control mayu" name="mtxtnomperson" id="mtxtnomperson" autocomplete="off">
+                        </div>  
+                    </div> 
+                    <div class="row g-2">
+                        <div class="col">
+                            <label for="formpromocion"  class="form-label">Direccion</label>
+                            <input type="text" class="form-control mayu" name="mtxtdirper" id="mtxtdirper" autocomplete="off">
+                        </div>
+                    </div>
+                    <div class="row g-2">
+                        <div class="col">
+                            <label for="formcantidad"  class="form-label">Cargo</label>
+                            <label  for="formentrega" class="form-label">Cargo</label>
+                            <select class="form-select" id="slcargpers" name="slcargpers" aria-label="Default select example">
+                                <option value="" selected>SELECCIONE CARGO</option>
+                            </select>
+                        </div>
+                        <div class="col">
+                            <label  for="formentrega" class="form-label">Area</label>
+                            <select class="form-select" id="slareaper" name="slareaper" aria-label="Default select example">
+                                <option value="" selected>SELECCIONE AREA</option>
+                            </select>
+                        </div>
+                    </div> 
+                    <div class="row g-2">
+                        <div class="col">
+                            <label for="formpromocion"  class="form-label">Saldo Basico</label>
+                            <input type="number"  class="form-control mayu" name="mtxtsalperso" id="mtxtsalperso" autocomplete="off">
+                        </div>
+                        <div class="col">
+                                <label for="formfpago" class="form-label">Departamento</label>
+                                    <select class="form-select" id="sldeparpers" name="sldeparpers" aria-label="Default select example">
+                                    <option value="" selected>SELECCIONE CATEGORIA</option>
+                                </select>
+                        </div>
+                    </div>
+                   
+                        <div class="row g-2">
+                            <div class="col">
+                                <label for="formfpago" class="form-label">Provincia</label>
+                                <select class="form-select" id="slprovpers" name="slprovpers" aria-label="Default select example">
+                                <option value="" selected>SELECCIONE CATEGORIA</option>
+                                </select>
+                            </div>
+                            <div class="col">
+                                <label for="formfpago" class="form-label">Distrito</label>
+                                <select class="form-select" id="sldistpers" name="sldistpers" aria-label="Default select example">
+                                    <option value="" selected>SELECCIONE CATEGORIA</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="row g-2">
+                            <div class="col">
+                                <label for="formpromocion"  class="form-label">Telefono</label>
+                                <input type="number" class="form-control mayu" name="mtxttelpers" id="mtxttelpers" autocomplete="off">    
+                            </div>
+                            <div class="col">
+                                <label for="formfpago" class="form-label">Celular</label>
+                                <input type="number" class="form-control mayu" name="mtxtcelpers" id="mtxtcelpers" autocomplete="off">    
+                            </div>
+                        </div>
+
+                        <div class="row g-2">
+                          
+                            <div class="col">
+                                <label for="formpromocion"  class="form-label">Nro Cuenta</label>
+                                <input type="number" class="form-control mayu" name="mtxtcuenpers" id="mtxtcuenpers" autocomplete="off">    
+                            </div>
+                            <div class="col">
+                                <label for="formpromocion"  class="form-label">Titular</label>
+                                <input type="text" class="form-control mayu" name="mtxttitulpers" id="mtxttitulpers" autocomplete="off">
+                            </div>
+                        </div>
+                </form>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger"  id="btncerrarpers" data-bs-dismiss="modal">Cerrar</button>
+                    <button type="button" id="btnguarpers" class="btn btn-primary">Guardar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
         </div>     
     </section>
 </body>

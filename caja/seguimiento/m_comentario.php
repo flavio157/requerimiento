@@ -1,6 +1,6 @@
 <?php
-    require_once("Database.php");
-    require_once("f_funcion.php");
+    require_once("../funciones/Database.php");
+    require_once("../funciones/f_funcion.php");
     class m_comentarios 
     {
         private $bd;
@@ -14,7 +14,7 @@
         {
            try {
                 $query = $this->bd->prepare("SELECT * FROM T_COMENTARIOS_FURGON
-                where CAST(FEC_REGISTRO as date) = '$fecha' AND ESTADO = 0");
+                where CAST(FEC_REGISTRO as date) = '$fecha' AND ESTADO = NULL");
                 $query->execute();
                 return $query->fetchAll();
            } catch (Exception $e) {

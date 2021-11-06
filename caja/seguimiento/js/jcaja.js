@@ -91,7 +91,7 @@ function verificar_escaneo(nro_correlativo,cod_personal,monto,fec_gasto,fec_cobr
     $.ajax({
         dataType:'text',
         type: 'POST', 
-        url:  '../seguimiento/c_listarcaja.php',
+        url:  'c_listarcaja.php',
         data: {
             "accion": "verificar",
             "dato" : nro_correlativo,
@@ -111,7 +111,7 @@ function listarcaja(oficina){
     $.ajax({
             dataType:'text',
             type: 'POST', 
-            url:  '../seguimiento/c_listarcaja.php',
+            url:  'c_listarcaja.php',
             data: {
                 "accion": "listar",
                 "oficina" : oficina
@@ -187,7 +187,7 @@ function registrarcaja(nro_correlativo,cod_personal,monto,fec_gasto,fec_cobro,vr
     $.ajax({
         dataType:'text',
         type: 'POST', 
-        url:  '../seguimiento/c_listarcaja.php',
+        url:  'c_listarcaja.php',
         data: {
             "accion": "guardar",
             "oficina" : oficina,
@@ -231,7 +231,7 @@ function lstcomentario(fecha) {
     $.ajax({
         dataType:'text',
         type: 'POST', 
-        url:  '../seguimiento/c_listarcaja.php',
+        url:  '/c_listarcaja.php',
         data: {
             "accion": "lstfecha",
             "fecha" : fecha,
@@ -252,7 +252,7 @@ function actualiestado() {
     $.ajax({
         dataType:'text',
         type: 'POST', 
-        url:  '../seguimiento/c_listarcaja.php',
+        url:  'c_listarcaja.php',
         data: {
             "accion": "actualizar",
             "nro" : $("#cod_comentario").val(),
@@ -267,7 +267,7 @@ function lstcomentariofalta() {
     $.ajax({
         dataType:'text',
         type: 'POST', 
-        url:  '../seguimiento/c_listarcaja.php',
+        url:  'c_listarcaja.php',
         data: {
             "accion": "lstcomenfalta",
             "oficina":''
