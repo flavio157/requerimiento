@@ -36,7 +36,7 @@ function main () {
 			$('nav').animate(
                 {
 				left: '0'
-                },200    
+                },180    
             );
 			contador = 0;
 		} else {
@@ -44,7 +44,7 @@ function main () {
 			$('nav').animate(
                 {
 				left: '-100%',
-                },200
+                },180
 			);
 		}
 	});

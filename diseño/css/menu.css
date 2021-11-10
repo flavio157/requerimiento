@@ -166,14 +166,16 @@ nav li li:hover .dropdown-menu {
 		cursor:pointer;
 	}
 
-	body {
+	body { 
 		padding-top:80px;
 	}
 
 	.menu_barras {
+		z-index: 3;
 		display:block;
 		width:100%;
-		position: fixed;
+		/*position: relative;*/
+		position: fixed; /*se cambio esto por relative*/
 		top:0;
 		background:linear-gradient(15deg,  #80d0c7 0%,#13547a 100%);
 

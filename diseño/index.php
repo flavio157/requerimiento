@@ -7,7 +7,7 @@
     <script src="//code.jquery.com/jquery-3.3.1.slim.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
    <!-- <script type="text/javascript" src="./js/jsprueba.js"></script>-->
-    <link rel=StyleSheet href="./css/styles.css" type="text/css" media=screen>
+    <link rel=StyleSheet href="styles.css" type="text/css" media=screen>
     <title>Login</title>
 </head>
 <body>
@@ -19,7 +19,7 @@
     <!--<h1 class="welcome text-center">Bienvenido a  <br>"Nombre"</h1>-->
         <div class="card card-container ">
            
-            <form class="form-signin" action="./menu/c_login.php" method="POST">
+            <form class="form-signin" action="./menu/c_permisosmenu.php" method="POST">
                 <span id="reauth-email" class="reauth-email"></span>
                 <p class="input_title">USUARIO</p>
                 <input type="text" id="usuario" name="usuario" class="form-control login_box" autofocus>
