@@ -1,0 +1,29 @@
+.main{
+  width:70%;
+  margin:0 auto;
+  padding:1em;
+  border-radius: 8px;
+ }
+
+.child-check{
+    margin-left: 15px;
+    display: none;
+  }
+  
+  .child-check.active{
+    display: block;
+  }
+  
+  ul.checktree-root, ul#tree ul {
+  list-style: none;
+  }
+
+  .highlight{
+    background-color: #ddd;
+  }
+  
+@media screen and (max-width:992px){
+    .main{
+        width:100%;
+    }
+}
