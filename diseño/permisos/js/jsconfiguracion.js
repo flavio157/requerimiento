@@ -1,4 +1,4 @@
-$(document).ready(function (params) {
+$(document).ready(function () {
    listarmenu();
    lstmenu();
    $('#tbmenu').on('click', 'tbody tr', function(event) {
@@ -6,7 +6,8 @@ $(document).ready(function (params) {
       var dato =  $(this).find("td:eq(0)").text();
       $("#tbsubmenu > tbody").empty();
       $("#subsubmenu > tbody").empty();
-      $("#txturlmenu").prop('disabled', false);
+      $("#txtmdurlmenu").css("display", "block");
+     // $("#txturlmenu").prop('disabled', false);
       $("#txtidmenu").val(dato)
       lstsubmenu(dato);
    });
@@ -15,88 +16,130 @@ $(document).ready(function (params) {
       $(this).addClass('highlight').siblings().removeClass('highlight');
       var idmenu =  $(this).find("td:eq(0)").text();
       var idsubmenu =  $(this).find("td:eq(1)").text();
+      $("#txtidmenu2").val(idmenu);
       $("#txtidsubmenu").val(idsubmenu)
       $("#subsubmenu > tbody").empty();
-      $("#txturlsubmenu").prop('disabled', false);
+      $("#txtmdurlsubmenu").css('display','block');
+      //$("#txturlsubmenu").prop('disabled', false);
       lstsubsubmenu(idmenu,idsubmenu);
+   });
+
+   $('#subsubmenu').on('click', 'tbody tr', function(event) {
+      $(this).addClass('highlight').siblings().removeClass('highlight');
    });
 
    $(document).on('click','#btnmenu',function () {
        id =  $(this).parents('tr').find('td:first-child').text();
-       nombre =  $(this).parents('tr').find('td:nth-child(2)').text();
-       url =  $(this).parents('tr').find('td:nth-child(3)').text();
-       estado =  $(this).parents('tr').find('td:nth-child(4)').text();
-       $("#txtnommenu").val(nombre);
-       $("#txturlmenu").val(url);
-       $("#txtidmenu").val(id);
-       $("#txtestmenu").val(estado);
-       if(estado == 1){document.querySelector('#rdactimenu').checked = true;}
-       else{document.querySelector('#rddescmenu').checked = true;}
+       buscarmenu(id);
+   
    });
 
    $(document).on('click','#btnsubmenu',function(){
       idmenu =  $(this).parents('tr').find('td:first-child').text();
       idsubmenu =  $(this).parents('tr').find('td:nth-child(2)').text();
-      nombre =  $(this).parents('tr').find('td:nth-child(3)').text();
-      url =  $(this).parents('tr').find('td:nth-child(4)').text();
-      estado =  $(this).parents('tr').find('td:nth-child(5)').text();
-      $("#txtnomsubmenu").val(nombre);
-      $("#txturlsubmenu").val(url);
-      $("#txtidsubmenu").val(idsubmenu)
-      if(estado == 1){document.querySelector('#rdactisubmenu').checked = true;}
-      else{document.querySelector('#rddescsubmenu').checked = true;}
+      buscarsubmenu(idmenu,idsubmenu);
    });
 
    $(document).on('click','#btnsubsubmenu',function () {
       idmenu =  $(this).parents('tr').find('td:first-child').text();
       idsubmenu =  $(this).parents('tr').find('td:nth-child(2)').text();
       idsubsubmenu =  $(this).parents('tr').find('td:nth-child(3)').text();
-      nombre =  $(this).parents('tr').find('td:nth-child(4)').text();
-      url =  $(this).parents('tr').find('td:nth-child(5)').text();
-      estado =  $(this).parents('tr').find('td:nth-child(6)').text();
-      $("#txtsubsubnombe").val(nombre);
-      $("#txtsubsuburl").val(url);
-      $("#txtidsubsubmenu").val(idsubsubmenu);
-      $("#txtestsubsubmenu").val(estado);
-      console.log(estado);
-      if(estado == 1){document.querySelector('#rdactisubsubmenu').checked = true;}
-      else{document.querySelector('#rddescsubsubmenu').checked = true;}
+      buscarsubsubmenu(idmenu,idsubmenu,idsubsubmenu);
   });
 
-  $("#btngmenus").on('click',function() {
-    _actualizar($("#txtidmenu").val(),"","",$("#txtnommenu").val(),$("#txturlmenu").val(),$("#txtestmenu").val())
+  $("#btnmdgmenus").on('click',function() {
+    _actualizar($("#txtmdidmenu").val(),"","",
+    $("#txtmdnommenu").val(),$("#txtmdurlmenu").val(),$("#txtmdestmenu").val());
+    lstmenu();
   });
 
-  $("input[id=rdactimenu]").change(function () {
+  $("input[id=rdmdactimenu]").change(function () {
+      $("#txtmdestmenu").val(1);
+  });
+
+  $("input[id=rdmddescmenu]").change(function () {	
+      $("#txtmdestmenu").val(0);
+  });
+
+  $("#btnmdgsubmenu").on('click',function(){
+      $("#tbsubmenu > tbody").empty();
+      _actualizar($("#txtmdidmenu2").val(),$("#txtidsubmenu").val(),"",
+      $("#txtmdnomsubmenu").val(),$("#txtmdurlsubmenu").val(),$("#txtmdestsubmenu").val())
+      lstsubmenu($("#txtmdidmenu2").val());
+   })
+
+  $("input[id=rdmdactisubmenu]").change(function () {
+      $("#txtmdestsubmenu").val(1);
+   });
+
+   $("input[id=rdmddescsubmenu]").change(function () {	
+      $("#txtmdestsubmenu").val(0);
+   });
+
+   $("#btnmdgsubsubmenu").on('click',function() {
+      $("#subsubmenu > tbody").empty();
+      _actualizar($("#txtmdidmenu3").val(),$("#txtmdsubidmenu2").val(),$("#txtmdidsubsubmenu").val(),
+      $("#txtmdsubsubnombe").val(),$("#txtmdsubsuburl").val(),$("#txtmdestsubsubmenu").val()) 
+      lstsubsubmenu($("#txtmdidmenu3").val(),$("#txtmdsubidmenu2").val())
+   });
+
+   $("input[id=rdmdactisubsubmenu]").change(function () {
+      $("#txtmdestsubsubmenu").val(1);
+   });
+
+   $("input[id=rdmddescsubsubmenu]").change(function () {	
+      $("#txtmdestsubsubmenu").val(0);
+   });
+
+   $("input[id=rdactimenu]").change(function() {
       $("#txtestmenu").val(1);
-  });
+   });
 
-  $("input[id=rddescmenu]").change(function () {	
+   $("input[id=rddescmenu]").change(function() {
       $("#txtestmenu").val(0);
-  });
+   });
 
-  $("#btngsubmenu").on('click',function(){
-      _actualizar($("#txtidmenu").val(),$("#txtidsubmenu").val(),"",$("#txtnomsubmenu").val(),$("#txturlsubmenu").val(),$("#txtestsubmenu").val())
-  })
+   $("#btngmenus").on('click',function() {
+       nombre = $("#txtnommenu").val();
+       url = $("#txturlmenu").val();
+       estado = $("#txtestmenu").val();
+       guardarmenu(nombre,url,estado);
+       removerclase();
+   });
 
-  $("input[id=rdactisubmenu]").change(function () {
+   $("input[id=rdactisubmenu]").change(function() {
       $("#txtestsubmenu").val(1);
    });
 
-   $("input[id=rddescsubmenu]").change(function () {	
+   $("input[id=rddescsubmenu]").change(function() {
       $("#txtestsubmenu").val(0);
    });
+   $("#btngsubmenu").on('click',function() {
+      idmenu = $("#txtidmenu").val();
+      nombre = $("#txtnomsubmenu").val();
+      url = $("#txturlsubmenu").val();
+      estado = $("#txtestsubmenu").val();
+    
+      guardarsubmenu(idmenu,nombre,url,estado);
+      removerclase();
+  });
 
-   $("#btngsubsubmenu").on('click',function() {
-      _actualizar($("#txtidmenu").val(),$("#txtidsubmenu").val(),$("#txtidsubsubmenu").val(),$("#txtsubsubnombe").val(),$("#txtsubsuburl").val(),$("#txtestsubsubmenu").val()) 
-   });
+  $("input[id=rdactisubsubmenu]").change(function() {
+   $("#txtestsubsubmenu").val(1);
+});
 
-   $("input[id=rdactisubsubmenu]").change(function () {
-      $("#txtestsubsubmenu").val(1);
-   });
+$("input[id=rddescsubsubmenu]").change(function() {
+   $("#txtestsubsubmenu").val(0);
+});
 
-   $("input[id=rddescsubsubmenu]").change(function () {	
-      $("#txtestsubsubmenu").val(0);
+  $("#btngsubsubmenu").on('click',function() {
+   idmenu = $("#txtidmenu2").val();
+   idsubmenu = $("#txtidsubmenu").val();
+   nombre = $("#txtsubsubnombe").val();
+   url = $("#txtsubsuburl").val();
+   estado = $("#txtestsubsubmenu").val();
+   guardarsubsubmenu(idmenu,idsubmenu,nombre,url,estado);
+   removerclase();
    });
 
 });
@@ -124,7 +167,8 @@ function lstmenu(){
           "accion" : 'lstmenu',
       },
       success: function(response){
-         b1 = "<a id='btnmenu' class='btn btn-primary btn-sm' style='float:right;'><i class='icon-pencil'>"
+         $("#tbmenu > tbody").empty();
+         b1 = "<a id='btnmenu' class='btn btn-primary btn-sm' data-bs-toggle='modal' data-bs-target='#mdmenu' style='float:right;'><i class='icon-pencil'>"
          obj = JSON.parse(response);
          $.each(obj['dato'], function(i, item) {
             var fila="<tr>";
@@ -143,7 +187,6 @@ function lstmenu(){
  });
 }
 
-
 function lstsubmenu(idmenu){
    $.ajax({
       dataType:'text',
@@ -154,7 +197,7 @@ function lstsubmenu(idmenu){
           "idmenu":idmenu
       },
       success: function(response){
-         b1 = "<a id='btnsubmenu' class='btn btn-primary btn-sm' style='float:right;'><i class='icon-pencil'>"
+         b1 = "<a id='btnsubmenu' class='btn btn-primary btn-sm' data-bs-toggle='modal' data-bs-target='#mdsubmenu' style='float:right;'><i class='icon-pencil'>"
          obj = JSON.parse(response);
          $.each(obj['dato'], function(i, item) {
             if(item[3] != ""){
@@ -170,7 +213,8 @@ function lstsubmenu(idmenu){
                btn.innerHTML=fila;
                document.getElementById("tbdsubmenu").appendChild(btn);
             }
-            $("#txturlmenu").prop('disabled', true);
+            $("#txtmdurlmenu").css("display", "none");
+            //$("#txturlmenu").prop('disabled', true);
          });
       }
  });
@@ -187,10 +231,12 @@ function lstsubsubmenu(idmenu,idsubmenu){
           "idsubmenu":idsubmenu
       },
       success: function(response){
-         b1 = "<a id='btnsubsubmenu' class='btn btn-primary btn-sm' style='float:right;'><i class='icon-pencil'>"
+         $("#subsubmenu > tbody").empty();
+         b1 = "<a id='btnsubsubmenu' class='btn btn-primary btn-sm'  data-bs-toggle='modal' data-bs-target='#mdsubsubmenu' style='float:right;'><i class='icon-pencil'>"
          obj = JSON.parse(response);
          $.each(obj['dato'], function(i, item) {
-            $("#txturlsubmenu").prop('disabled', true);
+            $("#txtmdurlsubmenu").css('display','none');
+            //$("#txturlsubmenu").prop('disabled', true);
             if(item[7] != ""){
                var fila="<tr>";
                fila += " <td style='display:none'>"+item[1]+"</td>"
@@ -211,7 +257,6 @@ function lstsubsubmenu(idmenu,idsubmenu){
    });
 }
 
-
 function _actualizar(idmenu,idsubmen,idsubsubmenu,nombre,url,estado) {
    $.ajax({
       dataType:'text',
@@ -227,28 +272,182 @@ function _actualizar(idmenu,idsubmen,idsubsubmenu,nombre,url,estado) {
           "estado":estado
       },
       success: function(response){
-        console.log(response);   
-        listarmenu();
+         listarmenu();
       }
  });
 }
 
-function guardar(idmenu,idsubmen,idsubsubmenu,nombre,url,estado) {
+function guardarmenu(nombre,url,estado) {
    $.ajax({
       dataType:'text',
       type: 'POST', 
       url:  'c_guardar_permisos.php',
       data: {
-          "accion" : 'guardar',
-          "idmenu":idmenu,
-          "idsubmen":idsubmen,
-          "idsubsubmenu":idsubsubmenu,
+          "accion" : 'guardarmenu',
           "nombre":nombre,
           "url":url,
           "estado":estado
       },
       success: function(response){
-        console.log(response);
+         if(response == 1){
+            Mensaje1("Se guardo el registro","success");
+            listarmenu();
+            document.getElementById('frmpermisos').reset();
+            lstmenu();
+         }else{
+            Mensaje1(response,"error");
+         }
       }
    });
+}
+
+function guardarsubmenu(idmenu,nombre,url,estado) {
+   $.ajax({
+      dataType:'text',
+      type: 'POST', 
+      url:  'c_guardar_permisos.php',
+      data: {
+          "accion" : 'guardarsubmenu',
+          "idmenu" : idmenu,
+          "nombre":nombre,
+          "url":url,
+          "estado":estado
+      },
+      success: function(response){
+         if(response == 1){
+            Mensaje1("Se guardo el registro","success");
+            listarmenu();
+            document.getElementById('frmpermisos').reset();
+            $("#tbsubmenu > tbody").empty();
+            lstsubmenu(idmenu);
+         }else{
+            Mensaje1(response,"error");
+         }
+      }
+   });
+}
+
+function guardarsubsubmenu(idmenu,idsubmenu,nombre,url,estado) {
+   $.ajax({
+      dataType:'text',
+      type: 'POST', 
+      url:  'c_guardar_permisos.php',
+      data: {
+          "accion" : 'guardarsubsubmenu',
+          "idmenu" : idmenu,
+          "idsubmenu" : idsubmenu,
+          "nombre":nombre,
+          "url":url,
+          "estado":estado
+      },
+      success: function(response){
+         if(response == 1){
+            Mensaje1("Se guardo el registro","success");
+            listarmenu();
+            document.getElementById('frmpermisos').reset();
+            $("#subsubmenu > tbody").empty();
+            lstsubsubmenu(idmenu,idsubmenu)
+         }else{
+            Mensaje1(response,"error");
+         }
+      }
+   });
+}
+
+function Mensaje1(texto,icono){
+   Swal.fire({
+    icon: icono,
+    title: texto,
+    //text: texto,
+    //padding:'1rem',
+    //grow:'fullscreen',
+    //backdrop: false,
+    //toast:true,
+    //position:'top'	
+    });
+}
+
+
+function buscarmenu(idmenu) {
+   $.ajax({
+      dataType:'text',
+      type: 'POST', 
+      url:  'c_guardar_permisos.php',
+      data: {
+          "accion" : 'buscarmenu',
+          "idmenu" : idmenu,
+      },
+      success: function(response){
+        obj = JSON.parse(response);
+        $.each(obj['dato'], function(i, item) {
+            $("#txtmdnommenu").val(item[1]);
+            $("#txtmdurlmenu").val(item[2]);
+            $("#txtmdidmenu").val(item[0]);
+            $("#txtmdestmenu").val(item[3]);
+            if(item[3] == 1){document.querySelector('#rdmdactimenu').checked = true;}
+            else{document.querySelector('#rdmddescmenu').checked = true;}
+        })
+       
+      }
+ });
+}
+
+function buscarsubmenu(idmenu,idsubmenu) {
+   $.ajax({
+      dataType:'text',
+      type: 'POST', 
+      url:  'c_guardar_permisos.php',
+      data: {
+          "accion" : 'buscarsubmenu',
+          "idmenu" : idmenu,
+          "idsubmenu" : idsubmenu,
+      },
+      success: function(response){
+         obj = JSON.parse(response)
+         $.each(obj['dato'], function(i, item) {
+            $("#txtidmenu2").val(item[1]);
+            $("#txtmdidmenu2").val(item[1]);
+            $("#txtmdnomsubmenu").val(item[3]);
+            $("#txtmdurlsubmenu").val(item[4]);
+            $("#txtmdidsubmenu").val(item[2])
+            $("#txtmdestsubmenu").val(item[9])
+            if(item[9] == 1){document.querySelector('#rdmdactisubmenu').checked = true;}
+            else{document.querySelector('#rdmddescsubmenu').checked = true;}
+        })
+       
+      }
+ });
+}
+
+function buscarsubsubmenu(idmenu,idsubmenu,idsubsubmenu) {
+   $.ajax({
+      dataType:'text',
+      type: 'POST', 
+      url:  'c_guardar_permisos.php',
+      data: {
+          "accion" : 'buscarsubsubmenu',
+          "idmenu" : idmenu,
+          "idsubmenu" : idsubmenu,
+          "idsubsubmenu" : idsubsubmenu,
+      },
+      success: function(response){
+         obj = JSON.parse(response)
+         $.each(obj['dato'], function(i, item) {
+            $("#txtmdidmenu3").val(item[1]);
+            $("#txtmdsubidmenu2").val(item[5]);
+            $("#txtmdsubsubnombe").val(item[7]);
+            $("#txtmdsubsuburl").val(item[8]);
+            $("#txtmdidsubsubmenu").val(item[6]);
+            $("#txtmdestsubsubmenu").val(item[10]);
+            if(item[10] == 1){document.querySelector('#rdmdactisubsubmenu').checked = true;}
+            else{document.querySelector('#rdmddescsubsubmenu').checked = true;}
+         });
+      }
+ });
+}
+
+function removerclase() {
+   $("#tbdmenu  tr").removeClass('highlight');
+   $("#tbdsubmenu tr").removeClass('highlight');
+   $("#tbdsubsubmenu tr").removeClass('highlight');
 }

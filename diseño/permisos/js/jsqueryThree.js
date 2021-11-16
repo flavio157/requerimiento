@@ -140,13 +140,13 @@ function consultarAnexo() {
                     })
                 });
            }else{
-            alert("ANEXO NO VALIDO");
+                Mensaje1("No se encontraron permisos para el anexo",'warning')
            }
          }
     });
  }
  
-
+ 
  function guardarPermisos(permisos) {
     anexo = $("#txtanexo").val(); 
     if(anexo != ""){
@@ -164,16 +164,30 @@ function consultarAnexo() {
                 success:function (dato) {
                     console.log(dato);
                     menu = [];
-                    alert(dato);
+                    Mensaje1(dato,'success');
                 }
             })
         }else{
-            alert("SELECCIONE PERMISOS");
+           Mensaje1("Seleccione permisos","Error")
         }
         
     }else{
-       alert("ANEXO INVALIDO");
+        Mensaje1("Anexo invalido",'Error');
     }
+ }
+
+
+ function Mensaje1(texto,icono){
+    Swal.fire({
+     icon: icono,
+     title: texto,
+     //text: texto,
+     //padding:'1rem',
+     //grow:'fullscreen',
+     //backdrop: false,
+     //toast:true,
+     //position:'top'	
+     });
  }
 
 

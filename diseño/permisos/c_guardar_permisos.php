@@ -28,8 +28,37 @@
             $url = $_POST['url'];
             $estado = $_POST['estado'];
             c_guardar_permisos::c_actualizar($idmenu,$idsubmen,$idsubsubmenu,$nombre,$url,$estado);
+        }else if($tipo == 'guardarmenu'){
+            $nombre =$_POST['nombre'];
+            $url = $_POST['url'];
+            $estado = $_POST['estado'];
+            c_guardar_permisos::c_guardar($nombre,$url,$estado);
+        }else if($tipo == 'guardarsubmenu'){
+            $idmenu = $_POST['idmenu'];
+            $nombre =$_POST['nombre'];
+            $url = $_POST['url'];
+            $estado = $_POST['estado'];
+            c_guardar_permisos::c_guardarsubmenu($idmenu,$nombre,$url,$estado);
+        } else if($tipo == 'guardarsubsubmenu'){
+            $idmenu = $_POST['idmenu'];
+            $idsubmenu = $_POST['idsubmenu'];
+            $nombre =$_POST['nombre'];
+            $url = $_POST['url'];
+            $estado = $_POST['estado'];
+            c_guardar_permisos::c_guardarsubmenu2($idmenu,$idsubmenu,$nombre,$url,$estado);
+        }else if($tipo == 'buscarmenu'){
+            $idmenu = $_POST['idmenu'];
+            c_guardar_permisos::c_buscarmenu($idmenu);
+        }else if($tipo == 'buscarsubmenu'){
+            $idmenu = $_POST['idmenu'];
+            $idsubmenu = $_POST['idsubmenu'];
+            c_guardar_permisos::c_buscarsubmenu($idmenu,$idsubmenu);
+        } else if($tipo == 'buscarsubsubmenu'){
+            $idmenu = $_POST['idmenu'];
+            $idsubmenu = $_POST['idsubmenu'];
+            $idsubsubmenu = $_POST['idsubsubmenu'];
+            c_guardar_permisos::c_buscarsubsubmenu($idmenu,$idsubmenu,$idsubsubmenu);
         }  
-
 
 class c_guardar_permisos 
 {
@@ -56,8 +85,6 @@ class c_guardar_permisos
         }
     }
     
-    
-
     static function c_buscar_anexo($anexo){
         $m_permisos = new m_guardar_permisos();
         $c_permisos = $m_permisos->m_consultar_permisos($anexo);
@@ -67,7 +94,6 @@ class c_guardar_permisos
             );
             echo json_encode($dato,JSON_FORCE_OBJECT);
     }
-
 
     static function c_listarMenu()
     { 
@@ -98,9 +124,9 @@ class c_guardar_permisos
                             '</ul>'.        
                         '</li>';
             }    
+        }
+        print_r($html);
     }
-    print_r($html);
-}
 
 
     static function c_listarSubmenus($idmenu){
@@ -212,9 +238,67 @@ class c_guardar_permisos
             $listadosub = $menu->m_actualizar($tabla,$datos);
             print_r($listadosub);
         }
-       
     }
 
+    static function c_guardar($nombre,$url,$estado){
+        if($nombre == ''){print_r("Error ingrese nombre del menu"); return;}
+        if($estado == ''){print_r("Error seleccione estado"); return;}
+        if(strlen($nombre) > 100){print_r("Error nombre mayor a lo permitido"); return;}
+        $m_permisos = new m_guardar_permisos();
+        $c_guardarmenu =$m_permisos->m_guardarmenu($nombre,$url,$estado);
+        print_r($c_guardarmenu);
+    }
+
+    static function c_guardarsubmenu($idmenu,$nombre,$url,$estado){
+        if($idmenu == ''){print_r("Error seleccione un menu"); return;}
+        if($nombre == ''){print_r("Error ingrese nombre del menu"); return;}
+        if($estado == ''){print_r("Error seleccione estado"); return;}
+        if(strlen($nombre) > 100){print_r("Error nombre mayor a lo permitido"); return;}
+        $m_permisos = new m_guardar_permisos();
+        $c_guardarmenu =$m_permisos->m_guardarsubmenus($idmenu,$nombre,$url,$estado);
+        print_r($c_guardarmenu);
+    }
+
+    static function c_guardarsubmenu2($idmenu,$idsubmenu,$nombre,$url,$estado){
+        if($idmenu == ""){print_r("Error seleccione un menu"); return;}
+        if($idsubmenu == ""){print_r("Error seleccione un Sub menu");return;}
+        if($nombre == ''){print_r("Error ingrese nombre del menu"); return;}
+        if($estado == ''){print_r("Error seleccione estado"); return;}
+        if(strlen($nombre) > 100){print_r("Error nombre mayor a lo permitido"); return;}
+        $m_permisos = new m_guardar_permisos();
+        $c_guardarmenu =$m_permisos->m_guardarsubmenus2($idmenu,$idsubmenu,$nombre,$url,$estado);
+        print_r($c_guardarmenu);
+    }
+
+    static function c_buscarmenu($idmenu)
+    {
+        $menu = new m_guardar_permisos();  
+        $c_menu = $menu->m_buscarMenu($idmenu);
+        $dato = array(
+            'dato' => $c_menu,
+        );
+        echo json_encode($dato,JSON_FORCE_OBJECT);
+    }
+
+    static function c_buscarsubmenu($idmenu,$submenu)
+    {
+        $menu = new m_guardar_permisos();  
+        $c_submenu = $menu->m_buscarsubMenu($idmenu,$submenu);
+        $dato = array(
+            'dato' => $c_submenu,
+        );
+        echo json_encode($dato,JSON_FORCE_OBJECT);
+    }
+
+    static function c_buscarsubsubmenu($idmenu,$submenu,$submenu2)
+    {
+        $menu = new m_guardar_permisos();  
+        $c_subsubmenu = $menu->m_buscarsubsubMenu($idmenu,$submenu,$submenu2);
+        $dato = array(
+            'dato' => $c_subsubmenu,
+        );
+        echo json_encode($dato,JSON_FORCE_OBJECT);
+    }
 }
 
 

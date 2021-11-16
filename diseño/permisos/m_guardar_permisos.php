@@ -1,13 +1,13 @@
 <?php
-    //require_once("../funciones/DatabasePlasticos.php"); 
-    require_once("../funciones/Database.php"); 
+    require_once("../funciones/DatabasePlasticos.php"); 
+   // require_once("../funciones/Database.php"); 
     class m_guardar_permisos 
     {
         private $bd;
         public function __construct()
         {
-           //  $this->bd=DataBasePlasticos::Conectar();
-           $this->bd=DataBase::Conectar();
+            $this->bd=DataBasePlasticos::Conectar();
+          //  $this->bd=DataBase::Conectar();
         }
             
         public function m_consultar_permisos($anexo){
@@ -122,6 +122,44 @@
            
         }
        
+
+        public function m_buscarMenu($idmenu)
+        {
+            try {
+                $query = $this->bd->prepare("SELECT * FROM T_CAB_MENU WHERE ID_MENU = '$idmenu'");
+                $query->execute();
+                return $query->fetchAll();
+            } catch (Exception $e) {   
+                print_r("Error al buscar menu" . $e);             
+            }
+        } 
+
+        public function m_buscarsubMenu($idmenu,$idsubmenu)
+        {
+            try {
+                $query = $this->bd->prepare("SELECT * FROM T_SUB_MENUS WHERE 
+                ID_MENU = '$idmenu' AND ID_SUBMENU1 = '$idsubmenu'");
+                $query->execute();
+                return $query->fetchAll();
+            } catch (Exception $e) {   
+                print_r("Error al buscar submenu" . $e);             
+            }
+        } 
+
+        public function m_buscarsubsubMenu($idmenu,$idsubmenu,$disubmenu2)
+        {
+            try {
+                $query = $this->bd->prepare("SELECT * FROM T_SUB_MENUS WHERE 
+                ID_MENU = '$idmenu' AND IDSUBMENU1 = '$idsubmenu' AND IDSUBMENU2 = '$disubmenu2'");
+                $query->execute();
+                return $query->fetchAll();
+            } catch (Exception $e) {   
+                print_r("Error al buscar submenu2" . $e);             
+            }
+        } 
+
+
+
         public function m_actualizar($tabla, $datos)
         {
             try {
@@ -133,6 +171,59 @@
             }
         }
         
+        public function m_guardarmenu($nombre,$url,$estado)
+        {
+            try {
+                $idmenu = $this->m_generarcodigo("ID_MENU","T_CAB_MENU");
+                $query = $this->bd->prepare("INSERT INTO T_CAB_MENU(ID_MENU,NOMBRE,URL,ESTADO) 
+                VALUES('$idmenu','$nombre','$url','$estado')");
+                $guardarmenu = $query->execute();
+                return $guardarmenu;
+            } catch (Exception $e) {
+                print_r("Error al guardar menu" . $e);
+            } 
+        }
+
+        public function m_guardarsubmenus($idmenu,$nombre,$url,$estado){
+            try {
+                $idsubmenu = $this->m_generarcodigo("ID_SUBMENU1","T_SUB_MENUS");
+                $query = $this->bd->prepare("INSERT INTO T_SUB_MENUS                 
+                VALUES('$idmenu','$idsubmenu','$nombre','$url','','','','','$estado','')");
+                /*print_r($query);*/
+                $guardarmenu = $query->execute();
+                return $guardarmenu;
+            } catch (Exception $e) {
+                print_r("Error al guardar submenu" . $e);
+            } 
+        }
+
+        public function m_guardarsubmenus2($idmenu,$idsubmenu,$nombre,$url,$estado){
+            try {
+                $idsubmenu2 = $this->m_generarcodigo("IDSUBMENU2","T_SUB_MENUS");
+                $query = $this->bd->prepare("INSERT INTO T_SUB_MENUS
+                VALUES('$idmenu','','','','$idsubmenu','$idsubmenu2','$nombre','$url','','$estado')");
+               /* print_r($query);*/
+                $guardarmenu = $query->execute();
+                return $guardarmenu;
+            } catch (Exception $e) {
+                print_r("Error al guardar submenu2" . $e);
+            } 
+        }
+
+        public function m_generarcodigo($campo,$tabla)
+        {
+            try {
+                $query = $this->bd->prepare("SELECT MAX($campo)+1 as codigo FROM $tabla");
+                $query->execute();
+                $results = $query->fetch();
+                if($results[0] == NULL) $results[0] = '1';
+                $res = str_pad($results[0], 3, '0', STR_PAD_LEFT);
+                return $res;
+            } catch (Exception $e) {
+                print_r("Error en la consulta generar codigo".$e);
+            }
+        }  
+
     }
 
 ?>
