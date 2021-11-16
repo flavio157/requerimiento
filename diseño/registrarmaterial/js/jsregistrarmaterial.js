@@ -28,9 +28,7 @@ $(function() {
     $("#txtcomcantidad").bind('keypress',function(e) {
         return _numeros(e);
     })
-    $("#mtxtnombreproducto").bind('keypress',function(e) {
-        return _letras(e);
-    })
+  
     
     $("#btnatproduc").on('click',function() {
         validatos();

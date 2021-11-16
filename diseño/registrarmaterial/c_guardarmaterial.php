@@ -56,7 +56,7 @@ require_once("m_guardarmaterial.php");
             if(strlen($unimedpro) < 2 || strlen($unimedpro) > 10){print_r("Unidad de medida minimo 2 y maximo 4 caracteres"); return;}
             if(preg_match($pattern,$unimedpro) == 0){print_r("Unidad de medida solo letras"); return;}
             if(strlen($despro) < 6){print_r("Nombre del producto minimo 6 caracteres"); return;}
-            if(preg_match($pattern,$despro) == 0){print_r("Nombre del producto solo letras"); return;}
+          
             if(strlen($codcateg) == 0){print_r("Seleccione categoria"); return;}
             if(strlen($abre) > 4 || strlen($abre) < 2){print_r("Abreviatura minimo 2 y maximo 4 caracteres"); return;}
             if(preg_match($pattern,$abre) == 0){print_r("Abreviatura solo letras"); return;}
