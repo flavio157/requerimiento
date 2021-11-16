@@ -1,3 +1,4 @@
+var sugematerial = [];
 $(function() {
     $('body').on('keydown', function(e){
         if( e.which == 38 ||  e.which == 40) {
@@ -167,5 +168,9 @@ function _lcform() {
     document.getElementById("frmguardaprod").reset();
 }
 
+
+function _lcform() {
+    document.getElementById("frmguardaprod").reset();
+}
 
 

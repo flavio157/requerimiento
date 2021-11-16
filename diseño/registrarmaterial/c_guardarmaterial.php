@@ -29,7 +29,6 @@ require_once("m_guardarmaterial.php");
         $seriepro = $_POST['serie'];
         c_guardarmaterial::c_verdatpro($codig,$product,$canpro,$prepro,$seriepro);
     }
-
     class c_guardarmaterial
     {
     
@@ -51,7 +50,7 @@ require_once("m_guardarmaterial.php");
         }
 
         static function guardarproducto($codpro,$codcateg,$despro,$unimedpro,$stockmin,$abre,$usuregi,$pesoneto,$codclase,$oficina){
-            $pattern = "/^[a-zA-Z\sñáéíóúÁÉÍÓÚ]+$/";
+            $pattern = "/^[a-zA-Z\sñáéíóúÁÉÍÓÚ.,;]+$/";
             if(strlen($codpro) > 6 || strlen($codpro) < 6){print_r("Codigo producto debe tener 6 caracteres");return;}
             if(strlen($unimedpro) < 2 || strlen($unimedpro) > 10){print_r("Unidad de medida minimo 2 y maximo 4 caracteres"); return;}
             if(preg_match($pattern,$unimedpro) == 0){print_r("Unidad de medida solo letras"); return;}
@@ -97,6 +96,7 @@ require_once("m_guardarmaterial.php");
             }
             print_r(1);
         }
+
 
     }
     

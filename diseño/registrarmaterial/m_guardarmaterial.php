@@ -51,7 +51,7 @@ class m_guardarmaterial
                 ,DES_PRODUCTO,UNI_MEDIDA,STOCK_MINIMO,ABR_PRODUCTO,PRE_PRODUCTO,EST_PRODUCTO,USU_REGISTRO,
                 FEC_REGISTRO,MAQUINA,PESO_NETO,COD_CLASE) 
                 VALUES('$codpro','$codcateg','$producto','$unimedpro',
-                $stockmin,'$abre',0,'A','$usuregi','$fech_registro','','$pesoneto','$codclase')");
+                $stockmin,'$abre',0,'1','$usuregi','$fech_registro','','$pesoneto','$codclase')");
             
                 $query->execute();  
                 
@@ -68,6 +68,17 @@ class m_guardarmaterial
                 $this->bd->rollBack();
                 print_r("Error al guardar".$e);
             }   
+    }
+
+    public function m_listarproducto(){
+        try {
+            $query = $this->bd->prepare("SELECT * FROM T_PRODUCTO");
+            $query->execute();
+            $results = $query->fetchAll();
+            return $results;
+        } catch (Exception $e) {
+            print_r("Error en listar producto".$e);
+        }
     }
 }
 
