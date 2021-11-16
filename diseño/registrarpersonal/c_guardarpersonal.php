@@ -50,14 +50,17 @@ require_once("m_guardarpersonal.php");
             $cantnombre = explode(" ", $nombre);
             $cantdireccion = explode(" ", $direccion);
             $titularar = explode(" ",$titular);
+            
             if($fechaingreso == ""){print_r("Error seleccione fecha de ingreso"); return;}
             if(preg_match($numero,$dni) == 0){print_r("Error DNI solo numeros"); return;}
             if(strlen($dni) > 8 ||strlen($dni) < 8 ){print_r("Error DNI solo 8 digitos"); return;}
             if(count($cantnombre) < 3){print_r("Error minimo un nombre y dos apellidos"); return;}
+            if(strlen($nombre) > 60 ){print_r("Error nombre del personal muy largo"); return;}
             if(count($cantdireccion) < 3){print_r("Error direccion invalido"); return;}
             if(strlen($nombre) == 0){print_r("Error nombre invalido"); return;}
             if(preg_match($letras,$nombre) == 0){print_r("Error solo letras en el nombre"); return;}
             if(strlen($direccion) == 0){print_r("Error direccion invalido"); return;}
+            if(strlen($direccion) > 100){print_r("Error direccion del personal muy largo"); return;}
             if(preg_match($moneda,$salario) == 0){print_r("Error salario solo numeros"); return;}
             if($telefono != ""){
                 if(preg_match($numero,$telefono) == 0){print_r("Error telefono solo numeros"); return;}
@@ -71,7 +74,7 @@ require_once("m_guardarpersonal.php");
             if($titular != ""){
                 if(count($titularar) < 3){print_r("Error minimo un nombre y dos apellidos en titular"); return;}
                 if(preg_match($letras,$titular) == 0){print_r("Error solo letras en titular"); return;}
-                
+                if(strlen($titular) > 50){print_r("Error nombre del titular muy largo"); return;}
             }else{
                 $titular = 'NULL';
             }
