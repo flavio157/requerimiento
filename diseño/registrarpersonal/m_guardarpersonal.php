@@ -50,7 +50,7 @@ class m_guardarpersonal
             $query->execute();
             $results = $query->fetch();
             if($results[0] == NULL) $results[0] = '1';
-            $res = str_pad($results[0], 4, '0', STR_PAD_LEFT);
+            $res = str_pad($results[0], 5, '0', STR_PAD_LEFT);
             return $res;
         } catch (Exception $e) {
             print_r("Error en la consulta generar codigo".$e);
