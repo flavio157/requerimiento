@@ -16,6 +16,7 @@ $(function() {
 
     $("#btncancelar").on('click',function () {
         tipo = 1;  
+        _lcform();
     })
 
     $("#btnguarpers").on('click',function() {
@@ -76,6 +77,11 @@ $(function() {
 
    $("#btnbuscarper").on('click',function() {
      buscarpersonal($("#txtcodpersonal").val());
+   })
+
+   $("#btnbuscpers").on('click',function (params) {
+       $("#txtcodpersonal").val('');
+       $("#txtpersonal").val('');
    })
 
 });
