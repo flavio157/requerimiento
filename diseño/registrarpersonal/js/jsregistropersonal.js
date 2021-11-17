@@ -10,9 +10,7 @@ $(function() {
         }
     });
    
-    $("#btnbuscarper").on('click',function () {
-        tipo = 0;   
-    });
+  
 
     $("#btncancelar").on('click',function () {
         tipo = 1;  
@@ -303,6 +301,7 @@ function buscarpersonal(personal) {
                 if(item[20] == 'NULL'){item[20] = ''}
                 $("#mtxttitulpers").val(item[20]);
                 $("#slcestado").val(item[13]);
+                tipo = 0;   
             });
         }
     });   
