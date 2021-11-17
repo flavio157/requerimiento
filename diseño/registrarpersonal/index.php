@@ -61,7 +61,7 @@ require_once(".././menu/index.php");
                         <div class="col">
                             <label for="formfpago" class="form-label">Nombre completo</label>
                             <div class="input-group flex-nowrap">
-                                <input type="text" class="form-control mayu" name="mtxtnomperson" id="mtxtnomperson" autocomplete="off">
+                                <input type="text" style="z-index: 1;" class="form-control mayu" name="mtxtnomperson" id="mtxtnomperson" autocomplete="off">
                                 <a class="btn btn-success" data-bs-toggle="modal" data-bs-target="#mdpersonal">
                                     <i class="icon-user" title="Buscar Personal"></i>
                                 </a>
