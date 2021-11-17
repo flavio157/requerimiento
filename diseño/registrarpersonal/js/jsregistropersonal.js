@@ -73,8 +73,16 @@ $(function() {
         _lstdistri($(this).val());
     });
 
+    $("#txtpersonal").keydown(function(e){
+        if(e.which == 8) {
+           $("#txtcodpersonal").val('');
+        }
+      });
+
    $("#btnbuscarper").on('click',function() {
-     buscarpersonal($("#txtcodpersonal").val());
+       if($("#txtcodpersonal").val() == ''){Mensaje1("Personal no existe","error");
+       _lcform();return;}
+       buscarpersonal($("#txtcodpersonal").val());
    })
 
    $("#btnbuscpers").on('click',function (params) {
@@ -149,6 +157,7 @@ function _actualizar(personal) {
         data:personal+"&accion=actualizar&usuario="+usu+"&codpersonal="+codpersonal,
         success:  function(response){
             if(response == 1){
+                sugepersonal = [];
                 Mensaje1("Se actualizo el registro","success");
                 _lcform();
                 tipo = 1;
@@ -301,7 +310,8 @@ function buscarpersonal(personal) {
                 if(item[20] == 'NULL'){item[20] = ''}
                 $("#mtxttitulpers").val(item[20]);
                 $("#slcestado").val(item[13]);
-                tipo = 0;   
+                tipo = 0;
+                $("#mdpersonal").modal('hide');   
             });
         }
     });   

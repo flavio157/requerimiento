@@ -179,7 +179,7 @@ require_once(".././menu/index.php");
                   </div>
                   <div class="modal-footer">
                     <button type="button" id="btncancelar" class="btn btn-danger" data-bs-dismiss="modal">Cancelar</button>
-                    <button type="button" id="btnbuscarper" class="btn btn-primary" data-bs-dismiss="modal">Aceptar</button>
+                    <button type="button" id="btnbuscarper" class="btn btn-primary">Aceptar</button>
                   </div>
                 </div>
               </div>
