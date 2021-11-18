@@ -87,6 +87,7 @@ $cod = $_SESSION["cod"];
                                         <th class="thtitulo" scope="col">Cantidad</th>
                                         <th class="thtitulo" scope="col">U.Medida</th>
                                         <th class="thtitulo" scope="col">Stock</th>
+                                        <th class="thtitulo" scope="col">Acciones</th>
                                     </tr>
                                 </thead>
                                 <tbody id="tbdmaterialmolde">

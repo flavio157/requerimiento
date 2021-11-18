@@ -23,7 +23,7 @@ class C_Login
         
 
         if($datosUsuario){
-            return header("Location: molde/index.php");
+            return header("Location: registromolde/index.php");
            }else{
            print_r("USTED NO TIENE PERMISO");
         }

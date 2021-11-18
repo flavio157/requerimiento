@@ -105,7 +105,6 @@ if ($ipFound) {
 
 
 function retunrFechaSql($fecha){
-
  $dia1=substr($fecha, 0, 2);
  $mes1=substr($fecha, 3, 2);
  $ano1=substr($fecha, 6, 4);
@@ -556,32 +555,5 @@ function f_Cuotas($promedioCuota,$cuotas,$dias){
         return $diff->days;
     }
 
-
-    function gethora(){
-        date_default_timezone_set('America/Lima');
-        $hora = date("H") .":". date("i");
-        return $hora;
-    }
-
-    
-    function generarcorrelativo($codigo,$tipo){
-        $codigo = ($codigo == "") ? '1': $codigo;
-        if($tipo == 1){
-            $res = str_pad($codigo, 9, '0', STR_PAD_LEFT);
-        }else if($tipo == 2){
-            $res = str_pad($codigo, 5, '0', STR_PAD_LEFT);
-        }
-        return $res;
-    }
-
-    function sumarfecha($cantdias){
-        date_default_timezone_set('America/Lima');
-        $fecha_actual = date("d-m-Y");
-        $fecha =  date("d-m-Y",strtotime($fecha_actual."+" .$cantdias."days"));
-        return $fecha;
-    }
-
-    
-  
 
   ?>

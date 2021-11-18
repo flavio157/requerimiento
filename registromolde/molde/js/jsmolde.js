@@ -107,6 +107,9 @@ $(function() {
         $(this).closest('tr').remove();
     })
 
+    $(document).on('click','#btneliminarmate',function(){
+        $(this).closest('tr').remove();
+    })
 
     $("#btnnuevo").on('click',function(){
       limpiar();
@@ -180,6 +183,7 @@ function lstmateriales(dato) {
             fila +="<td class="+color+">"+item[3]+"</td>";
             fila +="<td class="+color+">"+item[4]+"</td>";
             fila +="<td class="+color+">"+item[5]+"</td>";
+            fila +="<td><a id='btneliminarmate' class='btn btn-danger  btn-sm'><i class='icon-trash'></i></a></td>"
             fila +="</tr>";
             var btn = document.createElement("TR");
             btn.innerHTML=fila;
