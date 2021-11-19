@@ -255,6 +255,7 @@ function _lstdistri(dato) {
         success:  function(response){
             obj = JSON.parse(response);
             $select = $("#sldistpers");
+            console.log(obj['area']);
             $.each(obj['area'], function(e, i) {
                 $select.append('<option value=' +i[2]+ '>' + i[3] + '</option>');
             }); 

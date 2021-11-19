@@ -39,7 +39,7 @@ require_once(".././menu/index.php");
    <section>  
         <div class="main"> 
             <form id="frmgudarpers" name="frmgudarpers">
-                <input type="text" id="vroficina" style="display: none;" value="<?php echo $ofi?>"/>
+                <input type="text" id="vroficina" style="display: none;" value="<?php echo  $ofi?>"/>
                 <input type="text" id="vrzona" style="display: none;" value="<?php echo  $zon?>"/>
                 <input type="text" id="vrcodpersonal" style="display: none;" value="<?php echo  $cod?>"/>
                 <div class="row">
@@ -62,7 +62,7 @@ require_once(".././menu/index.php");
                             <label for="formfpago" class="form-label">Nombre completo</label>
                             <div class="input-group flex-nowrap">
                                 <input type="text" style="z-index: 1;" class="form-control mayu" name="mtxtnomperson" id="mtxtnomperson" autocomplete="off">
-                                <a class="btn btn-success" data-bs-toggle="modal" data-bs-target="#mdpersonal">
+                                <a class="btn btn-success" id="btnbuscpers" data-bs-toggle="modal" data-bs-target="#mdpersonal">
                                     <i class="icon-user" title="Buscar Personal"></i>
                                 </a>
                             </div>
@@ -141,7 +141,7 @@ require_once(".././menu/index.php");
                                 <select class="form-select" id="slcestado" name="slcestado" aria-label="Default select example">
                                     <option value="" >SELECCIONE ESTADO</option>
                                     <option value="1" selected>Activo</option>
-                                    <option value="0">Desactivo</option>
+                                    <option value="0">Inactivo</option>
                                 </select>
                             </div>
                         </div>
@@ -179,7 +179,7 @@ require_once(".././menu/index.php");
                   </div>
                   <div class="modal-footer">
                     <button type="button" id="btncancelar" class="btn btn-danger" data-bs-dismiss="modal">Cancelar</button>
-                    <button type="button" id="btnbuscarper" class="btn btn-primary">Aceptar</button>
+                    <button type="button" id="btnbuscarper" class="btn btn-primary" >Aceptar</button>
                   </div>
                 </div>
               </div>

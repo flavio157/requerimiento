@@ -29,11 +29,12 @@ class m_guardarpersonal
     {
       try {
          $fechaingreso = retunrFechaSqlphp($fechaingreso);
+         $fech_registro = retunrFechaSqlphp(date("Y-m-d"));
           $codpersonal = $this->m_generar_codpers('COD_PERSONAL','T_PERSONAL');
           $query = $this->bd->prepare("INSERT INTO T_PERSONAL(COD_PERSONAL,NOM_PERSONAL1,DIR_PERSONAL,DNI_PERSONAL,COD_CARGO,
           SAL_BASICO,COD_AREA,COD_DEPARTAMENTO,COD_PROVINCIA,COD_DISTRITO,TEL_PERSONAL,CEL_PERSONAL,EST_PERSONAL,
-          FEC_INGRESO,USU_REGISTRO,N_CUENTA,TITULAR) VALUES('$codpersonal','$nombre','$direccion','$dni','$cargo','$salario','$area',
-          '$departamento','$provincia','$distrito',$telefono,$celular,'$estado','$fechaingreso','$usuario','$cuenta','$titular')");
+          FEC_INGRESO,USU_REGISTRO,FEC_REGISTRO,N_CUENTA,TITULAR) VALUES('$codpersonal','$nombre','$direccion','$dni','$cargo','$salario','$area',
+          '$departamento','$provincia','$distrito',$telefono,$celular,'$estado','$fechaingreso','$usuario','$fech_registro','$cuenta','$titular')");
           $personal =  $query->execute();
           return $personal;
           $codpersonal = $this->m_generar_codpers('COD_PERSONAL','T_PERSONAL');
@@ -73,14 +74,14 @@ class m_guardarpersonal
     ,$distrito,$telefono,$celular,$cuenta,$titular,$usuario,$fechaingreso, $estado)
     {
       try {
-         $fechaingreso = retunrFechaSqlphp($fechaingreso);
-          
+          $fechaingreso = retunrFechaSqlphp($fechaingreso);
+          $fech_registro = retunrFechaSqlphp(date("Y-m-d"));
           $query = $this->bd->prepare("UPDATE T_PERSONAL SET COD_AREA = '$area',
           COD_CARGO = '$cargo',DNI_PERSONAL ='$dni',NOM_PERSONAL1 = '$nombre',SAL_BASICO = '$salario',
           DIR_PERSONAL = '$direccion',COD_DEPARTAMENTO = '$departamento', COD_PROVINCIA = '$provincia',
           COD_DISTRITO = '$distrito',TEL_PERSONAL = '$telefono',CEL_PERSONAL = '$celular',
           EST_PERSONAL = '$estado',FEC_INGRESO = '$fechaingreso',USU_MODIFICO = '$usuario',
-          FEC_MODIFICO = GETDATE(),N_CUENTA = '$cuenta' , TITULAR = '$titular' 
+          FEC_MODIFICO = '$fech_registro',N_CUENTA = '$cuenta' , TITULAR = '$titular' 
           WHERE COD_PERSONAL = '$codpersonal'");
           $personal =  $query->execute();
           return $personal;

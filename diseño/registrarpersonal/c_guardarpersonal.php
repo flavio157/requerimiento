@@ -93,13 +93,16 @@ require_once("m_guardarpersonal.php");
             if(preg_match($numero,$dni) == 0){print_r("Error DNI solo numeros"); return 0;}
             if(strlen($dni) > 8 ||strlen($dni) < 8 ){print_r("Error DNI solo 8 digitos"); return 0;}
             if(count($cantnombre) < 3){print_r("Error minimo un nombre y dos apellidos"); return 0;}
-            if(strlen($nombre) > 60 ){print_r("Error nombre del personal sobrepaso limite"); return 0;}
+            if(strlen($nombre) > 60 ){print_r("Error nombre del personal sobrepaso limite de 60 caracteres"); return;}
             if(count($cantdireccion) < 3){print_r("Error direccion invalido"); return 0;}
-            if(strlen($nombre) == 0){print_r("Error nombre invalido"); return 0;}
             if(preg_match($letras,$nombre) == 0){print_r("Error solo letras en el nombre"); return 0;}
             if(strlen($direccion) == 0){print_r("Error direccion invalido"); return 0;}
             if(strlen($direccion) > 100){print_r("Error direccion del personal sobrepaso limite"); return 0;}
             if(preg_match($moneda,$salario) == 0){print_r("Error salario solo numeros"); return 0;}
+            
+            $saldo = explode(".", $salario);
+            if(strlen($saldo[0]) > 7){print_r("Error campo cantidad, maximo 7 digitos con 2 decimales");return;}
+
             if($cargo == "00000"){print_r("Error seleccione cargo"); return 0;}
             if($area == "00000"){print_r("Error seleccione area"); return 0;}
             if($departamento == "00000"){print_r("Error seleccione departamento"); return 0;}
@@ -117,7 +120,7 @@ require_once("m_guardarpersonal.php");
             if($titular != ""){
                 if(count($titularar) < 3){print_r("Error minimo un nombre y dos apellidos en titular"); return;}
                 if(preg_match($letras,$titular) == 0){print_r("Error solo letras en titular"); return;}
-                if(strlen($titular) > 50){print_r("Error nombre del titular muy largo"); return;}
+                if(strlen($titular) > 50 ){print_r("Error nombre del titular sobrepaso limite de 50 caracteres"); return;}
             }else{
                 $titular = 'NULL';
             }
@@ -166,8 +169,8 @@ require_once("m_guardarpersonal.php");
                 array_push($personal,array(
                     "code" => $c_lstpersonal[$i][0],
                     "label" => $c_lstpersonal[$i][5],
-                    "prov" => $c_lstpersonal[$i][9],
-                    "dist" => $c_lstpersonal[$i][10]));
+                    "prov" => $c_lstpersonal[$i][8],
+                    "dist" => $c_lstpersonal[$i][9]));
             }
             $dato = array(
                 'dato' => $personal
