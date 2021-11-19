@@ -24,14 +24,14 @@ class m_guardarmaterial
     }
     
 
-    public function m_select_generarcodigo($campo,$tabla)
+    public function m_select_generarcodigo($campo,$tabla,$cantidad)
     {
         try {
             $query = $this->bd->prepare("SELECT MAX($campo)+1 as codigo FROM $tabla");
             $query->execute();
             $results = $query->fetch();
             if($results[0] == NULL) $results[0] = '1';
-            $res = str_pad($results[0], 8, '0', STR_PAD_LEFT);
+            $res = str_pad($results[0], $cantidad, '0', STR_PAD_LEFT);
             return $res;
         } catch (Exception $e) {
             print_r("Error en la consulta generar codigo".$e);
@@ -47,6 +47,7 @@ class m_guardarmaterial
                 $codpro = strtoupper($codpro);
                 $unimedpro = strtoupper($unimedpro);
                 $fech_registro = retunrFechaSqlphp(date("Y-m-d"));
+                $codpro = $this->m_select_generarcodigo('COD_PRODUCTO','T_PRODUCTO',6);
                 $query = $this->bd->prepare("INSERT INTO T_PRODUCTO (COD_PRODUCTO,COD_CATEGORIA
                 ,DES_PRODUCTO,UNI_MEDIDA,STOCK_MINIMO,ABR_PRODUCTO,PRE_PRODUCTO,EST_PRODUCTO,USU_REGISTRO,
                 FEC_REGISTRO,MAQUINA,PESO_NETO,COD_CLASE) 
@@ -56,7 +57,7 @@ class m_guardarmaterial
                 $query->execute();  
                 
                 $oficina = oficiona($oficina);
-                $correlativo = $this->m_select_generarcodigo('COD_ALIN','T_ALMACEN_INSUMOS');
+                $correlativo = $this->m_select_generarcodigo('COD_ALIN','T_ALMACEN_INSUMOS',8);
                 $query2 = $this->bd->prepare("INSERT INTO T_ALMACEN_INSUMOS (COD_ALIN,COD_ALMACEN,
                                    STOCK_ACTUAL,COD_PRODUCTO,COD_CLASE,STOCK_MINIMO) 
                 VALUES('$correlativo','$oficina','0','$codpro','$codclase',$stockmin)");

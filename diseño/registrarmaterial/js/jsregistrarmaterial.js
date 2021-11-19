@@ -1,10 +1,14 @@
 var sugematerial = [];
 $(function() {
+    $("#mtxtcodigopro").attr('disabled','disabled');
+    corprod();
+    
     $('body').on('keydown', function(e){
         if( e.which == 38 ||  e.which == 40) {
           return false;
         }
     });
+
   
     _categoria('lstcategoria','slcategoria');
     _categoria('lstclase','slclase');
@@ -125,6 +129,7 @@ function _guardarProducto() {
                  if(response == 1){
                       Mensaje1("Se registro Correctamente",'success');
                       _lcform();
+                      corprod()
                  }else{
                      Mensaje1(response,'error')
                  }
@@ -174,3 +179,17 @@ function _lcform() {
 }
 
 
+
+function corprod(){
+    $.ajax({
+        dataType:'text',
+        type: 'POST', 
+        url:  'c_guardarmaterial.php',
+        data:{
+            "accion" : 'codpro',
+        } ,
+        success:  function(e){
+           $("#mtxtcodigopro").val(e)
+        }
+    });   
+}

@@ -28,6 +28,8 @@ require_once("m_guardarmaterial.php");
         $prepro = $_POST['precio'];
         $seriepro = $_POST['serie'];
         c_guardarmaterial::c_verdatpro($codig,$product,$canpro,$prepro,$seriepro);
+    }else if($accion == 'codpro'){
+        c_guardarmaterial::c_codprod();
     }
     class c_guardarmaterial
     {
@@ -50,21 +52,27 @@ require_once("m_guardarmaterial.php");
         }
 
         static function guardarproducto($codpro,$codcateg,$despro,$unimedpro,$stockmin,$abre,$usuregi,$pesoneto,$codclase,$oficina){
+            $material = new m_guardarmaterial();
+            $cadena = "COD_PRODUCTO = '$codpro'";
+            $c_verificarcod = $material->m_buscar('T_PRODUCTO',$cadena);
+            if(count($c_verificarcod) > 0){print_r("Error el codigo del producto ya existe");return;}
             $pattern = "/^[a-zA-Z\sñáéíóúÁÉÍÓÚ.,;]+$/";
             if(strlen($codpro) > 6 || strlen($codpro) < 6){print_r("Codigo producto debe tener 6 caracteres");return;}
             if(strlen($unimedpro) < 2 || strlen($unimedpro) > 10){print_r("Unidad de medida minimo 2 y maximo 4 caracteres"); return;}
             if(preg_match($pattern,$unimedpro) == 0){print_r("Unidad de medida solo letras"); return;}
+            if(strlen($unimedpro) < 3){print_r("Unidad de medida minimo 3 caracteres"); return;}
             if(strlen($despro) < 6){print_r("Nombre del producto minimo 6 caracteres"); return;}
-            if(strlen($despro) > 50){print_r("Error nombre del producto muy largo"); return;}
+            if(strlen($despro) > 50){print_r("Nombre del producto maximo 50 caracteres"); return;}
             if(strlen($codcateg) == 0){print_r("Seleccione categoria"); return;}
             if(strlen($abre) > 4 || strlen($abre) < 2){print_r("Abreviatura minimo 2 y maximo 4 caracteres"); return;}
             if(preg_match($pattern,$abre) == 0){print_r("Abreviatura solo letras"); return;}
-            if(strlen($stockmin) < 2){print_r("Stock minimo minimo 2 caracteres"); return;};
-            if(!is_numeric($stockmin)){print_r("Stock minimo solo numeros"); return;};
-            if(strlen($pesoneto) < 1){print_r("Peson neto minimo 1 caracter"); return;};
-            if(!is_numeric($pesoneto)){print_r("Peso neto solo numeros"); return;};
+            if(strlen($stockmin) < 1){print_r("Error campo stock, minimo 1 digitos"); return;};
+            if(strlen($stockmin) > 5){print_r("Error campo stock, maximo 5 digitos"); return;};
+            if(!is_numeric($stockmin)){print_r("Error stock minimo, solo numeros"); return;};
+            if(!is_numeric($pesoneto)){print_r("Error peso neto solo numeros"); return;};
+            if(strlen($pesoneto) < 1){print_r("Error peso neto minimo 1 digito"); return;};
+            if(strlen($pesoneto) > 9){print_r("Error peso neto maximo 9 digitos"); return;};
             if(strlen($codclase) == 0){print_r("Seleccione clase del producto"); return;}
-            $material = new m_guardarmaterial(); 
             $c_guardarprod = $material->m_guardarprod($codpro,$codcateg,$despro,$unimedpro,$stockmin,$abre,$usuregi,$pesoneto,$codclase,$oficina);
             print_r(1);
         }
@@ -97,6 +105,13 @@ require_once("m_guardarmaterial.php");
             print_r(1);
         }
 
+
+        static function c_codprod()
+        {
+            $m_personal = new m_guardarmaterial();
+            $c_area = $m_personal-> m_select_generarcodigo('COD_PRODUCTO','T_PRODUCTO',6);
+            print_r($c_area);
+        }
 
     }
     
