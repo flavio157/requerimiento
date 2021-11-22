@@ -34,7 +34,7 @@
         {
             $personal = array();
             $m_personal = new m_moldes();
-            $cadena = "EST_PERSONAL = 'A'";
+            $cadena = "EST_PERSONAL = '1'";
             $c_personal = $m_personal->m_buscar('T_PERSONAL',$cadena);
             for ($i=0; $i < count($c_personal) ; $i++) { 
                 array_push($personal,array(
@@ -52,7 +52,7 @@
         {
             $personal = array();
             $m_personal = new m_moldes();
-            $cadena = "ESTADO = 'A'";
+            $cadena = "ESTADO = '1'";
             $c_personal = $m_personal->m_buscar('T_MOLDE',$cadena);
             for ($i=0; $i < count($c_personal) ; $i++) { 
                 array_push($personal,array(
@@ -76,8 +76,8 @@
                 'dato' => $c_personal
             );
             echo json_encode($dato,JSON_FORCE_OBJECT);
+    
         }
-
         static function c_guardar($idmolde,$fecini,$fecfin,$usuario,$personal,$cod_material)
         {
             if(c_moldes::verificarstock($cod_material) == -1){print_r("Error stock insuficiente"); return;}

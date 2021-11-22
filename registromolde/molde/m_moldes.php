@@ -1,6 +1,6 @@
 <?php
     require_once("../funciones/DataBasePlasticos.php");
-
+    require_once("../funciones/f_funcion.php");
     class m_moldes 
     {
         private $bd;
@@ -12,9 +12,10 @@
         public function m_buscar($tabla,$dato)
         {
             $query = $this->bd->prepare("SELECT * FROM $tabla WHERE $dato");
+           
             $query->execute();
             $datos = $query->fetchAll();
-            return $datos;
+            return $datos;  
         }
 
         public function m_select_generarcodigo($campo,$tabla)

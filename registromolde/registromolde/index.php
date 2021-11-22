@@ -53,13 +53,13 @@ $cod = $_SESSION["cod"];
                         <div class="input-group flex-nowrap">
                             <input type="text" class="form-control mayu" name="txtnommolde" id="txtnommolde" autocomplete="off"> 
                             <a class="btn btn-success" id="btnbuscpers" data-bs-toggle="modal" data-bs-target="#mdbusmolde">
-                               <i class="icon-magnifying-glass" title="Buscar Personal"></i>
+                               <i class="icon-magnifying-glass" title="Buscar Molde"></i>
                             </a>
                         </div>
                       
                     </div>
                     <div class="col">
-                        <label class="form-label">Medidas</label>
+                        <label class="form-label">Medidas molde</label>
                         <input type="text" class="form-control" name="txtmedmolde" id="txtmedmolde" autocomplete="off">    
                     </div>
                     <div class="col">
@@ -93,7 +93,7 @@ $cod = $_SESSION["cod"];
                         <input type="number" class="form-control" name="txtcantmaterial" id="txtcantmaterial" autocomplete="off">    
                     </div>
                     <div class="col">
-                        <label class="form-label">Medida Material</label>
+                        <label class="form-label">Medidas </label>
                         <input type="text" class="form-control" name="txtmendidmater" id="txtmendidmater" autocomplete="off">    
                     </div>
                 </div>
@@ -145,26 +145,26 @@ $cod = $_SESSION["cod"];
             </form>  
 
             <div class="modal fade" id="mdbusmolde" tabindex="-1" data-bs-keyboard="false" data-bs-backdrop="static" aria-hidden="true">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Buscar molde</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Buscar molde</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="row">
+                            <label>Buscar molde</label>
+                            <div class="col">
+                            <input type="text" id="txtbuscmolde" class="form-control mayu" autocomplete="off">
+                            </div>
+                        </div>  
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" id="btncancelar" class="btn btn-danger" data-bs-dismiss="modal">Cancelar</button>
+                        <button type="button" id="btnbusmolde" class="btn btn-primary">Guardar</button>
+                    </div>
+                    </div>
                 </div>
-                <div class="modal-body">
-                    <div class="row">
-                        <label>Buscar molde</label>
-                        <div class="col">
-                          <input type="text" id="txtbuscmolde" class="form-control mayu" autocomplete="off">
-                        </div>
-                    </div>  
-                </div>
-                <div class="modal-footer">
-                    <button type="button" id="btncancelar" class="btn btn-danger" data-bs-dismiss="modal">Cancelar</button>
-                    <button type="button" id="btnbusmolde" class="btn btn-primary">Guardar</button>
-                </div>
-                </div>
-            </div>
             </div>
         </div>     
     </section>

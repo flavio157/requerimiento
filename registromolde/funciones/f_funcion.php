@@ -556,4 +556,11 @@ function f_Cuotas($promedioCuota,$cuotas,$dias){
     }
 
 
+    
+    function gethora(){
+        date_default_timezone_set('America/Lima');
+        $hora = date("H") .":". date("i");
+        return $hora;
+    }
+
   ?>

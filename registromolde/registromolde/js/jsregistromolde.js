@@ -2,6 +2,11 @@ var sugematerial = [];
 var sugemolde = [];
 var tipo = 1;
 var actualiza = 1;
+var b1 = "<a id='btnactualizar' style='margin-right: 2px;margin-bottom: 1px;' class='btn btn-primary  btn-sm'>"+
+"<i class='icon-pencil' title='Modificar material'></i>"+
+"</a><a id='btneliminar' style='margin-bottom: 1px;' class='btn btn-danger  btn-sm'>"+
+"<i class='icon-trash' title='Eliminar material'></i>"+
+"</a>";
 $(function() {
 
   autocompletarMolde()
@@ -14,23 +19,20 @@ $(function() {
     nombre = $("#txtnombmaterial").val().trim();
     cantidad = $("#txtcantmaterial").val().trim();
     medidas = $("#txtmendidmater").val().trim();
-    Unidad = $("#txtunimaterial").val().trim();
+    unidad = $("#txtunimaterial").val().trim();
     if($("#txtcodmaterial").val().trim() == 0){ Mensaje1("Error material invalido","error");return;}
     if($("#txtnombmaterial").val().trim() == 0){ Mensaje1("Error ingrese nombre material","error");return;}
     if($("#txtcantmaterial").val().trim() == 0){ Mensaje1("Error ingrese cantidad","error");return;}
-    e = datosrepetidos('tbdmaterialmolde',$("#txtcodmaterial").val());
+    
     if(tipo == 1){
+      e = datosrepetidos('tbdmaterialmolde',$("#txtcodmaterial").val());
       if(!e){
         verficarmateriales($("#txtcodmaterial").val(),$("#txtnombmaterial").val(),
-                           $("#txtmendidmater").val(),$("#txtcantmaterial").val(),Unidad)
+                           $("#txtmendidmater").val(),$("#txtcantmaterial").val(),unidad)
       }
     }else{
-      if(!e && actualiza == 1){
-        guardarnuevomaterial(molde,material,cantidad,medidas,nombre,Unidad);
-      }else if(actualiza == 0){
-          verficarmateriales(material,nombre,
-            medidas,cantidad,Unidad);
-      }
+      verficar(material,nombre,medidas,cantidad,unidad)
+
     }
   });
 
@@ -137,7 +139,7 @@ function actualizar(tds){
     data:datos+"&accion=actualmater&usuario="+usu+"&material="+JSON.stringify(materiales),
     success:  function(e){
       if(e == 1){
-        Mensaje1('Se actualizaron correctamente lo datos','success');
+        Mensaje1('Se actualizaron correctamente los datos','success');
         limform();
         tipo = 1;
       } else{
@@ -238,7 +240,6 @@ function lstmolde(){
   });
 }
 
-
 function autocompletarMolde() {
   lstmolde();
   sugemolde = []
@@ -262,11 +263,7 @@ function buscarmolde(molde){
     } ,
     success:  function(response){
       obj = JSON.parse(response);
-      b1 = "<a id='btnactualizar' style='margin-right: 2px;margin-bottom: 1px;' class='btn btn-primary  btn-sm'>"+
-      "<i class='icon-pencil'></i>"+
-      "</a><a id='btneliminar' style='margin-bottom: 1px;' class='btn btn-danger  btn-sm'>"+
-      "<i class='icon-trash'></i>"+
-      "</a>";
+     
       $.each(obj['dato'], function(i, item) {
          $("#txtnommolde").val(item[1]);
          $("#txtmedmolde").val(item[2]);
@@ -317,11 +314,7 @@ function guardarnuevomaterial(molde,material,cantidad,medidas,nombre,unidad) {
     },
     success:  function(e){
       if(e == 1){
-        b1 = "<a id='btnactualizar' style='margin-right: 2px;margin-bottom: 1px;' class='btn btn-primary  btn-sm'>"+
-        "<i class='icon-pencil'></i>"+
-        "</a><a id='btneliminar' style='margin-bottom: 1px;' class='btn btn-danger  btn-sm'>"+
-        "<i class='icon-trash'></i>"+
-        "</a>";
+       
         array = [
             a = [material,'none',''],
             b = [nombre.toUpperCase(),'',''],
@@ -354,11 +347,7 @@ function verficarmateriales(material,nombre,medidas,cantidad,unidad) {
       } ,
       success:  function(response){
         if(response == 1){
-            b1 = "<a id='btnactualizar' style='margin-right: 2px;margin-bottom: 1px;' class='btn btn-primary  btn-sm'>"+
-            "<i class='icon-pencil'></i>"+
-            "</a><a id='btneliminar' style='margin-bottom: 1px;' class='btn btn-danger  btn-sm'>"+
-            "<i class='icon-trash'></i>"+
-            "</a>";
+          
             array = [
                 a = [material,'none',''],
                 b = [nombre.toUpperCase(),'',''],
@@ -376,6 +365,7 @@ function verficarmateriales(material,nombre,medidas,cantidad,unidad) {
     });
 }
 
+
 function eliminarmaterial(molde,material){
   $.ajax({
     dataType:'text',
@@ -390,6 +380,35 @@ function eliminarmaterial(molde,material){
       /*if(e == 1){
         Mensaje1('Se elimino el material','success');
       }*/
+    }
+  });
+}
+
+
+function verficar(material,nombre,medidas,cantidad,unidad) {
+  $.ajax({
+    dataType:'text',
+    type: 'POST', 
+    url:  'c_registromolde.php',
+    data:{
+        "accion" : 'verimaterial',
+        "material" : material,
+        "nombre" : nombre,
+        "cantidad" : cantidad,
+        "unidad":unidad,
+        "medidamat":medidas,
+    } ,
+    success:  function(response){
+      if(response == 1){
+        e = datosrepetidos('tbdmaterialmolde',material);
+        if(!e && actualiza == 1){
+          guardarnuevomaterial(molde,material,cantidad,medidas,nombre,unidad);
+        }else if(actualiza == 0){
+          verficarmateriales(material,nombre,medidas,cantidad,unidad)
+        }
+      }else{
+        Mensaje1(response,"error");
+      }
     }
   });
 }

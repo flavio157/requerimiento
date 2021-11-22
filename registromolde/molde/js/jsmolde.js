@@ -1,6 +1,7 @@
 var supersonal = [];
 var sumolde = [];
 $(function() {
+
   $('body').on('keydown', function(e){
     if( e.which == 38 ||  e.which == 40) {
       return false;
@@ -26,20 +27,15 @@ $(function() {
     });
 
     $("#addpersonal").click(function () {
-        ini = _verifec($("#txtfechini").val(),$("#txtfecinipers").val());
-        if(ini == -1){Mensaje1('Fecha inicio del personal no puede ser menor a fecha inicio del molde','error'); return;}
-        f = _verifec($("#txtfecfinpers").val(),$("#txtfechfin").val());
-        if(f == -1){Mensaje1('Fecha fin del personal no puede ser mayor a fecha fin del molde','error'); return;}
         tabla = $("#tbdpersonalmolde  tr");
         for (let i = 0; i < tabla.length; i++) { 
           if($(tabla[i]).find("td")[0].innerHTML == $("#txtcodpermolde").val()){
             Mensaje1('Personal ya agregado','error'); return;
           }
         }
-        if($("#txtfecinipers").val() == '' || $("#txtfecfinpers").val() == '' ){
+        if($("#txtfecinipers").val() == ''){
           Mensaje1('Seleccione fecha del personal','error'); return;}
-        l = _verifec($("#txtfecinipers").val(),$("#txtfecfinpers").val());
-        if(l==-1){Mensaje1('Error fecha de inicio no puede ser mayor a fecha fin','error'); return;}
+      
         b1 = "<a id='btneliminarPer' class='btn btn-danger  btn-sm'>"+
               "<i class='icon-trash'></i></a>";
         array = [
@@ -64,13 +60,7 @@ $(function() {
 
   
     $("#btng_molde").on('click',function () {
-      l = _verifec($("#txtfechini").val(),$("#txtfechfin").val());
-      if(l == -1){Mensaje1('Error fecha de inicio no puede ser mayor a fecha fin','error'); return;}
-      if($("#txtfechini").val() == '' || $("#txtfechfin").val() == '' ){
-        Mensaje1('Seleccione fecha de inicio y fin','error'); return;}
-      if($("#txtcodmolde").val() == '' || $("#txtdesmolde").val() == '' || $("#txtmedmolde").val() == ''){
-        Mensaje1('Ingrese datos del molde','error'); return;
-      }  
+     
       if($("#tbdmaterialmolde  tr").length == 0){
         Mensaje1('No se ha espesificado materiales para el molde','error'); return;
       }else{
@@ -183,7 +173,7 @@ function lstmateriales(dato) {
             fila +="<td class="+color+">"+item[3]+"</td>";
             fila +="<td class="+color+">"+item[4]+"</td>";
             fila +="<td class="+color+">"+item[5]+"</td>";
-            fila +="<td><a id='btneliminarmate' class='btn btn-danger  btn-sm'><i class='icon-trash'></i></a></td>"
+            fila +="<td class="+color+"><a id='btneliminarmate' class='btn btn-danger  btn-sm'><i class='icon-trash'></i></a></td>"
             fila +="</tr>";
             var btn = document.createElement("TR");
             btn.innerHTML=fila;

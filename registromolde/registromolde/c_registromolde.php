@@ -48,13 +48,23 @@
     {
         static function c_guardar($nombre,$medida,$estado,$productos,$usuario)
         {
+           $regex = "/[0-9]+(a|c|m|x)/"; 
            if(strlen($nombre) == 0){print_r("Error ingrese nombre del molde"); return;} 
            if(strlen($nombre) < 5){print_r("Error nombre del molde minimo 5 caracteres"); return;}
            if(strlen($nombre) > 100){print_r("Error nombre del molde sobrepaso limite de 100 caracteres"); return;}
            if(strlen($medida) == 0){print_r("Error ingrese medidas del molde"); return;}  
            if(strlen($medida) > 50){print_r("Error campo medida sobrepaso el limite de 50 caracteres"); return;}  
+           if(preg_match($regex,$medida) == 0){print_r("Error campo medida del molde tiene formato incorrecto "); return;}
            if(count($productos->tds)==0){print_r("Error ingrese productos"); return;}
+           
+           
            $m_molde = new m_registrarmolde();
+           $cadena = "NOM_MOLDE = '$nombre' and MEDIDAS = '$medida'";
+           $c_buscar = $m_molde->m_buscar('T_MOLDE',$cadena);
+           if(count($c_buscar)>0){
+                print_r("Error ya existe un molde con el mismo nombre y medidas");
+                return;
+            }
            $c_molde = $m_molde->m_guardar(strtoupper($nombre),$medida,$estado,$productos,$usuario);
            print_r($c_molde);
         }
@@ -106,19 +116,28 @@
 
         static function c_actualizarmoldemateriales($idmolde,$codmaterial,$cantidad,$usuario)
         {
+            $cant = explode(".", $cantidad);
+            if(strlen($cant[0]) > 4){print_r("Error campo cantidad, maximo 4 digitos con 3 decimales");return;}
             $m_molde = new m_registrarmolde();
             $c_molde = $m_molde->m_actualizarmoldemateriales($idmolde,$codmaterial,$cantidad,$usuario);
             print_r(1);
         }
         
         static function c_verificamaterial($material,$nombre,$cantidad,$unidad,$medidamaterial){
-          
+            $regex = "/[0-9]+(a|c|m|x)/"; 
             if(strlen($material) == 0){print_r("Error material invalido"); return;}
             if(strlen($nombre) == 0){print_r("Error ingrese nombre del material"); return;}
             if(strlen($unidad) > 10){print_r("Error campo unidad medida maximo 10 caracteres");return;}
             if(strlen($cantidad) == 0){print_r("Error ingrese cantidad"); return;}
-            if(strlen(str_replace('.','', $cantidad)) > 7){print_r("Error campo cantidad, maximo 7 digitos");return;}
-            if(strlen($medidamaterial) > 30){print_r("Error campo medida material maximo 30 caracteres");return;} 
+            
+            $cant = explode(".", $cantidad);
+            if(strlen($cant[0]) > 4){print_r("Error campo cantidad, maximo 4 digitos con 3 decimales");return;}
+            
+            if(strlen($medidamaterial) != 0){
+                if(strlen($medidamaterial) > 30){print_r("Error campo medida material maximo 30 caracteres");return;} 
+                if(preg_match($regex,$medidamaterial) == 0){print_r("Error campo medida material tiene formato incorrecto"); return;}
+            }
+           
             $m_producto = new m_registrarmolde();
             $cadena = "EST_PRODUCTO = '1'";
             $c_producto = $m_producto->m_buscar('T_PRODUCTO',$cadena);
@@ -148,6 +167,6 @@
             print_r($c_producto);
         }
 
-        /*validar el numero del campo medida material y cantidad */
+      
     }
 ?>
