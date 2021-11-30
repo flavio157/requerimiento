@@ -58,11 +58,10 @@ require_once("m_guardarmaterial.php");
             if(count($c_verificarcod) > 0){print_r("Error el codigo del producto ya existe");return;}
             $pattern = "/^[a-zA-Z\sñáéíóúÁÉÍÓÚ.,;]+$/";
             if(strlen($codpro) > 6 || strlen($codpro) < 6){print_r("Codigo producto debe tener 6 caracteres");return;}
-            if(strlen($unimedpro) < 2 || strlen($unimedpro) > 10){print_r("Unidad de medida minimo 2 y maximo 4 caracteres"); return;}
-            if(preg_match($pattern,$unimedpro) == 0){print_r("Unidad de medida solo letras"); return;}
-            if(strlen($unimedpro) < 3){print_r("Unidad de medida minimo 3 caracteres"); return;}
-            if(strlen($despro) < 6){print_r("Nombre del producto minimo 6 caracteres"); return;}
-            if(strlen($despro) > 50){print_r("Nombre del producto maximo 50 caracteres"); return;}
+            if(strlen($unimedpro) > 3){print_r("Error unidad de medida maximo 3 caracteres"); return;}
+            if(strlen($unimedpro) < 2){print_r("Unidad de medida minimo 2 caracteres"); return;}
+            if(strlen($despro) < 6){print_r("Error nombre del producto minimo 6 caracteres"); return;}
+            if(strlen($despro) > 50){print_r("Error nombre del producto maximo 50 caracteres"); return;}
             if(strlen($codcateg) == 0){print_r("Seleccione categoria"); return;}
             if(strlen($abre) > 4 || strlen($abre) < 2){print_r("Abreviatura minimo 2 y maximo 4 caracteres"); return;}
             if(preg_match($pattern,$abre) == 0){print_r("Abreviatura solo letras"); return;}
