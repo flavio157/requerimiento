@@ -1,0 +1,60 @@
+:root{
+    --mayuscula : uppercase;
+}
+
+.highlight{
+    background-color: #cfe2ff;
+   /* background-color: #ddd;*/
+}
+
+.ui-autocomplete.ui-front {
+    max-height: 300px;
+    width: 100px;
+    overflow-y: auto;   
+    overflow-x: hidden; 
+    z-index:1100;
+}
+
+.main{
+    width:70%;
+    margin:0 auto;
+    padding:1em;
+    border-radius: 8px;
+   }
+
+.mayu{
+    text-transform: uppercase;
+}
+
+.titulos{
+    font-family: arial;
+    font-weight: 600;
+}
+
+.thtitulo{
+    font-weight: 500;
+    text-align: center;
+}
+
+.tdcontent{
+    text-align: center;
+}
+
+.divbotones{
+    margin-top: 15px;  
+}
+
+input[type=number]::-webkit-inner-spin-button, 
+input[type=number]::-webkit-outer-spin-button { 
+        -webkit-appearance: none; 
+        margin: 0; 
+}
+@media screen and (max-width:992px){
+    .main{
+        width:100%;
+    }
+
+    .divbotones{
+        margin-top: 15px;
+    }
+}
