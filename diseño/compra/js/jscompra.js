@@ -1,16 +1,15 @@
 
 $(function() {
-   
-
+    $("#mtxtcodigopro").attr('disabled','disabled')
+    hora();
     $('body').on('keydown', function(e){
         if( e.which == 38 ||  e.which == 40) {
           return false;
         }
     });
-  
-
     autocompletarMaterial();
     autocompletarpersonal();
+    autocompletarproveedor();
     
     _categoria('lstcategoria','slcategoria');
     _categoria('lstclase','slclase');
@@ -28,9 +27,7 @@ $(function() {
     $("#mtxtstockmin").bind('keypress',function(e) {
         return _numeros(e);
     })
-    $("#mtxtunimedida").bind('keypress',function(e) {
-        return _letras(e);
-    })
+
     $("#mtxtabreviatura").bind('keypress',function(e) {
         return _letras(e);
     })
@@ -41,14 +38,10 @@ $(function() {
     $("#txtcomcantidad").bind('keypress',function(e) {
         return _numeros(e);
     })
-    $("#mtxtnombreproducto").bind('keypress',function(e) {
-        return _letras(e);
-    })
     
     $("#btng_compro").on('click',function (params) {
         var oficina = $("#frmcomprobante").serialize();
         if($("#txtcomfecemision").val() == ''){Mensaje1("Error ingrese fecha de emision","error"); return}
-        if($("#txtcomhoremision").val() == ''){Mensaje1("Error ingrese hora de emision","error"); return}
         if($("#txtcomfecentrega").val() == ''){Mensaje1("Error ingrese fecha de entrega","error"); return}
         if($("#txtcomcodpers").val() == ''){Mensaje1("Error ingrese personal","error"); return}
         if($("#txtcompersonal").val() == ''){Mensaje1("Error ingrese personal","error"); return}
@@ -81,7 +74,11 @@ $(function() {
     });
 
     $("#btnatproduc").on('click',function() {
-        validatos();
+        var serie = $("#txtcomserie").val();
+        tipo = _numeserie(serie);
+        console.log(tipo);
+        if(!tipo){validatos();}
+        else{Mensaje1("Error numero de serie ya existe en la tabla");}
     })
 
     $(document).on('click','#btneliminar',function() {
@@ -167,7 +164,31 @@ $(function() {
     $(document).on('hide.bs.modal', '.modal', function () {
         document.getElementById("frmgudarpers").reset();
         document.getElementById("frmguardaprod").reset();
+        document.getElementById("frmgudarproveedor").reset();
     });
+
+    $("#txtcomserie").keyup(function(e) {
+        var input=  document.getElementById('txtcomserie');
+            input.addEventListener('input',function(){
+                this.value = this.value.slice(0,20); 
+        })
+    })   
+
+    $("#addproducto").on('click',function (params) {
+        corprod();
+    });
+
+    $("#btnguarprovee").on('click',function () {
+        guardarprovee();
+    })
+
+    $("#mtxtrucprovee").bind('keypress',function(e) {
+           return _numeros(e); 
+    })
+    
+    $("#mtxtdniprovee").bind('keypress',function(e) {
+        return _numeros(e); 
+    })
 });
 
 function _guardarComprobante(oficina,tds) {
@@ -188,7 +209,7 @@ function _guardarComprobante(oficina,tds) {
                 Mensaje1(response,"error");
             }
         }
-    }); 
+    });
 }
 
 
@@ -215,7 +236,7 @@ function validatos() {
                 array = [
                     a = [codigo,'none',''],
                     b = [produ.toUpperCase(),'',''],
-                    c = [serie.toUpperCase(),'',''],
+                    c = [$.trim(serie.toUpperCase()),'',''],
                     d = [cant,'',''],
                     e = [precio,'','p'],
                     i = [b1,'',''],
@@ -230,6 +251,17 @@ function validatos() {
         }
     }); 
 }
+
+function _numeserie(serie) {
+    tabla = $("#tbdmaterialcompro tr");
+    for (let i = 0; i < tabla.length ; i++) {
+        if($(tabla[i]).find("td")[2].innerHTML.replace(/-/g,"") == $.trim(serie).replace(/-/g, "")){
+            return true;
+        }
+    }
+   return false;     
+}
+
 
 function _lstautocomplete(accion,array) {
     $.ajax({
@@ -300,7 +332,10 @@ function _guardarProducto() {
                       codigo = $("#mtxtcodigopro").val();
                       $("#txtcompcodPro").val(codigo);
                       $("#txtcompprod").val(producto);
+                      if(clase == '00001' || clase == '00004'){$("#txtcomserie").removeAttr('disabled','disabled')}
+                      else{$("#txtcomserie").attr('disabled','disabled')} 
                       document.getElementById("frmguardaprod").reset();
+                      $("#mdmaterial").modal('hide');
                  }else{
                      Mensaje1(response,'error')
                  }
@@ -348,7 +383,6 @@ function Mensaje2(oficina,tds) {
         confirmButtonText: 'Guardar',
         cancelButtonColor: '#d33',
       }).then((result) => {
-        /* Read more about isConfirmed, isDenied below */
         if (result.isConfirmed) {
             _guardarComprobante(oficina,tds);
         }
@@ -384,6 +418,18 @@ function autocompletarpersonal() {
         }
     });
 }
+
+function autocompletarproveedor() {
+    var suproveedor =[];
+    _lstautocomplete('proveedor',suproveedor);
+    $("#txtcomprovee").autocomplete({
+      source: suproveedor,
+        select: function (event, ui) {
+          $("#txtcodproveedor").val(ui.item.cod);
+        }
+    });
+}
+
 
 function _createtable(td,idtbttabla) {
     var total = 0;
@@ -523,3 +569,53 @@ function _lstdistri(dato) {
         }
     }); 
 }
+
+function hora(){
+    var laHora = new Date();
+    var horario = laHora.getHours();
+    var minutero = laHora.getMinutes();
+    if(minutero<10)
+        minutero = "0" + minutero;
+    if(horario<10)
+    horario = "0" + horario;
+    document.getElementById('txtcomhoremision').value = horario+":"+minutero
+    $("#txtcomhoremision").attr('disabled','disabled')
+    ahoraSonLas = setTimeout(hora,1000); 
+} 
+
+function corprod(){
+    $.ajax({
+        dataType:'text',
+        type: 'POST', 
+        url:  'c_comprobante.php',
+        data:{
+            "accion" : 'codpro',
+        } ,
+        success:  function(e){
+           $("#mtxtcodigopro").val(e)
+        }
+    });   
+}
+
+function guardarprovee() {
+    var proveedor = $("#frmgudarproveedor").serialize();
+    var usu = $("#vrcodpersonal").val();
+    $.ajax({
+        dataType:'text',
+        type: 'POST', 
+        url:  'c_comprobante.php',
+        data:proveedor+"&accion=gproveedor&usu="+usu,
+        success:  function(e){
+           if(e == 1){
+               Mensaje1("Se registro el proveedor","success");
+               $("#txtrucprovee").val($("#mtxtrucprovee").val());
+               $("#txtdniprovee").val($("#mtxtdniprovee").val());
+               document.getElementById("frmgudarproveedor").reset();
+               autocompletarproveedor();
+           }else{
+               Mensaje1(e,"error");
+           }
+        }
+    }); 
+}
+

@@ -84,33 +84,11 @@
     class c_registrarmolde
     {
         static function c_guardarproc($codpro,$nombre,$cantirec,$unidad,$cantxusar,$usuario,$molde,$tipo){
-
-            $m_guarprod = new m_registrarmolde();
-            $consulta = "molde = '$molde' and tipo = 'P'";
-            $c_moldes = $m_guarprod->m_buscar('V_MOLDES_FABRICACION ',$consulta);
-            if(count($c_moldes) > 0){
-                $c_guarmolde = array(false,'Error un molde ya fabricado no se puede modificar');
-                $dato = array(
-                    'dato' => $c_guarmolde ,
-                ); 
-                echo json_encode($dato,JSON_FORCE_OBJECT);
-                return;
-            }
-
-            $cadena = "molde = '$molde' AND fin_fabricacion = '0' and tipo = 'E'";
-            $c_buscar = $m_guarprod->m_buscar('V_MOLDES_FABRICACION',$cadena);
-            if(count($c_buscar)>0){
-                $c_guarmolde = array(false,'Error no se puede modificar un molde que se encuentra en fabricacion');
-                    $dato = array(
-                        'dato' => $c_guarmolde ,
-                    ); 
-                    echo json_encode($dato,JSON_FORCE_OBJECT);
-                    return;
-            } 
-
+            
             $resul = c_registrarmolde::c_verificamateri($nombre,$cantirec,$unidad,$cantxusar,$usuario,$tipo);
-
+          
             if($resul == ''){
+                $m_guarprod = new m_registrarmolde();
                 $c_guarprod = $m_guarprod->m_guarproc($codpro,strtoupper($nombre),$cantirec,
                 strtoupper($unidad),$cantxusar,$usuario);
                 if(strlen($molde) == 0){
@@ -149,6 +127,7 @@
                 if(strlen($decimal[0]) > 4){$c_guarmolde ="Error campo cantidad recibida, maximo 4 digitos con 3 decimales";return $c_guarmolde;}
                 if(preg_match($cantidad,$cantirec) == 0){$c_guarmolde = "Error solo numeros en cantidad recibida del material"; return $c_guarmolde;}
             }
+           
             
             if(strlen($unidad) == 0){$c_guarmolde = "Error ingrese unidad de medida del material"; return $c_guarmolde;}
             if(strlen($unidad) > 3){$c_guarmolde ="Error unidad de medida maximo 3 caracteres"; return $c_guarmolde;}
@@ -206,39 +185,12 @@
 
         static function c_actualizarmoldecompleto($codmolde,$txtnommolde,$txtmedmolde,$slcestado,$usuario,$productos,$cod_cliente){
             $m_actualizar = new m_registrarmolde();
-            $consulta = "molde = '$codmolde' and tipo = 'P'";
-            $c_moldes = $m_actualizar->m_buscar('V_MOLDES_FABRICACION ',$consulta);
-            if(count($c_moldes) > 0){
-                print_r('Error un molde ya fabricado no se puede modificar');
-                return;
-            }
-
-            $cadena = "molde = '$codmolde' AND fin_fabricacion = '0' and tipo = 'E'";
-            $c_buscar = $m_actualizar->m_buscar('V_MOLDES_FABRICACION',$cadena);
-            if(count($c_buscar)>0){
-                    print_r("Error no se puede modificar un molde que se encuentra en fabricacion");
-                    return;
-            } 
-
             $c_actualizar = $m_actualizar->m_actualizamolde($codmolde,strtoupper($txtnommolde),strtoupper($txtmedmolde)
                                                             ,$slcestado,$productos,$usuario,$cod_cliente);
             print_r($c_actualizar);                                                                
         }
 
         static function c_eliminarmaterial($codmolde,$codpro){
-           $m_eliminar = new m_registrarmolde();
-           $consulta = "molde = '$codmolde' and tipo = 'P'";
-           $c_moldes = $m_eliminar->m_buscar('V_MOLDES_FABRICACION ',$consulta);
-           if(count($c_moldes)){print_r("Error un molde ya fabricado no se puede modificar"); return;}
-
-            $cadena = "molde = '$codmolde' AND fin_fabricacion = '0' and tipo = 'E'";
-            $c_buscar = $m_eliminar->m_buscar('V_MOLDES_FABRICACION',$cadena);
-            if(count($c_buscar)>0){
-                    print_r("Error no se puede modificar un molde que se encuentra en fabricacion");
-                    return;
-            } 
-           
-           
            $m_eliminar = new m_registrarmolde();
            $c_eliminar = $m_eliminar->m_eliminarmolde($codmolde,$codpro);    
            print_r($c_eliminar);
@@ -268,7 +220,7 @@
         }
 
         static function c_verificardatoscli($nombre,$direccion,$identificacion,$telfono,$correo,$usuario)
-        {   
+        {
             
             $regex = "/^[0-9]+$/";
             $c_guarmolde = '';
@@ -283,6 +235,7 @@
             if(strlen($identificacion) == 10){$c_guarmolde = "Error campo identificacion 8 ó 11 digitos";return $c_guarmolde;}
             if(strlen($identificacion) < 8){$c_guarmolde = "Error campo identificacion minimo 8 digitos";return $c_guarmolde;}
             if(count(count_chars($identificacion, 1)) < 3){$c_guarmolde = "Error campo identificacion invalido";return $c_guarmolde;}
+
             if(strlen($telfono) != 0){
                 if(preg_match($regex,$telfono) == 0){$c_guarmolde = "Error solo numeros en telefono";
                    return $c_guarmolde;} 
@@ -375,32 +328,9 @@
         }
 
         static function c_guarcarmatepropio($codpro,$nombre,$unidad,$cantxusar,$usuario,$molde,$tipo){
-            $m_producto = new m_registrarmolde();
-            $consulta = "molde = '$molde' and tipo = 'P'";
-            $c_moldes = $m_producto->m_buscar('V_MOLDES_FABRICACION ',$consulta);
-            if(count($c_moldes) > 0){
-                $c_guarmolde = array(false,'Error un molde ya fabricado no se puede modificar');
-                $dato = array(
-                    'dato' => $c_guarmolde ,
-                ); 
-                echo json_encode($dato,JSON_FORCE_OBJECT);
-                return;
-            }
-
-            $cadena = "molde = '$molde' AND fin_fabricacion = '0' and tipo = 'E'";
-            $c_buscar = $m_producto->m_buscar('V_MOLDES_FABRICACION',$cadena);
-            if(count($c_buscar)>0){
-                $c_guarmolde = array(false,'Error no se puede modificar un molde que se encuentra en fabricacion');
-                    $dato = array(
-                        'dato' => $c_guarmolde ,
-                    ); 
-                    echo json_encode($dato,JSON_FORCE_OBJECT);
-                    return;
-            } 
-
             $resul = c_registrarmolde::c_verificamateri($nombre,'',$unidad,$cantxusar,$usuario,$tipo);
             if($resul == ''){
-              
+                $m_producto = new m_registrarmolde();
                 $c_producto = $m_producto->m_guarfabricaionmaterial($molde,$codpro,$cantxusar,$unidad,$usuario);
                 
                 $c_guarmolde = array($c_producto,'');

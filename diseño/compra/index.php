@@ -3,10 +3,11 @@
 if (session_status() == PHP_SESSION_NONE) {
     session_start();
 }
-$ofi = $_SESSION["ofi"];
+
+/*$ofi = $_SESSION["ofi"];
 $zon = $_SESSION["zon"];
-$cod = $_SESSION["cod"];
-require_once("../menu/index.php");
+$cod = $_SESSION["cod"];*/
+require_once(".././menu/index.php");
 ?>
 
 <!DOCTYPE html>
@@ -16,7 +17,7 @@ require_once("../menu/index.php");
 	 <link rel="STYLESHEET" type="text/css" href="./css/responsive.css">
      <script src="../js/jquery-3.3.1.slim.min.js"></script>
     <script src="../js/ajquery.min.js"></script>
-    <script src="./js/jscompra.js"></script>
+    <script src="./js/jscompra.js?v=1.1.1"></script>
     <script src="../js/bootstrap5.bundel.min.js"></script>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6" crossorigin="anonymous">
     <script src="../js/sweetalert2@11.js"></script>
@@ -43,9 +44,9 @@ require_once("../menu/index.php");
    <section>  
         <div class="main"> 
             <form id="frmcomprobante">
-                <input type="text" id="vroficina" style="display: none;" value="<?php echo $ofi?>"/>
+                <input type="text" id="vroficina" style="display: none;" value="<?php echo 'SMP2';//$ofi ?>"/>
                 <input type="text" id="vrzona" style="display: none;" value="<?php echo  $zon?>"/>
-                <input type="text" id="vrcodpersonal" style="display: none;" value="<?php echo  $cod?>"/>
+                <input type="text" id="vrcodpersonal" style="display: none;" value="<?php echo '0215';//$cod;?>"/>
                 <div class="row">
                     <div class="col g-4">
                     <center><label class="titulos">Registro Comprobante</label></center>
@@ -69,12 +70,22 @@ require_once("../menu/index.php");
                     </div>  
                 </div>    
                 <div class="row static">
-                     <div class="col g-4">
+                    <div class="col g-4">
                         <label>Personal</label>
                         <div class="input-group g-4">
                             <input type="text" class="form-control" id="txtcomcodpers" name="txtcomcodpers" style="display: none;">
                             <input type="text" class="form-control mayu" id="txtcompersonal" name="txtcompersonal" placeholder="BUSCAR PERSONAL" style="z-index:1">
                             <a class="btn btn-success static" id="addpersonal" data-bs-toggle="modal" data-bs-target="#mdpersonal">
+                                <i class="icon-add-user" title="Nuevo personal"></i>
+                            </a>
+                        </div>    
+                    </div>
+                    <div class="col g-4">
+                        <label>Proveedor</label>
+                        <div class="input-group g-4">
+                            <input type="text" class="form-control" id="txtcodproveedor" name="txtcodproveedor" style="display: none;">
+                            <input type="text" class="form-control mayu" id="txtcomprovee" name="txtcomprovee" placeholder="BUSCAR PROVEEDOR" style="z-index:1">
+                            <a class="btn btn-success static" id="addpersonal" data-bs-toggle="modal" data-bs-target="#mdproveedor">
                                 <i class="icon-add-user" title="Nuevo personal"></i>
                             </a>
                         </div>    
@@ -92,7 +103,7 @@ require_once("../menu/index.php");
                         </select>
                     </div> 
                     <div class="col g-4">
-                        <label>Numero</label>
+                        <label>Serie</label>
                         <input class="form-control mayu" type="text" name="txtnrocompro" id="txtnrocompro">
                     </div>
                     <div class="col g-4">
@@ -275,7 +286,7 @@ require_once("../menu/index.php");
                         <div class="col">
                             <label for="formfpago" class="form-label">Clase</label>
                             <select class="form-select" id="slclase" aria-label="Default select example">
-                            <option value="" selected>SELECCIONE CATEGORIA</option>
+                            <option value="">SELECCIONE CATEGORIA</option>
                             </select>
                         </div>
                         </div>
@@ -324,7 +335,6 @@ require_once("../menu/index.php");
                     </div>
                     <div class="row g-2">
                         <div class="col">
-                            <label for="formcantidad"  class="form-label">Cargo</label>
                             <label  for="formentrega" class="form-label">Cargo</label>
                             <select class="form-select" id="slcargpers" name="slcargpers" aria-label="Default select example">
                                 <option value="00000" selected>SELECCIONE CARGO</option>
@@ -396,6 +406,51 @@ require_once("../menu/index.php");
         </div>
     </div>
 </div>
+
+
+
+    
+    <div class="modal fade" id="mdproveedor" tabindex="-1"  data-bs-backdrop="static" data-bs-keyboard="false" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <center><h5 class="modal-title">Registro de nuevo proveedor</h5></center>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="frmgudarproveedor" name="frmgudarproveedor">
+                        <div class="row g-2">
+                            <div class="col">
+                                <label for="formfpago" class="form-label">Nombre Proveeedor</label>
+                                <input type="text" class="form-control mayu" name="mtxtnomprovee" id="mtxtnomprovee" autocomplete="off">
+                            </div>  
+                        </div> 
+                        <div class="row g-2">
+                            <div class="col">
+                                <label for="formpromocion"  class="form-label">Dirección</label>
+                                <input type="text" class="form-control mayu" name="mtxtdirprovee" id="mtxtdirprovee" autocomplete="off">
+                            </div>
+                        </div>
+                        <div class="row g-2">
+                            <div class="col">
+                                <label for="formpromocion"  class="form-label">RUC</label>
+                                <input type="text" class="form-control mayu" name="mtxtrucprovee" id="mtxtrucprovee" autocomplete="off">
+                            </div>
+                            <div class="col">
+                                <label for="formpromocion"  class="form-label">DNI</label>
+                                <input type="text" class="form-control mayu" name="mtxtdniprovee" id="mtxtdniprovee" autocomplete="off">
+                            </div>
+                        </div>
+                    </form>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-danger"  id="btncerrarprovee" data-bs-dismiss="modal">Cerrar</button>
+                        <button type="button" id="btnguarprovee" class="btn btn-primary">Guardar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
 
         </div>     
     </section>

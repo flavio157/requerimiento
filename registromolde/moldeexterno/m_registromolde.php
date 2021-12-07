@@ -20,6 +20,7 @@
             } catch (Exception $e) {
                 print_r("Error al buscar ". $e);
             }
+           
         }
 
         public function m_select_generarcodigo($campo,$tabla,$cantidad)
@@ -32,13 +33,14 @@
             $res = str_pad($results[0],$cantidad, '0', STR_PAD_LEFT);
             return $res;
             } catch (Exception $e) {
-                print_r("Error al generar codigo " . $e);
+                print_r("Error al generar codigo");
             }
         }
 
 
         public function m_guardar($txtnommolde,$txtmedmolde,$slcestado,$usuario,$productos,$codcliente,$tipomolde)
         { 
+           
             try {
                 $idmolde = $this->m_select_generarcodigo('ID_MOLDE','T_MOLDE',6);
                 $query = $this->bd->prepare("INSERT INTO T_MOLDE(ID_MOLDE,NOM_MOLDE,MEDIDAS,ESTADO,USU_REGISTRO,TIPO_MOLDE,COD_CLIENTE)
@@ -62,18 +64,20 @@
                 $datos = $query->fetchAll();
                 return $datos;
             } catch (Exception $e) {
-                print_r("Error listar moldes" . $e);
+                print_r("Error listar moldes");
             }
+            
         }
 
         public function m_guarproc($codpro,$nombre,$cantirec,$unidad,$cantxusar,$usuario){
+            
             try {
                 $codprod =  $this->m_select_generarcodigo('COD_PRODUCTO','T_PRODUCTO',6);
                 $query = $this->bd->prepare("INSERT INTO T_PRODUCTO(COD_PRODUCTO,
                         DES_PRODUCTO,UNI_MEDIDA,EST_PRODUCTO,USU_REGISTRO,FEC_REGISTRO) 
                         VALUES('$codprod','$nombre','$unidad','1','$usuario',GETDATE())");
                 $result = $query->execute();
-                
+               
                 if($result == 1){
                     $codalmins =  $this->m_select_generarcodigo('COD_ALIN','T_ALMACEN_EXTERNOS',6);
                     $query = $this->bd->prepare("INSERT INTO T_ALMACEN_EXTERNOS(COD_ALIN,
@@ -82,9 +86,9 @@
                     $guardado = $query->execute();
                 }
                 return array($guardado,$codprod);
-            } catch (Exception $e) {
-                    print_r("Error al guardar materiales para el molde ". $e);  
-            }              
+           } catch (Exception $e) {
+                print_r("Error al guardar materiales para el molde ". $e);  
+           }              
         }
 
         public function m_guarfabricaionmaterial($idmolde,$codprod,$matexusar,$unidad,$usuario){
@@ -178,7 +182,7 @@
             try {
                 $query = $this->bd->prepare("INSERT INTO T_CLIENTE_MOLDE(COD_CLIENTE,NOM_CLIENTE,DIR_CLIENTE
                 ,IDENTIFICACION , TEL_CLIENTE,CORREO,USU_REGISTRO) VALUES('$cod_cliente','$nombre','$direccion',
-                '$identificacion','$telfono','$correo','$usuario')"); //se cambio
+                '$identificacion','$telfono','$correo',$usuario)");
                 $respuesta = $query->execute();
                 return array($respuesta,$cod_cliente);
             } catch (Exception $e) {

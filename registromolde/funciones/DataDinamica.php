@@ -6,7 +6,7 @@ class DatabaseDinamica
     public static  function Conectarbd($database){
         try {
            
-            $server = "DESKTOP-PCSH8QU";
+            $server = "server=DESKTOP-PCSH8QU";
             $base_de_datos = new PDO("sqlsrv:server=$server;database=$database", "", "sa");
             $base_de_datos->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
             return $base_de_datos;

@@ -5,9 +5,9 @@ header('Content-Type: text/html; charset=UTF-8');
 if (session_status() == PHP_SESSION_NONE) {
     session_start();
 }
-/*$ofi = $_SESSION["ofi"];
+$ofi = $_SESSION["ofi"];
 $zon = $_SESSION["zon"];
-$cod = $_SESSION["cod"];*/
+$cod = $_SESSION["cod"];
 ?>
 
 <!DOCTYPE html>
@@ -33,36 +33,14 @@ $cod = $_SESSION["cod"];*/
 
 <body style="background: #f5f5f5;">
    <header>
-        <title>Molde Externo</title>
+        <title>Molde propio</title>
    </header>
    <section>  
         <div class="main"> 
             <form id="frmregistromolde">
-                <input type="text" id="vroficina" style="display: none;" value="<?php echo 'SMP2'//$ofi?>"/>
-                <input type="text" id="vrzona" style="display: none;" value="<?php //$echo  $zon?>"/>
-                <input type="text" id="vrcodpersonal" style="display: none;" value="<?php echo '0215' //$cod?>"/>
-                
-                <div class="row mb-3">
-                    <div class="col g-3">
-                        <center><label class="titulos">Datos del Cliente</label></center>
-                    </div>    
-                </div>
-                <div class="row mb-1">
-                    <div class="col">
-                        <label  class="form-label">Nombre cliente</label> 
-                        <input type="text" name="txtcodcliente" id="txtcodcliente" style="display: none;">
-                        <div class="input-group flex-nowrap">
-                            <input type="text" class="form-control mayu" placeholder="Buscar por nombre o razon social" name="txtcliente" id="txtcliente" autocomplete="off">    
-                            <a class="btn btn-success" id="btnbuscclien" data-bs-toggle="modal" data-bs-target="#mdclientemolde">
-                               <i class="icon-users" title="Buscar Molde"></i>
-                            </a>
-                        </div>
-                    </div>
-                    <div class="col">
-                        <label  class="form-label">Identificacion</label> 
-                        <input type="text" class="form-control mayu" placeholder="Buscar por DNI ó RUC" name="txtidentificacion" id="txtidentificacion" autocomplete="off">    
-                    </div>
-                </div>
+                <input type="text" id="vroficina" style="display: none;" value="<?php echo $ofi?>"/>
+                <input type="text" id="vrzona" style="display: none;" value="<?php echo  $zon?>"/>
+                <input type="text" id="vrcodpersonal" style="display: none;" value="<?php echo  $cod?>"/>
                 <div class="row mb-3">
                     <div class="col g-3">
                         <center><label class="titulos">Datos del molde</label></center>
@@ -80,7 +58,7 @@ $cod = $_SESSION["cod"];*/
                         </div>
                       
                     </div>
-                    <div class="col-md">
+                    <div class="col">
                         <label class="form-label">Medidas molde</label>
                         <input type="text" class="form-control" name="txtmedmolde" id="txtmedmolde" autocomplete="off">    
                     </div>
@@ -92,13 +70,6 @@ $cod = $_SESSION["cod"];*/
                             <option value="0">Inactivo</option>
                         </select>
                     </div>
-                    <div class="col-auto">
-                        <label for="formfpago" class="form-label">Tipo de Molde</label>
-                        <select class="form-select" id="slctipomolde" name="slctipomolde">
-                            <option value="E">Externo</option>
-                            <option value="P" selected>Propio</option>
-                        </select>
-                    </div>
                 </div>
                
                 <div class="row">
@@ -106,50 +77,34 @@ $cod = $_SESSION["cod"];*/
                         <center><label class="titulos">Materiales para el molde</label></center>
                     </div>    
                 </div>
-                <div class="row mb-3">
-                    <div class="col-auto">
-                        <label for="formfpago" class="form-label">Tipo de material</label>
-                        <select class="form-select" id="slctipomaterial" name="slctipomaterial">
-                            <option value="E">Externo</option>
-                             <option value="P" selected>Propio</option>
-                        </select>
-                    </div>
-                </div>
-
-
                 <div class="row mb-1">
-                    
-                    <div class="col">
+                    <div class="col-mb">
+                        <input type="text" name="txtcodmaterial" id="txtcodmaterial" style="display: none;">  
                         <label for="formpromocion"  class="form-label">Material</label>
                         <div class="input-group">
-                            <input type="text"  name="txtcodmaterialexter" id="txtcodmaterialexter" style="display: none;">        
-                            <input type="text" name="txttipomat" id="txttipomat" style="display: none;">
-                            <input type="text" class="form-control mayu" name="txtmaterialexter" id="txtmaterialexter" autocomplete="off">
-                            <a class="btn btn-success" id="btnlstmaterial" data-bs-toggle="modal" data-bs-target="#mdmaterial">
-                               <i class="icon-magnifying-glass" title="Buscar Molde"></i>
+                            <input type="text" class="form-control mayu" name="txtnombmaterial" id="txtnombmaterial" autocomplete="off">
+                            <a class="btn btn-success" id="btnmostmateri" data-bs-toggle="modal" data-bs-target="#mdmaterial">
+                               <i class="icon-magnifying-glass" title="Listar Materiales"></i>
                             </a>
                         </div>
                     </div>
-                    <div class="col">
-                            <label  class="form-label">Cantidad recibida</label> 
-                            <input type="number" class="form-control mayu" name="txtcanexternorec" id="txtcanexternorec" autocomplete="off">    
-                    </div>
+                    
                 </div>
                 <div class="row mb-1">
                     <div class="col">
                         <label  class="form-label">U. Medida</label> 
-                        <input type="text" class="form-control mayu" name="txtuniextern" id="txtuniextern" autocomplete="off">    
+                        <input type="text" class="form-control mayu" name="txtunimaterial" id="txtunimaterial" autocomplete="off" disabled>    
                     </div>
                     <div class="col">
                         <label  class="form-label">Cantidad por usar</label>
-                        <input type="number" class="form-control" name="txtcanexterno" id="txtcanexterno" autocomplete="off">    
+                        <input type="number" class="form-control" name="txtcantmaterial" id="txtcantmaterial" autocomplete="off">    
                     </div>
                 </div>
                 <div class="row mb-3">
                     <div class="col g-4 divbotones" style="margin-top: 3px;">
                         <div class="col-auto g-4">
                             <button  type="button" id="btnagremater" class="btn btn-primary" style="float: right;">
-                                    <i class="icon-add-to-list" title="Agregar Material"></i>
+                                    <i class="icon-plus" title="Agregar Material"></i>
                             </button>
                         </div>
                     </div>
@@ -176,7 +131,7 @@ $cod = $_SESSION["cod"];*/
                
                 <div class="row">
                     <div class="col g-4 divbotones">
-                        <button  type="button" id="btnnuevo"  class="btn btn-primary mb-2 pull-left ">
+                        <button  type="button" id="btnnuevo"  class="btn btn-primary mb-2 pull-left">
                                 <i class="icon-eraser" title="Limpiar Formulario"></i>
                             Nuevo
                         </button>
@@ -224,56 +179,6 @@ $cod = $_SESSION["cod"];*/
                 </div>
             </div>
 
-
-           <div class="modal fade" id="mdclientemolde" tabindex="-1" data-bs-keyboard="false" data-bs-backdrop="static" aria-hidden="true">
-                <div class="modal-dialog">
-                    <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalLabel">Registro de cliente</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body">
-                        <form id="frmclientemolde">
-                            <div class="row">
-                                
-                                <div class="row mb-2">
-                                    <div class="col">
-                                        <input type="text" name="txtcodclientemodal" id="txtcodclientemolda" style="display: none;">  
-                                        <label for="formpromocion"  class="form-label">Nombre Completo</label>
-                                        <input type="text" class="form-control mayu" placeholder="Nombre o razon social" name="txtnombcliente" id="txtnombcliente" autocomplete="off">       
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col">
-                                        <label  class="form-label">Dirección</label> 
-                                        <input type="text" class="form-control mayu" placeholder="Direccion" name="txtdireccliente" id="txtdireccliente" autocomplete="off">
-                                    </div>
-                                    <div class="col">
-                                        <label  class="form-label">Correo</label> 
-                                        <input type="text" class="form-control mayu" placeholder="Correo" name="txtcorreocliente" id="txtcorreocliente" autocomplete="off">
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col">
-                                        <label  class="form-label">Identificación</label>
-                                        <input type="Number" class="form-control" placeholder="DNI o RUC" name="txtidenticliente" id="txtidenticliente" autocomplete="off">    
-                                    </div>
-                                    <div class="col">
-                                        <label class="form-label">Telefono</label>
-                                        <input type="Number" class="form-control" placeholder="Telefon o celular" name="txttelefon" id="txttecliente" autocomplete="off">    
-                                    </div>
-                                </div> 
-                            </div> 
-                        </form>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" id="btnsalircli" class="btn btn-danger" data-bs-dismiss="modal">Cerrar</button>
-                        <button type="button" id="btngcliemodle" class="btn btn-primary">Guardar</button>
-                    </div>
-                    </div>
-                </div>
-            </div>
-
             <div class="modal fade" id="mdmaterial" tabindex="-1" data-bs-keyboard="false" data-bs-backdrop="static" aria-hidden="true">
                 <div class="modal-dialog">
                     <div class="modal-content">
@@ -300,12 +205,10 @@ $cod = $_SESSION["cod"];*/
                     </div>
                     <div class="modal-footer">
                         <button type="button" id="btncancelar" class="btn btn-danger" data-bs-dismiss="modal">Cerrar</button>
-                      
                     </div>
                     </div>
                 </div>
             </div>
-
 
 
 
