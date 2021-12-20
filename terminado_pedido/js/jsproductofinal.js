@@ -631,6 +631,7 @@ function obtenerDistrito(provincia,seleccDistrito){
         },
         success: function(response){
             $('#Selectdistro').append(response);
+            
             if(seleccDistrito){
                 $("#Selectdistro").val(seleccDistrito);
             }
@@ -660,6 +661,7 @@ function obtenerprovincia(){
 
 
 function validacionFrm() {
+    console.log($("#Selectdistro").val());
     telefono = document.getElementById("txttelefono").value
     telefono2 = document.getElementById("txtTelefono2").value
     tlfvalidacion = validarTelefono(telefono);
@@ -769,6 +771,7 @@ function guardarPedido() {
             data:data.serialize()+"&accion=guardar&array="+JSON.stringify(datosproductos)+
                 "&codPersonal="+codpersonal+"&oficina="+oficina+"&codcliente="+codcliente, 
             success: function(response){
+                console.log(response);
                 var obj = JSON.parse(response);
                 if(obj["estado"] === "error"){
                     mensajesError(obj['mensaje'],"mensajesgenerales")

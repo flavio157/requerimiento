@@ -47,11 +47,11 @@ $cod = $_SESSION["cod"];
                 </div>
                 <div class="col-12">
                     <label for="formNumero" class="form-label">NUMERO</label>
-                    <input type="number" class="form-control" name="txtnumero" id="txtnumero" >
+                    <input type="number" class="form-control" name="txtnumero" id="txtnumero" autocomplete="off">
                 </div>
                 <div class="col-12">
                     <label for="formcliente" class="form-label">CLIENTE</label>
-                    <input type="text" class="form-control" name="txtcliente" id="txtcliente" >
+                    <input type="text" class="form-control" name="txtcliente" id="txtcliente" autocomplete="off">
                 </div>
                 <div class="col-12">
                     <label for="formciudad" class="form-label">CIUDAD</label>
@@ -68,12 +68,12 @@ $cod = $_SESSION["cod"];
                 </div>
                 <div class="col-12">
                     <label for="formdireccion" class="form-label">DIRECCIÓN</label>
-                    <input type="text" class="form-control" name="txtdireccion" id="txtdireccion" >
+                    <input type="text" class="form-control" name="txtdireccion" id="txtdireccion" autocomplete="off">
                 </div>
                 
                 <div class="col-12">
                     <label for="formreferencia" class="form-label">REFERENCIA</label>
-                    <input type="text" class="form-control" name="txtreferencia" id="txtreferencia" >
+                    <input type="text" class="form-control" name="txtreferencia" id="txtreferencia" autocomplete="off">
                 </div>
 
                 <div class="col-12">
@@ -104,16 +104,16 @@ $cod = $_SESSION["cod"];
 
                 <div class="col-12">
                     <label for="formcontacto" class="form-label">CONTACTO</label>
-                    <input type="text" class="form-control" name="txtcontacto" id="txtcontacto" >
+                    <input type="text" class="form-control" name="txtcontacto" id="txtcontacto" autocomplete="off">
                 </div>
                 <div class="row g-2">
                     <div class="col">
                         <label for="formtelefono" class="form-label">TELEFONO</label>
-                        <input type="number" class="form-control" name="txttelefono" id="txttelefono">
+                        <input type="number" class="form-control" name="txttelefono" id="txttelefono" autocomplete="off">
                     </div>
                     <div class="col">
                         <label for="formcondicion" class="form-label">CONDICIÓN</label>
-                        <select class="form-select" name="slccondicion" aria-label="Default select example" id="condicion">
+                        <select class="form-select" name="slccondicion" aria-label="Default select example" id="condicion" >
                             <option selected value="n">Condicion</option>
                             <option value="0">Credito</option>
                             <option value="1">Contado</option>
@@ -140,22 +140,22 @@ $cod = $_SESSION["cod"];
                 <div class="row g-2">
                     <div class="col">
                         <label for="formentrega" class="form-label">N° CONTRATO</label>
-                        <input type="text" name="txtcontrato" id="txtcontrato" class="form-control">
+                        <input type="text" name="txtcontrato" id="txtcontrato" class="form-control" autocomplete="off">
                     </div>
                     <div class="col">
                         <label for="formfpago" class="form-label">TELEFONO 2</label>
-                        <input type="number" name="txtTelefono2" id="txtTelefono2" class="form-control" maxlength=9>
+                        <input type="number" name="txtTelefono2" id="txtTelefono2" class="form-control" maxlength=9 autocomplete="off">
                     </div>
                 </div>
 
                 <div class="row g-2">
                     <div class="col">
                         <label for="formentrega" class="form-label">CODIGO</label>
-                        <input type="number" name="txtcodigo" id="txtcodigo" class="form-control">
+                        <input type="number" name="txtcodigo" id="txtcodigo" class="form-control" autocomplete="off">
                     </div>
                     <div class="col">
                         <label for="formfpago" class="form-label">GENERADO</label>
-                        <input type="text" name="txtgenereado" id="txtgenereado" class="form-control" disabled=true>
+                        <input type="text" name="txtgenereado" id="txtgenereado" class="form-control" disabled=true autocomplete="off">
                        
                     </div>
                 </div>
