@@ -15,8 +15,9 @@ require_once("m_formulacion.php");
         $nom = $_POST['nom'];
         $cantxusar = $_POST['cantxusar'];
         $usu = $_POST['usu'];
-        c_formulacion::c_productoexterno($cod,$nom,$cantxusar,$usu);
-    }else if($accion == 'guardarform'){
+        $fijo = $_POST['fija'];
+        c_formulacion::c_productoexterno($cod,$nom,$cantxusar,$usu,$fijo);
+    }else if($accion == 'guardarform'){ //agregar tipo de material si el material cambia de cantidad o no
         $nomfor = $_POST['txtnombformula'];
         $nomproducto = $_POST['txtproducto'];
         $codproducto =$_POST['codpro']; 
@@ -42,7 +43,8 @@ require_once("m_formulacion.php");
         $codprod = $_POST['cod'];
         $cant = $_POST['cantxusar'];
         $usu = $_POST['usu'];
-       c_formulacion::c_actualizar_items($codform,$codprod,$cant,$usu);
+        $fijo = $_POST['fijo'];
+       c_formulacion::c_actualizar_items($codform,$codprod,$cant,$usu,$fijo);
     }else if($accion == 'delete'){
         $codform = $_POST['form'];
         $codprod = $_POST['cod'];
@@ -96,7 +98,7 @@ require_once("m_formulacion.php");
             echo json_encode($dato,JSON_FORCE_OBJECT);
         }
 
-        static function c_productoexterno($cod,$nom,$cantxusar,$usu)
+        static function c_productoexterno($cod,$nom,$cantxusar,$usu,$fijo)
         {  
             $dato = '';
             $resut = c_formulacion::c_verificamateri($cod,$nom,$cantxusar);
@@ -184,16 +186,16 @@ require_once("m_formulacion.php");
                 ,$unidamedida,$items,$usu);
                 print_r($c_formulacion);     
              }else{
-                 print_r("Error ya existe una formula con el mismo nombre");return;
+                 print_r("Error ya existe una formula para el producto");return;
              }
         }
 
-        static function c_actualizar_items($codform,$codprod,$cant,$usu)
+        static function c_actualizar_items($codform,$codprod,$cant,$usu,$fijo)
         {
             if(strlen(trim($cant)) == 0){print_r("Error ingrese cantidad del insumo");return;}
             if($cant == 0){print_r("Error cantidad del insumo no puede se 0");return;}
             $m_formula = new m_formulacion();
-            $c_actualizar = $m_formula->m_modificar_items($codform,$codprod,$cant,$usu);
+            $c_actualizar = $m_formula->m_modificar_items($codform,$codprod,$cant,$usu,$fijo);
             print_r($c_actualizar);
         }
 

@@ -1,16 +1,17 @@
 var sugexnombre = [];  sugexmaterial = [];cod='';select = 0 //not select;
-var usu = ''; tipo = ''; codpro = '';codfor ='';celda1 = ''; estado = 0;//0 save
+var usu = ''; tipo = ''; codpro = '';codfor ='';celda1 = ''; estado = 0;//0 save 
+celdafijo='';
 $(document).ready(function () {
   autocompletarproducto();
   autocompletarinsumo();
   usu = $("#vrcodpersonal").val();
   $("#btnagregarmater").on('click',function(){
     if(estado == 0){
-      agregmaterial(cod,$("#txtmaterial").val(),$("#txtcantxusar").val());
+      agregmaterial(cod,$("#txtmaterial").val(),$("#txtcantxusar").val(),$("#slctipoinsumo").val());
     }else{
       var t = datosrepetidos('tbdmateiales',cod);
       if(t){
-        additems(codfor,cod,$("#txtcantxusar").val(),$("#slcestadomater").val(),$("#txtmaterial").val())
+        additems(codfor,cod,$("#txtcantxusar").val(),$("#slcestadomater").val(),$("#txtmaterial").val(),$("#slctipoinsumo").val())
       }else{Mensaje1("Error ya se agrego el material","error");}
     }
   });
@@ -30,7 +31,8 @@ $(document).ready(function () {
       var td =  $("#tbdmateiales tr");
       var tds = [];
         for (let l = 0; l < td.length; l++) {
-          tds[l] =[$(td[l]).find("td")[0].innerHTML,$(td[l]).find("td")[2].innerHTML]
+          tds[l] =[$(td[l]).find("td")[0].innerHTML,$(td[l]).find("td")[2].innerHTML,
+          $(td[l]).find("td")[5].innerHTML]
         }
       guardarfor(formulario,tds);
     }else{
@@ -57,19 +59,19 @@ $(document).ready(function () {
     $("#mdcodmate").val($(this).parents('tr').find('td:nth-child(1)').text().trim());
     $("#mdmaterial").val($(this).parents('tr').find('td:nth-child(2)').text().trim());
     $("#mdcantxusar").val($(this).parents('tr').find('td:nth-child(3)').text().trim()); 
-   
+    $("#slcmdtipoinsumo").val($(this).parents('tr').find('td:nth-child(6)').text().trim()); 
     celda1 = $(this).parents('tr').find('td:nth-child(3)');
-    
+    celdafijo =  $(this).parents('tr').find('td:nth-child(6)');
   })
 
   $("#btnactuitems").on('click',function() {
     if(estado == 1){
-      updateitems(codfor,$("#mdcodmate").val(),$("#mdcantxusar").val())
+      updateitems(codfor,$("#mdcodmate").val(),$("#mdcantxusar").val(),$("#slcmdtipoinsumo").val())
     }else{
       if($("#mdcantxusar").val().trim().length == 0){Mensaje1("Error ingrese cantidad del insumo","error"); return;}
       if($("#mdcantxusar").val() == 0){Mensaje1("Error cantidad del insumo no puede ser 0","error");return}
       $(celda1).text(Number.parseFloat($("#mdcantxusar").val()).toFixed(3));
-      
+      $(celdafijo).text($("#slcmdtipoinsumo").val());
       $("#mditemformula").modal('hide');
     }
   });
@@ -187,18 +189,18 @@ function datosrepetidos(tabla,dato) {
   return true;
 }
 
-function agregmaterial(cod,nom,cantxusar) {
+function agregmaterial(cod,nom,cantxusar,fija) {
   $.ajax({
     dataType:'text',
     type: 'POST', 
     url:  'c_formulacion.php',
     data:{
-      "accion":'prod',"cod":cod,"nom":nom,"cantxusar":cantxusar,"usu" :usu
+      "accion":'prod',"cod":cod,"nom":nom,"cantxusar":cantxusar,"usu" :usu,"fija":fija
     },
     success:  function(response){
       obj = JSON.parse(response);
       cod = obj['cod'];
-      generar(obj,cod,nom,cantxusar)
+      generar(obj,cod,nom,cantxusar,fija)
     }
   });
 }
@@ -278,6 +280,7 @@ function lstitemsfor(form) {
         fila +="<td class='tdcontent'>"+item[3]+"</td>";
         fila +="<td class='tdcontent' style=display:none>"+item[4]+"</td>";
         fila +="<td class='tdcontent'>"+b2+"</td>";
+        fila +="<td class='tdcontent' style=display:none>"+item[5]+"</td>";
         var btn = document.createElement("TR");
         btn.innerHTML=fila;
         document.getElementById("tbdmateiales").appendChild(btn);
@@ -288,7 +291,7 @@ function lstitemsfor(form) {
 });
 }
 
-function additems(form,codpro,cant,estmat,nom) {
+function additems(form,codpro,cant,estmat,nom,fija) {
   $.ajax({
     dataType:'text',
     type: 'POST', 
@@ -299,7 +302,7 @@ function additems(form,codpro,cant,estmat,nom) {
     success:  function(r){
       obj = JSON.parse(r);
       if(obj['dato']==1){
-        generar(obj,codpro,nom,cant)
+        generar(obj,codpro,nom,cant,fija)
       }else{
         Mensaje1(obj['dato'],"error")
       }
@@ -308,7 +311,7 @@ function additems(form,codpro,cant,estmat,nom) {
   });
 }
 
-function generar(obj,codprod,nom,cant) {
+function generar(obj,codprod,nom,cant,fija) {
   if(obj['dato'] == 1){
     var b1 = "<a id='btnactualizar' style='margin-right: 2px;margin-bottom: 1px;' class='btn btn-primary  btn-sm' data-bs-toggle='modal' data-bs-target='#mditemformula'>"+
     "<i class='icon-pencil' title='Modificar material'></i>"+
@@ -318,7 +321,8 @@ function generar(obj,codprod,nom,cant) {
     if(r){
       array = [
         a = [codprod,'none',''],b = [nom,'',''],c = [Number.parseFloat(cant).toFixed(3),'',''],
-        d = [$("#slcestadomater").val(),'none',''],e = [b1,'','']
+        d = [$("#slcestadomater").val(),'none',''],e = [b1,'',''],
+        f = [fija,'none','']
       ]
       _createtable(array,'tbdmateiales');cod = '';
       $("#txtmaterial").val('');$("#txtcantxusar").val('');$("#slcestadomater").val('1');
@@ -330,13 +334,13 @@ function generar(obj,codprod,nom,cant) {
   } 
 }
 
-function updateitems(form,codpro,cant) {
+function updateitems(form,codpro,cant,fijo) {
   $.ajax({
     dataType:'text',
     type: 'POST', 
     url:  'c_formulacion.php',
     data:{
-      "accion":'updateitems',"form":form,"cod":codpro,"cantxusar":cant,"usu" :usu
+      "accion":'updateitems',"form":form,"cod":codpro,"cantxusar":cant,"usu" :usu,"fijo":fijo
     },
     success:  function(r){
       if(r == 1){

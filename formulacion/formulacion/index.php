@@ -3,10 +3,10 @@
 if (session_status() == PHP_SESSION_NONE) {
     session_start();
 }
-$ofi = $_SESSION["ofi"];
+/*$ofi = $_SESSION["ofi"];
 $zon = $_SESSION["zon"];
-$cod = $_SESSION["cod"];
-require_once("../menu/index.php");
+$cod = $_SESSION["cod"];*/
+//require_once("../menu/index.php");
 ?>
 
 <!DOCTYPE html>
@@ -48,9 +48,9 @@ require_once("../menu/index.php");
    <section>  
         <div class="main"> 
           <form style="margin-bottom: 0px;" id="frmformulacion">
-                  <input type="text" id="vroficina" style="display: none;" value="<?php echo $ofi?>"/>
+                  <input type="text" id="vroficina" style="display: none;" value="<?php echo 'SMP2'//$ofi?>"/>
                   <input type="text" id="vrzona" style="display: none;" value="<?php echo  $zon?>"/>
-                  <input type="text" id="vrcodpersonal" style="display: none;" value="<?php echo  $cod?>"/>
+                  <input type="text" id="vrcodpersonal" style="display: none;" value="<?php echo  '0215'//$cod?>"/>
               <div class="row mb-3">
                   <div class="col">
                       <center><label class="titulos">Registro de formulacion</label></center>
@@ -106,15 +106,15 @@ require_once("../menu/index.php");
                     <input type="number" id="txtcantxusar" name="txtcantxusar" class="form-control">
                   </div>
                 </div>
-               <!-- <div class="row">
+                <div class="row">
                   <div class="col-auto">
-                        <label >Estado</label>
-                        <select class="form-select" id="slcestadomater">
-                          <option value="1" selected>Activo</option>
-                          <option value="0">Inactivo</option>
+                        <label>Tipo insumo</label>
+                        <select class="form-select" id="slctipoinsumo" name="slctipoinsumo">
+                          <option value="0" selected>Cantidad Varia</option>
+                          <option value="1">Cantidad fija</option>
                   </select>
                   </div>
-                </div>-->
+                </div>
 
                 <div class="row ">
                    <div class="col g-3 ">
@@ -207,15 +207,15 @@ require_once("../menu/index.php");
               <input type="number" id="mdcantxusar" name="mdcantxusar" class="form-control">
             </div>
           </div>
-          <!--<div class="row">
+          <div class="row">
             <div class="col-auto">
-              <label >Estado</label>
-              <select class="form-select" id="slcmdestado">
-                <option value="1" selected>Activo</option>
-                <option value="0">Inactivo</option>
+              <label>Tipo insumo</label>
+              <select class="form-select" id="slcmdtipoinsumo" name="slcmdtipoinsumo">
+                <option value="0" selected>Cantidad Varia</option>
+                <option value="1">Cantidad fija</option>
               </select>
             </div>
-          </div>-->
+          </div>
         </div>
         <div class="modal-footer">
           <button type="button" id="btncancelar" class="btn btn-danger" data-bs-dismiss="modal">Cerrar</button>         

@@ -31,7 +31,10 @@
                     break;
                 case "SMP10":
                     return "00041";
-                    break;
+                    break;  
+                /*case "PLAS":
+                    return "00042";
+                    break;  */  
             }
         }
 

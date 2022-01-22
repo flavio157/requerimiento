@@ -64,8 +64,8 @@ class m_formulacion
             foreach ($items->tds as $dato){
                 if($dato != ''){
                     $query2 = $this->bd->prepare("INSERT INTO T_FORMULACION_ITEM(COD_FORMULACION,COD_PRODUCTO,
-                    CAN_FORMULACION,EST_FORMULACION,USU_REGISTRO,MAQUINA) 
-                    VALUES('$codform','$dato[0]',$dato[1],'1','$usu','$maquina')");
+                    CAN_FORMULACION,EST_FORMULACION,USU_REGISTRO,MAQUINA,CAN_FIJA) 
+                    VALUES('$codform','$dato[0]',$dato[1],'1','$usu','$maquina','$dato[2]')");
                      $query2->execute(); 
                     if($query2->errorCode()>0){	
                         $this->bd->rollBack();
@@ -78,8 +78,7 @@ class m_formulacion
             return $guardado;
         }catch (Exception $e) {
             $this->bd->rollBack();
-            print_r("Error al guardar formulacion " . $e);
-            
+            print_r("Error al guardar formulacion " . $e); 
         }
 
     }
@@ -98,12 +97,12 @@ class m_formulacion
        }
     }
 
-    public function m_modificar_items($codform,$codprod,$cant,$usu)
+    public function m_modificar_items($codform,$codprod,$cant,$usu,$fijo)
     {
         $fecha = retunrFechaSqlphp(date("Y-m-d"));
         try {
             $query = $this->bd->prepare("UPDATE T_FORMULACION_ITEM SET CAN_FORMULACION = '$cant',
-            USU_MODIFICO = '$usu' , FEC_MODIFICO = '$fecha' WHERE
+            USU_MODIFICO = '$usu' , FEC_MODIFICO = '$fecha',CAN_FIJA = '$fijo' WHERE
             COD_FORMULACION ='$codform' AND COD_PRODUCTO = '$codprod'");
             $result = $query->execute();
             return $result;
@@ -137,6 +136,5 @@ class m_formulacion
             print_r("Error al actualizar la formula " . $e);
         }
     }
-
 }
 ?>
