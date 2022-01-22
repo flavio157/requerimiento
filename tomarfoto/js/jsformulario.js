@@ -223,6 +223,7 @@ function validacion($tipo) {
            "nombreimg" : nombreimg
        },
        success: function(response){
+           console.log(response);
             if(response != ''){
                 imagen.setAttribute('src', "data:image/jpg;base64,"+response);
                 if( navigator.userAgent.match(/Android/i)
