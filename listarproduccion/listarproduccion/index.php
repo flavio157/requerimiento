@@ -79,6 +79,8 @@ $cod = $_SESSION["cod"];*/
                       <label class="btn btn-outline-primary" for="btndesecho">Desechos</label>
                       <input type="radio" class="btn-check" name="btnradio" id="btnresiduos" autocomplete="off">
                       <label class="btn btn-outline-primary" for="btnresiduos">Residuos</label>
+                      <input type="radio" class="btn-check" name="btnradio" id="btnresiduos" autocomplete="off">
+                      <label class="btn btn-outline-primary" for="btnresiduos">final</label>
                     </div>
                   </div>
                 </div>
@@ -211,17 +213,26 @@ $cod = $_SESSION["cod"];*/
           <div class="modal-dialog">
             <div class="modal-content">
               <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Avances de produccion</h5>
+                <h5 class="modal-title" id="exampleModalLabel">Registrar avances de producción</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
               </div>
               <div class="modal-body">
                 <form id="frmavances">  
+                  <div class="row">
+                    <div class="col mb-3">
+                      <label>Total de produccion: </label>
+                    </div>
+                    <div class="col mb-3">
+                      <input type="text" class="form-control form-control-sm" id="mdtotal" name="mdtotal"
+                      disabled style="border: 0;"> 
+                    </div>  
+                  </div>
                     <div class="row g-2"> 
                         <div class="col">
                             <input type="text" style="display: none;" id="mdlote" name="mdlote">
                             <input type="text" style="display: none;" id="mdcodprod" name="mdcodprod">
                             <input type="text" style="display: none;" id="mdproduc" name="mdproduc">
-                            <input type="text" style="display: none;" id="mdtotal" name="mdtotal">
+                           
                             <label for="formcantidad" class="form-label">Tara</label>
                             <div class="input-group mb-3">
                               <input type="number" class="form-control form-control-sm"  name="mdtara" id="mdtara" autocomplete="off">
@@ -285,7 +296,7 @@ $cod = $_SESSION["cod"];*/
                 </div>
                 <div class="row">
                   <div class="col">
-                    <div class="table-responsive-sm" style="overflow: scroll;height: 120px;"> 
+                    <div class="table-responsive-sm" style="overflow: scroll;height: 189px;"> 
                       <table class="table" id="tbocurrencia">
                         <thead>
                           <tr>

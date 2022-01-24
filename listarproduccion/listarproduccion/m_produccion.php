@@ -129,7 +129,7 @@ class m_produccion
                         $pasadas = $this->m_buscar('T_INSUMOS_PASADAS',$cadena);
                         $insumopasadas = $pasadas[0][1];
                     }else{
-                        $canpas += 1;
+                        (Int) $canpas =+ (Int)1;
                         $cadena = "COD_PRODUCTO = '$prod' AND TIPO_PASADA = '$canpas'";
                         $pasadas = $this->m_buscar('T_INSUMOS_PASADAS',$cadena);
                         $insumopasadas = $pasadas[0][1];

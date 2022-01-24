@@ -53,7 +53,8 @@ require_once("m_produccion.php");
         $usu = $_POST['usu'];
         $fin = $_POST['fin'];
         $producto = $_POST['mdproduc'];
-        c_produccion::c_gitemsavance($cantavance,$usu,$prod,$fin,$producto);
+        $faltante = $_POST['faltante'];
+        c_produccion::c_gitemsavance($cantavance,$usu,$prod,$fin,$producto,$faltante);
     }else if($accion == 'validafinpro'){
         $codproduccion = $_POST['produccion'];
         $cantidad = $_POST['cantidad'];
@@ -163,7 +164,7 @@ require_once("m_produccion.php");
 
         static function c_gavances($tara,$pesoneto,$cantxbolsa,$paquexsacar,$lote,$produccion,$usu,$total,$fin,
         $producto,$totalproduc){
-            $resul = c_produccion::c_validarfinrprod($tara,$pesoneto,$cantxbolsa,$paquexsacar,$lote);
+            $resul = c_produccion::c_validarfinrprod($tara,$pesoneto,$cantxbolsa,$paquexsacar,$lote,$total);
             if($resul == ""){
                $m_produccion = new m_produccion();
                 $c_produccion = $m_produccion->m_gvances($tara,$pesoneto,$cantxbolsa,$paquexsacar,$lote,
@@ -174,6 +175,7 @@ require_once("m_produccion.php");
 
         static function c_gitemsavance($cantavance,$usu,$prod,$fin,$producto)
         {
+            //if($cantavance > $faltante){print_r("Error los paquetes a sacar no puede ser mayor a lo indicado"); return;}
             $m_produccion = new m_produccion();
             $c_produccion = $m_produccion->m_itemavance($cantavance,$usu,$prod,$fin,$producto);
             print_r($c_produccion);
@@ -194,7 +196,7 @@ require_once("m_produccion.php");
             echo json_encode($dato,JSON_FORCE_OBJECT);
         }
 
-        static function c_validarfinrprod($tara,$pesoneto,$cantxbolsa,$paquexsacar,$lote)
+        static function c_validarfinrprod($tara,$pesoneto,$cantxbolsa,$paquexsacar,$lote,$total)
         {
             if(strlen(trim($tara)) == 0){return "Error ingrese tara";}
             if(!is_numeric($tara)){return "Error tara solo numeros";}
@@ -202,13 +204,14 @@ require_once("m_produccion.php");
             if(!is_numeric($pesoneto)){return "Error solo numeros en peso total";}
             if(strlen(trim($pesoneto)) == 0){return "Error ingrese peso total";}
             if(!is_numeric($pesoneto)){return "Error solo numeros en peso total";}
-            if($paquexsacar ==0 ){return "Error paquete por sacar no puede ser 0";}
+            if($paquexsacar == 0 ){return "Error paquete por sacar no puede ser 0";}
+            if($paquexsacar > $total){return "Error los paquetes a sacar no puede ser mayor a lo indicado";}
             return "";
         }
 
         static function c_verifinpro($codproduccion,$cantidad,$cantxpa,$total)
         {
-            if($cantxpa > $total){print_r("Error cantidad es mayor a la actual fabricación"); return;}
+            if($cantxpa > $total){print_r("Error la cantidad es mayor a la actual fabricación"); return;}
             if($cantxpa == '0'){print_r("Error cantidad  no puede ser cero"); return;}
             if(strlen(trim($cantxpa)) == 0){print_r("Error ingrese cantidad"); return;}
             $faltante = 0;

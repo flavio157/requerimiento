@@ -1,5 +1,5 @@
 var produc = ''; usu = '';t = 'm';produccion='';cantxinsumo = '';
-var cab = 0;totalpaquete = 0;cantidad=0;var qrcode = '';
+var cab = 0;totalpaquete = 0;cantidad=0;var qrcode = '';faltacaja = 0 ;
 $(document).ready(function () {
     lstitemsfor();
     hora();
@@ -15,7 +15,7 @@ $(document).ready(function () {
     });
 
     $("#btnnuevo").on('click',function() {
-        $("#txtocurrencias").val('');
+        lmp();
     });
 
     $("#btnmerma").on('click',function() {
@@ -131,9 +131,10 @@ function lstocurrencia() {
           obj = JSON.parse(r);
           $("#tbocurrencia > tbody").empty();
           $.each(obj['dato'], function(i, item) {
+            fecha = item[4].split(' '); 
             var fila = '';
             fila +="<td class='tdcontent'>"+item[2]+"</td>";
-            fila +="<td>"+item[4]+"</td>";
+            fila +="<td>"+fecha[0].replace(/^(\d{4})-(\d{2})-(\d{2})$/g,'$3/$2/$1')+"</td>";
             var btn = document.createElement("TR");
             btn.innerHTML=fila;
             document.getElementById("tbdocurrencia").appendChild(btn);
@@ -317,12 +318,13 @@ function lstinsumo(){
 }
 
 function guardaravances(frm,e){
+    mdtotal = $("#mdtotal").val();
     $.ajax({
         dataType:'text',
         type: 'POST', 
         url:  'c_produccion.php',
         data:frm+"&accion=gavances&usu="+usu+"&produccion="+produccion+
-            "&total="+totalpaquete+"&fin="+e,
+            "&total="+totalpaquete+"&fin="+e+"&mdtotal="+mdtotal,
         success:  function(e){
             if(e == 1){
                 Mensaje3("Se registron los datos" ,"success","Antes de cerrar la ventana imprima los tickes");
@@ -348,6 +350,7 @@ function v_avances($produccion){
                 $("#mdcantxcaja").attr('disabled',true);
                 $("#mdcanxbolsa").attr('disabled',true);
                 $("#mdcajasxsacar").val(obj['falta']);
+                faltacaja = obj['falta']
                 cab = 1;
             }else{
                 $("#mdtara").val('');
@@ -370,7 +373,7 @@ function guardaravancesits(produ,avance,e,producto){
         type: 'POST', 
         url:  'c_produccion.php',
         data:"accion=gavancesitems&avance="+avance+"&usu="+usu+"&produ="+produ+"&fin="+e+
-        "&mdproduc="+producto,
+        "&mdproduc="+producto+"&faltante="+faltacaja,
         success:  function(e){
             if(e == 1){
                Mensaje3("Se registron los datos" ,"success","Antes de cerrar la ventana imprima los tickes");
@@ -456,52 +459,66 @@ function demoFromHTML(cant,lote,fecha,peso,cantidad,tara,total,fin,avance) {
     for (let i = 0; i < cant; i++) {
         if(fin == 0 && (i+1) == cant && (total % cantidad) != 0 ){
             cantidad = total % cantidad; peso = (peso / cantidad)}
-        if(i % 2 == 0){x = 4; xr = 0;}else{x = 112;xr=105;}
+        if(i % 2 == 0){x = 2; xr = 0; xx = 59}else{x = 107 ;xr=105; xx = 59 * 2.78}
         if(tipo == 8){doc.addPage(); tipo = 0;}
         if(tipo == 0 || tipo == 1){
             doc.rect(xr, 74 * 0, 105, 74.20)
-                doc.text('FECHA: '+fecha, x, 9); //19
-                doc.text('CANTIDAD: '+cantidad + " Uds.", 59 , 9); //39
-                //39
+                doc.text('FECHA: '+fecha, x, 9); 
+                doc.text('CANTIDAD: '+cantidad + " Uds.",  xx, 9); 
 
                 doc.text('PESO NETO: ' + Number(peso).toFixed(2) +" Kg",x, 19); //29
-                doc.text('TARA: '+ Number(tara).toFixed(2) +" Kg",59, 19); //49
+                doc.text('TARA: '+ Number(tara).toFixed(2) +" Kg",xx, 19); //49
      
-               
                 
                 doc.text('PESO TOTAL: '+(Number(peso)+ Number(tara)).toFixed(2) +" Kg",x, 29); //59
-                doc.text('LOTE: '+lote, 59, 29);
+                doc.text('LOTE: '+lote, xx, 29);
                 
-                doc.addImage(base64Image,'JPEG', 61, 33, 40, 40);
+                doc.addImage(base64Image,'JPEG', xx, 33, 40, 40);
                 
                 tipo++;
         }else if(tipo  == 2 || tipo == 3){
             doc.rect(xr, 74 * 1, 105, 74.20)
-                doc.text('LOTE: '+lote, x, 83);
-                doc.text('FECHA: '+fecha, x, 93);
-                doc.text('PESO NETO: '+ Number(peso).toFixed(2) +" Kg",x, 103);
-                doc.text('CANTIDAD: '+cantidad + " Uds.", x, 113);
-                doc.text('TARA: '+ Number(tara).toFixed(2) +" Kg", x, 123);
-                doc.text('PESO TOTAL: '+(Number(peso)+ Number(tara)).toFixed(2) +" Kg", x, 133);
+                doc.text('FECHA: '+fecha, x, 83);
+                doc.text('CANTIDAD: '+cantidad + " Uds.", xx, 83); //103
+
+                doc.text('PESO NETO: '+ Number(peso).toFixed(2) +" Kg",x, 93);
+                doc.text('TARA: '+ Number(tara).toFixed(2) +" Kg", xx, 93);
+
+                
+                doc.text('PESO TOTAL: '+(Number(peso)+ Number(tara)).toFixed(2) +" Kg", x, 103);
+                doc.text('LOTE: '+lote, xx, 103);
+
+
+                doc.addImage(base64Image,'JPEG', xx, 107, 40, 40);
                 tipo++;
+
         }else if(tipo  == 4 || tipo == 5){
             doc.rect(xr, 74 * 2, 105, 74.20)
-                doc.text('LOTE: '+lote, x, 157);
-                doc.text('FECHA: '+fecha, x, 167);
-                doc.text('PESO NETO: '+ Number(peso).toFixed(2) +" Kg", x, 177);
-                doc.text('CANTIDAD: '+cantidad + " Uds.", x, 187);
-                doc.text('TARA: '+ Number(tara).toFixed(2) +" Kg", x, 197);
-                doc.text('PESO TOTAL: '+(Number(peso)+ Number(tara)).toFixed(2) +" Kg", x, 207);
+                doc.text('FECHA: '+fecha, x, 157);
+                doc.text('CANTIDAD: '+cantidad + " Uds.", xx, 157);
+
+                doc.text('PESO NETO: '+ Number(peso).toFixed(2) +" Kg", x, 167);
+                doc.text('TARA: '+ Number(tara).toFixed(2) +" Kg", xx, 167);
+                
+
+                doc.text('PESO TOTAL: '+(Number(peso)+ Number(tara)).toFixed(2) +" Kg", x, 177);
+                doc.text('LOTE: '+lote, xx, 177);
+
+                doc.addImage(base64Image,'JPEG', xx, 181, 40, 40);
                 tipo++;
 
         }else if(tipo  == 6 || tipo == 7){
             doc.rect(xr, 74 * 3, 105, 74.20)
-                doc.text('LOTE: '+lote, x, 231);
-                doc.text('FECHA: '+fecha, x, 241);
-                doc.text('PESO NETO: '+Number(peso).toFixed(2) +" Kg", x, 251);
-                doc.text('CANTIDAD: '+cantidad + " Uds.",x, 261);
-                doc.text('TARA: '+ Number(tara).toFixed(2) +" Kg", x, 271);
-                doc.text('PESO TOTAL: '+(Number(peso)+ Number(tara)).toFixed(2) +" Kg", x, 281);
+                doc.text('FECHA: '+fecha, x, 231);
+                doc.text('CANTIDAD: '+cantidad + " Uds.",xx, 231);
+                
+                doc.text('PESO NETO: '+Number(peso).toFixed(2) +" Kg", x, 241);
+                doc.text('TARA: '+ Number(tara).toFixed(2) +" Kg", xx, 241);
+                
+                doc.text('PESO TOTAL: '+(Number(peso)+ Number(tara)).toFixed(2) +" Kg", x, 251);
+                doc.text('LOTE: '+lote, xx, 251);
+
+                doc.addImage(base64Image,'JPEG', xx, 255, 40, 40);
                 tipo++;
         }
     }
@@ -529,14 +546,13 @@ function lmp(){
 }
 
 function qr(fecha,lote){
-    
     new QRious({
         element: document.querySelector("#codigo"),
-        value: "Lote: "+ lote + " Fecha: "+fecha, // La URL o el texto
+        value: "Lote: "+ lote + " Fecha: "+fecha, 
         size: 200,
-        backgroundAlpha: 0, // 0 para fondo transparente
-        foreground: "#000", // Color del QR
-        level: "H", // Puede ser L,M,Q y H (L es el de menor nivel, H el mayor)
+        backgroundAlpha: 0, 
+        foreground: "#000", 
+        level: "H", 
     });
     
 }
