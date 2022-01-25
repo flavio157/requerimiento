@@ -16,21 +16,20 @@ require_once("m_produccion.php");
         c_produccion::c_registrar_ocurrencia($produccion,$observacion,$usu);
     }else if($accion == 'gdatos'){
             $produccion = $_POST['produccion'];
-            $fechmerma = $_POST['fechmerma'];
-            $horamerma = $_POST['horamerma'];
             $fechincidencia = $_POST['fechincidencia'];
             $horaincidencia = $_POST['horaincidencia'];
             $observacion = $_POST['observacion'];
             $usu = $_POST['usu'];
             $t = $_POST['t'];
-            $items = json_decode($_POST['items']);
-            c_produccion::c_registrardatos($produccion,$fechmerma,$horamerma,$fechincidencia,$horaincidencia,
-            $observacion,$usu,$t,$items);
+            $cantidad = $_POST['cantidad'];
+            $tipomerma = $_POST['tipomerma'];
+            c_produccion::c_registrardatos($produccion,$fechincidencia,$horaincidencia,
+            $observacion,$usu,$t,$cantidad,$tipomerma);
 
-    }else if($accion == 'insumo'){
+    }/*else if($accion == 'insumo'){
         $produccion = $_POST['produccion'];
         c_produccion::c_buscarxinsumo($produccion);
-    }else if($accion == 'gavances'){
+    }*/else if($accion == 'gavances'){
         $tara = $_POST['mdtara'];
         $pesoneto = $_POST['mdpesoneto'];
         $cantxpaquete = $_POST['mdcantxcaja'];
@@ -75,7 +74,7 @@ require_once("m_produccion.php");
 
     class c_produccion
     {
-        static function c_buscarxinsumo($produccion)
+        /*static function c_buscarxinsumo($produccion)
         {   
             $mensaje = '';$c_itemsform = '';
             if(strlen(trim($produccion)) == 0){$mensaje = 'Error seleccione la produccion';}
@@ -87,7 +86,7 @@ require_once("m_produccion.php");
             }
             $dato = array('dato' => $c_itemsform,'m' => $mensaje);
             echo json_encode($dato,JSON_FORCE_OBJECT);
-        }
+        }*/
 
         static function c_itemsformula()
         {
@@ -120,40 +119,34 @@ require_once("m_produccion.php");
             print_r($c_produccion);
         }
 
-        static function c_registrardatos($codproduccion,$fechmerma,$horamerma,$fechincidencia,$horaincidencia,
-        $observacion,$usu,$t,$items)
+        static function c_registrardatos($codproduccion,$fechincidencia,$horaincidencia,
+        $observacion,$usu,$t,$cantidad,$tipomerma)
         {
-            $dato = c_produccion::c_validardatos($fechmerma,$horamerma,$fechincidencia,$horaincidencia,
+            $dato = c_produccion::c_validardatos($fechincidencia,$horaincidencia,
             $observacion,$t);
-            if(count($items->r)==0){print_r("Error ingrese material"); return;}
             $m_produccion = new m_produccion();
             if($dato == ''){
                 if($t == 'm'){
                     $merma = $m_produccion->m_guardarmerma($codproduccion,
-                    $fechmerma,$horamerma,$fechincidencia,$horaincidencia,$observacion,$usu,$items);
+                    $fechincidencia,$horaincidencia,$observacion,$usu,$cantidad,$tipomerma);
                     print_r($merma);
                 }else if($t == 'r'){
-                    $merma = $m_produccion->m_guardarresiduos($codproduccion,$observacion,$usu,$items);
-                    print_r($merma);
+                    $residuos = $m_produccion->m_guardarresiduos($codproduccion,$observacion,$usu);
+                    //print_r($residuos);
     
                 }else if ($t == 'd'){
-                    $merma = $m_produccion->m_guardardesechos($codproduccion,$observacion,$usu,$items);
-                    print_r($merma);
+                    $desechos = $m_produccion->m_guardardesechos($codproduccion,$observacion,$usu,$cantidad);
+                    print_r($desechos);
                 }
             }else{
                 print_r($dato);
             }
-            
         }
 
-        static function c_validardatos($fechmerma,$horamerma,$fechincidencia,$horaincidencia,
+        static function c_validardatos($fechincidencia,$horaincidencia,
         $observacion,$t)
         {
             if($t == 'm'){
-                if(strlen(trim($fechmerma)) == 0){return "Error seleccione fecha merma";}
-                if(strlen(trim($horamerma)) == 0){return "Error ingrese hora merma";}
-                if($horamerma == '00:00'){return "Error la hora merma no puede ser 00:00";}
-               
                 if(strlen(trim($fechincidencia)) == 0){return "Error seleccione fecha incidencia";}
                 if(strlen(trim($horaincidencia)) == 0){return "Error ingrese hora merma";}
                 if($horaincidencia == '00:00'){return "Error la hora incidencia no puede ser 00:00";}

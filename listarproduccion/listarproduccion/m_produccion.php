@@ -50,48 +50,48 @@ class m_produccion
         } 
     }
 
-    public function m_guardarmerma($codproduccion,$fechmerma,$horamerma,$fechincidencia,$horaincidencia,
-    $observacion,$usu,$items){
+    public function m_guardarmerma($codproduccion,$fechincidencia,$horaincidencia,
+    $observacion,$usu,$canmerma,$tipomer){
         $maquina = os_info();
-        $fechmerma = retunrFechaSqlphp($fechmerma);
         $fechincidencia = retunrFechaSqlphp($fechincidencia);
         $fecha = retunrFechaSqlphp(date("Y-m-d"));
+        $hora = gethora();
         $this->bd->beginTransaction();
         try {
             $codmerma = $this->m_select_generarcodigo('COD_MERMA','T_MERMAS',8);
             $query = $this->bd->prepare("INSERT INTO T_MERMAS(COD_MERMA,COD_PRODUCCION,FEC_MERMA,
             HOR_MERMA,FEC_INCIDENCIA,HOR_INCIDENCIA,OBS_INCIDENCIA,USU_REGISTRO,MAQUINA)VALUES('$codmerma','$codproduccion'
-            ,'$fechmerma','$horamerma','$fechincidencia','$horaincidencia','$observacion','$usu','$maquina')");
+            ,'$fecha','$hora','$fechincidencia','$horaincidencia','$observacion','$usu','$maquina')");
             $query->execute();
-                foreach ($items->r as $dato){ 
-                    if($dato != ''){
+              //  foreach ($items->r as $dato){ 
+                   // if($dato != ''){
                         $query2 = $this->bd->prepare("INSERT INTO T_MERMAS_ITEM(COD_MERMA,COD_PRODUCTO,CAN_PRODUCTO
                         ,TIPO_MERMA) 
-                        VALUES('$codmerma','$dato[0]','$dato[1]','$dato[2]')");
+                        VALUES('$codmerma','000046','$canmerma','$tipomer')");
                          $query2->execute(); 
-                        if($query2->errorCode()>0){	
+                      /*   if($query2->errorCode()>0){	
                             $this->bd->rollBack();
                             return 0;
-                            break;
-                        }
+                           break;
+                    //    }*/
 
-                        if($dato[2] == 'R'){
-                            $cadena = "COD_PRODUCTO = '$dato[0]'";
+                        if($tipomer == 'R'){
+                            $cadena = "COD_PRODUCTO = '000046'";//cambia el codigo del producto solo es prueba
                             $c_propio = $this->m_buscar('T_ALMACEN_INSUMOS',$cadena);
-                            $stock =number_format(($c_propio[0][4] + $dato[1]),2, '.', '');
+                            $stock =number_format(($c_propio[0][4] + $canmerma),2, '.', '');
                             $query3 = $this->bd->prepare("UPDATE T_ALMACEN_INSUMOS SET STOCK_ACTUAL='$stock',
-                            FEC_MODIFICO = '$fecha' WHERE COD_PRODUCTO ='$dato[0]'"); 
+                            FEC_MODIFICO = '$fecha' WHERE COD_PRODUCTO ='000046'"); 
                             $query3->execute();
-                            if($query3->errorCode()>0){	
+                            /*if($query3->errorCode()>0){	
                                 $this->bd->rollBack();
                                 return 0;
                                 break;
-                            }
+                            }*/
     
                         }
 
-                    }
-                }        
+                    //}
+              //  }        
 
             $guardado = $this->bd->commit();
             return $guardado;
@@ -102,8 +102,9 @@ class m_produccion
     }
 
     public function m_guardarresiduos($codproduccion,
-    $observacion,$usu,$items){
+    $observacion,$usu){
         $insumopasadas = ''; 
+        $insumoar = array();
         $maquina = os_info();
         $this->bd->beginTransaction();$fecha = retunrFechaSqlphp(date("Y-m-d"));
         try {
@@ -111,17 +112,41 @@ class m_produccion
             $query = $this->bd->prepare("INSERT INTO T_RESIDUOS(COD_RESIDUOS,COD_PRODUCCION,OBS_INCIDENCIA
             ,USU_REGISTRO,MAQUINA)VALUES('$codresiduos','$codproduccion','$observacion','$usu','$maquina')");
             $query->execute();
-            foreach ($items->r as $dato){
-                if($dato != ''){
-                    $query2 = $this->bd->prepare("INSERT INTO T_RESIDUOS_ITEM(COD_RESIDUOS,COD_PRODUCTO,CAN_PRODUCTO) 
+           // foreach ($items->r as $dato){
+               // if($dato != ''){
+                $cadena = "COD_PRODUCCION ='$codproduccion'";
+                $item = $this->m_buscar('T_PRODUCCION_ITEM',$cadena);
+                if(count($item) > 0){
+                    for ($i=0; $i <count($item) ; $i++) { 
+                        $cod = $item[$i][1];
+                        $cadena1 = "COD_PRODUCTO = '$cod' OR COD_INSUMO = '$cod'";
+                        $item1 = $this->m_buscar('T_INSUMOS_PASADAS',$cadena1);
+                        if(count($item1) > 1){
+                            array_push($insumoar,array($item1[0][0],$item1[0][0],0));
+                        }else if(count($item1) == 1){
+                            if(in_array($item1[0][0],$insumoar)){
+                                print_r($insumoar[0][0]);
+                            }else{
+                                array_push($insumoar,array($item1[0][0],$item1[0][1],$item1[0][6]));
+                            }
+                        }
+                        
+                    }
+                }
+                for ($i=0; $i <count($insumoar) ; $i++) { 
+                    print_r($insumoar[$i][1]);    
+                }
+                
+
+                    /*$query2 = $this->bd->prepare("INSERT INTO T_RESIDUOS_ITEM(COD_RESIDUOS,COD_PRODUCTO,CAN_PRODUCTO) 
                     VALUES('$codresiduos','$dato[0]',$dato[1])");
-                    $query2->execute(); 
-                    if($query2->errorCode()>0){	
+                    $query2->execute(); */
+                   /* if($query2->errorCode()>0){	
                         $this->bd->rollBack();
                         return 0;
                         break;
-                    }
-                    $cadena = "COD_PRODUCTO = '$dato[0]' or COD_INSUMO = '$dato[0]'"; //validar si es mayor a 5 no debe hhacer nada
+                    }*/
+                   /* $cadena = "COD_PRODUCTO = '$dato[0]' or COD_INSUMO = '$dato[0]'"; //validar si es mayor a 5 no debe hhacer nada
                     $pasadas = $this->m_buscar('T_INSUMOS_PASADAS',$cadena);
                     $prod = $pasadas[0][0];$canpas = $pasadas[0][6];
                     if(count($pasadas) > 1){
@@ -140,23 +165,23 @@ class m_produccion
                         $stock =number_format(($c_propio[0][4] + $dato[1]),2, '.', '');
                         $query3 = $this->bd->prepare("UPDATE T_ALMACEN_INSUMOS SET STOCK_ACTUAL='$stock',
                         FEC_MODIFICO = '$fecha' WHERE COD_PRODUCTO ='$insumopasadas'"); 
-                        $query3->execute();
-                        if($query3->errorCode()>0){	
+                        $query3->execute();*/
+                        /*if($query3->errorCode()>0){	
                             $this->bd->rollBack();
                             return 0;
                             break;
-                        }
-                }
-            }  
-            $guardado = $this->bd->commit();
-            return $guardado;
+                        }*/
+                //}
+           // }  
+            /*$guardado = $this->bd->commit();
+            return $guardado;*/
         } catch (Exception $e) {
             $this->bd->rollBack();
             print_r("Error al guardar residuos" .$e);
         }
     }
 
-    public function m_guardardesechos($codproduccion,$observacion,$usu,$items)
+    public function m_guardardesechos($codproduccion,$observacion,$usu,$cantidad)
     {
         $maquina = os_info();
         $this->bd->beginTransaction();
@@ -165,18 +190,18 @@ class m_produccion
             $query = $this->bd->prepare("INSERT INTO T_DESECHOS(COD_DESECHOS,COD_PRODUCCION,OBS_INCIDENCIA
             ,USU_REGISTRO,MAQUINA)VALUES('$coddesechos','$codproduccion','$observacion','$usu','$maquina')");
             $query->execute();
-            foreach ($items->r as $dato){
-                if($dato != ''){
+            /*foreach ($items->r as $dato){
+                if($dato != ''){*/
                     $query2 = $this->bd->prepare("INSERT INTO T_DESECHOS_ITEM(COD_DESECHOS,COD_PRODUCTO,CAN_PRODUCTO) 
-                    VALUES('$coddesechos','$dato[0]',$dato[1])");
+                    VALUES('$coddesechos','000047',$cantidad)");
                     $query2->execute(); 
-                    if($query2->errorCode()>0){	
+                /*    if($query2->errorCode()>0){	
                         $this->bd->rollBack();
                         return 0;
                         break;
                     }
                 }
-            }  
+            } */ 
             $guardado = $this->bd->commit();
             return $guardado;
         } catch (Exception $e) {
