@@ -122,11 +122,24 @@ require_once("m_produccion.php");
             c_produccion::c_pasadas($insumo);
     }else if($accion == 'lstalmacen'){
         c_produccion::lstalmacen();
+    }else if($accion== 'parametros'){
+        $produccion = $_POST['produccion'];
+        c_produccion::c_parametros($produccion);
     }
 
  
     class c_produccion
     {
+
+        static function c_parametros($produccion){
+            $m_formula = new m_produccion();
+            $cadena = "COD_PRODUCCION = '$produccion'";
+            $parametros = $m_formula->m_buscar('V_PARAMETROS_PRODUCCION',$cadena);
+            $dato = array('dato' => $parametros);
+            echo json_encode($dato,JSON_FORCE_OBJECT); 
+        }
+
+
         static function c_buscarxformula()
         {
             $producto = array();

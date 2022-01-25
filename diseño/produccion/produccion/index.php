@@ -3,11 +3,11 @@
 if (session_status() == PHP_SESSION_NONE) {
     session_start();
 }
-$ofi = $_SESSION["ofi"];
+/*$ofi = $_SESSION["ofi"];
 $zon = $_SESSION["zon"];
 $cod = $_SESSION["cod"];
 
-require_once("./menu/index.php");
+require_once("./menu/index.php");*/
 ?>
 
 <!DOCTYPE html>
@@ -47,11 +47,15 @@ require_once("./menu/index.php");
         <title>Registro de producción</title>
    </header>
    <section>  
+        <div class="ajax-loader">
+          <img src="loading.gif" class="img-responsive" />
+        </div> 
         <div class="main"> 
+            
           <form style="margin-bottom: 0px;" id="frmproduccion">
-                  <input type="text" id="vroficina" style="display: none;" value="<?php echo $ofi?>"/>
-                  <input type="text" id="vrzona" style="display: none;" value="<?php echo  $zon?>"/>
-                  <input type="text" id="vrcodpersonal" style="display: none;" value="<?php echo $cod?>"/>
+                  <input type="text" id="vroficina" style="display: none;" value="<?php echo 'SMP2'//$ofi?>"/>
+                  <input type="text" id="vrzona" style="display: none;" value="<?php echo  'SMP2'//$zon?>"/>
+                  <input type="text" id="vrcodpersonal" style="display: none;" value="<?php echo '0215'//$cod?>"/>
                 
               <div class="row mb-3">
                   <div class="col">
@@ -96,7 +100,7 @@ require_once("./menu/index.php");
                     </div>  
                   </div>
                 </div>
-                <div class="row"> 
+                <div class="row mb-3"> 
                   <div class="col-auto">
                     <label>Cavidades</label>
                     <input type="text" id="txtcavidades" name="txtcavidades" class="form-control">
@@ -115,368 +119,48 @@ require_once("./menu/index.php");
                     <input type="text" id="txtprodcant" name="txtprodcant" class="form-control">
                   </div>
                 </div>  
-                <div class="row">
+                <div class="row mb-5">
                   <div class="col-auto">
-                      <label >Almacen</label>
-                      <select class="form-select"  id="slctipoalmacen"  name="slctipoalmacen">
+                      <select class="form-select"  id="slctipoalmacen"  name="slctipoalmacen" class="btn btn-primary mb-2 pull-left">
                         <option value="" selected>Seleccion almacen</option>
                       </select>
+                  </div>
+                  
+                    <div class="col-auto" >
+                        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#mdparametros" style="float: right;">
+                          Parametros
+                        </button>
                     </div>
-                </div>
-
-                
-                <div class="row">
-                  <div class="col g-4">
-                      <center><label class="titulos">Temperatura</label></center>
-                  </div>
-                </div>
-
-              
-                <table class="table">
-                  <thead>
-                    <tr>
-                      <th class="thtitulo">#1</th>
-                      <th class="thtitulo">#2</th>
-                      <th class="thtitulo">#3</th>
-                      <th class="thtitulo">#4</th>
-                      <th class="thtitulo">#5</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr>
-                      <td>
-                        <input type="number" id="txttemp1" name="txttemp1" class="form-control">
-                      </td>
-                      <td>
-                        <input type="number" id="txttemp2" name="txttemp2" class="form-control">
-                      </td>
-                      <td>
-                        <input type="number" id="txttemp3" name="txttemp3" class="form-control">
-                      </td>
-                      <td>
-                        <input type="number" id="txttemp4" name="txttemp4" class="form-control">
-                      </td>
-                      <td>
-                        <input type="number" id="txttemp5" name="txttemp5" class="form-control">
-                      </td>
-                    </tr>
-                  </tbody>
-                </table>
-              
-
-              <div class="row">
-                  <div class="col g-4">
-                      <center><label class="titulos">Botadores Expul.</label></center>
-                  </div>
-              </div>
-                <table class="table">
-                  <thead>
-                    <tr>
-                      <th class="thtitulo">#</th>
-                      <th class="thtitulo">#1</th>
-                      <th class="thtitulo">#2</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr>
-                      <td>
-                       <label>Presión</label>
-                      </td>
-                      <td>
-                        <input type="number" id="presexplu1" name="presexplu1" class="form-control">
-                      </td>
-                      <td>
-                        <input type="number" id="presexplu2" name="presexplu2" class="form-control">
-                      </td>
-                    </tr>
-                    <tr>
-                      <td>
-                        <label>Velocidad</label>
-                      </td>
-                      <td>
-                        <input type="number"  id="velexplu1" name="velexplu1"  class="form-control">
-                      </td>
-                      <td>
-                        <input type="number"  id="velexplu2" name="velexplu2"  class="form-control">
-                      </td>
-                    </tr>
-                    <tr>
-                      <td>
-                        <label>Pisición</label>
-                      </td>
-                      <td>
-                        <input type="number" id="pisiexplu1" name="pisiexplu1" class="form-control">
-                      </td>
-                      <td>
-                        <input type="number" id="pisiexplu2" name="pisiexplu2" class="form-control">
-                      </td>
-                    </tr>
-                  </tbody>
-                </table>
-
-              <div class="row">
-                  <div class="col g-4">
-                      <center><label class="titulos">Botadores Contrac.</label></center>
-                  </div>
-              </div>
-
-             
-                <table class="table">
-                    <thead>
-                      <tr>
-                        <th class="thtitulo">#2</th>
-                        <th class="thtitulo">#1</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <tr>
-                        <td>
-                          <input type="number" id="contrac1" name="contrac1" class="form-control">
-                        </td>
-                        <td>
-                          <input type="number"  id="contrac2" name="contrac2" class="form-control">
-                        </td>
-                      </tr>
-                      <tr>
-                        <td>
-                          <input type="number" id="contrac3" name="contrac3" class="form-control">
-                        </td>
-                        <td>
-                          <input type="number" id="contrac4" name="contrac4" class="form-control">
-                        </td>
-                      </tr>
-                    </tbody>
-                </table>
-           
-              <div class="row">
-                  <div class="col g-4">
-                      <center><label class="titulos">Carga</label></center>
-                  </div>
-              </div>
-             
-                <table class="table">
-                    <thead>
-                      <tr>
-                        <th class="thtitulo">P.ATRA</th>
-                        <th class="thtitulo">#1</th>
-                        <th class="thtitulo">#2</th>
-                        <th class="thtitulo">#3</th>
-                        <th class="thtitulo">Succiona</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <tr>
-                        <td>
-                        <label class="tdtexto">Presión</label>
-                        </td>
-                        <td>
-                          <input type="number" id="cargapres1" name="cargapres1" class="form-control">
-                        </td>
-                        <td>
-                          <input type="number" id="cargapres2" name="cargapres2" class="form-control">
-                        </td>
-                        <td>
-                          <input type="number"  id="cargapres3" name="cargapres3"class="form-control">
-                        </td>
-                        <td>
-                          <input type="number" id="cargapresucc" name="cargapresucc" class="form-control">
-                        </td>
-                      </tr> 
-                      <tr>
-                        <td>
-                          <label class="tdtexto">Velocidad</label>
-                        </td>
-                        <td>
-                          <input type="number" id="cargavel1" name="cargavel1" class="form-control">
-                        </td>
-                        <td>
-                          <input type="number" id="cargavel2" name="cargavel2" class="form-control">
-                        </td>
-                        <td>
-                          <input type="number" id="cargavel3" name="cargavel3" class="form-control">
-                        </td>
-                        <td>
-                          <input type="number" id="cargavelsucc" name="cargavelsucc" class="form-control">
-                        </td>
-                      </tr>
-                      <tr>
-                        <td>
-                          <label>Posición</label>
-                        </td>
-                        <td>
-                          <input type="number" id="cargapisi1" name="cargapisi1" class="form-control">
-                        </td>
-                        <td>
-                          <input type="number" id="cargapisi2" name="cargapisi2" class="form-control">
-                        </td>
-                        <td>
-                          <input type="number" id="cargapisi3" name="cargapisi3" class="form-control">
-                        </td>
-                        <td>
-                          <input type="number" id="cargapisisucci" name="cargapisisucci" class="form-control">
-                        </td>
-                      </tr>
-                    </tbody>
-                  </table>
-
-              <div class="row">
-                  <div class="col g-4">
-                      <center><label class="titulos">Inyeccion</label></center>
-                  </div>
-              </div>
-                <table class="table">
-                    <thead>
-                      <tr>
-                        <th class="thtitulo"></th>
-                        <th class="thtitulo">#4</th>
-                        <th class="thtitulo">#3</th>
-                        <th class="thtitulo">#2</th>
-                        <th class="thtitulo">#1</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <tr>
-                        <td>
-                          <label>Presión</label>
-                        </td>
-                        <td>
-                          <input type="number" id="inyecpres4" name="inyecpres4" class="form-control">
-                        </td>
-                        <td>
-                          <input type="number" id="inyecpres3" name="inyecpres3" class="form-control">
-                        </td>
-                        <td>
-                          <input type="number" id="inyecpres2" name="inyecpres2" class="form-control">
-                        </td>
-                        <td>
-                          <input type="number" id="inyecpres1" name="inyecpres1"  class="form-control">
-                        </td>
-                      </tr>
-                      <tr>
-                        <td>
-                          <label>Velocidad</label>
-                        </td>
-                        <td>
-                          <input type="number" id="inyecvelo4" name="inyecvelo4" class="form-control">
-                        </td>
-                        <td>
-                          <input type="number" id="inyecvelo3" name="inyecvelo3" class="form-control">
-                        </td>
-                        <td>
-                          <input type="number" id="inyecvelo2" name="inyecvelo2" class="form-control">
-                        </td>
-                        <td>
-                          <input type="number" id="inyecvelo1" name="inyecvelo1" class="form-control">
-                        </td>
-                      </tr>
-                      <tr>
-                        <td>
-                          <label>Posicion</label>
-                        </td>
-                        <td>
-                          <input type="number" id="inyecposi4" name="inyecposi4" class="form-control">
-                        </td>
-                        <td>
-                          <input type="number" id="inyecposi3" name="inyecposi3" class="form-control">
-                        </td>
-                        <td>
-                          <input type="number" id="inyecposi2" name="inyecposi2" class="form-control">
-                        </td>
-                        <td>
-                          <input type="number" id="inyecposi1" name="inyecposi1" class="form-control">
-                        </td>
-                      </tr>
-                      <tr>
-                        <th scope="row"></th>
-                        <th scope="row"></th>
-                        <th scope="row"></th>
-                        <td colspan="1" class="thtitulo">Tiempo</td>
-                        <td><input type="number" id="inyectiemp" name="inyectiemp" class="form-control"></td>
-                      </tr>
-                    </tbody>
-                </table>
-
-                <table class="table">
-                    <thead>
-                      <tr>
-                        <th class="thtitulo">Presion</th>
-                        <th class="thtitulo">#3</th>
-                        <th class="thtitulo">#2</th>
-                        <th class="thtitulo">#1</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <tr>
-                        <td>
-                          <label>Velocidad</label>
-                        </td>
-                        <td>
-                          <input type="number" id="velocidad3" name="velocidad3" class="form-control">
-                        </td>
-                        <td>
-                          <input type="number" id="velocidad2" name="velocidad2" class="form-control">
-                        </td>
-                        <td>
-                          <input type="number" id="velocidad1" name="velocidad1" class="form-control">
-                        </td>
-                      </tr>
-                      <tr>
-                        <td>
-                          <label>Posicion</label>
-                        </td>
-                        <td>
-                          <input type="number" id="posicion3" name="posicion3" class="form-control">
-                        </td>
-                        <td>
-                          <input type="number"  id="posicion2" name="posicion2" class="form-control">
-                        </td>
-                        <td>
-                          <input type="number" id="posicion1" name="posicion1" class="form-control">
-                        </td>
-                      </tr>
-                      <tr>
-                        <th scope="row"></th>
-                        <th scope="row"></th>
-                        <td colspan="1" class="thtitulo">Tiempo</td>
-                        <td><input type="number" id="tiempo" name="tiempo" class="form-control"></td>
-                      </tr>
-                    </tbody>
-                </table>
-
-                <div class="row">
-                    <div class="col">
-
-                    </div>
-                </div>
-                
-                <div class="table-responsive" style="overflow: scroll;height: 150px;">
-                  <table class="table" id="tbmateriales">
-                    <thead>
-                        <tr>
-                          <th class="thtitulo" style="display: none;">Codigo</th>
-                          <th class="thtitulo">Insumo</th>
-                          <th class="thtitulo">Cantidad</th>
-                          <th class="thtitulo">Cantidad por usar</th>
-                          <th class="thtitulo">Acciones</th>
-                        </tr>
-                    </thead>
-                    <tbody id="tbdmateiales"> 
-                    </tbody>  
-                  </table>
                 </div>  
-                <table class="table" id="tbpasadas" style="display: none;">
-                  <thead>
-                    <tr>
-                      <th>insumo</th>
-                      <th>pasadas</th>
-                      <th>nombre</th>
-                      <th>cantidad</th>
-                      <th>tipo</th>
-                    </tr>
-                  </thead>
-                  <tbody id="tbdpasadas">
-                  </tbody>  
-                </table>   
+                <div class="table-responsive" style="overflow: scroll;height: 337px;">
+                        <table class="table" id="tbmateriales">
+                          <thead>
+                              <tr>
+                                <th class="thtitulo" style="display: none;">Codigo</th>
+                                <th class="thtitulo">Insumo</th>
+                                <th class="thtitulo">Cantidad</th>
+                                <th class="thtitulo">Cantidad por usar</th>
+                                <th class="thtitulo">Acciones</th>
+                              </tr>
+                          </thead>
+                          <tbody id="tbdmateiales"> 
+                          </tbody>  
+                        </table>
+                    </div>  
+                    <table class="table" id="tbpasadas" style="display: none;">
+                      <thead>
+                        <tr>
+                          <th>insumo</th>
+                          <th>pasadas</th>
+                          <th>nombre</th>
+                          <th>cantidad</th>
+                          <th>tipo</th>
+                        </tr>
+                      </thead>
+                      <tbody id="tbdpasadas">
+                      </tbody>  
+                    </table> 
+                    
           </form>
             <div class="row">
                <div class="col g-4 divbotones">
@@ -492,9 +176,396 @@ require_once("./menu/index.php");
                    </button>
                </div> 
             </div> 
-        </div>     
+        </div>
+          
     </section>
 
+    <div class="modal fade" id="mdparametros" tabindex="-1"  data-bs-keyboard="false" data-bs-backdrop="static" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">Parametros de producción</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <form id="frmparametros">
+              <ul class="nav nav-tabs" id="myTab" role="tablist">
+                <li class="nav-item" role="presentation">
+                  <button class="nav-link active" id="home-tab" data-bs-toggle="tab" data-bs-target="#home" type="button" role="tab" aria-controls="home" aria-selected="true">Temperatura</button>
+                </li>
+                <li class="nav-item" role="presentation">
+                  <button class="nav-link" id="profile-tab" data-bs-toggle="tab" data-bs-target="#profile" type="button" role="tab" aria-controls="profile" aria-selected="false">Carga</button>
+                </li>
+                <li class="nav-item" role="presentation">
+                  <button class="nav-link" id="contact-tab" data-bs-toggle="tab" data-bs-target="#contact" type="button" role="tab" aria-controls="contact" aria-selected="false">Insumos</button>
+                </li>
+              </ul>
+              <div class="tab-content" id="myTabContent">
+                <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
+                    <!--<div class="row">
+                      <div class="col g-2">
+                          <center><label class="titulos">Temperatura</label></center>
+                      </div>
+                    </div>-->
+                    <table class="table">
+                      <thead>
+                        <tr>
+                          <th class="thtitulo">#1</th>
+                          <th class="thtitulo">#2</th>
+                          <th class="thtitulo">#3</th>
+                          <th class="thtitulo">#4</th>
+                          <th class="thtitulo">#5</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr>
+                          <td>
+                            <input type="number" id="txttemp1" name="txttemp1" class="form-control">
+                          </td>
+                          <td>
+                            <input type="number" id="txttemp2" name="txttemp2" class="form-control">
+                          </td>
+                          <td>
+                            <input type="number" id="txttemp3" name="txttemp3" class="form-control">
+                          </td>
+                          <td>
+                            <input type="number" id="txttemp4" name="txttemp4" class="form-control">
+                          </td>
+                          <td>
+                            <input type="number" id="txttemp5" name="txttemp5" class="form-control">
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  
+
+                  <div class="row">
+                      <div class="col g-1">
+                          <center><label class="titulos">Botadores Expul.</label></center>
+                      </div>
+                  </div>
+                    <table class="table">
+                      <thead>
+                        <tr>
+                          <th class="thtitulo">#</th>
+                          <th class="thtitulo">#1</th>
+                          <th class="thtitulo">#2</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr>
+                          <td>
+                          <label>Presión</label>
+                          </td>
+                          <td>
+                            <input type="number" id="presexplu1" name="presexplu1" class="form-control">
+                          </td>
+                          <td>
+                            <input type="number" id="presexplu2" name="presexplu2" class="form-control">
+                          </td>
+                        </tr>
+                        <tr>
+                          <td>
+                            <label>Velocidad</label>
+                          </td>
+                          <td>
+                            <input type="number"  id="velexplu1" name="velexplu1"  class="form-control">
+                          </td>
+                          <td>
+                            <input type="number"  id="velexplu2" name="velexplu2"  class="form-control">
+                          </td>
+                        </tr>
+                        <tr>
+                          <td>
+                            <label>Pisición</label>
+                          </td>
+                          <td>
+                            <input type="number" id="pisiexplu1" name="pisiexplu1" class="form-control">
+                          </td>
+                          <td>
+                            <input type="number" id="pisiexplu2" name="pisiexplu2" class="form-control">
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
+
+                  <div class="row">
+                      <div class="col g-1">
+                          <center><label class="titulos">Botadores Contrac.</label></center>
+                      </div>
+                  </div>
+
+                
+                    <table class="table">
+                        <thead>
+                          <tr>
+                            <th class="thtitulo">#2</th>
+                            <th class="thtitulo">#1</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <tr>
+                            <td>
+                              <input type="number" id="contrac1" name="contrac1" class="form-control">
+                            </td>
+                            <td>
+                              <input type="number"  id="contrac2" name="contrac2" class="form-control">
+                            </td>
+                          </tr>
+                          <tr>
+                            <td>
+                              <input type="number" id="contrac3" name="contrac3" class="form-control">
+                            </td>
+                            <td>
+                              <input type="number" id="contrac4" name="contrac4" class="form-control">
+                            </td>
+                          </tr>
+                        </tbody>
+                    </table>
+
+
+                </div>
+                <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
+                    <!--<div class="row">
+                      <div class="col g-1">
+                          <center><label class="titulos">Carga</label></center>
+                      </div>
+                    </div>-->
+                    <table class="table">
+                        <thead>
+                          <tr>
+                            <th class="thtitulo">P.ATRA</th>
+                            <th class="thtitulo">#1</th>
+                            <th class="thtitulo">#2</th>
+                            <th class="thtitulo">#3</th>
+                            <th class="thtitulo">Succiona</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <tr>
+                            <td>
+                            <label class="tdtexto">Presión</label>
+                            </td>
+                            <td>
+                              <input type="number" id="cargapres1" name="cargapres1" class="form-control">
+                            </td>
+                            <td>
+                              <input type="number" id="cargapres2" name="cargapres2" class="form-control">
+                            </td>
+                            <td>
+                              <input type="number"  id="cargapres3" name="cargapres3"class="form-control">
+                            </td>
+                            <td>
+                              <input type="number" id="cargapresucc" name="cargapresucc" class="form-control">
+                            </td>
+                          </tr> 
+                          <tr>
+                            <td>
+                              <label class="tdtexto">Velocidad</label>
+                            </td>
+                            <td>
+                              <input type="number" id="cargavel1" name="cargavel1" class="form-control">
+                            </td>
+                            <td>
+                              <input type="number" id="cargavel2" name="cargavel2" class="form-control">
+                            </td>
+                            <td>
+                              <input type="number" id="cargavel3" name="cargavel3" class="form-control">
+                            </td>
+                            <td>
+                              <input type="number" id="cargavelsucc" name="cargavelsucc" class="form-control">
+                            </td>
+                          </tr>
+                          <tr>
+                            <td>
+                              <label>Posición</label>
+                            </td>
+                            <td>
+                              <input type="number" id="cargapisi1" name="cargapisi1" class="form-control">
+                            </td>
+                            <td>
+                              <input type="number" id="cargapisi2" name="cargapisi2" class="form-control">
+                            </td>
+                            <td>
+                              <input type="number" id="cargapisi3" name="cargapisi3" class="form-control">
+                            </td>
+                            <td>
+                              <input type="number" id="cargapisisucci" name="cargapisisucci" class="form-control">
+                            </td>
+                          </tr>
+                        </tbody>
+                      </table>
+
+                  <div class="row">
+                      <div class="col g-1">
+                          <center><label class="titulos">Inyeccion</label></center>
+                      </div>
+                  </div>
+                    <table class="table">
+                        <thead>
+                          <tr>
+                            <th class="thtitulo"></th>
+                            <th class="thtitulo">#4</th>
+                            <th class="thtitulo">#3</th>
+                            <th class="thtitulo">#2</th>
+                            <th class="thtitulo">#1</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <tr>
+                            <td>
+                              <label>Presión</label>
+                            </td>
+                            <td>
+                              <input type="number" id="inyecpres4" name="inyecpres4" class="form-control">
+                            </td>
+                            <td>
+                              <input type="number" id="inyecpres3" name="inyecpres3" class="form-control">
+                            </td>
+                            <td>
+                              <input type="number" id="inyecpres2" name="inyecpres2" class="form-control">
+                            </td>
+                            <td>
+                              <input type="number" id="inyecpres1" name="inyecpres1"  class="form-control">
+                            </td>
+                          </tr>
+                          <tr>
+                            <td>
+                              <label>Velocidad</label>
+                            </td>
+                            <td>
+                              <input type="number" id="inyecvelo4" name="inyecvelo4" class="form-control">
+                            </td>
+                            <td>
+                              <input type="number" id="inyecvelo3" name="inyecvelo3" class="form-control">
+                            </td>
+                            <td>
+                              <input type="number" id="inyecvelo2" name="inyecvelo2" class="form-control">
+                            </td>
+                            <td>
+                              <input type="number" id="inyecvelo1" name="inyecvelo1" class="form-control">
+                            </td>
+                          </tr>
+                          <tr>
+                            <td>
+                              <label>Posicion</label>
+                            </td>
+                            <td>
+                              <input type="number" id="inyecposi4" name="inyecposi4" class="form-control">
+                            </td>
+                            <td>
+                              <input type="number" id="inyecposi3" name="inyecposi3" class="form-control">
+                            </td>
+                            <td>
+                              <input type="number" id="inyecposi2" name="inyecposi2" class="form-control">
+                            </td>
+                            <td>
+                              <input type="number" id="inyecposi1" name="inyecposi1" class="form-control">
+                            </td>
+                          </tr>
+                          <tr>
+                            <th scope="row"></th>
+                            <th scope="row"></th>
+                            <th scope="row"></th>
+                            <td colspan="1" class="thtitulo">Tiempo</td>
+                            <td><input type="number" id="inyectiemp" name="inyectiemp" class="form-control"></td>
+                          </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="tab-pane fade" id="contact" role="tabpanel" aria-labelledby="contact-tab">
+
+                <table class="table">
+                        <thead>
+                          <tr>
+                            <th class="thtitulo">Presion</th>
+                            <th class="thtitulo">#3</th>
+                            <th class="thtitulo">#2</th>
+                            <th class="thtitulo">#1</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <tr>
+                            <td>
+                              <label>Velocidad</label>
+                            </td>
+                            <td>
+                              <input type="number" id="velocidad3" name="velocidad3" class="form-control">
+                            </td>
+                            <td>
+                              <input type="number" id="velocidad2" name="velocidad2" class="form-control">
+                            </td>
+                            <td>
+                              <input type="number" id="velocidad1" name="velocidad1" class="form-control">
+                            </td>
+                          </tr>
+                          <tr>
+                            <td>
+                              <label>Posicion</label>
+                            </td>
+                            <td>
+                              <input type="number" id="posicion3" name="posicion3" class="form-control">
+                            </td>
+                            <td>
+                              <input type="number"  id="posicion2" name="posicion2" class="form-control">
+                            </td>
+                            <td>
+                              <input type="number" id="posicion1" name="posicion1" class="form-control">
+                            </td>
+                          </tr>
+                          <tr>
+                            <th scope="row"></th>
+                            <th scope="row"></th>
+                            <td colspan="1" class="thtitulo">Tiempo</td>
+                            <td><input type="number" id="tiempo" name="tiempo" class="form-control"></td>
+                          </tr>
+                        </tbody>
+                    </table>
+                    
+                </div>
+              </div>
+            </form>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cerrar</button>
+            <button type="button" class="btn btn-primary" id="btnmdgmolde">Guardar</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    
 
     <div class="modal fade" id="mditemformula" tabindex="-1" data-bs-keyboard="false" data-bs-backdrop="static" aria-hidden="true">
       <div class="modal-dialog">
