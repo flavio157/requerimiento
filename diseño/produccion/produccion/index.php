@@ -527,8 +527,8 @@ require_once("./menu/index.php");*/
             </form>
           </div>
           <div class="modal-footer">
-            <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cerrar</button>
-            <button type="button" class="btn btn-primary" id="btnmdgmolde">Guardar</button>
+            <!--<button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cerrar</button>-->
+            <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Confirmar</button>
           </div>
         </div>
       </div>

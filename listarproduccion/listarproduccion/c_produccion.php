@@ -131,8 +131,8 @@ require_once("m_produccion.php");
                     $fechincidencia,$horaincidencia,$observacion,$usu,$cantidad,$tipomerma);
                     print_r($merma);
                 }else if($t == 'r'){
-                    $residuos = $m_produccion->m_guardarresiduos($codproduccion,$observacion,$usu);
-                    //print_r($residuos);
+                    $residuos = $m_produccion->m_guardarresiduos($codproduccion,$observacion,$usu,$cantidad);
+                    print_r($residuos);
     
                 }else if ($t == 'd'){
                     $desechos = $m_produccion->m_guardardesechos($codproduccion,$observacion,$usu,$cantidad);

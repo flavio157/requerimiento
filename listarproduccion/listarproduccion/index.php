@@ -131,7 +131,7 @@ $cod = $_SESSION["cod"];*/
                     </div>
                     <div class="row">
                       <div class="col">
-                        <a class="btn btn-success" id="btnlstformula" >
+                        <a class="btn btn-success" id="btnimprimir" >
                           <i class="icon-print" title="Imprimir"></i>
                         </a>
                       </div>

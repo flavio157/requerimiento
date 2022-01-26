@@ -1,5 +1,5 @@
 var sugxformula =[]; canform = '';celda = '';codproitem = '';celdatipo =''; codprodsele ='';
-var sugxmolde = []; sugxcli= [];usu=''; tbinsumos =[]; total = 0.000;nuedatos = [];modified = false;
+var sugxmolde = []; sugxcli= [];usu=''; tbinsumos =[]; total = 0.000;nuedatos = [];modified = 0;
 $(document).ready(function () {
     autocompletarformula();lstalmacen();
     autocompletamolde('P','');autocompletarcli();
@@ -66,11 +66,13 @@ $(document).ready(function () {
     })
 
     $("#btnclose").on('click',function() {
-        $("#tbmdinsumosa > tbody").empty();
+        $('#tbmdinsumosa').find("tr:gt(0)").remove(); 
+        $('#tbmdinsumos').find("tr:gt(0)").remove();   
     })
 
     $("#btncancelar").on('click',function() {
-        $("#tbmdinsumosa > tbody").empty();
+        $('#tbmdinsumosa').find("tr:gt(0)").remove();  
+        $('#tbmdinsumos').find("tr:gt(0)").remove();  
     });
 
     $(document).on('click',"#btnmdinsumo",function() {
@@ -143,16 +145,13 @@ $(document).ready(function () {
     });
 
     $("#btngproduccion").on('click',function() {
-        if(modified == true){
-            console.log("cambio");
-        }
-      /*  var td =  $("#tbdpasadas tr");
+        var td =  $("#tbdpasadas tr");
         var tds = [];
         for (let l = 0; l < td.length; l++) {
             tds[l] =[$(td[l]).find("td")[0].innerHTML,$(td[l]).find("td")[1].innerHTML,
             $(td[l]).find("td")[3].innerHTML,$(td[l]).find("td")[4].innerHTML]
         }
-        guardarprod(tds);*/
+        guardarprod(tds);
     })
 
     $('#txtbuscli').keydown(function(e) {
@@ -167,8 +166,8 @@ $(document).ready(function () {
         lmp();   
     });
 
-    $("input, select").change(function () {   
-		modified = true;  
+    $("#frmparametros input").change(function () {   
+		modified = 1;  
 	}); 
 });
 
@@ -189,48 +188,46 @@ function autocompletarformula() {
 }
 
 
-function parametros(produccion) {
-    console.log(produccion);
+function parametros(formula) {
     $.ajax({
         dataType:'text',
         type: 'POST', 
         url:  'c_produccion.php',
         data:{
-            "accion" : 'parametros',"produccion":produccion
+            "accion" : 'parametros',"produccion":formula
         } ,
         success:  function(r){
-            obj = JSON.parse(r)
+            obj = JSON.parse(r);
             $.each(obj['dato'], function(i, item) {
                 $("#txttemp1").val(item[5]);$("#txttemp2").val(item[6]);
                 $("#txttemp3").val(item[7]);$("#txttemp4").val(item[8]);
-                $("#txttemp5").va(item[9]);$("#presexplu1").val(item[10]);
-                $("#presexplu2").val(item[6]);$("#velexplu1").val(item[6]);
-                $("#velexplu2").val(item[6]);$("#pisiexplu1").val(item[6]);
-                $("#pisiexplu2").val(item[6]);$("#contrac1").val(item[6]);
-                $("#contrac2").val(item[6]);$("#contrac3").val(item[6]);
-                $("#contrac4").val(item[6]);$("#cargapres1").val(item[6]);
-                $("#cargapres2").val(item[6]);$("#cargapres3").val(item[6])
-                $("#cargapresucc").val(item[6]);$("#cargavel1").val(item[6])
-                $("#cargavel2").val(item[6]);$("#cargavel3").val(item[6])
-                $("#cargavelsucc").val(item[6]);$("#cargapisi1").val(item[6]);
-                $("#cargapisi2").val(item[6]);$("#cargapisi3").val(item[6])
-                $("#cargapisisucci").val(item[6]);$("#inyecpres4").val(item[6])
-                $("#inyecpres3").val(item[6]);$("#inyecpres2").val(item[6])
-                $("#inyecpres1").val(item[6]);$("#inyecvelo4").val(item[6])
-                $("#inyecvelo3").val(item[6]);$("#inyecvelo2").val(item[6])
-                $("#inyecvelo1").val(item[6]);$("#inyecposi4").val(item[6]);
-                $("#inyecposi3").val(item[6]);$("#inyecposi2").val(item[6])
-                $("#inyecposi1").val(item[6]);$("#inyectiemp").val(item[6])
-                $("#velocidad3").val(item[6]);$("#velocidad2").val(item[6])
-                $("#velocidad1").val(item[6]);$("#posicion3").val(item[6])
-                $("#posicion2").val(item[6]);$("#posicion1").val(item[6])
-                $("#tiempo").val(item[6])
-                
+                $("#txttemp5").val(item[9]);$("#presexplu1").val(item[10]);
+                $("#presexplu2").val(item[11]);$("#velexplu1").val(item[12]);
+                $("#velexplu2").val(item[13]);$("#pisiexplu1").val(item[14]);
+                $("#pisiexplu2").val(item[15]);$("#contrac1").val(item[16]);
+                $("#contrac2").val(item[17]);$("#contrac3").val(item[18]);
+                $("#contrac4").val(item[19]);$("#cargapres1").val(item[20]);
+                $("#cargapres2").val(item[21]);$("#cargapres3").val(item[22])
+                $("#cargapresucc").val(item[23]);$("#cargavel1").val(item[24])
+                $("#cargavel2").val(item[25]);$("#cargavel3").val(item[26])
+                $("#cargavelsucc").val(item[27]);$("#cargapisi1").val(item[28]);
+                $("#cargapisi2").val(item[29]);$("#cargapisi3").val(item[30])
+                $("#cargapisisucci").val(item[31]);$("#inyecpres4").val(item[34])
+                $("#inyecpres3").val(item[35]);$("#inyecpres2").val(item[36])
+                $("#inyecpres1").val(item[37]);$("#inyecvelo4").val(item[38])
+                $("#inyecvelo3").val(item[39]);$("#inyecvelo2").val(item[40])
+                $("#inyecvelo1").val(item[41]);$("#inyecposi4").val(item[42]);
+                $("#inyecposi3").val(item[43]);$("#inyecposi2").val(item[44])
+                $("#inyecposi1").val(item[45]);$("#inyectiemp").val(item[46])
+                $("#velocidad3").val(item[47]);$("#velocidad2").val(item[48])
+                $("#velocidad1").val(item[49]);$("#posicion3").val(item[50])
+                $("#posicion2").val(item[51]);$("#posicion1").val(item[52])
+                $("#tiempo").val(item[53])
             });
+        
         }
     });    
 }
-
 
 
 function stock(stock,insumo) {
@@ -282,8 +279,8 @@ function lstitemsfor(form) {
 function createtable(obj) {
     b2 = "<a id='btnactualizar' style='margin-right: 2px;margin-bottom: 1px;' class='btn btn-primary  btn-sm' data-bs-toggle='modal' data-bs-target='#mditemformula'>"+
           "<i class='icon-pencil' title='Modificar material'></i></a>";
-    $("#tbmateriales > tbody").empty();
-    $("#tbpasadas > tbody").empty();
+    $('#tbmateriales').find("tr:gt(0)").remove();    
+    $('#tbpasadas').find("tr:gt(0)").remove(); 
     $.each(obj, function(i, item) {
         var fila='';
         fila +="<td class='tdcontent' style=display:none>"+item[1]+"</td>";
@@ -390,7 +387,11 @@ function guardarmolde(cli,molde,t) {
         type: 'POST', 
         url:  'c_produccion.php',
         data:frmmolde+"&accion=guardamolde&usu="+usu+"&codcli="+cli,
+        beforeSend: function () {
+            $('.ajax-loader').css("visibility", "visible");
+        },
         success:  function(r){
+           
             obj = JSON.parse(r);
             if(obj['e'] == true){
                 $("#txtcodmolde").val(obj['c']);autocompletamolde(t,cli);
@@ -399,6 +400,8 @@ function guardarmolde(cli,molde,t) {
                 document.getElementById("frmmdmolde").reset();
             }
             else  Mensaje1(obj['e'],"error");
+        },complete: function(){
+            $('.ajax-loader').css("visibility", "hidden");
         }
       });    
 }
@@ -410,6 +413,9 @@ function guardarclie(nomcli) {
         type: 'POST', 
         url:  'c_produccion.php',
         data:frmcli+"&accion=guardaclie&usu="+usu,
+        beforeSend: function () {
+            $('.ajax-loader').css("visibility", "visible");
+        },
         success:  function(e){
             obj = JSON.parse(e);
             if(obj['e'] == true){
@@ -419,7 +425,12 @@ function guardarclie(nomcli) {
                 $("#mdcliente").modal('hide');
                 document.getElementById("frmmdcliente").reset();
             }
-            else Mensaje1(obj['e'],"error")
+            else{
+                Mensaje1(obj['e'],"error")
+                $('.ajax-loader').css("visibility", "hidden");
+            } 
+        },complete: function(){
+            $('.ajax-loader').css("visibility", "hidden");
         }
       });
 }
@@ -447,7 +458,8 @@ function guardarprod(tds) {
         dataType:'text',
         type: 'POST', 
         url:  'c_produccion.php',
-        data:frmprod+"&"+frmparame+"&accion=guardaprod&usu="+usu+"&items="+JSON.stringify(materiales),
+        data:frmprod+"&"+frmparame+"&accion=guardaprod&usu="+usu+"&items="+JSON.stringify(materiales)+
+        "&modified="+modified,
         beforeSend: function () {
             $('.ajax-loader').css("visibility", "visible");
         },
@@ -455,6 +467,7 @@ function guardarprod(tds) {
             if(e == 1){
                 Mensaje1("Se registro la fabricacion del plastico","success");
                 lmp();
+                para = 0;
             }else{Mensaje1(e,"error")}
         },complete: function(){
             $('.ajax-loader').css("visibility", "hidden");
@@ -465,6 +478,7 @@ function guardarprod(tds) {
 function lmp() {
     disabled();
     document.getElementById("frmproduccion").reset();
+    document.getElementById("frmparametros").reset();
     $('#tbmateriales').find("tr:gt(0)").remove();    
     $('#tbpasadas').find("tr:gt(0)").remove(); 
 }
@@ -494,7 +508,7 @@ function buscarpasadas(insumo,material,cantidad) {
         },
         success:  function(e){
             var fila=''; obj = JSON.parse(e);
-            $("#tbmdinsumos > tbody").empty();
+            $("#tbmdinsumos").find("tr:gt(0)").remove(); 
             fila +="<td class='tdcontent' style=display:none>"+insumo+"</td>";
             fila +="<td >"+material+"</td>";
             fila +="<td >"+cantidad+"</td>";

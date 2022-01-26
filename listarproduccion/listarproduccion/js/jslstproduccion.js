@@ -1,8 +1,9 @@
 var usu = '';t = 'm';produccion='';cantxinsumo = '';
-var cab = 0;totalpaquete = 0;cantidad=0;var qrcode = '';faltacaja = 0 ;
+var cab = 0;totalpaquete = 0;cantidad=0;var qrcode = '';faltacaja = 0 ;sobra=0;
 $(document).ready(function () {
     lstitemsfor();
     hora();
+    disabled();
     usu = $("#vrcodpersonal").val();
 
     $('#tbproduccion').on('click', 'tbody tr', function(event) {
@@ -41,32 +42,6 @@ $(document).ready(function () {
         guardar(fechincidencia,horaincidencia,observacion,tipomerma,cantidad);
     });
 
-  /*  $("#btnagregarmater").on('click',function() {
-        var t = datosrepetidos('tbdreportinsu',$("#txtcodpro").val().trim());
-        if(!t){Mensaje1("Error ya se agrego el material","error") ; return};
-        b2 = "<a  style='margin-right: 2px;margin-bottom: 1px;' class='btn btn-primary  btn-sm'>"+
-        "<i class='icon-pencil' title='Modificar material'></i></a>"+
-        "<a id='btneliminar' style='margin-right: 2px;margin-bottom: 1px;' class='btn btn-danger  btn-sm'>"+
-        "<i class='icon-trash' title='Eliminar material'></i></a>";
-        if($("#txtcodpro").val().trim().length == 0 ){Mensaje1("Error seleccione insumo","error");}
-        if($("#txtcantidad").val().trim().length == 0 ){Mensaje1("Error ingrese cantidad","error");}
-        if($("#txtcantidad").val() > cantidad){Mensaje1("Error la cantidad no puede se mayor a la insumo utilizados","error");return;}
-        if($("#txtcantidad").val() == 0){Mensaje1("Errro ingrese cantidad","error");}
-        
-        array = [
-            a = [$("#txtcodpro").val(),'none',''],
-            b = [$("#txtinsumos").val(),'',''],
-            c = [$("#txtcantidad").val(),'',''],
-            d = [$("#slctipomerma").val(),'none',''],
-            i = [b2,'',''],
-        ]
-        _createtable2(array,'tbdreportinsu');
-        
-        $("#txtcodpro").val('');
-        $("#txtinsumos").val('');
-        $("#txtcantidad").val('');
-    });*/
-
     $(document).on('click','#btneliminar',function() {
         $(this).closest('tr').remove();
     });
@@ -77,6 +52,10 @@ $(document).ready(function () {
         $("#mdtotal").val());*/
      
     });
+
+    $(document).on('click','#btnfinalizar',function() {
+        $("#mdregiresiduo").modal('show');
+    })
 
     $(document).on('click','#btnavances',function(){
         $("#mdlote").val($(this).parents('tr').find('td:nth-child(4)').text());
@@ -102,21 +81,21 @@ $(document).ready(function () {
         }else{ $("#mdcajasxsacar").val('')}
     });
 
-    /*$("#btnmdinsumo").on('click',function(){
-        lstinsumo()
-    });*/
-
-    /*$(document).on('click','#btnselectmate',function(){
-        cantxinsumo = $(this).parents('tr').find('td:nth-child(4)').text();
-        $("#txtcodpro").val($(this).parents('tr').find('td:nth-child(2)').text());
-        $("#txtinsumos").val($(this).parents('tr').find('td:nth-child(3)').text());
-        cantidad = $(this).parents('tr').find('td:nth-child(4)').text();
-        $("#sltipoinsum").val($(this).parents('tr').find('td:nth-child(5)').text().trim());
-        $("#mdlstinsumos").modal('hide');
-    });*/
-
     $(document).on('click',"#btnocurencia",function(){
         lstocurrencia();
+    });
+
+    $(document).on('click',"#btnimprimir",function(){
+        cant=  $("#mdcajasxsacar").val();var fin = 1;
+        lote = $("#mdlote").val();
+        fecha = date();
+        peso = $("#mdpesoneto").val();
+        cantidad = $("#mdcantxcaja").val();
+        tara = $("#mdtara").val();
+        total = $("#mdtotal").val();
+        topaqu = (cantidad *  totalpaquete + sobra)
+        if(topaqu = total){fin == 0}else{fin == 1}
+        demoFromHTML(cant,lote,fecha,peso,cantidad,tara,total,fin);
     });
 
 });
@@ -232,8 +211,10 @@ function guardar(fechincidencia,horaincidencia,observacion,tipomerma,cantidad) {
         } ,
         success: function(e) {
             if(e==1){
-                mensaje = (t == 'm') ? "la merma" : (t == 'd') ? "el desecho" : "el residuo";
+                mensaje = (t == 'm') ? "la merma" : (t == 'd') ? "el desecho" : " los sobrantes";
                 Mensaje1("Se registro correctamente "+mensaje,"success"); 
+                if(t == 'm'){$("#btndesecho").removeAttr('disabled')}
+                if(t == 'd'){$("#btnresiduos").removeAttr('disabled');}
                 lmp(); enabled();t = 'm';hora();
             }else{
                 Mensaje1(e,"error");
@@ -263,15 +244,6 @@ function datosrepetidos(tabla,dato) {
   return true;
 }
 
-/*function itemstabla() {
-    var td =  $("#tbdreportinsu tr");
-    var tds = [];
-    for (let l = 0; l < td.length; l++) {
-        tds[l] =[$(td[l]).find("td")[0].innerHTML,$(td[l]).find("td")[2].innerHTML
-        ,$(td[l]).find("td")[3].innerHTML]
-    }
-    return tds;
-}*/
 
 function hora(){
     var laHora = new Date();
@@ -281,38 +253,6 @@ function hora(){
     if(horario<10) horario = "0" + horario;
     document.getElementById('horincidencia').value = horario+":"+minutero
 } 
-/*
-function lstinsumo(){
-    $.ajax({
-      dataType:'text',
-      type: 'POST', 
-      url:  'c_produccion.php',
-      data:{"accion" : 'insumo',"produccion" : produccion} ,
-      success:  function(response){
-          obj = JSON.parse(response);
-          if(obj['m'] == 1){
-            $("#tblmdinsumo > tbody").empty();
-            b2 ="<a id='btnselectmate' style='margin-right: 2px;margin-bottom: 1px;' class='btn btn-primary  btn-sm'>"+
-            "<i class='icon-edit' title='Registrar avances'></i></a>";
-            $.each(obj['dato'], function(i, item) {
-                var fila = '';
-                fila +="<td class='tdcontent' style=display:none>"+item[0]+"</td>";
-                fila +="<td style=display:none>"+item[1]+"</td>";
-                fila +="<td >"+item[2]+"</td>";
-                fila +="<td >"+item[3]+"</td>";
-                fila +="<td style=display:none>"+item[4]+"</td>";
-                fila +="<td class='tdcontent'>"+b2+"</td>";
-                var btn = document.createElement("TR");
-                btn.innerHTML=fila;
-                document.getElementById("tbdlmdinsumo").appendChild(btn);
-            });
-            $("#mdlstinsumos").modal('show');
-          }else
-          Mensaje1(obj['m'],"error");
-         
-      }
-    });
-}*/
 
 function guardaravances(frm,e){
     mdtotal = $("#mdtotal").val();
@@ -456,7 +396,7 @@ function demoFromHTML(cant,lote,fecha,peso,cantidad,tara,total,fin,avance) {
     for (let i = 0; i < cant; i++) {
         if(fin == 0 && (i+1) == cant && (total % cantidad) != 0 ){
             cantidad = total % cantidad; peso = (peso / cantidad)}
-        if(i % 2 == 0){x = 2; xr = 0; xx = 59}else{x = 107 ;xr=105; xx = 59 * 2.78}
+        if(i % 2 == 0){x = 2; xr = 0; xx = 59 ; xqr = 32}else{x = 107 ;xr=105; xx = 59 * 2.78;xqr = 59 *2.30}
         if(tipo == 8){doc.addPage(); tipo = 0;}
         if(tipo == 0 || tipo == 1){
             doc.rect(xr, 74 * 0, 105, 74.20)
@@ -470,13 +410,13 @@ function demoFromHTML(cant,lote,fecha,peso,cantidad,tara,total,fin,avance) {
                 doc.text('PESO TOTAL: '+(Number(peso)+ Number(tara)).toFixed(2) +" Kg",x, 29); //59
                 doc.text('LOTE: '+lote, xx, 29);
                 
-                doc.addImage(base64Image,'JPEG', xx, 33, 40, 40);
+                doc.addImage(base64Image,'JPEG', xqr, 33, 40, 40);
                 
                 tipo++;
         }else if(tipo  == 2 || tipo == 3){
             doc.rect(xr, 74 * 1, 105, 74.20)
                 doc.text('FECHA: '+fecha, x, 83);
-                doc.text('CANTIDAD: '+cantidad + " Uds.", xx, 83); //103
+                doc.text('CANTIDAD: '+cantidad + " Uds.", xqr, 83); //103
 
                 doc.text('PESO NETO: '+ Number(peso).toFixed(2) +" Kg",x, 93);
                 doc.text('TARA: '+ Number(tara).toFixed(2) +" Kg", xx, 93);
@@ -486,7 +426,7 @@ function demoFromHTML(cant,lote,fecha,peso,cantidad,tara,total,fin,avance) {
                 doc.text('LOTE: '+lote, xx, 103);
 
 
-                doc.addImage(base64Image,'JPEG', xx, 107, 40, 40);
+                doc.addImage(base64Image,'JPEG', xqr, 107, 40, 40);
                 tipo++;
 
         }else if(tipo  == 4 || tipo == 5){
@@ -501,7 +441,7 @@ function demoFromHTML(cant,lote,fecha,peso,cantidad,tara,total,fin,avance) {
                 doc.text('PESO TOTAL: '+(Number(peso)+ Number(tara)).toFixed(2) +" Kg", x, 177);
                 doc.text('LOTE: '+lote, xx, 177);
 
-                doc.addImage(base64Image,'JPEG', xx, 181, 40, 40);
+                doc.addImage(base64Image,'JPEG', xqr, 181, 40, 40);
                 tipo++;
 
         }else if(tipo  == 6 || tipo == 7){
@@ -515,11 +455,11 @@ function demoFromHTML(cant,lote,fecha,peso,cantidad,tara,total,fin,avance) {
                 doc.text('PESO TOTAL: '+(Number(peso)+ Number(tara)).toFixed(2) +" Kg", x, 251);
                 doc.text('LOTE: '+lote, xx, 251);
 
-                doc.addImage(base64Image,'JPEG', xx, 255, 40, 40);
+                doc.addImage(base64Image,'JPEG', xqr, 255, 40, 40);
                 tipo++;
         }
     }
-    updateimpresion(avance)
+    //updateimpresion(avance)
     window.open(doc.output('bloburl'), '_blank');
 }
 
@@ -551,4 +491,18 @@ function qr(fecha,lote){
         level: "H", 
     });
     
+}
+
+function date(){
+    n =  new Date();
+    y = n.getFullYear();
+    m = n.getMonth() + 1;
+    d = n.getDate();
+    if(m < 10) m = "0"+m;
+    return d + "/" + m + "/" + y;
+}
+
+function disabled() {
+    $("#btndesecho").prop("disabled", true);
+    $("#btnresiduos").prop("disabled",true);
 }

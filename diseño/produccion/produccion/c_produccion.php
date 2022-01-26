@@ -101,13 +101,14 @@ require_once("m_produccion.php");
         $tiempo = $_POST['tiempo'];  
         $usu = $_POST['usu'];
         $items =json_decode($_POST['items']);
+        $cambios = $_POST['modified'];
         c_produccion::c_guardarproduccion($codform,$produc,$sltipoprod,$cliente,$molde,$cavidades,$pesouni,$ciclo,$procant,
         $almacen,$tempera1,$tempera2,$tempera3,$tempera4,$tempera5,$presexplu1,$presexplu2,$velexplu1,
         $velexplu2,$pisiexplu1,$pisiexplu2,$contrac1,$contrac2,$contrac3,$contrac4,$cargapres1,$cargapres2,$cargapres3,
         $cargapresucc,$cargavel1,$cargavel2,$cargavel3,$cargavelsucc,$cargapisi1,$cargapisi2,$cargapisi3,$cargapisisucci,
         $inyecpres4,$inyecpres3,$inyecpres2,$inyecpres1,$inyecvelo4,$inyecvelo3,$inyecvelo2,$inyecvelo1,$inyecposi4,
         $inyecposi3,$inyecposi2,$inyecposi1,$inyectiemp,$velocidad3,$velocidad2,$velocidad1,$posicion3,$posicion2,
-        $posicion1,$tiempo,$usu,$items);
+        $posicion1,$tiempo,$usu,$items,$cambios);
     }else if($accion == 'externo'){
         $producto = $_POST['insumo'];
         $cantidad = $_POST['stocks'];
@@ -132,10 +133,11 @@ require_once("m_produccion.php");
     {
 
         static function c_parametros($produccion){
+            $para = 0;
             $m_formula = new m_produccion();
-            $cadena = "COD_PRODUCCION = '$produccion'";
-            $parametros = $m_formula->m_buscar('V_PARAMETROS_PRODUCCION',$cadena);
-            $dato = array('dato' => $parametros);
+            $parametros = $m_formula->m_ultimoregistro($produccion);
+            if(count($parametros) > 0){$para = 1;}
+            $dato = array('dato' => $parametros , 'para' => $para);
             echo json_encode($dato,JSON_FORCE_OBJECT); 
         }
 
@@ -233,6 +235,7 @@ require_once("m_produccion.php");
 
           static function c_guardarclie($nombre,$dire,$correo,$dni,$tel,$usu)
         {
+
             $mensaje = ''; $codigo = '';
             $regex = "/^[0-9]+$/";
             if(strlen($correo) != 0){
@@ -259,7 +262,11 @@ require_once("m_produccion.php");
             if(strlen(trim($mensaje)) == 0){
                 $m_producto = new m_produccion();
                 $c_cliente = $m_producto->m_guardarcliente(strtoupper($nombre),$dire,$correo,$dni,$tel,$usu);
-                $mensaje = $c_cliente[0]; $codigo = $c_cliente[1];
+                if($c_cliente != 1){
+                    $mensaje = $c_cliente; $codigo = '';
+                }else{
+                    $mensaje = $c_cliente[0]; $codigo = $c_cliente[1];
+                }
             }
             
             $dato = array('e' => $mensaje,'c' => $codigo);
@@ -277,12 +284,14 @@ require_once("m_produccion.php");
             else{
             $m_producto = new m_produccion();
             $c_molde = $m_producto->m_guardarmolde(strtoupper($nombre),$medidas,$usu,$codcliente);
-                $mensaje = $c_molde[0]; $codigo = $c_molde[1];
+                if($c_molde != 1){
+                    $mensaje = $c_molde; $codigo = '';
+                }else{
+                    $mensaje = $c_molde[0]; $codigo = $c_molde[1];
+                }
             }
-            $dato = array(
-                'e' =>  $mensaje,
-                'c' =>  $codigo
-            );
+            
+            $dato = array('e' =>  $mensaje,'c' =>  $codigo);
             echo json_encode($dato,JSON_FORCE_OBJECT);
         }
 
@@ -293,7 +302,7 @@ require_once("m_produccion.php");
         $cargapresucc,$cargavel1,$cargavel2,$cargavel3,$cargavelsucc,$cargapisi1,$cargapisi2,$cargapisi3,$cargapisisucci,
         $inyecpres4,$inyecpres3,$inyecpres2,$inyecpres1,$inyecvelo4,$inyecvelo3,$inyecvelo2,$inyecvelo1,$inyecposi4,
         $inyecposi3,$inyecposi2,$inyecposi1,$inyectiemp,$velocidad3,$velocidad2,$velocidad1,$posicion3,$posicion2,
-        $posicion1,$tiempo,$usu,$items)
+        $posicion1,$tiempo,$usu,$items,$cambios)
         {
             $m_produccion = new m_produccion();
             $return = c_produccion::validardatosfor($codform,$produc,$sltipoprod,$cliente,$molde,$cavidades,$pesouni,$ciclo,$procant,
@@ -305,13 +314,13 @@ require_once("m_produccion.php");
             $posicion1,$tiempo),$items);
         
             if($return == ''){
-                $c_formulacion = $m_produccion->m_guardarformulacion($produc,$sltipoprod,$cliente,$molde,$cavidades,$pesouni,$ciclo,$procant,
+                $c_formulacion = $m_produccion->m_guardarformulacion($codform,$produc,$sltipoprod,$cliente,$molde,$cavidades,$pesouni,$ciclo,$procant,
                 $almacen,$tempera1,$tempera2,$tempera3,$tempera4,$tempera5,$presexplu1,$presexplu2,$velexplu1,
                 $velexplu2,$pisiexplu1,$pisiexplu2,$contrac1,$contrac2,$contrac3,$contrac4,$cargapres1,$cargapres2,$cargapres3,
                 $cargapresucc,$cargavel1,$cargavel2,$cargavel3,$cargavelsucc,$cargapisi1,$cargapisi2,$cargapisi3,$cargapisisucci,
                 $inyecpres4,$inyecpres3,$inyecpres2,$inyecpres1,$inyecvelo4,$inyecvelo3,$inyecvelo2,$inyecvelo1,$inyecposi4,
                 $inyecposi3,$inyecposi2,$inyecposi1,$inyectiemp,$velocidad3,$velocidad2,$velocidad1,$posicion3,$posicion2,
-                $posicion1,$tiempo,$usu,$items);
+                $posicion1,$tiempo,$usu,$items,$cambios);
                 print_r($c_formulacion);
             }else{print_r($return);}
            

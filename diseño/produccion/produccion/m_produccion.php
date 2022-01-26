@@ -57,7 +57,7 @@ class m_produccion
              $result = $query->execute();   
              return array($result,$cliente);      
         } catch (Exception $e) {
-            print_r("Error al registrar cliente ".$e);
+            return "Error al registrar cliente ".$e;
         }
     }
     public function m_guardarmolde($nombre,$medidas,$usu,$codcliente){
@@ -69,17 +69,17 @@ class m_produccion
              $result = $query->execute();     
              return array($result,$molde);            
         } catch (Exception $e) {
-            print_r("Error al registrar molde ".$e);
+            return "Error al registrar molde ".$e;
         }
     }
 
-    public function m_guardarformulacion($produc,$sltipoprod,$cliente,$molde,$cavidades,$pesouni,$ciclo,$procant,
+    public function m_guardarformulacion($codform,$produc,$sltipoprod,$cliente,$molde,$cavidades,$pesouni,$ciclo,$procant,
         $almacen,$tempera1,$tempera2,$tempera3,$tempera4,$tempera5,$presexplu1,$presexplu2,$velexplu1,
         $velexplu2,$pisiexplu1,$pisiexplu2,$contrac1,$contrac2,$contrac3,$contrac4,$cargapres1,$cargapres2,$cargapres3,
         $cargapresucc,$cargavel1,$cargavel2,$cargavel3,$cargavelsucc,$cargapisi1,$cargapisi2,$cargapisi3,$cargapisisucci,
         $inyecpres4,$inyecpres3,$inyecpres2,$inyecpres1,$inyecvelo4,$inyecvelo3,$inyecvelo2,$inyecvelo1,$inyecposi4,
         $inyecposi3,$inyecposi2,$inyecposi1,$inyectiemp,$velocidad3,$velocidad2,$velocidad1,$posicion3,$posicion2,
-        $posicion1,$tiempo,$usu,$items){
+        $posicion1,$tiempo,$usu,$items,$cambios){
             $fechage = retunrFechaSqlphp(date("Y-m-d"));
             $fecha_actual = date("d-m-Y",strtotime(date("d-m-Y")."+ 1 year"));
             $hora = gethora();
@@ -91,7 +91,7 @@ class m_produccion
             $produccion = $this->m_select_generarcodigo('COD_PRODUCCION','T_PRODUCCION',9);
             $n_produ_g = $this->n_produccion_g();
             if($sltipoprod == 'P'){$cliente = '000000';}
-            $query = $this->bd->prepare("INSERT INTO T_PRODUCCION(COD_PRODUCCION,COD_PRODUCTO,COD_CLIENTE,
+            $query = $this->bd->prepare("INSERT INTO T_PRODUCCION(,COD_PRODUCCION,COD_PRODUCTO,COD_CLIENTE,
             ID_MOLDE,FEC_GENERADO,HOR_GENERADO,FEC_VENCIMIENTO,COD_CATEGORIA,NUM_PRODUCCION_LOTE,CAN_PRODUCCION,
             CAVIDADES,PESO_UNI,CICLO,EST_PRODUCCION,USU_REGISTRO,MAQUINA,EXTERNO,COD_ALMACEN,N_PRODUCCION_G)
             VALUES('$produccion','$produc','$cliente','$molde','$fechage','$hora','$fecha_actual','00002','$lote','$procant','$cavidades',
@@ -119,15 +119,43 @@ class m_produccion
             '$posicion1','$tiempo')");
             $query3->execute();
 
+           
+            if($cambios == 1){
+
+                $query4 = $this->bd->prepare("INSERT INTO T_TEMPERATURA_TEMP(COD_FORMULACION,COD_PRODUCCION,TEMPERATURA_1,TEMPERATURA_2,
+                TEMPERATURA_3,TEMPERATURA_4,TEMPERATURA_5,EXPUL_PRESION_1,EXPUL_PRESION_2,EXPUL_VELOCI_1,EXPUL_VELOCI_2,
+                EXPUL_PISICION_1,EXPUL_PISICION_2,CONTRAC_1,CONTRAC_2,CONTRAC_3,CONTRAC_4,CARGA_PRESION_1,CARGA_PRESION_2,
+                CARGA_PRESION_3,CARGA_PRESION_SUCCI,CARGA_VELOC_1,CARGA_VELOC_2,CARGA_VELOC_3,CARGA_VELOC_SUCCI,CARGA_POSIC_1,
+                CARGA_POSIC_2,CARGA_POSIC_3,CARGA_POSIC_SUCCI,USU_REGISTRO) VALUES('$codform','$produccion','$tempera1','$tempera2','$tempera3','$tempera4',
+                '$tempera5','$presexplu1','$presexplu2','$velexplu1','$velexplu2','$pisiexplu1','$pisiexplu2','$contrac1','$contrac2',
+                '$contrac3','$contrac4','$cargapres1','$cargapres2','$cargapres3','$cargapresucc','$cargavel1','$cargavel2','$cargavel3',
+                '$cargavelsucc','$cargapisi1','$cargapisi2','$cargapisi3','$cargapisisucci','$usu')");
+               
+                $query4->execute();
+    
+                $query5 = $this->bd->prepare("INSERT INTO T_INYECCION_TEMP(COD_FORMULACION,COD_PRODUCCION,INYECC_PRESION_1,INYECC_PRESION_2,
+                INYECC_PRESION_3,INYECC_PRESION_4,INYECC_VELOCIDAD_1,INYECC_VELOCIDAD_2,INYECC_VELOCIDAD_3,INYECC_VELOCIDAD_4,
+                INYECC_POSICION_1,INYECC_POSICION_2,INYECC_POSICION_3,INYECC_POSICION_4,INYECC_TIEMPO,PRES_VELOCIDAD_1,PRES_VELOCIDAD_2,
+                PRES_VELOCIDAD_3,PRES_POSICION_1,PRES_POSICION_2,PRES_POSICION_3,PRES_TIEMPO,USU_REGISTRO) VALUES('$codform','$produccion','$inyecpres4'
+                ,'$inyecpres3','$inyecpres2','$inyecpres1','$inyecvelo4','$inyecvelo3','$inyecvelo2','$inyecvelo1','$inyecposi4',
+                '$inyecposi3','$inyecposi2','$inyecposi1','$inyectiemp','$velocidad3','$velocidad2','$velocidad1','$posicion3','$posicion2',
+                '$posicion1','$tiempo','$usu')");
+                $query5->execute();
+            }
+           
+
+
+
+
             foreach ($items->tds as $dato){
                 if($dato != ''){
                     if($dato[3] == "P"){
                         $cadena = "COD_PRODUCTO = '$dato[1]'";
                         $c_propio = $this->m_buscar('T_ALMACEN_INSUMOS',$cadena);
                         $stock =number_format(($c_propio[0][4] - $dato[2]),2, '.', '');
-                        $query4 = $this->bd->prepare("UPDATE T_ALMACEN_INSUMOS SET STOCK_ACTUAL='$stock',
+                        $query6 = $this->bd->prepare("UPDATE T_ALMACEN_INSUMOS SET STOCK_ACTUAL='$stock',
                         FEC_MODIFICO = '$fechage' WHERE COD_PRODUCTO ='$dato[1]'"); 
-                        $query4->execute();
+                        $query6->execute();
                     }else if($dato[3] == "E"){
                         /*$cadena = "COD_PRODUCTO = '$dato[1]'";
                         $c_propio = $this->m_buscar('T_ALMACEN_EXTERNOS',$cadena);
@@ -136,11 +164,11 @@ class m_produccion
                         WHERE COD_PRODUCTO ='$dato[1]'");*/
                     }
                     
-                    $query5 = $this->bd->prepare("INSERT INTO T_PRODUCCION_ITEM(COD_PRODUCCION,COD_PRODUCTO,
+                    $query7 = $this->bd->prepare("INSERT INTO T_PRODUCCION_ITEM(COD_PRODUCCION,COD_PRODUCTO,
                     CAN_FORMULACION,TIPO_INSUMOS,USU_REGISTRO,MAQUINA) 
                     VALUES('$produccion','$dato[1]',$dato[2],'$dato[3]','$usu','$maquina')");
-                     $query5->execute(); 
-                    if($query5->errorCode()>0){	
+                     $query7->execute(); 
+                    if($query7->errorCode()>0){	
                         $this->bd->rollBack();
                         return 0;
                         break;
@@ -221,6 +249,19 @@ class m_produccion
             }
         }catch (Exception $e) {
             print_r("Error al actualizar almacen externo" . $e);
+        }
+    }
+
+    public function m_ultimoregistro($formula)
+    {
+        try {
+            $query = $this->bd->prepare("SELECT TOP 1 * FROM V_PARAMETROS_PRODUCCION WHERE 
+            COD_FORMULACION = '$formula' ORDER BY COD_PRODUCCION DESC");
+            $query->execute();
+            $resul = $query->fetchAll(PDO::FETCH_NUM);
+            return $resul;
+        } catch (Exception $e) {
+            print_r("Error al seleccionar ultimos parametros " . $e);
         }
     }
 }
