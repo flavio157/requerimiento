@@ -1,15 +1,15 @@
-var usu = '';t = 'm';produccion='';cantxinsumo = '';
+var usu = '';t = 'm';produccion='';cantxinsumo = ''; tipobtn = 'a';color = '';
 var cab = 0;totalpaquete = 0;cantidad=0;var qrcode = '';faltacaja = 0 ;sobra=0;
 $(document).ready(function () {
     lstitemsfor();
     hora();
-    disabled();
+    disabletab();
     usu = $("#vrcodpersonal").val();
 
     $('#tbproduccion').on('click', 'tbody tr', function(event) {
         $(this).addClass('highlight').siblings().removeClass('highlight');
-        produccion = $(this).find("td:eq(0)").text();
-        
+        produccion = $(this).find("td:eq(0)").text(); 
+        color = $(this).find("td:eq(6)").text(); 
     });
 
     $("#btngocurrencia").on('click',function(){
@@ -21,8 +21,7 @@ $(document).ready(function () {
     });
 
     $("#btnmerma").on('click',function() {
-         t = 'm'
-         enabled();
+         t = 'm';enabled();
     })
 
     $("#btnresiduos").on('click',function() {
@@ -39,30 +38,28 @@ $(document).ready(function () {
         cantidad = $("#txtcantidad").val();
         observacion = $("#txtobservacion").val();
         tipomerma = $("#slctipomerma").val();
-        guardar(fechincidencia,horaincidencia,observacion,tipomerma,cantidad);
-    });
-
-    $(document).on('click','#btneliminar',function() {
-        $(this).closest('tr').remove();
+        falla = $("#txtprodfalla").val();
+        guardar(fechincidencia,horaincidencia,observacion,tipomerma,cantidad,falla);
     });
 
     $("#btngavances").on('click',function() {
-        $("#mdregiresiduo").modal('show');
-        /*verificarfinprod($("#mdcodprod").val(),$("#mdcajasxsacar").val(),$("#mdcantxcaja").val(),
-        $("#mdtotal").val());*/
-     
+        if(faltacaja == 0 && tipobtn == 'f'){finproduccion($("#mdcodprod").val()); return;}
+        if(faltacaja == 0 && tipobtn == 'a'){Mensaje1("Error no ya no hay avances que registrar","error");return;}
+        
+        if(t != 'r' && faltacaja != 0){
+            $("#mdregiresiduo").modal('show');
+        }else{
+            verificarfinprod($("#mdcodprod").val(),$("#mdcajasxsacar").val(),$("#mdcantxcaja").val(),
+            $("#mdtotal").val());
+        }
     });
 
     $(document).on('click','#btnfinalizar',function() {
-        $("#mdregiresiduo").modal('show');
+        inputavance(this,'t'); tipobtn = 'f';
     })
 
     $(document).on('click','#btnavances',function(){
-        $("#mdlote").val($(this).parents('tr').find('td:nth-child(4)').text());
-        $("#mdcodprod").val($(this).parents('tr').find('td:nth-child(1)').text());
-        $("#mdtotal").val($(this).parents('tr').find('td:nth-child(5)').text());
-        $("#mdproduc").val($(this).parents('tr').find('td:nth-child(6)').text());
-        v_avances($(this).parents('tr').find('td:nth-child(1)').text());/**/
+        inputavance(this,'a'); tipobtn = 'a'
     });
 
     $('#mdcantxcaja').keyup(function(e) {
@@ -77,6 +74,7 @@ $(document).ready(function () {
                 totalpaquete = paquete - 1;
                 $("#mdcajasxsacar").val(paquete - 1);
                 $("#lblmensaje").text("");
+                $("#lblmensaje").text('Paquetes por sacar ' + totalpaquete);
             }
         }else{ $("#mdcajasxsacar").val('')}
     });
@@ -93,11 +91,30 @@ $(document).ready(function () {
         cantidad = $("#mdcantxcaja").val();
         tara = $("#mdtara").val();
         total = $("#mdtotal").val();
-        topaqu = (cantidad *  totalpaquete + sobra)
-        if(topaqu = total){fin == 0}else{fin == 1}
-        demoFromHTML(cant,lote,fecha,peso,cantidad,tara,total,fin);
+        topaqu = (cantidad * cant + sobra);
+        if(topaqu >= total){fin = 0}else{fin = 1}
+
+        if(tipobtn == 'f' && cant == 0){
+            lstavance($("#mdcodprod").val())
+        }else if(tipobtn == 'f' && cant != 0){
+            perdida($("#mdcodprod").val(),cant,lote,fecha,peso,cantidad,tara,total,fin)
+          }
+
+        if(tipobtn == 'a'){
+            if(cant > totalpaquete){Mensaje1("Error paquetes a sacar es mayor a lo indicado","error");return;}
+            perdida($("#mdcodprod").val(),cant,lote,fecha,peso,cantidad,tara,total,fin)
+        }
     });
 
+    $("#btncerragre").on('click',function() {
+        if(t == 'd'){Mensaje1("Error registre desechos y sobrantes antes de cerrar","error")}
+        else{$("#mdregiresiduo").modal('hide');}
+    });
+
+    $("#btnclose").on('click',function() {
+        if(t == 'd'){Mensaje1("Error registre desechos y sobrantes antes de cerrar","error")}
+        else{$("#mdregiresiduo").modal('hide');}
+    })
 });
 
 function lstocurrencia() {
@@ -135,7 +152,7 @@ function lstitemsfor() {
 }
 
 function createtable(obj) {
-    b2 ="<a id='btnfinalizar' style='margin-right: 2px;margin-bottom: 1px;' class='btn btn-primary  btn-sm'>"+
+    b2 ="<a id='btnfinalizar' style='margin-right: 2px;margin-bottom: 1px;' class='btn btn-primary  btn-sm' data-bs-toggle='modal' data-bs-target='#mdregisavances'>"+
         "<i class='icon-check' title='Registrar avances'></i></a>"+
         "<a id='btnavances' style='margin-right: 2px;margin-bottom: 1px;' class='btn btn-primary  btn-sm' data-bs-toggle='modal' data-bs-target='#mdregisavances'>"+
          "<i class='icon-edit' title='Registrar avances'></i></a>"+
@@ -151,6 +168,7 @@ function createtable(obj) {
         fila +="<td style=display:none>"+item[6]+"</td>";
         fila +="<td >"+item[9]+"</td>";
         fila +="<td class='tdcontent' style=display:none>"+item[1]+"</td>";
+        fila +="<td class='tdcontent' style=display:none>"+item[11]+"</td>";
         fila +="<td class='tdcontent'>"+b2+"</td>";
         var btn = document.createElement("TR");
         btn.innerHTML=fila;
@@ -163,11 +181,15 @@ function gocurrencia(ocurrencia){
         dataType:'text',
         type: 'POST', 
         url:  'c_produccion.php',
-        data:"accion=ocurrencia&produccion="+produccion+"&ocurrencia="+ocurrencia+"&usu="+usu,
-        success: function(r) {
+        data:"accion=ocurrencia&produccion="+produccion+"&ocurrencia="+ocurrencia+"&usu="+usu
+        ,beforeSend: function () {
+            $('.ajax-loader').css("visibility", "visible");
+        },success: function(r) {
             if(r==1){Mensaje1("Se registro la observación","success");
             $("#txtocurrencias").val('');$("#mdocurrencia").modal('hide')}
             else{ Mensaje1(r.trim(),"error");} 
+        },complete: function(){
+            $('.ajax-loader').css("visibility", "hidden");
         }
       }); 
 }
@@ -182,6 +204,7 @@ function enabled() {
     $("#fehincidencia").removeAttr('disabled');
     $("#horincidencia").removeAttr('disabled');
     $("#slctipomerma").removeAttr('disabled');
+    $("#txtprodfalla").removeAttr('disabled');
 }
 
 function disabled() {
@@ -190,9 +213,10 @@ function disabled() {
     $("#fehincidencia").attr('disabled',true);
     $("#horincidencia").attr('disabled',true);
     $("#slctipomerma").attr('disabled',true);
+    $("#txtprodfalla").attr('disabled',true);
 }
 
-function guardar(fechincidencia,horaincidencia,observacion,tipomerma,cantidad) {
+function guardar(fechincidencia,horaincidencia,observacion,tipomerma,cantidad,falla) {
     mensaje = '';
     $.ajax({
         dataType:'text',
@@ -208,40 +232,35 @@ function guardar(fechincidencia,horaincidencia,observacion,tipomerma,cantidad) {
             "usu":usu,
             "t" : t,
             "cantidad":cantidad,
-        } ,
-        success: function(e) {
+            "color" : color,
+            "cantprofalla" : falla
+        },beforeSend: function () {
+            $('.ajax-loader').css("visibility", "visible");
+        },success: function(e) {
             if(e==1){
                 mensaje = (t == 'm') ? "la merma" : (t == 'd') ? "el desecho" : " los sobrantes";
                 Mensaje1("Se registro correctamente "+mensaje,"success"); 
-                if(t == 'm'){$("#btndesecho").removeAttr('disabled')}
-                if(t == 'd'){$("#btnresiduos").removeAttr('disabled');}
-                lmp(); enabled();t = 'm';hora();
+                if(t == 'm'){$("#btndesecho").removeAttr('disabled');$(".merma").removeClass('active');
+                $(".desechos").addClass('active');disabled(); $("#btnmerma").removeAttr('checked');
+                $("#btnmerma").attr('disabled',true); t='d'; 
+                lmp();hora(); lstitemsfor(); return;}
+
+                if(t == 'd'){$("#btnresiduos").removeAttr('disabled');
+                $(".sobra").addClass('active');disabled();$("#btndesecho").removeAttr('checked');
+                $("#btndesecho").attr('disabled',true);$(".desechos").removeClass('active'); 
+                lmp();hora(); t='r'; return;}
+                
+                if(t == 'r'){$("#mdregiresiduo").modal('hide'); 
+                disabletab(); enabled(); $("#btnmerma").removeAttr("disabled");lmp();hora()
+                $(".sobra").removeClass('active');$(".merma").addClass('active');$("#btnmerma").attr('checked');}
             }else{
                 Mensaje1(e,"error");
+                $('.ajax-loader').css("visibility", "hidden");
             }
+        },complete: function(){
+            $('.ajax-loader').css("visibility", "hidden");
         }
       });
-}
-
-function _createtable2(td,idtbttabla) {
-    var total = 0;var fila='';
-    for (let i = 0; i < td.length; i++) {
-        fila +="<td class='tdcontent' style=display:"+td[i][1]+">"+td[i][0]+"</td>";
-        if(td[i][2] == 'p'){total =Number(total + td[i][0])}
-    }
-    var btn = document.createElement("TR");
-    btn.innerHTML=fila;
-    document.getElementById(idtbttabla).appendChild(btn);
-}
-
-function datosrepetidos(tabla,dato) {
-    filas = $("#"+tabla+" tr");
-    for (let l = 0; l < filas.length; l++) {
-        if($(filas[l]).find("td")[0].innerHTML == dato){
-            return false;
-        }
-    }
-  return true;
 }
 
 
@@ -254,81 +273,6 @@ function hora(){
     document.getElementById('horincidencia').value = horario+":"+minutero
 } 
 
-function guardaravances(frm,e){
-    mdtotal = $("#mdtotal").val();
-    $.ajax({
-        dataType:'text',
-        type: 'POST', 
-        url:  'c_produccion.php',
-        data:frm+"&accion=gavances&usu="+usu+"&produccion="+produccion+
-            "&total="+totalpaquete+"&fin="+e+"&mdtotal="+mdtotal,
-        success:  function(e){
-            if(e == 1){
-                Mensaje3("Se registron los datos" ,"success","Antes de cerrar la ventana imprima los tickes");
-            }else{Mensaje1(e,"error");}
-        }
-    });
-}  
-
-function v_avances($produccion){
-    $.ajax({
-        dataType:'text',
-        type: 'POST', 
-        url:  'c_produccion.php',
-        data:"accion=v_avances&produccion="+$produccion,
-        success:  function(e){
-            obj = JSON.parse(e);
-            if(obj['t'] == 1){
-                $("#mdtara").val(obj['dato'][0][9]);
-                $("#mdpesoneto").val(obj['dato'][0][10]);
-                $("#mdcantxcaja").val(obj['dato'][0][7]);
-                $("#mdtara").attr('disabled',true);
-                $("#mdpesoneto").attr('disabled',true);
-                $("#mdcantxcaja").attr('disabled',true);
-                $("#mdcanxbolsa").attr('disabled',true);
-                $("#mdcajasxsacar").val(obj['falta']);
-                faltacaja = obj['falta']
-                cab = 1;
-            }else{
-                $("#mdtara").val('');
-                $("#mdpesoneto").val('');
-                $("#mdcantxcaja").val('');
-                $("#mdcajasxsacar").val('');
-                $("#mdtara").removeAttr('disabled');
-                $("#mdpesoneto").removeAttr('disabled');
-                $("#mdcantxcaja").removeAttr('disabled');
-                $("#mdcanxbolsa").removeAttr('disabled');
-                cab = 0;
-            }
-        }
-      }); 
-}
-
-function guardaravancesits(produ,avance,e,producto){
-   $.ajax({
-        dataType:'text',
-        type: 'POST', 
-        url:  'c_produccion.php',
-        data:"accion=gavancesitems&avance="+avance+"&usu="+usu+"&produ="+produ+"&fin="+e+
-        "&mdproduc="+producto+"&faltante="+faltacaja,
-        success:  function(e){
-            if(e == 1){
-               Mensaje3("Se registron los datos" ,"success","Antes de cerrar la ventana imprima los tickes");
-            }else{Mensaje1(e,"error");}
-        }
-    });
-}  
-
-function Mensaje3(title,icon,text) {
-    Swal.fire({title: title,icon: icon,text: text,showCancelButton: true,
-        confirmButtonText: 'Imprimir',cancelButtonColor: '#d33',cancelButtonText: "Cerrar"
-      }).then((result) => {
-        if (result.isConfirmed) {
-            lstavance($("#mdcodprod").val());
-        }
-      })
-}
-
 function verificarfinprod(produccion,cantidad,cantxpa,total){
     $.ajax({
         dataType:'text',
@@ -340,34 +284,123 @@ function verificarfinprod(produccion,cantidad,cantxpa,total){
             "cantidad" : cantidad,
             "cantxpa" :cantxpa,"total":total,
         } ,
-        success:  function(e){
-           if(e == 0){
-                Mensaje2("Se terminara la produccion",'info','¿Desea continuar?',e);
-           }else if(e == 1){
+        success:function(e){
+            if(e == 1){
                 if(cab == 0){ 
-                    guardaravances($("#frmavances").serialize(),e);
+                    guardaravances($("#frmavances").serialize());
                 }else if(cab == 1){
-                    guardaravancesits($("#mdcodprod").val(),$("#mdcajasxsacar").val(),e,$("#mdproduc").val())
-                }
-           }else{
-               Mensaje1(e,"error");
-           }
+                    guardaravancesits($("#mdcodprod").val(),$("#mdcajasxsacar").val(),$("#mdproduc").val());
+                } //cambiar el valor de e por otra variable
+            }else{Mensaje1(e,"error");}
         }
       });
 }
 
-function Mensaje2(title,icon,text,e) {
-    Swal.fire({title: title,icon: icon,text: text,showCancelButton: true,
-        confirmButtonText: 'Aceptar',cancelButtonColor: '#d33',cancelButtonText: "Cerrar"
-      }).then((result) => {
-        if (result.isConfirmed) {
-            if(cab == 0){ 
-                guardaravances($("#frmavances").serialize(),e);
-             }else if(cab == 1){
-                guardaravancesits($("#mdcodprod").val(),$("#mdcajasxsacar").val(),e,$("#mdproduc").val())
-             }
+function guardaravances(frm){
+    mdtotal = $("#mdtotal").val();
+    $.ajax({
+        dataType:'text',
+        type: 'POST', 
+        url:  'c_produccion.php',
+        data:frm+"&accion=gavances&usu="+usu+"&produccion="+produccion+
+            "&total="+totalpaquete+"&mdtotal="+mdtotal
+        ,beforeSend: function () {
+            $('.ajax-loader').css("visibility", "visible");
+        },success:function(re){
+            obj = JSON.parse(re);
+            if(obj['suc'] == 1){
+                if(obj['termi'] == 1){faltacaja = 0}
+                $("#lblmensaje").text('Paquetes restantes ' + (totalpaquete - $("#mdcajasxsacar").val()));
+                Mensaje3("Se registron los datos" ,"success","Antes de cerrar la ventana imprima los tickes");
+            }else{
+                Mensaje1(obj['suc'],"error");
+                $('.ajax-loader').css("visibility", "hidden");
+                t = 'm';
+            }
+        },complete: function(){
+            $('.ajax-loader').css("visibility", "hidden");
         }
-      })
+    });
+}  
+
+function v_avances($produccion,inavance){
+    $.ajax({
+        dataType:'text',
+        type: 'POST', 
+        url:  'c_produccion.php',
+        data:"accion=v_avances&produccion="+$produccion,
+        success:function(e){
+            obj = JSON.parse(e);
+            if(obj['t'] == 1){
+                $("#mdtara").val(obj['dato'][0][9]);
+                $("#mdpesoneto").val(obj['dato'][0][10]);
+                $("#mdcantxcaja").val(obj['dato'][0][7]);
+                $("#mdtara").attr('disabled',true);
+                $("#mdpesoneto").attr('disabled',true);
+                $("#mdcantxcaja").attr('disabled',true);
+                $("#mdcanxbolsa").attr('disabled',true);
+                $("#mdcajasxsacar").val(obj['falta']);
+                sobra = (obj['dato'][0][7] * obj['dato'][0][6]);
+                totalpaquete = faltacaja = obj['falta']
+                $("#lblmensaje").text('Paquetes restantes ' + obj['falta']);
+                if(inavance == 't' || faltacaja == 0){$("#mdcajasxsacar").attr('disabled',true);}
+                else{$("#mdcajasxsacar").removeAttr('disabled')}
+                cab = 1;
+            }else{
+                $("#mdtara").val('');
+                $("#mdpesoneto").val('');
+                $("#mdcantxcaja").val('');
+                $("#mdcajasxsacar").val('');
+                $("#mdtara").removeAttr('disabled');
+                $("#mdpesoneto").removeAttr('disabled');
+                $("#mdcantxcaja").removeAttr('disabled');
+                $("#mdcanxbolsa").removeAttr('disabled');
+                $("#mdcajasxsacar").removeAttr('disabled');
+                faltacaja = 1;
+                cab = 0;
+                $("#lblmensaje").text('');
+            }
+        }
+      }); 
+}
+
+function guardaravancesits(produ,avance,producto){
+   $.ajax({
+        dataType:'text',
+        type: 'POST', 
+        url:  'c_produccion.php',
+        data:"accion=gavancesitems&avance="+avance+"&usu="+usu+"&produ="+produ+
+        "&mdproduc="+producto+"&faltante="+faltacaja
+        ,beforeSend: function () {
+            $('.ajax-loader').css("visibility", "visible");
+        },
+        success:function(res){
+            obj = JSON.parse(res);
+            if(obj['suc'] == 1){
+               if(obj['termi'] == 1){faltacaja = 0;}
+               if(obj['termi'] == 1 && tipobtn == 'f'){faltacaja = 0;
+                 finproduccion($("#mdcodprod").val()); 
+                 return;}
+                 $("#lblmensaje").text('Paquetes restantes ' + (totalpaquete - $("#mdcajasxsacar").val()));
+              Mensaje3("Se registron los datos" ,"success","Antes de cerrar la ventana imprima los tickes");
+            }else{Mensaje1(obj['suc'],"error");
+            $('.ajax-loader').css("visibility", "hidden");
+                t = 'm';
+            }
+        },complete: function(){
+            $('.ajax-loader').css("visibility", "hidden");
+        }
+    });
+}  
+
+function Mensaje3(title,icon,text) {
+    $("#mdtara").attr('disabled',true);
+    $("#mdpesoneto").attr('disabled',true);
+    $("#mdcantxcaja").attr('disabled',true);
+    $("#mdcanxbolsa").attr('disabled',true);
+    t = 'm';
+    Swal.fire({title: title,icon: icon,text: text,confirmButtonText: 'Aceptar',
+    })
 }
 
 function lstavance(produccion){
@@ -376,11 +409,15 @@ function lstavance(produccion){
         type: 'POST', 
         url:  'c_produccion.php',
         data:{"accion" : 'lstavance',"produccion" : produccion} ,
-        success:  function(e){
+        success:function(e){
             obj = JSON.parse(e);
+           if(obj['succ'] == 1){
             $.each(obj['dato'], function(i, item) {
-               demoFromHTML(item[6],item[3],obj['fecha'],item[10],item[7],item[9],item[8],obj['tipo'],obj['id'])
+                demoFromHTML(obj['cantidad'],item[3],obj['fecha'],item[10],item[7],item[9],item[8],obj['tipo'],obj['id'])
             }); 
+           }else{
+                Mensaje1("Error no hay datos que imprimir","error");
+           }
         }
     });
 }
@@ -395,37 +432,27 @@ function demoFromHTML(cant,lote,fecha,peso,cantidad,tara,total,fin,avance) {
     if(cant % 8 != 0){hojas += 1}
     for (let i = 0; i < cant; i++) {
         if(fin == 0 && (i+1) == cant && (total % cantidad) != 0 ){
-            cantidad = total % cantidad; peso = (peso / cantidad)}
+        cantidad = total % cantidad; peso = (peso / cantidad)}
         if(i % 2 == 0){x = 2; xr = 0; xx = 59 ; xqr = 32}else{x = 107 ;xr=105; xx = 59 * 2.78;xqr = 59 *2.30}
         if(tipo == 8){doc.addPage(); tipo = 0;}
         if(tipo == 0 || tipo == 1){
             doc.rect(xr, 74 * 0, 105, 74.20)
                 doc.text('FECHA: '+fecha, x, 9); 
                 doc.text('CANTIDAD: '+cantidad + " Uds.",  xx, 9); 
-
-                doc.text('PESO NETO: ' + Number(peso).toFixed(2) +" Kg",x, 19); //29
-                doc.text('TARA: '+ Number(tara).toFixed(2) +" Kg",xx, 19); //49
-     
-                
-                doc.text('PESO TOTAL: '+(Number(peso)+ Number(tara)).toFixed(2) +" Kg",x, 29); //59
+                doc.text('PESO NETO: ' + Number(peso).toFixed(2) +" Kg",x, 19); 
+                doc.text('TARA: '+ Number(tara).toFixed(2) +" Kg",xx, 19); 
+                doc.text('PESO TOTAL: '+(Number(peso)+ Number(tara)).toFixed(2) +" Kg",x, 29);
                 doc.text('LOTE: '+lote, xx, 29);
-                
                 doc.addImage(base64Image,'JPEG', xqr, 33, 40, 40);
-                
                 tipo++;
         }else if(tipo  == 2 || tipo == 3){
             doc.rect(xr, 74 * 1, 105, 74.20)
                 doc.text('FECHA: '+fecha, x, 83);
-                doc.text('CANTIDAD: '+cantidad + " Uds.", xqr, 83); //103
-
+                doc.text('CANTIDAD: '+cantidad + " Uds.", xx, 83); 
                 doc.text('PESO NETO: '+ Number(peso).toFixed(2) +" Kg",x, 93);
                 doc.text('TARA: '+ Number(tara).toFixed(2) +" Kg", xx, 93);
-
-                
                 doc.text('PESO TOTAL: '+(Number(peso)+ Number(tara)).toFixed(2) +" Kg", x, 103);
                 doc.text('LOTE: '+lote, xx, 103);
-
-
                 doc.addImage(base64Image,'JPEG', xqr, 107, 40, 40);
                 tipo++;
 
@@ -433,14 +460,10 @@ function demoFromHTML(cant,lote,fecha,peso,cantidad,tara,total,fin,avance) {
             doc.rect(xr, 74 * 2, 105, 74.20)
                 doc.text('FECHA: '+fecha, x, 157);
                 doc.text('CANTIDAD: '+cantidad + " Uds.", xx, 157);
-
                 doc.text('PESO NETO: '+ Number(peso).toFixed(2) +" Kg", x, 167);
                 doc.text('TARA: '+ Number(tara).toFixed(2) +" Kg", xx, 167);
-                
-
                 doc.text('PESO TOTAL: '+(Number(peso)+ Number(tara)).toFixed(2) +" Kg", x, 177);
                 doc.text('LOTE: '+lote, xx, 177);
-
                 doc.addImage(base64Image,'JPEG', xqr, 181, 40, 40);
                 tipo++;
 
@@ -448,13 +471,10 @@ function demoFromHTML(cant,lote,fecha,peso,cantidad,tara,total,fin,avance) {
             doc.rect(xr, 74 * 3, 105, 74.20)
                 doc.text('FECHA: '+fecha, x, 231);
                 doc.text('CANTIDAD: '+cantidad + " Uds.",xx, 231);
-                
                 doc.text('PESO NETO: '+Number(peso).toFixed(2) +" Kg", x, 241);
                 doc.text('TARA: '+ Number(tara).toFixed(2) +" Kg", xx, 241);
-                
                 doc.text('PESO TOTAL: '+(Number(peso)+ Number(tara)).toFixed(2) +" Kg", x, 251);
                 doc.text('LOTE: '+lote, xx, 251);
-
                 doc.addImage(base64Image,'JPEG', xqr, 255, 40, 40);
                 tipo++;
         }
@@ -470,8 +490,7 @@ function updateimpresion(avance){
         url:  'c_produccion.php',
         data:{"accion" : 'updimpresion',"avance" : avance} ,
         success:  function(e){
-           if(e != 1){Mensaje1(e,"error")}
-           $("#mdregisavances").modal('hide');
+           if(e != 1){Mensaje1(e,"error")};$("#mdregisavances").modal('hide');
            lstitemsfor();
         }
     });  
@@ -489,20 +508,62 @@ function qr(fecha,lote){
         backgroundAlpha: 0, 
         foreground: "#000", 
         level: "H", 
-    });
-    
+    }); 
 }
 
 function date(){
-    n =  new Date();
-    y = n.getFullYear();
-    m = n.getMonth() + 1;
-    d = n.getDate();
+    n =  new Date();y = n.getFullYear();m = n.getMonth() + 1;d = n.getDate();
     if(m < 10) m = "0"+m;
     return d + "/" + m + "/" + y;
 }
 
-function disabled() {
+function disabletab() {
     $("#btndesecho").prop("disabled", true);
     $("#btnresiduos").prop("disabled",true);
+}
+
+function inputavance(tab,inavance) {
+        $("#mdlote").val($(tab).parents('tr').find('td:nth-child(4)').text());
+        $("#mdcodprod").val($(tab).parents('tr').find('td:nth-child(1)').text());
+        $("#mdtotal").val($(tab).parents('tr').find('td:nth-child(5)').text());
+        $("#mdproduc").val($(tab).parents('tr').find('td:nth-child(6)').text());
+        v_avances($(tab).parents('tr').find('td:nth-child(1)').text(),inavance);/**/
+}
+
+function finproduccion(produccion){
+    $.ajax({
+        dataType:'text',
+        type: 'POST', 
+        url:  'c_produccion.php',
+        data:{
+            "accion" : 'finproduc',
+            "produccion" : produccion,
+            "usu" : usu,
+        },beforeSend: function () {
+            $('.ajax-loader').css("visibility", "visible");
+        },success:function(e){
+            if(e == 1){ Mensaje1("Se finalizo la produccion","success");
+            lstitemsfor(); $("#mdregisavances").modal('hide'); t = 'm'}
+            else{
+                mensaje(e,"error");
+            }
+        },complete: function(){
+            $('.ajax-loader').css("visibility", "hidden");
+        }
+      });
+}
+
+function perdida(produccion,cant,lote,fecha,peso,cantidad,tara,total,fin) {
+    $.ajax({
+        dataType:'text',
+        type: 'POST', 
+        url:  'c_produccion.php',
+        data:{
+            "accion" : 'perdida',
+            "produccion" : produccion,
+        },success:function(e){
+            total = (total - e);
+            demoFromHTML(cant,lote,fecha,peso,cantidad,tara,total,fin);
+        }
+      }); 
 }

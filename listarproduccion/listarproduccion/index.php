@@ -5,10 +5,11 @@ header('Content-Type: text/html; charset=UTF-8');
 if (session_status() == PHP_SESSION_NONE) {
     session_start();
 }
-/*$ofi = $_SESSION["ofi"];
+$ofi = $_SESSION["ofi"];
 $zon = $_SESSION["zon"];
-$cod = $_SESSION["cod"];*/
-?>
+$cod = $_SESSION["cod"];
+require_once("./menu/index.php");
+?>  
 
 <!DOCTYPE html>
 <html lang="en">
@@ -33,11 +34,14 @@ $cod = $_SESSION["cod"];*/
         <title>Moldes en fabricacion</title>
    </header>
    <section>  
+        <div class="ajax-loader">
+          <img src="loading.gif" class="img-responsive" />
+        </div> 
         <div class="main"> 
             <form id="frmfabricacion">
-                <input type="text" id="vroficina" style="display: none;" value="<?php echo 'SMP2'//$ofi?>"/>
-                <input type="text" id="vrzona" style="display: none;" value="<?php //$echo  $zon?>"/>
-                <input type="text" id="vrcodpersonal" style="display: none;" value="<?php echo '0215' //$cod?>"/>
+                <input type="text" id="vroficina" style="display: none;" value="<?php echo $ofi?>"/>
+                <input type="text" id="vrzona" style="display: none;" value="<?php echo  $zon?>"/>
+                <input type="text" id="vrcodpersonal" style="display: none;" value="<?php echo $cod?>"/>
                    <div class="row">
                         <div class="col mb-3">
                             <center><label class="titulos">Producción</label></center>
@@ -74,11 +78,11 @@ $cod = $_SESSION["cod"];*/
                     <img alt="Código QR" id="codigo" style="display: none;">
             </form>
 
-        <div class="modal fade" id="mdregisavances" tabindex="-1"   aria-hidden="true">
+        <div class="modal fade" id="mdregisavances" data-bs-keyboard="false" data-bs-backdrop="static" tabindex="-1"   aria-hidden="true">
           <div class="modal-dialog">
             <div class="modal-content">
               <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Registrar avances de producción</h5>
+                <h5 class="modal-title" id="exampleModalLabel">Registrar producción</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
               </div>
               <div class="modal-body">
@@ -117,7 +121,7 @@ $cod = $_SESSION["cod"];*/
                             <label for="formpromocion" class="form-label">cantidad por paquete</label>  <!--cantidad dentro de cada caja -->
                             <div class="input-group mb-3">
                               <input type="number" class="form-control form-control-sm" name="mdcantxcaja" autocomplete="off" id="mdcantxcaja">
-                              <span class="input-group-text" id="basic-addon1">Und</span>
+                              <span class="input-group-text" id="basic-addon1">Uds</span>
                             </div>
                         </div>
                         <div class="col">
@@ -125,11 +129,11 @@ $cod = $_SESSION["cod"];*/
                             se calcula con la cantidad por paquete o la cantidad del items-->
                             <div class="input-group mb-3">
                               <input type="number" class="form-control form-control-sm" id="mdcajasxsacar" name="mdcajasxsacar">
-                              <span class="input-group-text" id="basic-addon1">Und</span>
+                              <span class="input-group-text" id="basic-addon1">Uds</span>
                             </div>
                         </div>
                     </div>
-                    <div class="row">
+                    <div class="row mb-1">
                       <div class="col">
                         <a class="btn btn-success" id="btnimprimir" >
                           <i class="icon-print" title="Imprimir"></i>
@@ -140,6 +144,7 @@ $cod = $_SESSION["cod"];*/
                 </form>
             </div>
               <div class="modal-footer">
+               
                 <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cerrar</button>
                 <button type="button" class="btn btn-primary" id="btngavances">Guardar</button>
               </div>
@@ -147,7 +152,7 @@ $cod = $_SESSION["cod"];*/
           </div> 
         </div>
 
-        <div class="modal fade" id="mdocurrencia" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal fade" id="mdocurrencia" tabindex="-1" data-bs-keyboard="false" data-bs-backdrop="static" aria-labelledby="exampleModalLabel" aria-hidden="true">
           <div class="modal-dialog">
             <div class="modal-content">
               <div class="modal-header">
@@ -185,12 +190,12 @@ $cod = $_SESSION["cod"];*/
         </div>
 
 
-        <div class="modal fade" id="mdregiresiduo" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal fade" id="mdregiresiduo" tabindex="-1" data-bs-keyboard="false" data-bs-backdrop="static" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog">
           <div class="modal-content">
             <div class="modal-header">
               <h5 class="modal-title" id="exampleModalLabel">Registrar residuos</h5>
-              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+              <button type="button" class="btn-close" id="btnclose" ></button>
             </div>
             <div class="modal-body">
             <form id="mdregistroresi">
@@ -198,14 +203,15 @@ $cod = $_SESSION["cod"];*/
                       <div class="col mb-3">
                         <div class="btn-group" role="group" aria-label="Basic radio toggle button group">
                           <input type="radio"  class="btn-check" name="btnradio" id="btnmerma" autocomplete="off" checked>
-                          <label class="btn btn-outline-primary" for="btnmerma">Merma</label>
+                          <label class="btn btn-outline-primary merma" for="btnmerma">Merma</label>
                           <input type="radio" class="btn-check" name="btnradio" id="btndesecho" autocomplete="off">
-                          <label class="btn btn-outline-primary" for="btndesecho">Desechos</label>
+                          <label class="btn btn-outline-primary desechos" for="btndesecho">Desechos</label>
                           <input type="radio" class="btn-check" name="btnradio" id="btnresiduos" autocomplete="off">
-                          <label class="btn btn-outline-primary" for="btnresiduos">Sobrantes</label>
+                          <label class="btn btn-outline-primary sobra" for="btnresiduos">Sobrantes</label>
                         </div>
                       </div>
                     </div>
+                  
                       <div class="row">
                         <div class="col">
                           <label class="form-label">Fecha incidencia</label>
@@ -239,9 +245,21 @@ $cod = $_SESSION["cod"];*/
                       </div>-->
                       <div class="row">
                         <div class="col">
-                          <label class="form-label">Cantidad</label>
-                          <input type="text" class="form-control" id="txtcantidad" autocomplete="off">    
+                          <label class="form-label">Producto Malogrado</label>
+                          <div class="input-group mb-3">
+                            <input type="text" class="form-control" id="txtprodfalla" autocomplete="off">    
+                            <span class="input-group-text" id="basic-addon1">Uds</span>
+                          </div>
                         </div>
+                        <div class="col">
+                          <label class="form-label">Peso</label>
+                          <div class="input-group mb-3">
+                            <input type="text" class="form-control" id="txtcantidad" autocomplete="off">    
+                            <span class="input-group-text" id="basic-addon1">g</span>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="row">
                         <div class="col">
                           <label class="form-label">Tipo Merma</label>
                           <select class="form-select mb-3" id="slctipomerma" >
@@ -250,6 +268,7 @@ $cod = $_SESSION["cod"];*/
                           </select>
                         </div>
                       </div>
+                      
                      <!-- <div class="row mb-3">
                         <div class="col g-3 ">
                             <a class="btn btn-primary" type="button" id="btnagregarmater" style="float: right;">
@@ -260,7 +279,7 @@ $cod = $_SESSION["cod"];*/
                   </form>        
             </div>
             <div class="modal-footer">
-              <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cerrar</button>
+              <button type="button" class="btn btn-danger" id="btncerragre">Cerrar</button>
               <button type="button" class="btn btn-primary" id="btnguardar">Aceptar</button>
             </div>
           </div>

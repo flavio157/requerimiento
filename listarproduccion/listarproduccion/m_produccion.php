@@ -51,7 +51,7 @@ class m_produccion
     }
 
     public function m_guardarmerma($codproduccion,$fechincidencia,$horaincidencia,
-    $observacion,$usu,$canmerma,$tipomer){
+    $observacion,$usu,$canmerma,$tipomer,$falla){
         $maquina = os_info();
         $fechincidencia = retunrFechaSqlphp($fechincidencia);
         $fecha = retunrFechaSqlphp(date("Y-m-d"));
@@ -64,15 +64,15 @@ class m_produccion
             ,'$fecha','$hora','$fechincidencia','$horaincidencia','$observacion','$usu','$maquina')");
             $query->execute();
                         $query2 = $this->bd->prepare("INSERT INTO T_MERMAS_ITEM(COD_MERMA,COD_PRODUCTO,CAN_PRODUCTO
-                        ,TIPO_MERMA) 
-                        VALUES('$codmerma','000046','$canmerma','$tipomer')");
+                        ,TIPO_MERMA,CANT_PROD_MALOG) 
+                        VALUES('$codmerma','000055','$canmerma','$tipomer','$falla')");
                          $query2->execute();
                         if($tipomer == 'R'){
-                            $cadena = "COD_PRODUCTO = '000046'";//cambia el codigo del producto solo es prueba
+                            $cadena = "COD_PRODUCTO = '000055'";//cambia el codigo del producto solo es prueba
                             $c_propio = $this->m_buscar('T_ALMACEN_INSUMOS',$cadena);
                             $stock =number_format(($c_propio[0][4] + $canmerma),2, '.', '');
                             $query3 = $this->bd->prepare("UPDATE T_ALMACEN_INSUMOS SET STOCK_ACTUAL='$stock',
-                            FEC_MODIFICO = '$fecha' WHERE COD_PRODUCTO ='000046'"); 
+                            FEC_MODIFICO = '$fecha' WHERE COD_PRODUCTO ='000055'"); 
                             $query3->execute();
                         }
             $guardado = $this->bd->commit();
@@ -84,7 +84,7 @@ class m_produccion
     }
 
     public function m_guardarresiduos($codproduccion,
-    $observacion,$usu,$cantidad){
+    $observacion,$usu,$cantidad,$color){
         $insumoar = array();
         $maquina = os_info();
         $this->bd->beginTransaction();$fecha = retunrFechaSqlphp(date("Y-m-d"));
@@ -98,7 +98,7 @@ class m_produccion
                 if(count($item) > 0){
                     for ($i=0; $i <count($item) ; $i++) { 
                         $cod = $item[$i][1];
-                        $cadena1 = "COD_PRODUCTO = '$cod' OR COD_INSUMO = '$cod'";
+                        $cadena1 = "COLOR_INSUMO = '$color' AND COD_PRODUCTO = '$cod' OR COD_INSUMO = '$cod'";
                         $item1 = $this->m_buscar('T_INSUMOS_PASADAS',$cadena1);
 
                         if(count($item1) > 1){                                                                                          
@@ -122,7 +122,8 @@ class m_produccion
                         }
                     }
                 }
-                
+
+                  
                     for ($j=0; $j < count($insumoar); $j++) { 
                         $codinsumo = $insumoar[$j][0];
                         $query2 = $this->bd->prepare("INSERT INTO T_RESIDUOS_ITEM(COD_RESIDUOS,COD_PRODUCTO,CAN_PRODUCTO) 
@@ -133,9 +134,10 @@ class m_produccion
                             return 0;
                             break;
                         }
-                        $pasada =  ((int)$insumoar[0] + (int)1);
+                        $pasada =  ((int)$insumoar[0][2] + (int)1);
+                      
                         if($pasada < 5)
-                        $cadena = "COD_PRODUCTO = '$codinsumo' AND TIPO_PASADA = '$pasada'"; //validar si es mayor a 5 no debe hhacer nada
+                        $cadena = "COD_PRODUCTO = '$codinsumo' AND TIPO_PASADA = '$pasada' AND COLOR_INSUMO = '$color'";
                         $pasadas = $this->m_buscar('T_INSUMOS_PASADAS',$cadena);
                         $prod = $pasadas[0][1];
                         
@@ -145,6 +147,7 @@ class m_produccion
                         $stock =number_format(($c_propio[0][4] + $cantidad),2, '.', '');
                         $query3 = $this->bd->prepare("UPDATE T_ALMACEN_INSUMOS SET STOCK_ACTUAL='$stock',
                         FEC_MODIFICO = '$fecha' WHERE COD_PRODUCTO ='$codinsumo'"); 
+                        
                         $query3->execute();
                        if($query3->errorCode()>0){	
                             $this->bd->rollBack();
@@ -171,7 +174,7 @@ class m_produccion
             ,USU_REGISTRO,MAQUINA)VALUES('$coddesechos','$codproduccion','$observacion','$usu','$maquina')");
             $query->execute();
             $query2 = $this->bd->prepare("INSERT INTO T_DESECHOS_ITEM(COD_DESECHOS,COD_PRODUCTO,CAN_PRODUCTO) 
-                      VALUES('$coddesechos','000047',$cantidad)");
+                      VALUES('$coddesechos','000056',$cantidad)");
             $query2->execute(); 
             $guardado = $this->bd->commit();
             return $guardado;
@@ -199,10 +202,7 @@ class m_produccion
             USU_REGISTRO,IMPRESO)VALUES('$codavance','$paquexsacar','$usu','$usu','0')");
             $query2->execute();
 
-            if($fin == 0){
-               $query3 = $this->bd->prepare("UPDATE T_PRODUCCION SET EST_PRODUCCION ='1' ,USU_MODIFICO ='$usu',
-                FEC_MODIFICO ='$fecha' WHERE COD_PRODUCCION = '$produccion'");
-                $query3->execute();
+            if($fin == 1){
                 if($totalproduc % $cantxbolsa != 0 ){$total = $cantxbolsa * ($paquexsacar - 1);}
                 else{$total = $cantxbolsa * ($paquexsacar);}    
                 $cantalm = $total + ($totalproduc % $cantxbolsa);
@@ -221,7 +221,7 @@ class m_produccion
             return $guardado;
         } catch (Exception $e) {
             $this->bd->rollBack();
-            print_r("Error al guardar avances de la formulación" .$e);
+           return "Error al guardar avances de la formulación" .$e;
         }
     }
 
@@ -237,10 +237,7 @@ class m_produccion
             USU_REGISTRO,IMPRESO)VALUES('$codavace','$cantavance','$usu','$usu','0')");
             $query1->execute();
 
-            if($fin == 0){
-                $query2 = $this->bd->prepare("UPDATE T_PRODUCCION SET EST_PRODUCCION ='1' ,USU_MODIFICO ='$usu',
-                FEC_MODIFICO ='$fecha' WHERE COD_PRODUCCION = '$produccion'");
-                $query2->execute();
+            if($fin == 1){
                 $cantalm = $this->m_verificaralmac($prod,$cantavance);
             }else{
                 $cantalm =  $avance[0][5] * $cantavance;
@@ -256,7 +253,7 @@ class m_produccion
             return $guardado;
         } catch (Exception $e) {
             $this->bd->rollBack();
-            print_r("Error al guardar avances de la formulacion items" .$e);
+            return "Error al guardar avances de la formulacion items" .$e;
         }
     }
 
@@ -296,6 +293,18 @@ class m_produccion
             return $e;
         }
        
+    }
+
+    public function m_finalizarproduccion($produccion,$usu){
+        try {
+            $fecha = retunrFechaSqlphp(date("Y-m-d"));
+            $query3 = $this->bd->prepare("UPDATE T_PRODUCCION SET EST_PRODUCCION ='1' ,USU_MODIFICO ='$usu',
+            FEC_MODIFICO ='$fecha' WHERE COD_PRODUCCION = '$produccion'");
+            $result = $query3->execute();
+            return $result;
+        } catch (Exception $e) {
+           print_r("Error al terminar produccion  " . $e);
+        }
     }
 
 }
