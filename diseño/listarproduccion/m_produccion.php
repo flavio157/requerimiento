@@ -154,7 +154,6 @@ class m_produccion
                             return 0;
                             break;
                         }
-                    
                     }
             $guardado = $this->bd->commit();
             return $guardado;
@@ -313,6 +312,69 @@ class m_produccion
             return $result;
         } catch (Exception $e) {
            print_r("Error al terminar produccion  " . $e);
+        }
+    }
+
+    public function m_actualizarmerma($descripcion,$usu,$merma,$cantmerma,$tipomerma,$canpormalogra)
+    {  
+        $fecha = retunrFechaSqlphp(date("Y-m-d"));
+        $this->bd->beginTransaction();
+        try {
+            $query = $this->bd->prepare("UPDATE T_MERMAS SET OBS_INCIDENCIA='$descripcion',
+            FEC_MODIFICO = '$fecha',USU_MODIFICO = '$usu' WHERE COD_MERMA ='$merma'"); 
+            $query->execute();
+
+            $query1 = $this->bd->prepare("UPDATE T_MERMAS_ITEM SET CAN_PRODUCTO = '$cantmerma',
+            TIPO_MERMA ='$tipomerma',CANT_PROD_MALOG = '$canpormalogra'
+            WHERE COD_MERMA = '$merma'");
+            $query1->execute();
+
+            $guardado = $this->bd->commit();
+            return $guardado;
+        } catch (Exception $e) {
+            $this->bd->rollBack();
+            print_r("Error al actualizar merma ". $e);
+        }
+    }
+
+    public function m_actdesechos($cantdesecho,$descripcion,$usu,$coddesecho)
+    {
+        $fecha = retunrFechaSqlphp(date("Y-m-d"));
+        $this->bd->beginTransaction();
+        try {
+            $query = $this->bd->prepare("UPDATE T_DESECHOS SET OBS_INCIDENCIA='$descripcion',
+            FEC_MODIFICO = '$fecha',USU_MODIFICO = '$usu' WHERE COD_DESECHOS ='$coddesecho'"); 
+            $query->execute();
+
+            $query1 = $this->bd->prepare("UPDATE T_DESECHOS_ITEM SET CAN_PRODUCTO = '$cantdesecho'
+            WHERE COD_DESECHOS = '$coddesecho'");
+            $query1->execute();
+
+            $guardado = $this->bd->commit();
+            return $guardado;
+        } catch (Exception $e) {
+            $this->bd->rollBack();
+            print_r("Error al actualizar desechos ". $e);
+        }
+    }
+
+    public function m_actresiduos($descripcion,$usu,$canresiduos,$codresiduos){
+        $fecha = retunrFechaSqlphp(date("Y-m-d"));
+        $this->bd->beginTransaction();
+        try {
+            $query = $this->bd->prepare("UPDATE T_RESIDUOS SET OBS_INCIDENCIA='$descripcion',
+            FEC_MODIFICO = '$fecha',USU_MODIFICO = '$usu' WHERE COD_RESIDUOS ='$codresiduos'"); 
+            $query->execute();
+
+            $query1 = $this->bd->prepare("UPDATE T_RESIDUOS_ITEM SET CAN_PRODUCTO = '$canresiduos'
+            WHERE COD_RESIDUOS = '$codresiduos'");
+            $query1->execute();
+
+            $guardado = $this->bd->commit();
+            return $guardado;
+        } catch (Exception $e) {
+            $this->bd->rollBack();
+            print_r("Error al actualizar residuos ". $e);
         }
     }
 

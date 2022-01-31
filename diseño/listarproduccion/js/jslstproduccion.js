@@ -1,5 +1,5 @@
 var usu = '';t = 'm';produccion='';cantxinsumo = ''; tipobtn = 'a';color = '';
-var cab = 0;totalpaquete = 0;cantidad=0;var qrcode = '';faltacaja = 0 ;sobra=0;
+var cab = 0;totalpaquete = 0;cantidad=0;var qrcode = '';faltacaja = 0 ;sobra=0;merma ='';
 $(document).ready(function () {
     lstitemsfor();
     hora();
@@ -20,17 +20,21 @@ $(document).ready(function () {
         lmp();
     });
 
-    $("#btnmerma").on('click',function() {
-         t = 'm';enabled();
+    $("#btnmodimerma").on('click',function() {
+        t='m';listresiduos('m'); enabled();
     })
 
-    $("#btnresiduos").on('click',function() {
-        t = 'r'; disabled();
+    $("#btnmodresiduos").on('click',function() {
+      t='r'; listresiduos('r'); disabled();
     });
 
-    $("#btndesecho").on('click',function() {
-        t = 'd'; disabled();
+    $("#btnmoddesecho").on('click',function() {
+        t='d'; listresiduos('d'); disabled();
     });
+
+    $(document).on('click','#btnmodificar',function() {
+        t='m'; listresiduos('m'); enabled();
+    })
 
     $("#btnguardar").on('click',function(){
         fechincidencia = $("#fehincidencia").val();
@@ -43,15 +47,8 @@ $(document).ready(function () {
     });
 
     $("#btngavances").on('click',function() {
-        //if(faltacaja == 0 && tipobtn == 'f'){finproduccion($("#mdcodprod").val()); return;}
         if(faltacaja == 0 && tipobtn == 'a'){Mensaje1("Error no ya no hay avances que registrar","error");return;}
-        
-        if(t != 'r' && faltacaja != 0){
-            $("#mdregiresiduo").modal('show');
-        }/*else{
-            verificarfinprod($("#mdcodprod").val(),$("#mdcajasxsacar").val(),$("#mdcantxcaja").val(),
-            $("#mdtotal").val());
-        }*/
+        if(t != 'r' && faltacaja != 0){$("#mdregiresiduo").modal('show');}
     });
 
     $("#btnregisproduc").on('click',function() {
@@ -118,9 +115,22 @@ $(document).ready(function () {
     });
 
     $("#btnclose").on('click',function() {
-        if(t == 'd'){Mensaje1("Error registre desechos y sobrantes antes de cerrar","error")}
+        if(t == 'd' || t == 'r'){Mensaje1("Error registre desechos y sobrantes antes de cerrar","error")}
         else{$("#mdregiresiduo").modal('hide');}
     })
+
+    $(document).on('click','#btnactu',function() {
+        merma = $(this).parents('tr').find('td:nth-child(1)').text().trim()
+        $("#txtmdobservacion").val($(this).parents('tr').find('td:nth-child(2)').text().trim());
+        $("#txtmdcantidad").val($(this).parents('tr').find('td:nth-child(3)').text().trim()); 
+        $("#slcmdtipomerma").val($(this).parents('tr').find('td:nth-child(4)').text().trim()); 
+        $("#txtmdprodfalla").val($(this).parents('tr').find('td:nth-child(5)').text().trim()); 
+    });
+
+    $("#btnmodificaresi").on('click',function() {
+        actualizaresiduos();
+    })
+
 });
 
 function lstocurrencia() {
@@ -158,12 +168,14 @@ function lstitemsfor() {
 }
 
 function createtable(obj) {
-    b2 ="<a id='btnfinalizar' style='margin-right: 2px;margin-bottom: 1px;' class='btn btn-primary  btn-sm' data-bs-toggle='modal' data-bs-target='#mdregisavances'>"+
-        "<i class='icon-check' title='Registrar avances'></i></a>"+
-        "<a id='btnavances' style='margin-right: 2px;margin-bottom: 1px;' class='btn btn-primary  btn-sm' data-bs-toggle='modal' data-bs-target='#mdregisavances'>"+
+    b2 ="<a id='btnfinalizar' style='margin-right: 1px;margin-bottom: 1px;' class='btn btn-primary  btn-sm' data-bs-toggle='modal' data-bs-target='#mdregisavances'>"+
+        "<i class='icon-check' title='Finalizar Produccion'></i></a>"+
+        "<a id='btnavances' style='margin-right: 1px;margin-bottom: 1px;' class='btn btn-primary  btn-sm' data-bs-toggle='modal' data-bs-target='#mdregisavances'>"+
          "<i class='icon-edit' title='Registrar avances'></i></a>"+
-         "<a id='btnocurencia' style='margin-right: 2px;margin-bottom: 1px;' class='btn btn-danger  btn-sm' data-bs-toggle='modal' data-bs-target='#mdocurrencia'>"+
-         "<i class='icon-warning' title='Registrar avances'></i></a>";
+         "<a id='btnocurencia' style='margin-right: 1px;margin-bottom: 1px;' class='btn btn-danger  btn-sm' data-bs-toggle='modal' data-bs-target='#mdocurrencia'>"+
+         "<i class='icon-warning' title='Registrar Ocurrencias'></i></a>"+
+         "<a id='btnmodificar' style='margin-right: 1px;margin-bottom: 1px;' class='btn btn-danger  btn-sm' data-bs-toggle='modal' data-bs-target='#mdmodacregiresidu'>"+
+         "<i class='icon-warning' title='Modificar residuos'></i></a>";
     $("#tbproduccion > tbody").empty();
     $.each(obj, function(i, item) {
         cliente = (item[3] == null) ? '' : item[3];
@@ -205,21 +217,21 @@ function Mensaje1(texto,icono){
 }
 
 function enabled() {
-    $("#fechmerma").removeAttr('disabled');
-    $("#hormerma").removeAttr('disabled');
     $("#fehincidencia").removeAttr('disabled');
     $("#horincidencia").removeAttr('disabled');
     $("#slctipomerma").removeAttr('disabled');
     $("#txtprodfalla").removeAttr('disabled');
+    $("#txtmdprodfalla").removeAttr('disabled');
+    $("#slcmdtipomerma").removeAttr('disabled');
 }
 
 function disabled() {
-    $("#fechmerma").attr('disabled',true);
-    $("#hormerma").attr('disabled',true);
     $("#fehincidencia").attr('disabled',true);
     $("#horincidencia").attr('disabled',true);
     $("#slctipomerma").attr('disabled',true);
     $("#txtprodfalla").attr('disabled',true);
+    $("#txtmdprodfalla").attr('disabled',true);
+    $("#slcmdtipomerma").attr('disabled',true);
 }
 
 function guardar(fechincidencia,horaincidencia,observacion,tipomerma,cantidad,falla) {
@@ -270,7 +282,6 @@ function guardar(fechincidencia,horaincidencia,observacion,tipomerma,cantidad,fa
       });
 }
 
-
 function hora(){
     var laHora = new Date();
     var horario = laHora.getHours();
@@ -319,8 +330,13 @@ function guardaravances(frm){
                 if(obj['termi'] == 1){faltacaja = 0}
                 $("#lblmensaje").text('Paquetes restantes ' + (totalpaquete - $("#mdcajasxsacar").val()));
                 Mensaje3("Se registron los datos" ,"success","Antes de cerrar la ventana imprima los tickes");
-                $("#btnregisproduc").attr('disabled',true);
-                $("#btngavances").removeAttr('disabled');
+                if(tipobtn == 'f' && faltacaja == 0){
+                    $("#btnregisproduc").removeAttr('disabled');
+                    $("#btngavances").attr('disabled',true);
+                }else{
+                    $("#btnregisproduc").attr('disabled',true);
+                    $("#btngavances").removeAttr('disabled');
+                }
             }else{
                 Mensaje1(obj['suc'],"error");
                 $('.ajax-loader').css("visibility", "hidden");
@@ -352,10 +368,12 @@ function v_avances($produccion,inavance){
                 sobra = (obj['dato'][0][7] * obj['dato'][0][6]);
                 totalpaquete = faltacaja = obj['falta']
                 $("#lblmensaje").text('Paquetes restantes ' + obj['falta']);
-                if(inavance == 't' || faltacaja == 0){$("#btngavances").attr('disabled',true);
+                if(inavance == 't' && faltacaja == 0){$("#btngavances").attr('disabled',true);
                 $("#btnregisproduc").removeAttr('disabled')
                     $("#mdcajasxsacar").attr('disabled',true);}
-                else{$("#mdcajasxsacar").removeAttr('disabled')}
+                else{$("#btngavances").removeAttr('disabled');
+                    $("#btnregisproduc").attr('disabled',true);
+                    $("#mdcajasxsacar").removeAttr('disabled')}
                 cab = 1;
             }else{
                 $("#mdtara").val('');
@@ -389,9 +407,7 @@ function guardaravancesits(produ,avance,producto){
             obj = JSON.parse(res);
             if(obj['suc'] == 1){
                if(obj['termi'] == 1){faltacaja = 0;}
-               if(obj['termi'] == 1 && tipobtn == 'f'){faltacaja = 0;
-                 finproduccion($("#mdcodprod").val()); 
-                 return;}
+               if(obj['termi'] == 1 && tipobtn == 'f'){faltacaja = 0;return;}
                  $("#lblmensaje").text('Paquetes restantes ' + (totalpaquete - $("#mdcajasxsacar").val()));
               Mensaje3("Se registron los datos" ,"success","Antes de cerrar la ventana imprima los tickes");
               $("#btnregisproduc").attr('disabled',true);
@@ -535,7 +551,6 @@ function disabletab() {
     $("#btnresiduos").prop("disabled",true);
 }
 
-
 function inputavance(tab,inavance) {
         $("#mdlote").val($(tab).parents('tr').find('td:nth-child(4)').text());
         $("#mdcodprod").val($(tab).parents('tr').find('td:nth-child(1)').text());
@@ -556,10 +571,12 @@ function finproduccion(produccion){
         },beforeSend: function () {
             $('.ajax-loader').css("visibility", "visible");
         },success:function(e){
-            if(e == 1){ Mensaje1("Se finalizo la produccion","success");
+            if(e == 1){Mensaje1("Se finalizo la produccion","success");
             lstitemsfor(); $("#mdregisavances").modal('hide'); t = 'm'}
             else{
-                mensaje(e,"error");
+                $('.ajax-loader').css("visibility", "hidden");
+                t = 'm';
+                Mensaje2("Error al finalizar produccion","error",e);
             }
         },complete: function(){
             $('.ajax-loader').css("visibility", "hidden");
@@ -580,4 +597,69 @@ function perdida(produccion,cant,lote,fecha,peso,cantidad,tara,total,fin) {
             demoFromHTML(cant,lote,fecha,peso,cantidad,tara,total,fin);
         }
       }); 
+}
+
+function Mensaje2(title,icon,text) {
+    Swal.fire({title: title,icon: icon,text: text,confirmButtonText: 'Aceptar',
+    }).then((result) => {
+        if (result.isConfirmed) {
+            $("#mdregiresiduo").modal('show');
+            $("#divtable").css("display","block");
+        }
+    })
+}
+
+function listresiduos(p) {
+    $("#txtmdobservacion").val('');$("#txtmdprodfalla").val('');
+    $("#txtmdcantidad").val('');$("#slcmdtipomerma").val('R');
+    $.ajax({
+        dataType:'text',
+        type: 'POST', 
+        url:  'c_produccion.php',
+        data:{
+            "accion" : 'lstmodificar',
+            "tipo" : p,
+            "produccion" : produccion
+        },success:function(e){
+            obj = JSON.parse(e);
+            $("#tbmodificar > tbody").empty();
+            $.each(obj['dato'], function(i, item) {
+               if(p == 'm')tablamodificar(item[0],item[6],item[13],item[14],item[15])
+               else tablamodificar(item[0],item[2],item[9],'','')
+            });
+        }
+    });    
+}
+function  tablamodificar(a,b,c,d,e) {
+    a1 ="<a id='btnactu' class='btn btn-primary  btn-sm'>"+
+    "<i class='icon-brush' title='Actualizar item'></i></a>";
+    $("#tbmodificar > tbody").empty();
+    var fila='';
+    fila +="<td class='tdcontent' style=display:none>"+a+"</td>";
+    fila +="<td >"+b+"</td>";
+    fila +="<td >"+c+"</td>";
+    fila +="<td style=display:none>"+d+"</td>";
+    fila +="<td style=display:none>"+e+"</td>";
+    fila +="<td class='tdcontent'>"+a1+"</td>";
+    var btn = document.createElement("TR");
+    btn.innerHTML=fila;
+    document.getElementById("tbdmodificar").appendChild(btn);
+}
+
+function actualizaresiduos() {
+    var frmactua = $("#frmdmresiduos").serialize();
+    console.log(frmactua);
+    $.ajax({
+        dataType:'text',
+        type: 'POST', 
+        url:  'c_produccion.php',
+        data:frmactua+"&accion=frmmodificar&usu="+usu+"&merma="+merma+"tipo="+t
+        ,success:function(e){
+          if(e == 1){
+             Mensaje1("Se actualizo el registro","success");
+          }else{
+              Mensaje1("Error al actualizar el registro","error");
+          }
+        }
+    });
 }

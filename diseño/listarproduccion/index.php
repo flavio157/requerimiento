@@ -83,7 +83,7 @@ $cod = $_SESSION["cod"];*/
             <div class="modal-content">
               <div class="modal-header">
                 <h5 class="modal-title" id="exampleModalLabel">Registrar producción</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                <button type="button" class="btn-close"  data-bs-dismiss="modal"  id="btncloseavan" aria-label="Close"></button>
               </div>
               <div class="modal-body">
                 <form id="frmavances">  
@@ -189,7 +189,7 @@ $cod = $_SESSION["cod"];*/
         </div>
 
 
-        <div class="modal fade" id="mdregiresiduo" tabindex="-1" data-bs-keyboard="false" data-bs-backdrop="static" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal fade" id="mdregiresiduo" tabindex="-1" data-bs-keyboard="false" data-bs-backdrop="static" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog">
           <div class="modal-content">
             <div class="modal-header">
@@ -230,18 +230,6 @@ $cod = $_SESSION["cod"];*/
                         <textarea class="form-control" rows="3" id="txtobservacion"></textarea>
                         </div>
                       </div>
-                      <!--<div class="row">
-                        <div class="col">
-                          <label class="form-label">Insumos</label>
-                          <div class="input-group mb-3">
-                            <input id="txtcodpro" class="form-control" style="display: none;"> 
-                            <input type="text" class="form-control" id="txtinsumos" autocomplete="off"> 
-                            <a class="btn btn-success" id="btnmdinsumo">
-                              <i class="icon-magnifying-glass" title="buscar insumos"></i>
-                            </a>
-                          </div>
-                        </div>
-                      </div>-->
                       <div class="row">
                         <div class="col">
                           <label class="form-label">Producto Malogrado</label>
@@ -259,7 +247,7 @@ $cod = $_SESSION["cod"];*/
                         </div>
                       </div>
                       <div class="row">
-                        <div class="col">
+                        <div class="col-auto">
                           <label class="form-label">Tipo Merma</label>
                           <select class="form-select mb-3" id="slctipomerma" >
                             <option value="R" selected>Reingreso</option>
@@ -267,23 +255,105 @@ $cod = $_SESSION["cod"];*/
                           </select>
                         </div>
                       </div>
-                      
-                     <!-- <div class="row mb-3">
-                        <div class="col g-3 ">
-                            <a class="btn btn-primary" type="button" id="btnagregarmater" style="float: right;">
-                                <i class='icon-add-to-list' title='Agregar molde'></i>
-                            </a>
-                        </div>
-                      </div>--> 
                   </form>        
             </div>
             <div class="modal-footer">
               <button type="button" class="btn btn-danger" id="btncerragre">Cerrar</button>
-              <button type="button" class="btn btn-primary" id="btnguardar">Aceptar</button>
+              <button type="button" class="btn btn-primary" id="btnguardar">Confirmar</button>
             </div>
           </div>
         </div>
       </div>
+
+
+
+      <div class="modal fade" id="mdmodacregiresidu" tabindex="-1" data-bs-keyboard="false" data-bs-backdrop="static" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="exampleModalLabel">Registrar residuos</h5>
+              <button type="button" class="btn-close"  data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                  <div class="row">
+                      <div class="col mb-3">
+                        <div class="btn-group" role="group" aria-label="Basic radio toggle button group">
+                          <input type="radio"  class="btn-check" name="btnradio" id="btnmodimerma" autocomplete="off" checked>
+                          <label class="btn btn-outline-primary" for="btnmodimerma">Merma</label>
+                          <input type="radio" class="btn-check" name="btnradio" id="btnmoddesecho" autocomplete="off">
+                          <label class="btn btn-outline-primary" for="btnmoddesecho">Desechos</label>
+                          <input type="radio" class="btn-check" name="btnradio" id="btnmodresiduos" autocomplete="off">
+                          <label class="btn btn-outline-primary" for="btnmodresiduos">Sobrantes</label>
+                        </div>
+                      </div>
+                    </div>
+            <form id="frmdmresiduos">
+                    <div class="row">
+                        <div class="col">
+                        <label class="form-label">Observación</label>
+                        <textarea class="form-control" rows="3" id="txtmdobservacion" name="txtmdobservacion"></textarea>
+                        </div>
+                      </div>
+                      <div class="row">
+                        <div class="col">
+                          <label class="form-label">Producto Malogrado</label>
+                          <div class="input-group mb-3">
+                            <input type="text" class="form-control" name="txtmdprodfalla" id="txtmdprodfalla" autocomplete="off">    
+                            <span class="input-group-text" id="basic-addon1">Uds</span>
+                          </div>
+                        </div>
+                        <div class="col">
+                          <label class="form-label">Peso</label>
+                          <div class="input-group mb-3">
+                            <input type="text" id="txtmdpeso" name="txtmdpeso" style="display: none;"> 
+                            <input type="text" class="form-control" name="txtmdcantidad" id="txtmdcantidad" autocomplete="off">    
+                            <span class="input-group-text" id="basic-addon1">g</span>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="row">
+                        <input type="text" id="slcmdtipo" name="slcmdtipo" style="display: none;"> 
+                        <div class="col-auto">
+                          <label class="form-label">Tipo Merma</label>
+                          <select class="form-select mb-3" id="slcmdtipomerma" name="slcmdtipomerma">
+                            <option value="R" selected>Reingreso</option>
+                            <option value="P">Perdida</option>  
+                          </select>
+                        </div>
+                      </div>
+
+                      <div class="row" id="divtable">
+                        <div class="col">
+                          <table class="table" id="tbmodificar">
+                              <thead>
+                                <tr>
+                                  <th>Descripcion</th>
+                                  <th>cantidad</th>
+                                  <th>Acción</th>
+                                </tr>
+                              </thead>
+                              <tbody id="tbdmodificar">
+                               
+                              </tbody>
+                          </table>
+                        </div>
+                      </div>
+
+                  </form>        
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-danger"  data-bs-dismiss="modal">Cerrar</button>
+              <button type="button" class="btn btn-primary" id="btnmodificaresi">Confirmar</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+
+
+
+
     </div>    
 </body>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.3.2/jspdf.debug.js"></script>
