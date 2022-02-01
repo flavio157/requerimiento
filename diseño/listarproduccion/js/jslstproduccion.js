@@ -125,6 +125,8 @@ $(document).ready(function () {
         $("#txtmdcantidad").val($(this).parents('tr').find('td:nth-child(3)').text().trim()); 
         $("#slcmdtipomerma").val($(this).parents('tr').find('td:nth-child(4)').text().trim()); 
         $("#txtmdprodfalla").val($(this).parents('tr').find('td:nth-child(5)').text().trim()); 
+        $("#txtmdpeso").val($(this).parents('tr').find('td:nth-child(3)').text().trim());
+        $("#slcmdtipo").val($(this).parents('tr').find('td:nth-child(4)').text().trim());
     });
 
     $("#btnmodificaresi").on('click',function() {
@@ -174,8 +176,8 @@ function createtable(obj) {
          "<i class='icon-edit' title='Registrar avances'></i></a>"+
          "<a id='btnocurencia' style='margin-right: 1px;margin-bottom: 1px;' class='btn btn-danger  btn-sm' data-bs-toggle='modal' data-bs-target='#mdocurrencia'>"+
          "<i class='icon-warning' title='Registrar Ocurrencias'></i></a>"+
-         "<a id='btnmodificar' style='margin-right: 1px;margin-bottom: 1px;' class='btn btn-danger  btn-sm' data-bs-toggle='modal' data-bs-target='#mdmodacregiresidu'>"+
-         "<i class='icon-warning' title='Modificar residuos'></i></a>";
+         "<a id='btnmodificar' style='margin-right: 1px;margin-bottom: 1px;' class='btn btn-primary  btn-sm' data-bs-toggle='modal' data-bs-target='#mdmodacregiresidu'>"+
+         "<i class='icon-list' title='Modificar residuos'></i></a>";
     $("#tbproduccion > tbody").empty();
     $.each(obj, function(i, item) {
         cliente = (item[3] == null) ? '' : item[3];
@@ -442,24 +444,25 @@ function lstavance(produccion){
             obj = JSON.parse(e);
            if(obj['succ'] == 1){
             $.each(obj['dato'], function(i, item) {
-                demoFromHTML(obj['cantidad'],item[3],obj['fecha'],item[10],item[7],item[9],item[8],obj['tipo'],obj['id'])
+                c(obj['cantidad'],item[3],obj['fecha'],item[10],item[7],item[9],item[8],obj['tipo'],obj['id'])
             }); 
            }else{
                 Mensaje1("Error no hay datos que imprimir","error");
            }
         }
     });
-}
+} 
 
 function demoFromHTML(cant,lote,fecha,peso,cantidad,tara,total,fin,avance) {
     qr(fecha,lote);
     let base64Image = $('#codigo').attr('src');
-    count = 0; tipo = 0;
+    count = 0; tipo = 0;pesoneto = 0;
     var doc = new jsPDF();doc.setFontSize(14);doc.setFontType('normal');
     var hojas = 0;
     if(Math.floor(cant / 8) == 0){hojas = 1}else{hojas = Math.floor(cant / 8)}
     if(cant % 8 != 0){hojas += 1}
     for (let i = 0; i < cant; i++) {
+        pesoneto = Number(peso * cantidad).toFixed(2);
         if(fin == 0 && (i+1) == cant && (total % cantidad) != 0 ){
         cantidad = total % cantidad; peso = (peso / cantidad)}
         if(i % 2 == 0){x = 2; xr = 0; xx = 59 ; xqr = 32}else{x = 107 ;xr=105; xx = 59 * 2.78;xqr = 59 *2.30}
@@ -468,9 +471,9 @@ function demoFromHTML(cant,lote,fecha,peso,cantidad,tara,total,fin,avance) {
             doc.rect(xr, 74 * 0, 105, 74.20)
                 doc.text('FECHA: '+fecha, x, 9); 
                 doc.text('CANTIDAD: '+cantidad + " Uds.",  xx, 9); 
-                doc.text('PESO NETO: ' + Number(peso).toFixed(2) +" Kg",x, 19); 
+                doc.text('PESO NETO: ' + pesoneto +" Kg",x, 19); 
                 doc.text('TARA: '+ Number(tara).toFixed(2) +" Kg",xx, 19); 
-                doc.text('PESO TOTAL: '+(Number(peso)+ Number(tara)).toFixed(2) +" Kg",x, 29);
+                doc.text('PESO TOTAL: '+(Number(pesoneto)+ Number(tara)).toFixed(2) +" Kg",x, 29);
                 doc.text('LOTE: '+lote, xx, 29);
                 doc.addImage(base64Image,'JPEG', xqr, 33, 40, 40);
                 tipo++;
@@ -478,9 +481,9 @@ function demoFromHTML(cant,lote,fecha,peso,cantidad,tara,total,fin,avance) {
             doc.rect(xr, 74 * 1, 105, 74.20)
                 doc.text('FECHA: '+fecha, x, 83);
                 doc.text('CANTIDAD: '+cantidad + " Uds.", xx, 83); 
-                doc.text('PESO NETO: '+ Number(peso).toFixed(2) +" Kg",x, 93);
+                doc.text('PESO NETO: '+ pesoneto +" Kg",x, 93);
                 doc.text('TARA: '+ Number(tara).toFixed(2) +" Kg", xx, 93);
-                doc.text('PESO TOTAL: '+(Number(peso)+ Number(tara)).toFixed(2) +" Kg", x, 103);
+                doc.text('PESO TOTAL: '+(Number(pesoneto)+ Number(tara)).toFixed(2) +" Kg", x, 103);
                 doc.text('LOTE: '+lote, xx, 103);
                 doc.addImage(base64Image,'JPEG', xqr, 107, 40, 40);
                 tipo++;
@@ -489,9 +492,9 @@ function demoFromHTML(cant,lote,fecha,peso,cantidad,tara,total,fin,avance) {
             doc.rect(xr, 74 * 2, 105, 74.20)
                 doc.text('FECHA: '+fecha, x, 157);
                 doc.text('CANTIDAD: '+cantidad + " Uds.", xx, 157);
-                doc.text('PESO NETO: '+ Number(peso).toFixed(2) +" Kg", x, 167);
+                doc.text('PESO NETO: '+ pesoneto +" Kg", x, 167);
                 doc.text('TARA: '+ Number(tara).toFixed(2) +" Kg", xx, 167);
-                doc.text('PESO TOTAL: '+(Number(peso)+ Number(tara)).toFixed(2) +" Kg", x, 177);
+                doc.text('PESO TOTAL: '+(Number(pesoneto)+ Number(tara)).toFixed(2) +" Kg", x, 177);
                 doc.text('LOTE: '+lote, xx, 177);
                 doc.addImage(base64Image,'JPEG', xqr, 181, 40, 40);
                 tipo++;
@@ -500,15 +503,15 @@ function demoFromHTML(cant,lote,fecha,peso,cantidad,tara,total,fin,avance) {
             doc.rect(xr, 74 * 3, 105, 74.20)
                 doc.text('FECHA: '+fecha, x, 231);
                 doc.text('CANTIDAD: '+cantidad + " Uds.",xx, 231);
-                doc.text('PESO NETO: '+Number(peso).toFixed(2) +" Kg", x, 241);
+                doc.text('PESO NETO: '+pesoneto +" Kg", x, 241);
                 doc.text('TARA: '+ Number(tara).toFixed(2) +" Kg", xx, 241);
-                doc.text('PESO TOTAL: '+(Number(peso)+ Number(tara)).toFixed(2) +" Kg", x, 251);
+                doc.text('PESO TOTAL: '+(Number(pesoneto)+ Number(tara)).toFixed(2) +" Kg", x, 251);
                 doc.text('LOTE: '+lote, xx, 251);
                 doc.addImage(base64Image,'JPEG', xqr, 255, 40, 40);
                 tipo++;
         }
     }
-    //updateimpresion(avance)
+    
     window.open(doc.output('bloburl'), '_blank');
 }
 
@@ -592,9 +595,11 @@ function perdida(produccion,cant,lote,fecha,peso,cantidad,tara,total,fin) {
         data:{
             "accion" : 'perdida',
             "produccion" : produccion,
+            "fecha" : fecha
         },success:function(e){
-            total = (total - e);
-            demoFromHTML(cant,lote,fecha,peso,cantidad,tara,total,fin);
+            obj = JSON.parse(e);
+            total = (total - obj['e']);
+            demoFromHTML(cant,lote,obj['fecha'],peso,cantidad,tara,total,fin);
         }
       }); 
 }
@@ -603,8 +608,6 @@ function Mensaje2(title,icon,text) {
     Swal.fire({title: title,icon: icon,text: text,confirmButtonText: 'Aceptar',
     }).then((result) => {
         if (result.isConfirmed) {
-            $("#mdregiresiduo").modal('show');
-            $("#divtable").css("display","block");
         }
     })
 }
@@ -648,15 +651,16 @@ function  tablamodificar(a,b,c,d,e) {
 
 function actualizaresiduos() {
     var frmactua = $("#frmdmresiduos").serialize();
-    console.log(frmactua);
     $.ajax({
         dataType:'text',
         type: 'POST', 
         url:  'c_produccion.php',
-        data:frmactua+"&accion=frmmodificar&usu="+usu+"&merma="+merma+"tipo="+t
+        data:frmactua+"&accion=frmmodificar&usu="+usu+"&merma="+merma+"&tipo="+t
         ,success:function(e){
+            
           if(e == 1){
              Mensaje1("Se actualizo el registro","success");
+             listresiduos(t)
           }else{
               Mensaje1("Error al actualizar el registro","error");
           }

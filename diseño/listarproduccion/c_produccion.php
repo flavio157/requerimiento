@@ -77,14 +77,24 @@ require_once("m_produccion.php");
         $produccion = $_POST['produccion'];
         c_produccion::c_lstresiduos($tipo,$produccion);
     }else if($accion == 'frmmodificar'){
+      
+        $tipo = $_POST['tipo'];
         $merma = $_POST['merma'];
         $observacion = $_POST['txtmdobservacion'];
-        $cantfalla = $_POST['txtmdprodfalla'];
         $txtmdpesAnter = $_POST['txtmdpeso'];
         $txtmdpesomodifi = $_POST['txtmdcantidad'];
         $slcmdtipoAnt = $_POST['slcmdtipo'];
-        $slcmdtipomodi = $_POST['slcmdtipomerma'];
-        $tipo = $_POST['tipo'];
+            
+        if(isset($_POST['txtmdprodfalla']) == 1)
+        {  $cantfalla = $_POST['txtmdprodfalla'];}else{
+            $cantfalla = '';
+        }
+        
+        if(isset($_POST['slcmdtipomerma']) == 1)
+        { $slcmdtipomodi = $_POST['slcmdtipomerma'];}else{
+            $slcmdtipomodi = '';
+        }
+      
         $usu = $_POST['usu'];
         c_produccion::c_actualizar($merma,$observacion,$cantfalla,$txtmdpesAnter,$txtmdpesomodifi
         ,$slcmdtipoAnt,$slcmdtipomodi,$tipo,$usu);
@@ -380,7 +390,10 @@ require_once("m_produccion.php");
                     $suma += $c_avance[$i][15];
                 }
             }
-            print_r($suma);
+            $fecha = retunrFechaActual();
+            $dato = array('e' => $suma ,'fecha' => $fecha);
+            echo json_encode($dato,JSON_FORCE_OBJECT);
+            //print_r($suma);
         }
 
         static function c_lstresiduos($tipo,$codproduccion)
@@ -398,15 +411,17 @@ require_once("m_produccion.php");
         static function c_actualizar($merma,$observacion,$cantfalla,$txtmdpesAnter,$txtmdpesomodifi
         ,$slcmdtipoAnt,$slcmdtipomodi,$tipo,$usu)
         {
-            
+            //$cantfalla,$observacion,$usu,$merma,$txtmdpesAnter,$txtmdpesomodifi
             $m_formula = new m_produccion();
             if($tipo == 'm'){
-                $resul =$m_formula->m_actualizarmerma($observacion,$usu,$merma,$merma,$txtmdpesAnter,$slcmdtipomodi,$$cantfalla);
+                $resul =$m_formula->m_actualizarmerma($txtmdpesomodifi,$observacion,$usu,$merma,$txtmdpesAnter,$txtmdpesomodifi,$cantfalla,$slcmdtipoAnt,$slcmdtipomodi);
+                print_r($resul);
             }else if($tipo == 'd'){
-                $resul =$m_formula->m_actdesechos($txtmdpesAnter,$observacion,$usu,$merma);
-                return $resul;
+                $resul =$m_formula->m_actdesechos($txtmdpesomodifi,$observacion,$usu,$merma);
+                print_r($resul);
             }else if($tipo == 'r'){
-                $resul =$m_formula->m_actresiduos($cantfalla,$observacion,$usu,$merma);
+                $resul =$m_formula->m_actresiduos($txtmdpesomodifi,$observacion,$usu,$merma,$txtmdpesAnter,$txtmdpesomodifi);
+                print_r($resul);
             }
         }
 
