@@ -3,11 +3,11 @@
 if (session_status() == PHP_SESSION_NONE) {
     session_start();
 }
-/*$ofi = $_SESSION["ofi"];
+$ofi = $_SESSION["ofi"];
 $zon = $_SESSION["zon"];
 $cod = $_SESSION["cod"];
 
-require_once("./menu/index.php");*/
+require_once("../menu/index.php");
 ?>
 
 <!DOCTYPE html>
@@ -53,9 +53,9 @@ require_once("./menu/index.php");*/
         <div class="main"> 
             
           <form style="margin-bottom: 0px;" id="frmproduccion">
-                  <input type="text" id="vroficina" style="display: none;" value="<?php echo 'SMP2'//$ofi?>"/>
-                  <input type="text" id="vrzona" style="display: none;" value="<?php echo  'SMP2'//$zon?>"/>
-                  <input type="text" id="vrcodpersonal" style="display: none;" value="<?php echo '0215'//$cod?>"/>
+                  <input type="text" id="vroficina" style="display: none;" value="<?php echo $ofi?>"/>
+                  <input type="text" id="vrzona" style="display: none;" value="<?php echo  $zon?>"/>
+                  <input type="text" id="vrcodpersonal" style="display: none;" value="<?php echo $cod?>"/>
                 
               <div class="row mb-3">
                   <div class="col">
@@ -66,7 +66,9 @@ require_once("./menu/index.php");*/
                 <div class="col">
                 <input type="text" id="txtprod" name="txtprod" style="display: none;">
                 <input type="text" id="txtform" name="txtform" style="display: none;">
-                    <label>Nombre formula</label>
+                <input type="text" id="color" name="color" style="display: none;">
+                
+                    <label>Nombre de la formula</label>
                     <input type="text" id="txtbformula" name="txtbformula" class="form-control mayu"  placeholder="Buscar formula" autocomplete="off">
                 </div> 
                 <div class="col-auto">
@@ -197,7 +199,7 @@ require_once("./menu/index.php");*/
                   <button class="nav-link" id="profile-tab" data-bs-toggle="tab" data-bs-target="#profile" type="button" role="tab" aria-controls="profile" aria-selected="false">Carga</button>
                 </li>
                 <li class="nav-item" role="presentation">
-                  <button class="nav-link" id="contact-tab" data-bs-toggle="tab" data-bs-target="#contact" type="button" role="tab" aria-controls="contact" aria-selected="false">Insumos</button>
+                  <button class="nav-link" id="contact-tab" data-bs-toggle="tab" data-bs-target="#contact" type="button" role="tab" aria-controls="contact" aria-selected="false">Presión</button>
                 </li>
               </ul>
               <div class="tab-content" id="myTabContent">

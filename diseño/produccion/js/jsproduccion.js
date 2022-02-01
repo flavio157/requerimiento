@@ -183,6 +183,7 @@ function autocompletarformula() {
           parametros(ui.item.code);
           $("#txtprodcant").val(ui.item.cant);
           $("#txtbformula").val(ui.item.label);
+          $("#color").val(ui.item.color);
         }
     });
 }
@@ -499,12 +500,13 @@ function insertexter(insumo,stocks,tipo) {
 }
 
 function buscarpasadas(insumo,material,cantidad) {
+    color = $("#color").val()
     $.ajax({
         dataType:'text',
         type: 'POST', 
         url:  'c_produccion.php',
         data:{
-            "accion" :"pasadas","insumo" : insumo,
+            "accion" :"pasadas","insumo" : insumo,"color":color
         },
         success:  function(e){
             var fila=''; obj = JSON.parse(e);

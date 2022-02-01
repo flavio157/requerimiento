@@ -120,7 +120,8 @@ require_once("m_produccion.php");
         c_produccion::c_updateexteno($producto,$cantidad,$tipo);
     }else if($accion == 'pasadas'){
             $insumo = $_POST['insumo'];
-            c_produccion::c_pasadas($insumo);
+            $color = $_POST['color'];
+            c_produccion::c_pasadas($insumo,$color);
     }else if($accion == 'lstalmacen'){
         c_produccion::lstalmacen();
     }else if($accion== 'parametros'){
@@ -153,7 +154,9 @@ require_once("m_produccion.php");
                     "code" => $c_producto[$i][0],
                     "prod" => $c_producto[$i][2],
                     "cant" => $c_producto[$i][4],
-                    "label" => trim($c_producto[$i][1]) ));
+                    "label" => trim($c_producto[$i][1]),
+                    "color" => trim($c_producto[$i][6]),
+                ));
             }
             $dato = array('dato' => $producto);
             echo json_encode($dato,JSON_FORCE_OBJECT);
@@ -403,10 +406,10 @@ require_once("m_produccion.php");
             print_r($c_produccion);
        }
 
-       static function c_pasadas($insumo)
+       static function c_pasadas($insumo,$color)
        {
             $m_producto = new m_produccion();
-            $cadena = "producto = '$insumo'";
+            $cadena = "producto = '$insumo' and color ='$color'";
             $c_producto = $m_producto->m_buscar('V_INSUMOS_PASADAS',$cadena);
             $dato = array(
                 'dato' => $c_producto, 
