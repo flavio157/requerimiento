@@ -3004,7 +3004,7 @@
         decodeOnceFromConstraints(constraints, videoSource) {
             return __awaiter(this, void 0, void 0, function* () {
                 const stream = yield navigator.mediaDevices.getUserMedia(constraints);
-                return yield this.decodeOnceFromStream(canvas2, videoSource);
+                return yield this.decodeOnceFromStream(stream, videoSource);
             });
         }
         /**
@@ -3050,12 +3050,10 @@
          * @memberOf BrowserCodeReader
          */
         decodeFromVideoDevice(deviceId, videoSource, callbackFn) {
-           
             return __awaiter(this, void 0, void 0, function* () {
                 let videoConstraints;
                 if (!deviceId) {
-                    videoConstraints = { facingMode: 'environment'}
-                    
+                    videoConstraints = { facingMode: 'environment' };
                 }
                 else {
                     videoConstraints = { deviceId: { exact: deviceId } };
@@ -3076,107 +3074,9 @@
         decodeFromConstraints(constraints, videoSource, callbackFn) {
             return __awaiter(this, void 0, void 0, function* () {
                 const stream = yield navigator.mediaDevices.getUserMedia(constraints);
-              
-                
                 return yield this.decodeFromStream(stream, videoSource, callbackFn);
             });
         }
-
-        /** 
-         * se creo para probrar los limites del lector
-         * 
-        */
-         getShadedRegionBounds(A, e, t) {
-            if (t > A || t > e) throw "'config.qrbox' no debe ser mayor que el ancho y el alto del elemento HTML";
-            return {
-               
-               // x: (A - t) / 2,
-               // y: (e - t) / 2,
-               x : 80,
-                y: 0,
-                width: t,
-                height: t
-            }
-        }
-        
-
-        /*A=250, e=250 t=undefined*/
-        createCanvasElement(A, e, t) {
-            var g = A,
-                i = e,
-                n = document.createElement("canvas");
-                /*aqui*/
-        return n.style.width = g + "px", n.style.height = i + "px", n.style.display = "none", n.id = "qr-canvas", n
-        }
-
-
-        possiblyInsertShadingElement(A, e, t, g) {
-            if (!(e - g < 1 || t - g < 1)) {
-                var i = document.createElement("div");
-                //para modificar la posicion del centro donde se lee el codigobar
-               // if (i.style.position = "absolute", i.style.borderLeft = (e - g) / 2 + "px solid #0000007a", i.style.borderRight = (e - g) / 2 + "px solid #0000007a", i.style.borderTop = (t - g) / 2 + "px solid #0000007a", i.style.borderBottom = (t - g) / 2 + "px solid #0000007a", i.style.boxSizing = "border-box", i.style.top = "0px", i.style.bottom = "0px", i.style.left = "0px", i.style.right = "0px", i.id = "qr-shaded-region", e - g < 11 || t - g < 11) this.hasBorderShaders = !1;
-              if(screen.width > screen.height){
-              
-                var l = screen.width - screen.height;
-                
-              }else{
-                
-                var l = (screen.height - screen.width) - 100;
-               // console.log(l/2);
-              }
-
-              //console.log((screen.width - screen.height));
-               
-             //alert(l+"px solid #0000007a");
-             if (i.style.position = "absolute", i.style.borderLeft = 11 + "px solid #0000007a", i.style.borderRight = 11 + "px solid #0000007a", i.style.borderTop = l/2 + "px solid #0000007a", i.style.borderBottom = l/2 + "px solid #0000007a", i.style.boxSizing = "border-box", i.style.top = "0px", i.style.bottom = "0px", i.style.left = "0px", i.style.right = "0px", i.id = "qr-shaded-region", e - g < 11 || t - g < 11) this.hasBorderShaders = !1;
-               else {
-                  
-                    var n = 40;
-                    //var w = $(i).css("border-bottom-width");
-                    //console.log(w);
-                    //90px
-                   // console.log(i);
-                    //console.log(i +","+ 5 +","+ 45+","+ (l/2) +"+"+ 5 +"-"+ n+","+-5);
-                    //esquinas superiores
-                    this.insertShaderBorders(i, (l/10), 5, -5, 0, !0,'top','border1'),
-                    this.insertShaderBorders(i, (l/10), 5, -5, 0, !1,'top','border2'), 
-                    this.insertShaderBorders(i, 5, (l/8), -5, -5, !0,'top','border3'), 
-                    this.insertShaderBorders(i, 5, (l/8), -5, -5, !1,'top','border4'), 
-                    //esquinas inferiores
-                    this.insertShaderBorders(i, (l/10), 5, -3 , 0, !0,'bottom','border5'), 
-                    this.insertShaderBorders(i, (l/10), 5, -3 , 0, !1,'bottom','border6'), 
-                   
-                  /**/  this.insertShaderBorders(i, 5, (l/8),-3, -5, !0,'bottom','border7'),
-                        this.insertShaderBorders(i, 5, (l/8), -3, -5, !1,'bottom','border8'), 
-                    this.hasBorderShaders = !0
-                }
-               // console.log(A);
-                A.append(i)
-            }
-        }   
-
-      
-
-       insertShaderBorders(A, e, t, g, i, n,tipo,id) {
-            var o = document.createElement("div");
-            if(tipo == 'top'){
-                o.id=id, o.style.position = "absolute", o.style.backgroundColor =  "#ffffff", o.style.width = e + "px", o.style.height = t + "px", o.style.top = g + "px", n ? o.style.left = i + "px" : o.style.right = i + "px", this.borderShaders || (this.borderShaders = []), this.borderShaders.push(o), A.appendChild(o)
-            }else if(tipo == 'bottom'){
-                o.id=id,o.style.position = "absolute", o.style.backgroundColor =  "#ffffff", o.style.width = e + "px", o.style.height = t + "px", o.style.bottom = g + "px", n ? o.style.left = i + "px" : o.style.right = i + "px", this.borderShaders || (this.borderShaders = []), this.borderShaders.push(o), A.appendChild(o)
-            }
-           
-        }
-
-
-        /** 
-         * fin de las funciones creadas
-        */
-
-
-        
-
-
-
         /**
          * In one attempt, tries to decode the barcode from a stream obtained from the given constraints while showing the video in the specified video element.
          *
@@ -3190,7 +3090,6 @@
             return __awaiter(this, void 0, void 0, function* () {
                 this.reset();
                 const video = yield this.attachStreamToVideo(stream, videoSource);
-                
                 return yield this.decodeContinuously(video, callbackFn);
             });
         }
@@ -3329,7 +3228,6 @@
          * @experimental
          */
         decodeFromVideoContinuously(source, url, callbackFn) {
-           
             if (undefined === source && undefined === url) {
                 throw new ArgumentException('Either an element with a src set or an URL must be provided');
             }
@@ -3348,7 +3246,6 @@
             this.reset();
             const element = this.prepareImageElement(source);
             this.imageElement = element;
-            
             let task;
             if (this.isImageLoaded(element)) {
                 task = this.decodeOnce(element, false, true);
@@ -3548,39 +3445,19 @@
                 }
                 try {
                     const result = this.decode(element);
-                    // aqui alert(result);  "rgb(90, 193, 56)"
-                     
                     callbackFn(result, null);
                     setTimeout(loop, this.timeBetweenScansMillis);
-                    $("#border1").css('background-color','rgb(90, 193, 56)');
-                    $("#border2").css('background-color','rgb(90, 193, 56)');
-                    $("#border3").css('background-color','rgb(90, 193, 56)');
-                    $("#border4").css('background-color','rgb(90, 193, 56)');
-                    $("#border5").css('background-color','rgb(90, 193, 56)');
-                    $("#border6").css('background-color','rgb(90, 193, 56)');
-                    $("#border7").css('background-color','rgb(90, 193, 56)');
-                    $("#border8").css('background-color','rgb(90, 193, 56)');
                 }
                 catch (e) {
                     callbackFn(null, e);
                     const isChecksumOrFormatError = e instanceof ChecksumException || e instanceof FormatException;
                     const isNotFound = e instanceof NotFoundException;
                     if (isChecksumOrFormatError || isNotFound) {
-                        $("#border1").css('background-color','rgb(255, 255, 255)');
-                        $("#border2").css('background-color','rgb(255, 255, 255)');
-                        $("#border3").css('background-color','rgb(255, 255, 255)');
-                        $("#border4").css('background-color','rgb(255, 255, 255)');
-                        $("#border5").css('background-color','rgb(255, 255, 255)');
-                        $("#border6").css('background-color','rgb(255, 255, 255)');
-                        $("#border7").css('background-color','rgb(255, 255, 255)');
-                        $("#border8").css('background-color','rgb(255, 255, 255)');
                         // trying again
                         setTimeout(loop, this._timeBetweenDecodingAttempts);
                     }
                 }
             };
-           
-            //result != "" ? $("#brd").css('background-color','rgb(90, 193, 56)') : $("#brd").css('background-color','rgb(255, 255, 255)')
             loop();
         }
         /**
@@ -3588,10 +3465,7 @@
          */
         decode(element) {
             // get binary bitmap for decode function
-
             const binaryBitmap = this.createBinaryBitmap(element);
-           
-           // const binaryBitmap = lienzo(element);
             return this.decodeBitmap(binaryBitmap);
         }
         /**
@@ -3600,12 +3474,9 @@
          * @param mediaElement HTML element containing drawable image source.
          */
         createBinaryBitmap(mediaElement) {
-            const ctx = this.getCaptureCanvasContext(mediaElement);    
-
+            const ctx = this.getCaptureCanvasContext(mediaElement);
             this.drawImageOnCanvas(ctx, mediaElement);
             const canvas = this.getCaptureCanvas(mediaElement);
-           
-           // console.log(elemento);
             const luminanceSource = new HTMLCanvasElementLuminanceSource(canvas);
             const hybridBinarizer = new HybridBinarizer(luminanceSource);
             return new BinaryBitmap(hybridBinarizer);
@@ -3613,7 +3484,6 @@
         /**
          *
          */
-        /*aqui */
         getCaptureCanvasContext(mediaElement) {
             if (!this.captureCanvasContext) {
                 const elem = this.getCaptureCanvas(mediaElement);
@@ -3628,8 +3498,6 @@
         getCaptureCanvas(mediaElement) {
             if (!this.captureCanvas) {
                 const elem = this.createCaptureCanvas(mediaElement);
-               // elem.style.position = 'absolute'
-               
                 this.captureCanvas = elem;
             }
             return this.captureCanvas;
@@ -3637,33 +3505,8 @@
         /**
          * Ovewriting this allows you to manipulate the snapshot image in anyway you want before decode.
          */
-        
         drawImageOnCanvas(canvasElementContext, srcElement) {
-            //aqui
-            var targetSize =  100;
-            const videoWidth = Math.ceil(srcElement.videoWidth);
-            const videoHeight = Math.ceil(srcElement.videoHeight);
-            const targetLeft = (videoWidth - targetSize) / 2;
-            const targetTop = (videoHeight - targetSize) / 2;
-            
-            if($("#qr-shaded-region").length == 0){
-                
-                var i = true;
-                var g = 0
-                var A = targetLeft
-                var e = targetTop 
-                var o = this.getShadedRegionBounds(A, e, g);
-                //crea el elemento canvas
-                var I = this.createCanvasElement(o.width, o.height);
-                //obtiene el context 
-                var C = I.getContext("2d");
-                $("#contentcanvas").append(canvasElementContext);
-                $("#contentcanvas").append(I);
-              
-           C.canvas.width = o.width, C.canvas.height = o.height, $("#contentcanvas").append(I), i && this.possiblyInsertShadingElement(document.getElementById("contentcanvas"), A, e, g), this.qrRegion = o, this.context = C, this.canvasElement = I
-        }
-            canvasElementContext.drawImage(srcElement,10,280, 700, 700, 0, 0, 800,800);
-          // canvasElementContext.drawImage(srcElement, 0, 80);
+            canvasElementContext.drawImage(srcElement, 0, 0);
         }
         /**
          * Call the encapsulated readers decode
@@ -3674,9 +3517,8 @@
         /**
          * 🖌 Prepares the canvas for capture and scan frames.
          */
-      //  targetSize = Math.ceil(availableWidth < availableHeight ? availableWidth / 2 : availableHeight / 2);
         createCaptureCanvas(mediaElement) {
-           if (typeof document === 'undefined') {
+            if (typeof document === 'undefined') {
                 this._destroyCaptureCanvas();
                 return null;
             }
@@ -3693,12 +3535,10 @@
                     height = mediaElement.naturalHeight || mediaElement.height;
                 }
             }
-           var targetSize = 100
-            canvasElement.style.width = 600+'px';
-            canvasElement.style.height = targetSize + 'px';
-
-            canvasElement.width = 600;
-            canvasElement.height = targetSize;
+            canvasElement.style.width = width + 'px';
+            canvasElement.style.height = height + 'px';
+            canvasElement.width = width;
+            canvasElement.height = height;
             return canvasElement;
         }
         /**
@@ -5396,7 +5236,6 @@
         constructor(bits, points) {
             this.bits = bits;
             this.points = points;
-            
         }
         getBits() {
             return this.bits;
@@ -6556,7 +6395,6 @@
             try {
                 let detectorResult = detector.detectMirror(false);
                 points = detectorResult.getPoints();
-                
                 this.reportFoundResultPoints(hints, points);
                 decoderResult = new Decoder().decode(detectorResult);
             }
@@ -6567,7 +6405,6 @@
                 try {
                     let detectorResult = detector.detectMirror(true);
                     points = detectorResult.getPoints();
-                
                     this.reportFoundResultPoints(hints, points);
                     decoderResult = new Decoder().decode(detectorResult);
                 }
@@ -11165,14 +11002,11 @@
                 dimensionTop = dimensionRight = Math.max(dimensionTop, dimensionRight);
             }
             let bits = Detector$1.sampleGrid(this.image, topLeft, bottomLeft, bottomRight, topRight, dimensionTop, dimensionRight);
-            /*aqui la corrdenadas cuando detecta codigo barra */
             return new DetectorResult(bits, [topLeft, bottomLeft, bottomRight, topRight]);
-
         }
         static shiftPoint(point, to, div) {
             let x = (to.getX() - point.getX()) / (div + 1);
             let y = (to.getY() - point.getY()) / (div + 1);
-            
             return new ResultPoint(point.getX() + x, point.getY() + y);
         }
         static moveAway(point, fromX, fromY) {
@@ -11360,7 +11194,6 @@
         }
         static sampleGrid(image, topLeft, bottomLeft, bottomRight, topRight, dimensionX, dimensionY) {
             const sampler = GridSamplerInstance.getInstance();
-           
             return sampler.sampleGrid(image, dimensionX, dimensionY, 0.5, 0.5, dimensionX - 0.5, 0.5, dimensionX - 0.5, dimensionY - 0.5, 0.5, dimensionY - 0.5, topLeft.getX(), topLeft.getY(), topRight.getX(), topRight.getY(), bottomRight.getX(), bottomRight.getY(), bottomLeft.getX(), bottomLeft.getY());
         }
         /**
@@ -14129,8 +13962,6 @@
             const topLeft = info.getTopLeft();
             const topRight = info.getTopRight();
             const bottomLeft = info.getBottomLeft();
-            /*aqui*/
-            
             const moduleSize = this.calculateModuleSize(topLeft, topRight, bottomLeft);
             if (moduleSize < 1.0) {
                 throw new NotFoundException('No pattern found in proccess finder.');
