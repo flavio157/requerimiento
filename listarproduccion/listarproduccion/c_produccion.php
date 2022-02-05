@@ -72,8 +72,33 @@ require_once("m_produccion.php");
     }else if($accion =='perdida'){
         $produccion = $_POST['produccion'];
         c_produccion::c_perdida($produccion);
+    }else if($accion == 'lstmodificar'){
+        $tipo = $_POST['tipo'];
+        $produccion = $_POST['produccion'];
+        c_produccion::c_lstresiduos($tipo,$produccion);
+    }else if($accion == 'frmmodificar'){
+      
+        $tipo = $_POST['tipo'];
+        $merma = $_POST['merma'];
+        $observacion = $_POST['txtmdobservacion'];
+        $txtmdpesAnter = $_POST['txtmdpeso'];
+        $txtmdpesomodifi = $_POST['txtmdcantidad'];
+        $slcmdtipoAnt = $_POST['slcmdtipo'];
+            
+        if(isset($_POST['txtmdprodfalla']) == 1)
+        {  $cantfalla = $_POST['txtmdprodfalla'];}else{
+            $cantfalla = '';
+        }
+        
+        if(isset($_POST['slcmdtipomerma']) == 1)
+        { $slcmdtipomodi = $_POST['slcmdtipomerma'];}else{
+            $slcmdtipomodi = '';
+        }
+      
+        $usu = $_POST['usu'];
+        c_produccion::c_actualizar($merma,$observacion,$cantfalla,$txtmdpesAnter,$txtmdpesomodifi
+        ,$slcmdtipoAnt,$slcmdtipomodi,$tipo,$usu);
     }
-
 
     class c_produccion
     {
@@ -112,12 +137,11 @@ require_once("m_produccion.php");
         $observacion,$usu,$t,$cantidad,$tipomerma,$color,$falla)
         {
             $falla = (strlen(trim($falla)) == 0) ? 0 : $falla;
-            $residuos = '';$resul = '';
+            $residuos = '';
             $dato = c_produccion::c_validardatos($fechincidencia,$horaincidencia,
             $observacion,$t,$cantidad);
-            $resul = c_produccion::verificartotal($codproduccion,'r');
             $m_produccion = new m_produccion();
-            if($dato == '0' && $resul == '0'){
+            if($dato == '0'){
                 if($t == 'm'){
                     $residuos = $m_produccion->m_guardarmerma($codproduccion,
                     $fechincidencia,$horaincidencia,$observacion,$usu,$cantidad,$tipomerma,$falla);
@@ -132,8 +156,7 @@ require_once("m_produccion.php");
                     print_r($residuos);
                 }
             }else{
-                $resul = ($dato != '0')? $dato : $resul;
-                print_r($resul);
+                print_r($dato);
             }
         }
 
@@ -145,8 +168,8 @@ require_once("m_produccion.php");
                 if(strlen(trim($horaincidencia)) == 0){return "Error ingrese hora merma";}
                 if($horaincidencia == '00:00'){return "Error la hora incidencia no puede ser 00:00";}
             }
-            if(!is_numeric($cantidad)){return "Error solo numero en cantidad";}
             if(strlen(trim($observacion)) == 0){return "Error ingrese observación";}
+            if(!is_numeric($cantidad)){return "Error solo numero en cantidad";}
             return '0';
         }
 
@@ -155,7 +178,6 @@ require_once("m_produccion.php");
             $temi = 0;$dato = "";$c_produccion = '';$respuesta = '0'; 
            
             if($paquexsacar == $total){
-                $respuesta = c_produccion::verificartotal($produccion,'f');
                 $temi = 1;
             }
             $resul = c_produccion::c_validarfinrprod($tara,$pesoneto,$cantxbolsa,$paquexsacar,$lote,$total);
@@ -188,7 +210,6 @@ require_once("m_produccion.php");
                  $cantpaquete += $avance[$i][6];                 
             }
             if($avance[0][5] == ($cantpaquete + $cantavance)){
-                $respuesta = c_produccion::verificartotal($prod,'f');
                 $temi = 1;
             }
             
@@ -294,18 +315,17 @@ require_once("m_produccion.php");
         {   
            $m_produccion = new m_produccion();
            $respuesta = c_produccion::verificartotal($produccion,'f');
-            if($respuesta == 0){
+            if($respuesta == "0"){
                 $c_terminar = $m_produccion->m_finalizarproduccion($produccion,$usu);
                 print_r($c_terminar);
             }else{
                 print_r($respuesta);
             }
-            
         }
 
         static function verificartotal($produccion,$tipo)
         {
-            $cantidad = 0; $totalxprod = 0;
+            $cantidad = 0; $totalxprod = 0; $totalinsumo = 0;
             $m_produccion = new m_produccion();
             $consulta = "COD_PRODUCCION = '$produccion'";
             $itempro = $m_produccion->m_buscar('T_PRODUCCION_ITEM',$consulta);
@@ -319,23 +339,24 @@ require_once("m_produccion.php");
                     $merma = $m_produccion->m_buscar('V_LISTAR_MERMA',$consulta2);
                     if(count($merma) > 0){
                         for ($a=0; $a < count($merma) ; $a++) { 
-                            $totalxprod += $merma[$a][13];
+                            if($merma[$a][15] == 0){
+                                $totalxprod = $totalxprod + $merma[$a][13];
+                            }
                         }
                     }
-
                     $consulta3 = "COD_PRODUCCION = '$produccion' AND insumo = '$insumo'"; 
                     $residuos = $m_produccion->m_buscar('V_LISTAR_RESIDUOS',$consulta3);
                     if(count($residuos) > 0){
                         for ($l=0; $l < count($residuos) ; $l++) { 
-                            $totalxprod += $residuos[$l][9];
+                            $totalxprod = $totalxprod + $residuos[$l][9];
                         }
                     }
 
                     $consulta4 = "COD_PRODUCCION = '$produccion'"; 
                     $desecho = $m_produccion->m_buscar('V_LISTAR_DESECHOS',$consulta4);
                     if(count($desecho) > 0){
-                        for ($j =0; $j < count($desecho) ; $j++) { 
-                            $totalxprod += $desecho[$j][9];
+                        for ($j =0; $j < count($desecho) ; $j++) {
+                            $totalxprod = $totalxprod +  $desecho[$j][9];
                         }
                     }
                 }
@@ -344,17 +365,17 @@ require_once("m_produccion.php");
             $consulta4 = "COD_PRODUCCION = '$produccion'"; 
             $produc = $m_produccion->m_buscar('T_PRODUCCION',$consulta4);
             if(count($produc) > 0){
-                $totalxprod = ($produc[0][9] * $produc[0][11]) + ($totalxprod * 0.001);  //la suma del peso del producto mas merma ect.
-            }    
-          
-            if($tipo == 'r' || $tipo == 'f'){
-                if(($totalxprod * 0.001)  > number_format($cantidad,3,'.', ' ') ){ 
-                    return "Error el peso total de los insumos usado es mayor al peso total del producto";
-                }
-            }else if($tipo == 'f'){
-                if(number_format($cantidad,3,'.', ' ')  > ($totalxprod * 0.001)){ 
-                    return "Error el peso total de los insumos usado es menor al peso total del producto";
-                }
+                $totalinsumo = number_format((($produc[0][9] * $produc[0][11]) * 0.001),2,'.',' ');  //la suma del peso del producto mas merma ect.
+                $totalinsumo = $totalinsumo + number_format(($totalxprod * 0.01),2,'.',' ');
+            }   
+            $cantidad =  number_format($cantidad,2,'.', ' ');
+      
+            if(bccomp($totalinsumo, $cantidad,2) == -1){ 
+                return "El peso total del producto es mayor al peso total de los insumos usados";
+            }
+  
+            if(bccomp($cantidad,$totalinsumo,2) == -1){ 
+                return "El peso total del producto es menor al peso total de los insumos usados";
             }
             return '0';
         }
@@ -369,8 +390,41 @@ require_once("m_produccion.php");
                     $suma += $c_avance[$i][15];
                 }
             }
-            print_r($suma);
+            $fecha = retunrFechaActual();
+            $dato = array('e' => $suma ,'fecha' => $fecha);
+            echo json_encode($dato,JSON_FORCE_OBJECT);
+            //print_r($suma);
         }
+
+        static function c_lstresiduos($tipo,$codproduccion)
+        {
+            $m_formula = new m_produccion();
+            $cadena = "COD_PRODUCCION = '$codproduccion'";
+
+            if($tipo == 'm') $c_formula = $m_formula->m_buscar('V_LISTAR_MERMA',$cadena);
+            else if($tipo == 'r')  $c_formula = $m_formula->m_buscar('V_LISTAR_RESIDUOS',$cadena);
+            else if($tipo == 'd')  $c_formula = $m_formula->m_buscar('V_LISTAR_DESECHOS',$cadena);
+            $dato = array('dato' => $c_formula);
+            echo json_encode($dato,JSON_FORCE_OBJECT);
+        }
+
+        static function c_actualizar($merma,$observacion,$cantfalla,$txtmdpesAnter,$txtmdpesomodifi
+        ,$slcmdtipoAnt,$slcmdtipomodi,$tipo,$usu)
+        {
+            //$cantfalla,$observacion,$usu,$merma,$txtmdpesAnter,$txtmdpesomodifi
+            $m_formula = new m_produccion();
+            if($tipo == 'm'){
+                $resul =$m_formula->m_actualizarmerma($txtmdpesomodifi,$observacion,$usu,$merma,$txtmdpesAnter,$txtmdpesomodifi,$cantfalla,$slcmdtipoAnt,$slcmdtipomodi);
+                print_r($resul);
+            }else if($tipo == 'd'){
+                $resul =$m_formula->m_actdesechos($txtmdpesomodifi,$observacion,$usu,$merma);
+                print_r($resul);
+            }else if($tipo == 'r'){
+                $resul =$m_formula->m_actresiduos($txtmdpesomodifi,$observacion,$usu,$merma,$txtmdpesAnter,$txtmdpesomodifi);
+                print_r($resul);
+            }
+        }
+
 
     }
 ?>

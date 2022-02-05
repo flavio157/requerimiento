@@ -1,5 +1,5 @@
 var usu = '';t = 'm';produccion='';cantxinsumo = ''; tipobtn = 'a';color = '';
-var cab = 0;totalpaquete = 0;cantidad=0;var qrcode = '';faltacaja = 0 ;sobra=0;
+var cab = 0;totalpaquete = 0;cantidad=0;var qrcode = '';faltacaja = 0 ;sobra=0;merma ='';
 $(document).ready(function () {
     lstitemsfor();
     hora();
@@ -20,17 +20,25 @@ $(document).ready(function () {
         lmp();
     });
 
-    $("#btnmerma").on('click',function() {
-         t = 'm';enabled();
+    $("#btncloseavan").on('click',function(){
+        t = 'm'
+    });
+
+    $("#btnmodimerma").on('click',function() {
+        t='m';listresiduos('m'); enabled();
     })
 
-    $("#btnresiduos").on('click',function() {
-        t = 'r'; disabled();
+    $("#btnmodresiduos").on('click',function() {
+      t='r'; listresiduos('r'); disabled();
     });
 
-    $("#btndesecho").on('click',function() {
-        t = 'd'; disabled();
+    $("#btnmoddesecho").on('click',function() {
+        t='d'; listresiduos('d'); disabled();
     });
+
+    $(document).on('click','#btnmodificar',function() {
+        t='m'; listresiduos('m'); enabled();
+    })
 
     $("#btnguardar").on('click',function(){
         fechincidencia = $("#fehincidencia").val();
@@ -43,16 +51,15 @@ $(document).ready(function () {
     });
 
     $("#btngavances").on('click',function() {
-        if(faltacaja == 0 && tipobtn == 'f'){finproduccion($("#mdcodprod").val()); return;}
         if(faltacaja == 0 && tipobtn == 'a'){Mensaje1("Error no ya no hay avances que registrar","error");return;}
-        
-        if(t != 'r' && faltacaja != 0){
-            $("#mdregiresiduo").modal('show');
-        }else{
-            verificarfinprod($("#mdcodprod").val(),$("#mdcajasxsacar").val(),$("#mdcantxcaja").val(),
-            $("#mdtotal").val());
-        }
+        if(t != 'r' && faltacaja != 0){$("#mdregiresiduo").modal('show');}
     });
+
+    $("#btnregisproduc").on('click',function() {
+        if(faltacaja == 0 && tipobtn == 'f'){finproduccion($("#mdcodprod").val()); return;}
+        verificarfinprod($("#mdcodprod").val(),$("#mdcajasxsacar").val(),$("#mdcantxcaja").val(),
+        $("#mdtotal").val());
+    })
 
     $(document).on('click','#btnfinalizar',function() {
         inputavance(this,'t'); tipobtn = 'f';
@@ -93,7 +100,7 @@ $(document).ready(function () {
         total = $("#mdtotal").val();
         topaqu = (cantidad * cant + sobra);
         if(topaqu >= total){fin = 0}else{fin = 1}
-
+        
         if(tipobtn == 'f' && cant == 0){
             lstavance($("#mdcodprod").val())
         }else if(tipobtn == 'f' && cant != 0){
@@ -107,14 +114,29 @@ $(document).ready(function () {
     });
 
     $("#btncerragre").on('click',function() {
-        if(t == 'd'){Mensaje1("Error registre desechos y sobrantes antes de cerrar","error")}
+        if(t == 'd' || t == 'r'){Mensaje1("Error registre desechos y sobrantes antes de cerrar","error")}
         else{$("#mdregiresiduo").modal('hide');}
     });
 
     $("#btnclose").on('click',function() {
-        if(t == 'd'){Mensaje1("Error registre desechos y sobrantes antes de cerrar","error")}
+        if(t == 'd' || t == 'r'){Mensaje1("Error registre desechos y sobrantes antes de cerrar","error")}
         else{$("#mdregiresiduo").modal('hide');}
     })
+
+    $(document).on('click','#btnactu',function() {
+        merma = $(this).parents('tr').find('td:nth-child(1)').text().trim()
+        $("#txtmdobservacion").val($(this).parents('tr').find('td:nth-child(2)').text().trim());
+        $("#txtmdcantidad").val($(this).parents('tr').find('td:nth-child(3)').text().trim()); 
+        $("#slcmdtipomerma").val($(this).parents('tr').find('td:nth-child(4)').text().trim()); 
+        $("#txtmdprodfalla").val($(this).parents('tr').find('td:nth-child(5)').text().trim()); 
+        $("#txtmdpeso").val($(this).parents('tr').find('td:nth-child(3)').text().trim());
+        $("#slcmdtipo").val($(this).parents('tr').find('td:nth-child(4)').text().trim());
+    });
+
+    $("#btnmodificaresi").on('click',function() {
+        actualizaresiduos();
+    })
+
 });
 
 function lstocurrencia() {
@@ -152,12 +174,14 @@ function lstitemsfor() {
 }
 
 function createtable(obj) {
-    b2 ="<a id='btnfinalizar' style='margin-right: 2px;margin-bottom: 1px;' class='btn btn-primary  btn-sm' data-bs-toggle='modal' data-bs-target='#mdregisavances'>"+
-        "<i class='icon-check' title='Registrar avances'></i></a>"+
-        "<a id='btnavances' style='margin-right: 2px;margin-bottom: 1px;' class='btn btn-primary  btn-sm' data-bs-toggle='modal' data-bs-target='#mdregisavances'>"+
+    b2 ="<a id='btnfinalizar' style='margin-right: 1px;margin-bottom: 1px;' class='btn btn-primary  btn-sm' data-bs-toggle='modal' data-bs-target='#mdregisavances'>"+
+        "<i class='icon-check' title='Finalizar Produccion'></i></a>"+
+        "<a id='btnavances' style='margin-right: 1px;margin-bottom: 1px;' class='btn btn-primary  btn-sm' data-bs-toggle='modal' data-bs-target='#mdregisavances'>"+
          "<i class='icon-edit' title='Registrar avances'></i></a>"+
-         "<a id='btnocurencia' style='margin-right: 2px;margin-bottom: 1px;' class='btn btn-danger  btn-sm' data-bs-toggle='modal' data-bs-target='#mdocurrencia'>"+
-         "<i class='icon-warning' title='Registrar avances'></i></a>";
+         "<a id='btnocurencia' style='margin-right: 1px;margin-bottom: 1px;' class='btn btn-danger  btn-sm' data-bs-toggle='modal' data-bs-target='#mdocurrencia'>"+
+         "<i class='icon-warning' title='Registrar Ocurrencias'></i></a>"+
+         "<a id='btnmodificar' style='margin-right: 1px;margin-bottom: 1px;' class='btn btn-primary  btn-sm' data-bs-toggle='modal' data-bs-target='#mdmodacregiresidu'>"+
+         "<i class='icon-list' title='Modificar residuos'></i></a>";
     $("#tbproduccion > tbody").empty();
     $.each(obj, function(i, item) {
         cliente = (item[3] == null) ? '' : item[3];
@@ -199,21 +223,21 @@ function Mensaje1(texto,icono){
 }
 
 function enabled() {
-    $("#fechmerma").removeAttr('disabled');
-    $("#hormerma").removeAttr('disabled');
     $("#fehincidencia").removeAttr('disabled');
     $("#horincidencia").removeAttr('disabled');
     $("#slctipomerma").removeAttr('disabled');
     $("#txtprodfalla").removeAttr('disabled');
+    $("#txtmdprodfalla").removeAttr('disabled');
+    $("#slcmdtipomerma").removeAttr('disabled');
 }
 
 function disabled() {
-    $("#fechmerma").attr('disabled',true);
-    $("#hormerma").attr('disabled',true);
     $("#fehincidencia").attr('disabled',true);
     $("#horincidencia").attr('disabled',true);
     $("#slctipomerma").attr('disabled',true);
     $("#txtprodfalla").attr('disabled',true);
+    $("#txtmdprodfalla").attr('disabled',true);
+    $("#slcmdtipomerma").attr('disabled',true);
 }
 
 function guardar(fechincidencia,horaincidencia,observacion,tipomerma,cantidad,falla) {
@@ -250,7 +274,8 @@ function guardar(fechincidencia,horaincidencia,observacion,tipomerma,cantidad,fa
                 $("#btndesecho").attr('disabled',true);$(".desechos").removeClass('active'); 
                 lmp();hora(); t='r'; return;}
                 
-                if(t == 'r'){$("#mdregiresiduo").modal('hide'); 
+                if(t == 'r'){$("#mdregiresiduo").modal('hide');$("#btnregisproduc").removeAttr('disabled');
+                $("#btngavances").attr('disabled',true);
                 disabletab(); enabled(); $("#btnmerma").removeAttr("disabled");lmp();hora()
                 $(".sobra").removeClass('active');$(".merma").addClass('active');$("#btnmerma").attr('checked');}
             }else{
@@ -262,7 +287,6 @@ function guardar(fechincidencia,horaincidencia,observacion,tipomerma,cantidad,fa
         }
       });
 }
-
 
 function hora(){
     var laHora = new Date();
@@ -312,6 +336,13 @@ function guardaravances(frm){
                 if(obj['termi'] == 1){faltacaja = 0}
                 $("#lblmensaje").text('Paquetes restantes ' + (totalpaquete - $("#mdcajasxsacar").val()));
                 Mensaje3("Se registron los datos" ,"success","Antes de cerrar la ventana imprima los tickes");
+                if(tipobtn == 'f' && faltacaja == 0){
+                    $("#btnregisproduc").removeAttr('disabled');
+                    $("#btngavances").attr('disabled',true);
+                }else{
+                    $("#btnregisproduc").attr('disabled',true);
+                    $("#btngavances").removeAttr('disabled');
+                }
             }else{
                 Mensaje1(obj['suc'],"error");
                 $('.ajax-loader').css("visibility", "hidden");
@@ -343,8 +374,12 @@ function v_avances($produccion,inavance){
                 sobra = (obj['dato'][0][7] * obj['dato'][0][6]);
                 totalpaquete = faltacaja = obj['falta']
                 $("#lblmensaje").text('Paquetes restantes ' + obj['falta']);
-                if(inavance == 't' || faltacaja == 0){$("#mdcajasxsacar").attr('disabled',true);}
-                else{$("#mdcajasxsacar").removeAttr('disabled')}
+                if(inavance == 't' && faltacaja == 0){$("#btngavances").attr('disabled',true);
+                $("#btnregisproduc").removeAttr('disabled')
+                    $("#mdcajasxsacar").attr('disabled',true);}
+                else{$("#btngavances").removeAttr('disabled');
+                    $("#btnregisproduc").attr('disabled',true);
+                    $("#mdcajasxsacar").removeAttr('disabled')}
                 cab = 1;
             }else{
                 $("#mdtara").val('');
@@ -378,11 +413,11 @@ function guardaravancesits(produ,avance,producto){
             obj = JSON.parse(res);
             if(obj['suc'] == 1){
                if(obj['termi'] == 1){faltacaja = 0;}
-               if(obj['termi'] == 1 && tipobtn == 'f'){faltacaja = 0;
-                 finproduccion($("#mdcodprod").val()); 
-                 return;}
+               if(obj['termi'] == 1 && tipobtn == 'f'){faltacaja = 0;return;}
                  $("#lblmensaje").text('Paquetes restantes ' + (totalpaquete - $("#mdcajasxsacar").val()));
               Mensaje3("Se registron los datos" ,"success","Antes de cerrar la ventana imprima los tickes");
+              $("#btnregisproduc").attr('disabled',true);
+              $("#btngavances").removeAttr('disabled');
             }else{Mensaje1(obj['suc'],"error");
             $('.ajax-loader').css("visibility", "hidden");
                 t = 'm';
@@ -420,66 +455,69 @@ function lstavance(produccion){
            }
         }
     });
-}
+} 
 
 function demoFromHTML(cant,lote,fecha,peso,cantidad,tara,total,fin,avance) {
-    qr(fecha,lote);
-    let base64Image = $('#codigo').attr('src');
-    count = 0; tipo = 0;
-    var doc = new jsPDF();doc.setFontSize(14);doc.setFontType('normal');
+    count = 0; tipo = 0;pesoneto = 0;
+    var doc = new jsPDF();doc.setFontSize(14);doc.setFontType('normal'); doc.setFont(undefined,'bold')
     var hojas = 0;
     if(Math.floor(cant / 8) == 0){hojas = 1}else{hojas = Math.floor(cant / 8)}
     if(cant % 8 != 0){hojas += 1}
     for (let i = 0; i < cant; i++) {
+        pesoneto = Number(peso * cantidad).toFixed(2);
         if(fin == 0 && (i+1) == cant && (total % cantidad) != 0 ){
         cantidad = total % cantidad; peso = (peso / cantidad)}
-        if(i % 2 == 0){x = 2; xr = 0; xx = 59 ; xqr = 32}else{x = 107 ;xr=105; xx = 59 * 2.78;xqr = 59 *2.30}
+        if(i % 2 == 0){x = 5; xr = 0; xx = 55 ; xqr = 32}else{x = 107 ;xr=105; xx = 57 * 2.78;xqr = 59 *2.30}
         if(tipo == 8){doc.addPage(); tipo = 0;}
         if(tipo == 0 || tipo == 1){
             doc.rect(xr, 74 * 0, 105, 74.20)
                 doc.text('FECHA: '+fecha, x, 9); 
                 doc.text('CANTIDAD: '+cantidad + " Uds.",  xx, 9); 
-                doc.text('PESO NETO: ' + Number(peso).toFixed(2) +" Kg",x, 19); 
-                doc.text('TARA: '+ Number(tara).toFixed(2) +" Kg",xx, 19); 
-                doc.text('PESO TOTAL: '+(Number(peso)+ Number(tara)).toFixed(2) +" Kg",x, 29);
-                doc.text('LOTE: '+lote, xx, 29);
-                doc.addImage(base64Image,'JPEG', xqr, 33, 40, 40);
+                doc.text('PESO NETO: ' + pesoneto +" Kg",x, 19); 
+                doc.text('TARA: '+ Number(tara).toFixed(2) +" Kg",x, 29); 
+                doc.text('PESO TOTAL: '+(Number(pesoneto)+ Number(tara)).toFixed(2) +" Kg",x, 39);
+                doc.text('LOTE: '+lote, x, 49);
+                doc.text('TURNO: prueba de turno', x, 59);
+                doc.text('MAQUINISTA: prueba de maquinista', x, 69);
                 tipo++;
         }else if(tipo  == 2 || tipo == 3){
             doc.rect(xr, 74 * 1, 105, 74.20)
                 doc.text('FECHA: '+fecha, x, 83);
                 doc.text('CANTIDAD: '+cantidad + " Uds.", xx, 83); 
-                doc.text('PESO NETO: '+ Number(peso).toFixed(2) +" Kg",x, 93);
-                doc.text('TARA: '+ Number(tara).toFixed(2) +" Kg", xx, 93);
-                doc.text('PESO TOTAL: '+(Number(peso)+ Number(tara)).toFixed(2) +" Kg", x, 103);
-                doc.text('LOTE: '+lote, xx, 103);
-                doc.addImage(base64Image,'JPEG', xqr, 107, 40, 40);
+                doc.text('PESO NETO: '+ pesoneto +" Kg",x, 93);
+                doc.text('TARA: '+ Number(tara).toFixed(2) +" Kg", x, 103);
+                doc.text('PESO TOTAL: '+(Number(pesoneto)+ Number(tara)).toFixed(2) +" Kg", x, 113);
+                doc.text('LOTE: '+lote, x, 123);
+                doc.text('TURNO: prueba de turno', x, 133);
+                doc.text('MAQUINISTA: prueba de maquinista', x, 143);
                 tipo++;
 
         }else if(tipo  == 4 || tipo == 5){
             doc.rect(xr, 74 * 2, 105, 74.20)
                 doc.text('FECHA: '+fecha, x, 157);
                 doc.text('CANTIDAD: '+cantidad + " Uds.", xx, 157);
-                doc.text('PESO NETO: '+ Number(peso).toFixed(2) +" Kg", x, 167);
-                doc.text('TARA: '+ Number(tara).toFixed(2) +" Kg", xx, 167);
-                doc.text('PESO TOTAL: '+(Number(peso)+ Number(tara)).toFixed(2) +" Kg", x, 177);
-                doc.text('LOTE: '+lote, xx, 177);
-                doc.addImage(base64Image,'JPEG', xqr, 181, 40, 40);
+                doc.text('PESO NETO: '+ pesoneto +" Kg", x, 167);
+                doc.text('TARA: '+ Number(tara).toFixed(2) +" Kg", x, 177);
+                doc.text('PESO TOTAL: '+(Number(pesoneto)+ Number(tara)).toFixed(2) +" Kg", x, 187);
+                doc.text('LOTE: '+lote, x, 197);
+                doc.text('TURNO: Prueba de turno', x, 207);
+                doc.text('MAQUINISTA: prueba de maquinista',x, 217);
                 tipo++;
 
         }else if(tipo  == 6 || tipo == 7){
             doc.rect(xr, 74 * 3, 105, 74.20)
                 doc.text('FECHA: '+fecha, x, 231);
                 doc.text('CANTIDAD: '+cantidad + " Uds.",xx, 231);
-                doc.text('PESO NETO: '+Number(peso).toFixed(2) +" Kg", x, 241);
-                doc.text('TARA: '+ Number(tara).toFixed(2) +" Kg", xx, 241);
-                doc.text('PESO TOTAL: '+(Number(peso)+ Number(tara)).toFixed(2) +" Kg", x, 251);
-                doc.text('LOTE: '+lote, xx, 251);
-                doc.addImage(base64Image,'JPEG', xqr, 255, 40, 40);
+                doc.text('PESO NETO: '+pesoneto +" Kg", x, 241);
+                doc.text('TARA: '+ Number(tara).toFixed(2) +" Kg", x, 251);
+                doc.text('PESO TOTAL: '+(Number(pesoneto)+ Number(tara)).toFixed(2) +" Kg", x, 261);
+                doc.text('LOTE: '+lote, x, 271);
+                doc.text('TURNO: prueba de turno', x, 281);
+                doc.text('MAQUINISTA: prueba de maquinista', x, 291);
                 tipo++;
         }
     }
-    //updateimpresion(avance)
+    
     window.open(doc.output('bloburl'), '_blank');
 }
 
@@ -500,7 +538,7 @@ function lmp(){
     document.getElementById("mdregistroresi").reset();
 }
 
-function qr(fecha,lote){
+/*function qr(fecha,lote){
     new QRious({
         element: document.querySelector("#codigo"),
         value: "Lote: "+ lote + " Fecha: "+fecha, 
@@ -509,7 +547,7 @@ function qr(fecha,lote){
         foreground: "#000", 
         level: "H", 
     }); 
-}
+}*/
 
 function date(){
     n =  new Date();y = n.getFullYear();m = n.getMonth() + 1;d = n.getDate();
@@ -542,10 +580,12 @@ function finproduccion(produccion){
         },beforeSend: function () {
             $('.ajax-loader').css("visibility", "visible");
         },success:function(e){
-            if(e == 1){ Mensaje1("Se finalizo la produccion","success");
+            if(e == 1){Mensaje1("Se finalizo la produccion","success");
             lstitemsfor(); $("#mdregisavances").modal('hide'); t = 'm'}
             else{
-                mensaje(e,"error");
+                $('.ajax-loader').css("visibility", "hidden");
+                t = 'm';
+                Mensaje2("Error al finalizar produccion","error",e);
             }
         },complete: function(){
             $('.ajax-loader').css("visibility", "hidden");
@@ -561,9 +601,75 @@ function perdida(produccion,cant,lote,fecha,peso,cantidad,tara,total,fin) {
         data:{
             "accion" : 'perdida',
             "produccion" : produccion,
+            "fecha" : fecha
         },success:function(e){
-            total = (total - e);
-            demoFromHTML(cant,lote,fecha,peso,cantidad,tara,total,fin);
+            obj = JSON.parse(e);
+            total = (total - obj['e']);
+            demoFromHTML(cant,lote,obj['fecha'],peso,cantidad,tara,total,fin);
         }
       }); 
+}
+
+function Mensaje2(title,icon,text) {
+    Swal.fire({title: title,icon: icon,text: text,confirmButtonText: 'Aceptar',
+    }).then((result) => {
+        if (result.isConfirmed) {
+        }
+    })
+}
+
+function listresiduos(p) {
+    $("#txtmdobservacion").val('');$("#txtmdprodfalla").val('');
+    $("#txtmdcantidad").val('');$("#slcmdtipomerma").val('R');
+    $.ajax({
+        dataType:'text',
+        type: 'POST', 
+        url:  'c_produccion.php',
+        data:{
+            "accion" : 'lstmodificar',
+            "tipo" : p,
+            "produccion" : produccion
+        },success:function(e){
+            obj = JSON.parse(e);
+            $("#tbmodificar > tbody").empty();
+            $.each(obj['dato'], function(i, item) {
+               if(p == 'm')tablamodificar(item[0],item[6],item[13],item[14],item[15])
+               else tablamodificar(item[0],item[2],item[9],'','')
+            });
+        }
+    });    
+}
+function  tablamodificar(a,b,c,d,e) {
+    a1 ="<a id='btnactu' class='btn btn-primary  btn-sm'>"+
+    "<i class='icon-brush' title='Actualizar item'></i></a>";
+    $("#tbmodificar > tbody").empty();
+    var fila='';
+    fila +="<td class='tdcontent' style=display:none>"+a+"</td>";
+    fila +="<td >"+b+"</td>";
+    fila +="<td >"+c+"</td>";
+    fila +="<td style=display:none>"+d+"</td>";
+    fila +="<td style=display:none>"+e+"</td>";
+    fila +="<td class='tdcontent'>"+a1+"</td>";
+    var btn = document.createElement("TR");
+    btn.innerHTML=fila;
+    document.getElementById("tbdmodificar").appendChild(btn);
+}
+
+function actualizaresiduos() {
+    var frmactua = $("#frmdmresiduos").serialize();
+    $.ajax({
+        dataType:'text',
+        type: 'POST', 
+        url:  'c_produccion.php',
+        data:frmactua+"&accion=frmmodificar&usu="+usu+"&merma="+merma+"&tipo="+t
+        ,success:function(e){
+            
+          if(e == 1){
+             Mensaje1("Se actualizo el registro","success");
+             listresiduos(t)
+          }else{
+              Mensaje1("Error al actualizar el registro","error");
+          }
+        }
+    });
 }
