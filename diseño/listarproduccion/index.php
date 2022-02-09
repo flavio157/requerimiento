@@ -5,10 +5,10 @@ header('Content-Type: text/html; charset=UTF-8');
 if (session_status() == PHP_SESSION_NONE) {
     session_start();
 }
-/*$ofi = $_SESSION["ofi"];
+$ofi = $_SESSION["ofi"];
 $zon = $_SESSION["zon"];
-$cod = $_SESSION["cod"];*/
-//require_once("./menu/index.php");
+$cod = $_SESSION["cod"];
+require_once("./menu/index.php");
 ?>  
 
 <!DOCTYPE html>
@@ -53,9 +53,9 @@ $cod = $_SESSION["cod"];*/
         </div> 
         <div class="main"> 
             <form id="frmfabricacion">
-                <input type="text" id="vroficina" style="display: none;" value="<?php echo 'SMP2'//$ofi?>"/>
-                <input type="text" id="vrzona" style="display: none;" value="<?php echo  ''//$zon?>"/>
-                <input type="text" id="vrcodpersonal" style="display: none;" value="<?php echo '0215'//$cod?>"/>
+                <input type="text" id="vroficina" style="display: none;" value="<?php echo $ofi?>"/>
+                <input type="text" id="vrzona" style="display: none;" value="<?php echo  $zon?>"/>
+                <input type="text" id="vrcodpersonal" style="display: none;" value="<?php echo $cod?>"/>
                    <div class="row">
                         <div class="col mb-3">
                             <center><label class="titulos">Producción</label></center>

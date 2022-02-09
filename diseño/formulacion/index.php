@@ -3,10 +3,10 @@
 if (session_status() == PHP_SESSION_NONE) {
     session_start();
 }
-/*$ofi = $_SESSION["ofi"];
+$ofi = $_SESSION["ofi"];
 $zon = $_SESSION["zon"];
-$cod = $_SESSION["cod"];*/
-//require_once("../menu/index.php");
+$cod = $_SESSION["cod"];
+require_once("./menu/index.php");
 ?>
 
 <!DOCTYPE html>
@@ -48,9 +48,9 @@ $cod = $_SESSION["cod"];*/
    <section>  
         <div class="main"> 
           <form style="margin-bottom: 0px;" id="frmformulacion">
-                  <input type="text" id="vroficina" style="display: none;" value="<?php echo 'SMP2'//$ofi?>"/>
+                  <input type="text" id="vroficina" style="display: none;" value="<?php echo $ofi?>"/>
                   <input type="text" id="vrzona" style="display: none;" value="<?php echo  $zon?>"/>
-                  <input type="text" id="vrcodpersonal" style="display: none;" value="<?php echo  '0215'//$cod?>"/>
+                  <input type="text" id="vrcodpersonal" style="display: none;" value="<?php echo $cod?>"/>
               <div class="row mb-3">
                   <div class="col">
                       <center><label class="titulos">Registro de formulacion</label></center>
