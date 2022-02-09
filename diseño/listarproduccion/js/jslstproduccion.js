@@ -1,10 +1,12 @@
-var usu = '';t = 'm';produccion='';cantxinsumo = ''; tipobtn = 'a';color = '';
+var usu = '';t = 'm';produccion='';cantxinsumo = ''; tipobtn = 'a';color = '';lstpersonal = [];
 var cab = 0;totalpaquete = 0;cantidad=0;var qrcode = '';faltacaja = 0 ;sobra=0;merma ='';
+var doc;tipofipd = 0;
 $(document).ready(function () {
+    usu = $("#vrcodpersonal").val();
     lstitemsfor();
     hora();
     disabletab();
-    usu = $("#vrcodpersonal").val();
+    autocompletarpersonal();
 
     $('#tbproduccion').on('click', 'tbody tr', function(event) {
         $(this).addClass('highlight').siblings().removeClass('highlight');
@@ -18,6 +20,10 @@ $(document).ready(function () {
 
     $("#btnnuevo").on('click',function() {
         lmp();
+    });
+
+    $("#btncloseavan").on('click',function(){
+        t = 'm'
     });
 
     $("#btnmodimerma").on('click',function() {
@@ -96,7 +102,7 @@ $(document).ready(function () {
         total = $("#mdtotal").val();
         topaqu = (cantidad * cant + sobra);
         if(topaqu >= total){fin = 0}else{fin = 1}
-
+        
         if(tipobtn == 'f' && cant == 0){
             lstavance($("#mdcodprod").val())
         }else if(tipobtn == 'f' && cant != 0){
@@ -133,7 +139,44 @@ $(document).ready(function () {
         actualizaresiduos();
     })
 
+    $("#mdmaquinista").keydown(function(e) {
+        if (e.keyCode == 8) $('#mdcodmaquinista').val('');
+    });
+
 });
+
+function autocompletarpersonal() {
+    buscarxformula();
+    $("#mdmaquinista").autocomplete({
+        source: lstpersonal,
+        select: function (event, ui) {
+          $("#mdcodmaquinista").val(ui.item.code);
+        }
+    });
+}
+
+function buscarxformula(){
+    $.ajax({
+      dataType:'text',
+      type: 'POST', 
+      url:  'c_produccion.php',
+      data:{
+          "accion" : 'buscarxformula',
+          "usu" : usu
+      } ,
+      success:  function(response){
+          obj = JSON.parse(response);
+          $("#mdmaquinista").val(obj['nombre']);
+          $("#mdcodmaquinista").val(usu);
+          $.each(obj['dato'], function(i, item) {
+            lstpersonal.push(item);
+          });
+      }
+    });
+}
+
+
+
 
 function lstocurrencia() {
     $.ajax({
@@ -253,10 +296,11 @@ function guardar(fechincidencia,horaincidencia,observacion,tipomerma,cantidad,fa
             "t" : t,
             "cantidad":cantidad,
             "color" : color,
-            "cantprofalla" : falla
+            "cantprofalla" : falla,
         },beforeSend: function () {
             $('.ajax-loader').css("visibility", "visible");
         },success: function(e) {
+            console.log(e);
             if(e==1){
                 mensaje = (t == 'm') ? "la merma" : (t == 'd') ? "el desecho" : " los sobrantes";
                 Mensaje1("Se registro correctamente "+mensaje,"success"); 
@@ -309,8 +353,9 @@ function verificarfinprod(produccion,cantidad,cantxpa,total){
                 if(cab == 0){ 
                     guardaravances($("#frmavances").serialize());
                 }else if(cab == 1){
-                    guardaravancesits($("#mdcodprod").val(),$("#mdcajasxsacar").val(),$("#mdproduc").val());
-                } //cambiar el valor de e por otra variable
+                    guardaravancesits($("#mdcodprod").val(),$("#mdcajasxsacar").val(),$("#mdproduc").val()
+                    ,$("#slcmdturno").val(),$("#mdcodmaquinista").val());
+                } 
             }else{Mensaje1(e,"error");}
         }
       });
@@ -395,17 +440,18 @@ function v_avances($produccion,inavance){
       }); 
 }
 
-function guardaravancesits(produ,avance,producto){
+function guardaravancesits(produ,avance,producto,turno,maquinista){
    $.ajax({
         dataType:'text',
         type: 'POST', 
         url:  'c_produccion.php',
         data:"accion=gavancesitems&avance="+avance+"&usu="+usu+"&produ="+produ+
-        "&mdproduc="+producto+"&faltante="+faltacaja
+        "&mdproduc="+producto+"&faltante="+faltacaja+"&turno="+turno+"&maquinista="+maquinista
         ,beforeSend: function () {
             $('.ajax-loader').css("visibility", "visible");
         },
         success:function(res){
+            console.log(res);
             obj = JSON.parse(res);
             if(obj['suc'] == 1){
                if(obj['termi'] == 1){faltacaja = 0;}
@@ -443,21 +489,25 @@ function lstavance(produccion){
         success:function(e){
             obj = JSON.parse(e);
            if(obj['succ'] == 1){
+            doc = new jsPDF()
+            tipofipd = 0;
             $.each(obj['dato'], function(i, item) {
-                c(obj['cantidad'],item[3],obj['fecha'],item[10],item[7],item[9],item[8],obj['tipo'],obj['id'])
+              sum = (Number(i)+Number(1));
+              demoFromHTML(item[6],item[3],item[4],item[10],item[7],item[9],item[8],obj['tipo'],obj['id'],item[12],item[13],obj['fila'],sum)
+                //demoFromHTML(obj['cantidad'],item[3],obj['fecha'],item[10],item[7],item[9],item[8],obj['tipo'],obj['id'],item[12],item[13])
             }); 
            }else{
-                Mensaje1("Error no hay datos que imprimir","error");
+              Mensaje1("Error no hay datos que imprimir","error");
            }
         }
     });
 } 
 
-function demoFromHTML(cant,lote,fecha,peso,cantidad,tara,total,fin,avance) {
-    qr(fecha,lote);
-    let base64Image = $('#codigo').attr('src');
-    count = 0; tipo = 0;pesoneto = 0;
-    var doc = new jsPDF();doc.setFontSize(14);doc.setFontType('normal');
+function demoFromHTML(cant,lote,fecha,peso,cantidad,tara,total,fin,avance,maquinista,turno,filas,sum) {
+    console.log(maquinista,turno);
+    turno = (turno.trim() == 'M') ? 'Mañana' : 'Tarde';
+    pesoneto = 0;
+    doc.setFontSize(14);doc.setFontType('normal'); doc.setFont(undefined,'bold')
     var hojas = 0;
     if(Math.floor(cant / 8) == 0){hojas = 1}else{hojas = Math.floor(cant / 8)}
     if(cant % 8 != 0){hojas += 1}
@@ -465,54 +515,59 @@ function demoFromHTML(cant,lote,fecha,peso,cantidad,tara,total,fin,avance) {
         pesoneto = Number(peso * cantidad).toFixed(2);
         if(fin == 0 && (i+1) == cant && (total % cantidad) != 0 ){
         cantidad = total % cantidad; peso = (peso / cantidad)}
-        if(i % 2 == 0){x = 2; xr = 0; xx = 59 ; xqr = 32}else{x = 107 ;xr=105; xx = 59 * 2.78;xqr = 59 *2.30}
-        if(tipo == 8){doc.addPage(); tipo = 0;}
-        if(tipo == 0 || tipo == 1){
+        if(i % 2 == 0){x = 5; xr = 0; xx = 55 ; xqr = 32}else{x = 107 ;xr=105; xx = 57 * 2.78;xqr = 59 *2.30}
+        if(tipofipd == 8){doc.addPage(); tipofipd = 0;}
+        if(tipofipd == 0 || tipofipd == 1){
             doc.rect(xr, 74 * 0, 105, 74.20)
                 doc.text('FECHA: '+fecha, x, 9); 
                 doc.text('CANTIDAD: '+cantidad + " Uds.",  xx, 9); 
                 doc.text('PESO NETO: ' + pesoneto +" Kg",x, 19); 
-                doc.text('TARA: '+ Number(tara).toFixed(2) +" Kg",xx, 19); 
-                doc.text('PESO TOTAL: '+(Number(pesoneto)+ Number(tara)).toFixed(2) +" Kg",x, 29);
-                doc.text('LOTE: '+lote, xx, 29);
-                doc.addImage(base64Image,'JPEG', xqr, 33, 40, 40);
-                tipo++;
-        }else if(tipo  == 2 || tipo == 3){
+                doc.text('TARA: '+ Number(tara).toFixed(2) +" Kg",x, 29); 
+                doc.text('PESO TOTAL: '+(Number(pesoneto)+ Number(tara)).toFixed(2) +" Kg",x, 39);
+                doc.text('LOTE: '+lote, x, 49);
+                doc.text('TURNO: '+turno, x, 59);
+                doc.text('MAQUINISTA: '+maquinista, x, 69);
+                tipofipd++;
+        }else if(tipofipd  == 2 || tipofipd == 3){
             doc.rect(xr, 74 * 1, 105, 74.20)
                 doc.text('FECHA: '+fecha, x, 83);
                 doc.text('CANTIDAD: '+cantidad + " Uds.", xx, 83); 
                 doc.text('PESO NETO: '+ pesoneto +" Kg",x, 93);
-                doc.text('TARA: '+ Number(tara).toFixed(2) +" Kg", xx, 93);
-                doc.text('PESO TOTAL: '+(Number(pesoneto)+ Number(tara)).toFixed(2) +" Kg", x, 103);
-                doc.text('LOTE: '+lote, xx, 103);
-                doc.addImage(base64Image,'JPEG', xqr, 107, 40, 40);
-                tipo++;
+                doc.text('TARA: '+ Number(tara).toFixed(2) +" Kg", x, 103);
+                doc.text('PESO TOTAL: '+(Number(pesoneto)+ Number(tara)).toFixed(2) +" Kg", x, 113);
+                doc.text('LOTE: '+lote, x, 123);
+                doc.text('TURNO: '+turno, x, 133);
+                doc.text('MAQUINISTA: '+maquinista, x, 143);
+                tipofipd++;
 
-        }else if(tipo  == 4 || tipo == 5){
+        }else if(tipofipd  == 4 || tipofipd == 5){
             doc.rect(xr, 74 * 2, 105, 74.20)
                 doc.text('FECHA: '+fecha, x, 157);
                 doc.text('CANTIDAD: '+cantidad + " Uds.", xx, 157);
                 doc.text('PESO NETO: '+ pesoneto +" Kg", x, 167);
-                doc.text('TARA: '+ Number(tara).toFixed(2) +" Kg", xx, 167);
-                doc.text('PESO TOTAL: '+(Number(pesoneto)+ Number(tara)).toFixed(2) +" Kg", x, 177);
-                doc.text('LOTE: '+lote, xx, 177);
-                doc.addImage(base64Image,'JPEG', xqr, 181, 40, 40);
-                tipo++;
+                doc.text('TARA: '+ Number(tara).toFixed(2) +" Kg", x, 177);
+                doc.text('PESO TOTAL: '+(Number(pesoneto)+ Number(tara)).toFixed(2) +" Kg", x, 187);
+                doc.text('LOTE: '+lote, x, 197);
+                doc.text('TURNO: '+turno, x, 207);
+                doc.text('MAQUINISTA: '+maquinista,x, 217);
+                tipofipd++;
 
-        }else if(tipo  == 6 || tipo == 7){
+        }else if(tipofipd  == 6 || tipofipd == 7){
             doc.rect(xr, 74 * 3, 105, 74.20)
                 doc.text('FECHA: '+fecha, x, 231);
                 doc.text('CANTIDAD: '+cantidad + " Uds.",xx, 231);
                 doc.text('PESO NETO: '+pesoneto +" Kg", x, 241);
-                doc.text('TARA: '+ Number(tara).toFixed(2) +" Kg", xx, 241);
-                doc.text('PESO TOTAL: '+(Number(pesoneto)+ Number(tara)).toFixed(2) +" Kg", x, 251);
-                doc.text('LOTE: '+lote, xx, 251);
-                doc.addImage(base64Image,'JPEG', xqr, 255, 40, 40);
-                tipo++;
+                doc.text('TARA: '+ Number(tara).toFixed(2) +" Kg", x, 251);
+                doc.text('PESO TOTAL: '+(Number(pesoneto)+ Number(tara)).toFixed(2) +" Kg", x, 261);
+                doc.text('LOTE: '+lote, x, 271);
+                doc.text('TURNO: '+turno, x, 281);
+                doc.text('MAQUINISTA: '+maquinista, x, 291);
+                tipofipd++;
         }
     }
-    
-    window.open(doc.output('bloburl'), '_blank');
+    if(filas == sum){
+        window.open(doc.output('bloburl'), '_blank');
+    }
 }
 
 function updateimpresion(avance){
@@ -532,7 +587,7 @@ function lmp(){
     document.getElementById("mdregistroresi").reset();
 }
 
-function qr(fecha,lote){
+/*function qr(fecha,lote){
     new QRious({
         element: document.querySelector("#codigo"),
         value: "Lote: "+ lote + " Fecha: "+fecha, 
@@ -541,7 +596,7 @@ function qr(fecha,lote){
         foreground: "#000", 
         level: "H", 
     }); 
-}
+}*/
 
 function date(){
     n =  new Date();y = n.getFullYear();m = n.getMonth() + 1;d = n.getDate();
@@ -588,6 +643,7 @@ function finproduccion(produccion){
 }
 
 function perdida(produccion,cant,lote,fecha,peso,cantidad,tara,total,fin) {
+    tur = $("#slcmdturno").val();maquinista = $("#mdcodmaquinista").val();
     $.ajax({
         dataType:'text',
         type: 'POST', 
@@ -595,13 +651,21 @@ function perdida(produccion,cant,lote,fecha,peso,cantidad,tara,total,fin) {
         data:{
             "accion" : 'perdida',
             "produccion" : produccion,
-            "fecha" : fecha
+            "fecha" : fecha,
+            "turno" : tur,
+            "maquinista" :maquinista
         },success:function(e){
             obj = JSON.parse(e);
-            total = (total - obj['e']);
-            demoFromHTML(cant,lote,obj['fecha'],peso,cantidad,tara,total,fin);
+            if(obj['mensaje'] == 0){
+                doc = new jsPDF();tipofipd = 0;
+                total = (total - obj['e']);
+                demoFromHTML(cant,lote,obj['fecha'],peso,cantidad,tara,total,fin,'',$("#mdmaquinista").val(),tur);
+            }else{
+                Mensaje1(obj['mensaje'],'error');
+            }
+            
         }
-      }); 
+    }); 
 }
 
 function Mensaje2(title,icon,text) {

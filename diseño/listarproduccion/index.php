@@ -5,10 +5,10 @@ header('Content-Type: text/html; charset=UTF-8');
 if (session_status() == PHP_SESSION_NONE) {
     session_start();
 }
-$ofi = $_SESSION["ofi"];
+/*$ofi = $_SESSION["ofi"];
 $zon = $_SESSION["zon"];
-$cod = $_SESSION["cod"];
-require_once("./menu/index.php");
+$cod = $_SESSION["cod"];*/
+//require_once("./menu/index.php");
 ?>  
 
 <!DOCTYPE html>
@@ -29,6 +29,20 @@ require_once("./menu/index.php");
 
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
+<style>
+  .ui-autocomplete.ui-front {
+      max-height: 300px;
+      width: 100px;
+      overflow-y: auto;   
+      overflow-x: hidden; 
+      z-index:1100 !important;
+  }
+
+  .my-class-form-control-group{
+    display:flex;
+    align-items:Center;
+  }
+</style>
 <body style="background: #f5f5f5;">
    <header>
         <title>Moldes en fabricacion</title>
@@ -39,9 +53,9 @@ require_once("./menu/index.php");
         </div> 
         <div class="main"> 
             <form id="frmfabricacion">
-                <input type="text" id="vroficina" style="display: none;" value="<?php echo $ofi?>"/>
-                <input type="text" id="vrzona" style="display: none;" value="<?php echo  $zon?>"/>
-                <input type="text" id="vrcodpersonal" style="display: none;" value="<?php echo $cod?>"/>
+                <input type="text" id="vroficina" style="display: none;" value="<?php echo 'SMP2'//$ofi?>"/>
+                <input type="text" id="vrzona" style="display: none;" value="<?php echo  ''//$zon?>"/>
+                <input type="text" id="vrcodpersonal" style="display: none;" value="<?php echo '0215'//$cod?>"/>
                    <div class="row">
                         <div class="col mb-3">
                             <center><label class="titulos">Producción</label></center>
@@ -75,7 +89,7 @@ require_once("./menu/index.php");
                       <button type="button" id="btndesecho" class="btn btn-danger" >Desechos</button>-->
 
              
-                    <img alt="Código QR" id="codigo" style="display: none;">
+                    <!--<img alt="Código QR" id="codigo" style="display: none;">-->
             </form>
 
         <div class="modal fade" id="mdregisavances" data-bs-keyboard="false" data-bs-backdrop="static" tabindex="-1"   aria-hidden="true">
@@ -133,6 +147,21 @@ require_once("./menu/index.php");
                             </div>
                         </div>
                     </div>
+                    <div class="row mb-3">
+                        <div class="col" style="padding-right: 0px;">
+                          <label>Turno</label>
+                          <select class="form-select" id="slcmdturno" name="slcmdturno">
+                            <option selected value="">Seleccione Turno</option>
+                            <option value="M">Mañana</option>
+                            <option value="T">Tarde</option>
+                          </select>
+                        </div>
+                        <div class="col" style="padding-left: 5px;">
+                          <input type="text" id="mdcodmaquinista" name="mdcodmaquinista" style="display: none;">
+                          <label>Maquinista</label>
+                            <input type="text" class="form-control" id="mdmaquinista" name="mdmaquinista">
+                        </div>
+                    </div>  
                     <div class="row mb-1">
                       <div class="col">
                         <a class="btn btn-success" id="btnimprimir" >
@@ -271,7 +300,7 @@ require_once("./menu/index.php");
         <div class="modal-dialog">
           <div class="modal-content">
             <div class="modal-header">
-              <h5 class="modal-title" id="exampleModalLabel">Modificar residuos</h5>
+              <h5 class="modal-title" id="exampleModalLabel">Registrar residuos</h5>
               <button type="button" class="btn-close"  data-bs-dismiss="modal"></button>
             </div>
             <div class="modal-body">

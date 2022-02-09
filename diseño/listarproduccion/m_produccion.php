@@ -194,7 +194,7 @@ class m_produccion
     }
 
     public function m_gvances($tara,$pesoneto,$cantxbolsa,$paquexsacar,$lote,$produccion,$usu,$total,$fin,$producto,
-    $totalproduc)
+    $totalproduc,$turno,$maquinista)
     {
         $maquina = os_info();
         $fecha = retunrFechaSqlphp(date("Y-m-d"));
@@ -208,7 +208,7 @@ class m_produccion
             $query->execute();
             
             $query2 = $this->bd->prepare("INSERT INTO T_AVANCE_PRODUCCION_ITEM(COD_AVANCE,CANT_PAQUETE,OPERARIO,
-            USU_REGISTRO,IMPRESO)VALUES('$codavance','$paquexsacar','$usu','$usu','0')");
+            USU_REGISTRO,IMPRESO,TURNO)VALUES('$codavance','$paquexsacar','$maquinista','$usu','0','$turno')");
             $query2->execute();
 
             if($fin == 1){
@@ -234,7 +234,7 @@ class m_produccion
         }
     }
 
-    public function m_itemavance($cantavance,$usu,$prod,$fin,$producto){
+    public function m_itemavance($cantavance,$usu,$prod,$fin,$producto,$turno,$maquinista){
         $this->bd->beginTransaction();
         $fecha = retunrFechaSqlphp(date("Y-m-d"));
         $cantalm = 0;
@@ -243,7 +243,7 @@ class m_produccion
             $avance = $this->m_buscar('T_AVANCE_PRODUCCION',$consulta);
             $codavace = $avance[0][1]; $produccion = $avance[0][0];
             $query1 = $this->bd->prepare("INSERT INTO T_AVANCE_PRODUCCION_ITEM(COD_AVANCE,CANT_PAQUETE,OPERARIO,
-            USU_REGISTRO,IMPRESO)VALUES('$codavace','$cantavance','$usu','$usu','0')");
+            USU_REGISTRO,IMPRESO,TURNO)VALUES('$codavace','$cantavance','$maquinista','$usu','0','$turno')");
             $query1->execute();
 
             if($fin == 1){
