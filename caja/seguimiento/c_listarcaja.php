@@ -1,7 +1,7 @@
 <?php
-        require_once("../funciones/m_listarcaja.php");
-        require_once("../funciones/f_funcion.php");
-        require_once("../funciones/m_comentario.php"); //esto
+       require_once("m_listarcaja.php");
+       require_once("../funciones/f_funcion.php");
+       require_once("m_comentario.php");  //esto
 
         $accion = $_POST['accion'];
         $oficina = trim($_POST['oficina']);

@@ -27,7 +27,7 @@ $cod = $_SESSION["cod"];
        
         <LINK REL=StyleSheet HREF="../css/responsive.css" TYPE="text/css" MEDIA=screen>
         
-        <script type="text/javascript" src="../js/jcaja.js"></script>
+        <script type="text/javascript" src="./js/jcaja.js"></script>
         
         <link rel="STYLESHEET" type="text/css" href="../fonts/style.css">
         <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>

@@ -6,6 +6,7 @@ var monto;
 var fec_gasto;
 var fec_cobro;
 var id;
+
 $(document).ready(function(){
     
     tdtable = $('#tablacaja').DataTable({
@@ -273,6 +274,7 @@ function lstcomentariofalta() {
             "oficina":''
         },
         success: function(response){
+            console.log(response);
             mensaje = "No se agregro comentario los dia(s)";
             obj = JSON.parse(response);
             $.each(obj['dato'], function(i, f) {
