@@ -4,6 +4,7 @@ ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 
 require_once("m_produccion.php");
+require_once("../funciones/f_funcion.php");
 
     $accion = $_POST['accion'];  
     if($accion == 'buscarxformula'){
@@ -21,9 +22,8 @@ require_once("m_produccion.php");
         $tipo = $_POST['tipo'];
         c_produccion::veristock($txtcant,$cantxusar,$codpro,$tipo);
     }else if($accion == 'buscarmolde'){
-        $t = $_POST['t'];
         $code = $_POST['code'];
-        c_produccion::c_buscarmolde($t,$code);
+        c_produccion::c_buscarmolde($code);
     }else if($accion == 'buscarclie'){
         c_produccion::c_buscarcliente();
     }else if($accion == 'guardaclie'){
@@ -50,7 +50,9 @@ require_once("m_produccion.php");
         $pesouni = $_POST['txtpesouni'];
         $ciclo = $_POST['txtciclo'];
         $procant = $_POST['txtprodcant'];
-        $almacen = $_POST['slctipoalmacen'];
+        $inicio = $_POST['txtinicio'];
+        $fin = $_POST['txtfin'];
+        $estilomolde = $_POST['estilomolde'];
 
         $tempera1 = $_POST['txttemp1'];
         $tempera2 = $_POST['txttemp2'];
@@ -63,10 +65,7 @@ require_once("m_produccion.php");
         $velexplu2 = $_POST['velexplu2'];
         $pisiexplu1 = $_POST['pisiexplu1'];
         $pisiexplu2 = $_POST['pisiexplu2'];
-        $contrac1 = $_POST['contrac1'];
-        $contrac2 = $_POST['contrac2'];
-        $contrac3 = $_POST['contrac3'];
-        $contrac4 = $_POST['contrac4'];
+      
         $cargapres1 = $_POST['cargapres1'];
         $cargapres2 = $_POST['cargapres2'];
         $cargapres3 = $_POST['cargapres3'];
@@ -102,13 +101,52 @@ require_once("m_produccion.php");
         $usu = $_POST['usu'];
         $items =json_decode($_POST['items']);
         $cambios = $_POST['modified'];
+        $txttemp6 = $_POST['txttemp6'];
+        $txttemp7 = $_POST['txttemp8'];
+        $txttemp8 = $_POST['txttemp7'];
+        $txttemp9 = $_POST['txttemp9'];
+
+        
+        $txtcarriage = $_POST['txtcarriage'];
+        $txtclosedd = $_POST['txtclosedd'];
+        $txtcuter = $_POST['txtcuter'];
+        $txthead = $_POST['txthead'];
+        $txtblow = $_POST['txtblow'];
+        $txttotalblo = $_POST['txttotalblo'];
+        $txtblow1 = $_POST['txtblow1'];
+        $txtlf = $_POST['txtlf'];
+        $txtdefla = $_POST['txtdefla'];
+        $txtunde = $_POST['txtunde'];
+        $txtcoolin = $_POST['txtcoolin'];
+        $txtlock = $_POST['txtlock'];
+        $txtbottle = $_POST['txtbottle'];
+        $txtcarria = $_POST['txtcarria'];
+        $txtopenmoul = $_POST['txtopenmoul'];
+        $txtcuter1 = $_POST['txtcuter1'];
+        $txthead1 = $_POST['txthead1'];
+        $txtblowpin = $_POST['txtblowpin'];
+        $txttotalbl = $_POST['txttotalbl'];
+        $txtdeflati = $_POST['txtdeflati'];
+        $txtblopinS = $_POST['txtblopinS'];
+        $txtdeflation = $_POST['txtdeflation'];
+        $txtcamvaci1 = $_POST['txtcamvaci1'];
+        $txtcooling = $_POST['txtcooling'];
+        $txtcamvaci2 = $_POST['txtcamvaci2'];
+        $txtcamvaci3 = $_POST['txtcamvaci3'];
+        $modifiedLF = $_POST['modifiedLF'];
+        $removebloq = $_POST['r'];
+
         c_produccion::c_guardarproduccion($codform,$produc,$sltipoprod,$cliente,$molde,$cavidades,$pesouni,$ciclo,$procant,
-        $almacen,$tempera1,$tempera2,$tempera3,$tempera4,$tempera5,$presexplu1,$presexplu2,$velexplu1,
-        $velexplu2,$pisiexplu1,$pisiexplu2,$contrac1,$contrac2,$contrac3,$contrac4,$cargapres1,$cargapres2,$cargapres3,
+        $tempera1,$tempera2,$tempera3,$tempera4,$tempera5,$presexplu1,$presexplu2,$velexplu1,
+        $velexplu2,$pisiexplu1,$pisiexplu2,$cargapres1,$cargapres2,$cargapres3,
         $cargapresucc,$cargavel1,$cargavel2,$cargavel3,$cargavelsucc,$cargapisi1,$cargapisi2,$cargapisi3,$cargapisisucci,
         $inyecpres4,$inyecpres3,$inyecpres2,$inyecpres1,$inyecvelo4,$inyecvelo3,$inyecvelo2,$inyecvelo1,$inyecposi4,
         $inyecposi3,$inyecposi2,$inyecposi1,$inyectiemp,$velocidad3,$velocidad2,$velocidad1,$posicion3,$posicion2,
-        $posicion1,$tiempo,$usu,$items,$cambios);
+        $posicion1,$tiempo,$usu,$items,$cambios,$inicio,$fin,$txttemp6,$txttemp7,$txttemp8,$txttemp9,
+        $txtcarriage,$txtclosedd,$txtcuter,$txthead,$txtblow,$txttotalblo,$txtblow1,$txtlf,$txtdefla,$txtunde,
+        $txtcoolin,$txtlock,$txtbottle,$txtcarria,$txtopenmoul,$txtcuter1,$txthead1,$txtblowpin,$txttotalbl,
+        $txtdeflati,$txtblopinS,$txtdeflation,$txtcamvaci1,$txtcooling,$txtcamvaci2,$txtcamvaci3,$modifiedLF
+        ,$estilomolde,$removebloq);
     }else if($accion == 'externo'){
         $producto = $_POST['insumo'];
         $cantidad = $_POST['stocks'];
@@ -120,13 +158,13 @@ require_once("m_produccion.php");
         c_produccion::c_updateexteno($producto,$cantidad,$tipo);
     }else if($accion == 'pasadas'){
             $insumo = $_POST['insumo'];
-            $color = $_POST['color'];
-            c_produccion::c_pasadas($insumo,$color);
-    }else if($accion == 'lstalmacen'){
-        c_produccion::lstalmacen();
+            c_produccion::c_pasadas($insumo);
     }else if($accion== 'parametros'){
         $produccion = $_POST['produccion'];
         c_produccion::c_parametros($produccion);
+    }else if("confirmar"){
+        $confirmacion = $_POST['codconfirmar'];
+        c_produccion::c_confirmacion($confirmacion);
     }
 
  
@@ -145,8 +183,9 @@ require_once("m_produccion.php");
 
         static function c_buscarxformula()
         {
-            $producto = array();
             $m_producto = new m_produccion();
+            $m_producto->generarxdiario();
+            $producto = array();
             $cadena = "'' = ''";
             $c_producto = $m_producto->m_buscar('V_CABECERA_FORMULACION',$cadena);
             for ($i=0; $i < count($c_producto) ; $i++) { 
@@ -154,23 +193,14 @@ require_once("m_produccion.php");
                     "code" => $c_producto[$i][0],
                     "prod" => $c_producto[$i][2],
                     "cant" => $c_producto[$i][4],
-                    "label" => trim($c_producto[$i][1]),
-                    "color" => trim($c_producto[$i][6]),
-                ));
+                    "idmolde" => $c_producto[$i][7],
+                    "molde" => $c_producto[$i][8],
+                    "estiM" => $c_producto[$i][11],
+                    "label" => trim($c_producto[$i][1]) ));
             }
             $dato = array('dato' => $producto);
             echo json_encode($dato,JSON_FORCE_OBJECT);
         }
-
-
-        static function lstalmacen(){
-            $m_formula = new m_produccion();
-            $cadena = "TIPO_ALMACEN = '1'";
-            $c_almacen = $m_formula->m_buscar('T_ALMACEN',$cadena);
-            $dato = array('dato' => $c_almacen);
-            echo json_encode($dato,JSON_FORCE_OBJECT);
-        }
-
 
         static function c_itemsformula($formula)
         {
@@ -206,11 +236,11 @@ require_once("m_produccion.php");
             echo json_encode($dato,JSON_FORCE_OBJECT);
         }
 
-        static function c_buscarmolde($t,$code)
+        static function c_buscarmolde($code)
         {
             $producto = array();
             $m_producto = new m_produccion();
-            $cadena = "COD_CLIENTE = '$code' or TIPO_MOLDE = '$t' and ESTADO = '1'";
+            $cadena = "COD_CLIENTE = '$code' or TIPO_MOLDE = 'P' and ESTADO = '1'";
             $c_producto = $m_producto->m_buscar('T_MOLDE',$cadena);
             for ($i=0; $i < count($c_producto) ; $i++) { 
                 array_push($producto,array(
@@ -265,14 +295,19 @@ require_once("m_produccion.php");
             if(strlen(trim($mensaje)) == 0){
                 $m_producto = new m_produccion();
                 $c_cliente = $m_producto->m_guardarcliente(strtoupper($nombre),$dire,$correo,$dni,$tel,$usu);
-                if($c_cliente != 1){
-                    $mensaje = $c_cliente; $codigo = '';
+                if($c_cliente[0] != true){
+                    $mensaje = $c_cliente[0]; 
+                    $codigo = '';
                 }else{
-                    $mensaje = $c_cliente[0]; $codigo = $c_cliente[1];
+                    $mensaje = $c_cliente[0]; 
+                    $codigo = $c_cliente[1];
                 }
             }
             
-            $dato = array('e' => $mensaje,'c' => $codigo);
+            $dato = array(
+                'e' => $mensaje,
+                'c' => $codigo
+            );
             echo json_encode($dato,JSON_FORCE_OBJECT);
         }
 
@@ -287,7 +322,7 @@ require_once("m_produccion.php");
             else{
             $m_producto = new m_produccion();
             $c_molde = $m_producto->m_guardarmolde(strtoupper($nombre),$medidas,$usu,$codcliente);
-                if($c_molde != 1){
+                if($c_molde != true){
                     $mensaje = $c_molde; $codigo = '';
                 }else{
                     $mensaje = $c_molde[0]; $codigo = $c_molde[1];
@@ -300,30 +335,125 @@ require_once("m_produccion.php");
 
 
         static function c_guardarproduccion($codform,$produc,$sltipoprod,$cliente,$molde,$cavidades,$pesouni,$ciclo,$procant,
-        $almacen,$tempera1,$tempera2,$tempera3,$tempera4,$tempera5,$presexplu1,$presexplu2,$velexplu1,
-        $velexplu2,$pisiexplu1,$pisiexplu2,$contrac1,$contrac2,$contrac3,$contrac4,$cargapres1,$cargapres2,$cargapres3,
+        $tempera1,$tempera2,$tempera3,$tempera4,$tempera5,$presexplu1,$presexplu2,$velexplu1,
+        $velexplu2,$pisiexplu1,$pisiexplu2,$cargapres1,$cargapres2,$cargapres3,
         $cargapresucc,$cargavel1,$cargavel2,$cargavel3,$cargavelsucc,$cargapisi1,$cargapisi2,$cargapisi3,$cargapisisucci,
         $inyecpres4,$inyecpres3,$inyecpres2,$inyecpres1,$inyecvelo4,$inyecvelo3,$inyecvelo2,$inyecvelo1,$inyecposi4,
         $inyecposi3,$inyecposi2,$inyecposi1,$inyectiemp,$velocidad3,$velocidad2,$velocidad1,$posicion3,$posicion2,
-        $posicion1,$tiempo,$usu,$items,$cambios)
-        {
+        $posicion1,$tiempo,$usu,$items,$cambios,$inicio,$fin,$txttemp6,$txttemp7,$txttemp8,$txttemp9,
+        $txtcarriage,$txtclosedd,$txtcuter,$txthead,$txtblow,$txttotalblo,$txtblow1,$txtlf,$txtdefla,$txtunde,
+        $txtcoolin,$txtlock,$txtbottle,$txtcarria,$txtopenmoul,$txtcuter1,$txthead1,$txtblowpin,$txttotalbl,
+        $txtdeflati,$txtblopinS,$txtdeflation,$txtcamvaci1,$txtcooling,$txtcamvaci2,$txtcamvaci3,$modifiedLF,$estilomolde,$removebloq)
+        { 
             $m_produccion = new m_produccion();
-            $return = c_produccion::validardatosfor($codform,$produc,$sltipoprod,$cliente,$molde,$cavidades,$pesouni,$ciclo,$procant,
-            $almacen,array($tempera1,$tempera2,$tempera3,$tempera4,$tempera5,$presexplu1,$presexplu2,$velexplu1,
-            $velexplu2,$pisiexplu1,$pisiexplu2,$contrac1,$contrac2,$contrac3,$contrac4,$cargapres1,$cargapres2,$cargapres3,
+            if(strlen(trim($removebloq)) == 0){ $removebloq = "B";}
+           
+
+            $parametros = $m_produccion->m_ultimoregistro($codform);
+            if(count($parametros) > 0 && $removebloq == "B" && ($modifiedLF == 1 || $cambios == 1)){print_r("b"); return;}
+
+            $inyeccion = array($presexplu1,$presexplu2,$velexplu1,
+            $velexplu2,$pisiexplu1,$pisiexplu2,$cargapres1,$cargapres2,$cargapres3,
             $cargapresucc,$cargavel1,$cargavel2,$cargavel3,$cargavelsucc,$cargapisi1,$cargapisi2,$cargapisi3,$cargapisisucci,
             $inyecpres4,$inyecpres3,$inyecpres2,$inyecpres1,$inyecvelo4,$inyecvelo3,$inyecvelo2,$inyecvelo1,$inyecposi4,
             $inyecposi3,$inyecposi2,$inyecposi1,$inyectiemp,$velocidad3,$velocidad2,$velocidad1,$posicion3,$posicion2,
-            $posicion1,$tiempo),$items);
+            $posicion1,$tiempo);
+
+            $soplado = array($txtcarriage,$txtclosedd,$txtcuter,$txthead,$txtblow,$txttotalblo,$txtblow1,$txtlf,$txtdefla,$txtunde,
+            $txtcoolin,$txtlock,$txtbottle,$txtcarria,$txtopenmoul,$txtcuter1,$txthead1,$txtblowpin,$txttotalbl,
+            $txtdeflati,$txtblopinS,$txtdeflation,$txtcamvaci1,$txtcooling,$txtcamvaci2,$txtcamvaci3,$modifiedLF);
+
+           
+            $return = c_produccion::validardatosfor($codform,$produc,$sltipoprod,$cliente,$molde,$cavidades,$pesouni,$ciclo,$procant,
+            $inicio,$fin,
+            $tempera1,$tempera2,$tempera3,$tempera4,$tempera5,$txttemp6,$txttemp7,$txttemp8,$txttemp9,
+            $inyeccion, $soplado ,
+            $estilomolde,$items);
         
             if($return == ''){
+                $txttemp6 = (strlen(trim($txttemp6))== 0 ) ? 0.00 : $txttemp6;
+                $txttemp7 = (strlen(trim($txttemp7))== 0 ) ? 0.00 : $txttemp7;
+                $txttemp8 = (strlen(trim($txttemp8))== 0 ) ? 0.00 : $txttemp8;
+                $txttemp9 = (strlen(trim($txttemp9))== 0 ) ? 0.00 : $txttemp9;
+                
+                    $presexplu1 = (strlen(trim($presexplu1))== 0 ) ? 0.00 : $presexplu1;
+                    $presexplu2 = (strlen(trim($presexplu2))== 0 ) ? 0.00 : $presexplu2;
+                    $velexplu1 = (strlen(trim($velexplu1))== 0 ) ? 0.00 : $velexplu1;
+                    $velexplu2 = (strlen(trim($velexplu2))== 0 ) ? 0.00 : $velexplu2;
+                    $pisiexplu1 = (strlen(trim($pisiexplu1))== 0 ) ? 0.00 : $pisiexplu1;
+                    $pisiexplu2 = (strlen(trim($pisiexplu2))== 0 ) ? 0.00 : $pisiexplu2;
+                    $cargapres1 = (strlen(trim($cargapres1))== 0 ) ? 0.00 : $cargapres1;
+                    $cargapres2 = (strlen(trim($cargapres2))== 0 ) ? 0.00 : $cargapres2;
+                    $cargapres3 = (strlen(trim($cargapres3))== 0 ) ? 0.00 : $cargapres3;
+                    $cargapresucc = (strlen(trim($cargapresucc))== 0 ) ? 0.00 : $cargapresucc;
+                    $cargavel1 = (strlen(trim($cargavel1))== 0 ) ? 0.00 : $cargavel1;
+                    $cargavel2 = (strlen(trim($cargavel2))== 0 ) ? 0.00 : $cargavel2;
+                    $cargavel3 = (strlen(trim($cargavel3))== 0 ) ? 0.00 : $cargavel3;
+                    $cargavelsucc = (strlen(trim($cargavelsucc))== 0 ) ? 0.00 : $cargavelsucc;
+                    $cargapisi1 = (strlen(trim($cargapisi1))== 0 ) ? 0.00 : $cargapisi1;
+                    $cargapisi2 = (strlen(trim($cargapisi2))== 0 ) ? 0.00 : $cargapisi2;
+                    $cargapisi3 = (strlen(trim($cargapisi3))== 0 ) ? 0.00 : $cargapisi3;
+                    $cargapisisucci = (strlen(trim($cargapisisucci))== 0 ) ? 0.00 : $cargapisisucci;
+                    $inyecpres4 = (strlen(trim($inyecpres4))== 0 ) ? 0.00 : $inyecpres4;
+                    $inyecpres3 = (strlen(trim($inyecpres3))== 0 ) ? 0.00 : $inyecpres3;
+                    $inyecpres2 = (strlen(trim($inyecpres2))== 0 ) ? 0.00 : $inyecpres2;
+                    $inyecpres1 = (strlen(trim($inyecpres1))== 0 ) ? 0.00 : $inyecpres1;
+                    $inyecvelo4 = (strlen(trim($inyecvelo4))== 0 ) ? 0.00 : $inyecvelo4;
+                    $inyecvelo3 = (strlen(trim($inyecvelo3))== 0 ) ? 0.00 : $inyecvelo3;
+                    $inyecvelo2 = (strlen(trim($inyecvelo2))== 0 ) ? 0.00 : $inyecvelo2;
+                    $inyecvelo1 = (strlen(trim($inyecvelo1))== 0 ) ? 0.00 : $inyecvelo1;
+                    $inyecposi4 = (strlen(trim($inyecposi4))== 0 ) ? 0.00 : $inyecposi4;
+                    $inyecposi3 = (strlen(trim($inyecposi3))== 0 ) ? 0.00 : $inyecposi3;
+                    $inyecposi2 = (strlen(trim($inyecposi2))== 0 ) ? 0.00 : $inyecposi2;
+                    $inyecposi1 = (strlen(trim($inyecposi1))== 0 ) ? 0.00 : $inyecposi1;
+                    $inyectiemp = (strlen(trim($inyectiemp))== 0 ) ? 0.00 : $inyectiemp;
+                    $velocidad3 = (strlen(trim($velocidad3))== 0 ) ? 0.00 : $velocidad3;
+                    $velocidad2 = (strlen(trim($velocidad2))== 0 ) ? 0.00 : $velocidad2;
+                    $velocidad1 = (strlen(trim($velocidad1))== 0 ) ? 0.00 : $velocidad1;
+                    $posicion3 = (strlen(trim($posicion3))== 0 ) ? 0.00 : $posicion3;
+                    $posicion2 = (strlen(trim($posicion2))== 0 ) ? 0.00 : $posicion2;
+                    $posicion1 = (strlen(trim($posicion1))== 0 ) ? 0.00 : $posicion1;
+                    $tiempo = (strlen(trim($tiempo))== 0 ) ? 0.00 : $tiempo;
+                
+                    $txtcarriage = (strlen(trim($txtcarriage))== 0 ) ? 0.00 : $txtcarriage;
+                    $txtclosedd = (strlen(trim($txtclosedd))== 0 ) ? 0.00 : $txtclosedd;
+                    $txtcuter = (strlen(trim($txtcuter))== 0 ) ? 0.00 : $txtcuter;
+                    $txthead = (strlen(trim($txthead))== 0 ) ? 0.00 : $txthead;
+                    $txtblow = (strlen(trim($txtblow))== 0 ) ? 0.00 : $txtblow;
+                    $txttotalblo = (strlen(trim($txttotalblo))== 0 ) ? 0.00 : $txttotalblo;
+                    $txtblow1 = (strlen(trim($txtblow1))== 0 ) ? 0.00 : $txtblow1;
+                    $txtlf = (strlen(trim($txtlf))== 0 ) ? 0.00 : $txtlf;
+                    $txtdefla = (strlen(trim($txtdefla))== 0 ) ? 0.00 : $txtdefla;
+                    $txtunde = (strlen(trim($txtunde))== 0 ) ? 0.00 : $txtunde;
+                    $txtcoolin = (strlen(trim($txtcoolin))== 0 ) ? 0.00 : $txtcoolin;
+                    $txtlock = (strlen(trim($txtlock))== 0 ) ? 0.00 : $txtlock;
+                    $txtbottle = (strlen(trim($txtbottle))== 0 ) ? 0.00 : $txtbottle;
+                    $txtcarria = (strlen(trim($txtcarria))== 0 ) ? 0.00 : $txtcarria;
+                    $txtopenmoul = (strlen(trim($txtopenmoul))== 0 ) ? 0.00 : $txtopenmoul;
+                    $txtcuter1 = (strlen(trim($txtcuter1))== 0 ) ? 0.00 : $txtcuter1;
+                    $txthead1 = (strlen(trim($txthead1))== 0 ) ? 0.00 : $txthead1;
+                    $txtblowpin = (strlen(trim($txtblowpin))== 0 ) ? 0.00 : $txtblowpin;
+                    $txttotalbl = (strlen(trim($txttotalbl))== 0 ) ? 0.00 : $txttotalbl;
+
+                    $txtdeflati = (strlen(trim($txtdeflati))== 0 ) ? 0.00 : $txtdeflati;
+                    $txtblopinS = (strlen(trim($txtblopinS))== 0 ) ? 0.00 : $txtblopinS;
+                    $txtdeflation = (strlen(trim($txtdeflation))== 0 ) ? 0.00 : $txtdeflation;
+                    $txtcamvaci1 = (strlen(trim($txtcamvaci1))== 0 ) ? 0.00 : $txtcamvaci1;
+                    $txtcooling = (strlen(trim($txtcooling))== 0 ) ? 0.00 : $txtcooling;
+
+                    $txtcamvaci2 = (strlen(trim($txtcamvaci2))== 0 ) ? 0.00 : $txtcamvaci2;
+                    $txtcamvaci3 = (strlen(trim($txtcamvaci3))== 0 ) ? 0.00 : $txtcamvaci3;
+
                 $c_formulacion = $m_produccion->m_guardarformulacion($codform,$produc,$sltipoprod,$cliente,$molde,$cavidades,$pesouni,$ciclo,$procant,
-                $almacen,$tempera1,$tempera2,$tempera3,$tempera4,$tempera5,$presexplu1,$presexplu2,$velexplu1,
-                $velexplu2,$pisiexplu1,$pisiexplu2,$contrac1,$contrac2,$contrac3,$contrac4,$cargapres1,$cargapres2,$cargapres3,
+                $tempera1,$tempera2,$tempera3,$tempera4,$tempera5,$presexplu1,$presexplu2,$velexplu1,
+                $velexplu2,$pisiexplu1,$pisiexplu2,$cargapres1,$cargapres2,$cargapres3,
                 $cargapresucc,$cargavel1,$cargavel2,$cargavel3,$cargavelsucc,$cargapisi1,$cargapisi2,$cargapisi3,$cargapisisucci,
                 $inyecpres4,$inyecpres3,$inyecpres2,$inyecpres1,$inyecvelo4,$inyecvelo3,$inyecvelo2,$inyecvelo1,$inyecposi4,
                 $inyecposi3,$inyecposi2,$inyecposi1,$inyectiemp,$velocidad3,$velocidad2,$velocidad1,$posicion3,$posicion2,
-                $posicion1,$tiempo,$usu,$items,$cambios);
+                $posicion1,$tiempo,$usu,$items,$cambios,$inicio,$fin,$txttemp6,$txttemp7,$txttemp8,$txttemp9,
+                $txtcarriage,$txtclosedd,$txtcuter,$txthead,$txtblow,$txttotalblo,$txtblow1,$txtlf,$txtdefla,$txtunde,
+                $txtcoolin,$txtlock,$txtbottle,$txtcarria,$txtopenmoul,$txtcuter1,$txthead1,$txtblowpin,$txttotalbl,
+                $txtdeflati,$txtblopinS,$txtdeflation,$txtcamvaci1,$txtcooling,$txtcamvaci2,$txtcamvaci3,$modifiedLF);
                 print_r($c_formulacion);
             }else{print_r($return);}
            
@@ -331,7 +461,9 @@ require_once("m_produccion.php");
 
 
         static function validardatosfor($codform,$produc,$sltipoprod,$cliente,$molde,$cavidades,$pesouni,$ciclo,$procant,
-        $almacen,$datos,$items)
+        $inicio,$fin,
+        $tempera1,$tempera2,$tempera3,$tempera4,$tempera5,$txttemp6,$txttemp7,$txttemp8,$txttemp9,
+        $inyeccion,$soplado,$estilomolde,$items)
         {
             $m_produccion = new m_produccion();
             if(strlen(trim($produc)) == 0){return "Error seleccione formula";}
@@ -346,16 +478,54 @@ require_once("m_produccion.php");
             if(strlen(trim($pesouni)) == 0){return "Error ingrese peso unitario del material";}
             if(strlen($pesouni) > 20){return "Error peso unitario no puede se mayor a 20 caracteres";}
             $cantidad = explode(".", $procant);
-            if(strlen(trim($almacen)) == 0){return "Error seleccione el almacen";}
-            if(strlen($cantidad[0]) > 7){print_r("Error campo cantidad, maximo 7 digitos");return;}
-            if(!is_numeric($procant)){return "Error solo numeros en cantidad de la formula"; }
+            if($inicio == ""){return "Error ingrese fecha de inicion";}
+            if($fin == ""){return  "Error ingrese fecha fin";}
 
-            for ($i=0; $i < count($datos) ; $i++) { 
-                if(strlen(trim($datos[$i])) == 0){return "Error ingrese parametros de producción";}
-                if(!is_numeric($datos[$i])){return "Error solo numeros en parametros de producción";}
-                if(c_produccion::cantidigito($datos[$i])){return "Error maximo solo 5 digitos en parametros de producción";}
-                if($datos[$i] == 0){return "Error los parametros no pueden ser 0";}
+            $fecha_inicio = strtotime($inicio);
+            $fecha_fin = strtotime($fin);
+            if($fecha_inicio > $fecha_fin ){
+                return "Errro fecha fin no puede ser menor a fecha de inicio";
             }
+            if(strlen($cantidad[0]) > 7){return "Error campo cantidad, maximo 7 digitos";}
+            if(!is_numeric($procant)){return "Error solo numeros en cantidad de la formula".$procant; }
+
+
+            //temperatura
+            if(strlen(trim($tempera1)) == 0){return "Error ingrese temperatura";}
+            if(!is_numeric($tempera1)){return "Error solo numeros en temperatura";}
+            if(strlen(trim($tempera2)) == 0){return "Error ingrese temperatura";}
+            if(!is_numeric($tempera2)){return "Error solo numeros en temperatura";}
+            if(strlen(trim($tempera3)) == 0){return "Error ingrese temperatura";}
+            if(!is_numeric($tempera3)){return "Error solo numeros en temperatura";}
+            if(strlen(trim($tempera4)) == 0){ return "Error ingrese temperatura";}
+            if(!is_numeric($tempera4)){return "Error solo numeros en temperatura";}
+            if(strlen(trim($tempera5)) == 0){ return "Error ingrese temperatura";}
+            if(!is_numeric($tempera5)){return "Error solo numeros en temperatura";}
+            if($estilomolde == "S"){
+                if(!is_numeric($txttemp6)){return "Error solo numeros en temperatura";}
+                if(strlen(trim($txttemp6)) == 0){return "Error ingrese temperatura";}
+                if(!is_numeric($txttemp7)){return "Error solo numeros en temperatura";}
+                if(strlen(trim($txttemp7)) == 0){return "Error ingrese temperatura";}
+                if(!is_numeric($txttemp8)){return "Error solo numeros en temperatura";}
+                if(strlen(trim($txttemp8)) == 0){return "Error ingrese temperatura";}
+                if(!is_numeric($txttemp9)){return "Error solo numeros en temperatura";}
+                if(strlen(trim($txttemp9)) == 0){return "Error ingrese temperatura";}
+                
+                for ($i=0; $i < count($soplado) ; $i++) { 
+                    if(strlen(trim($soplado[$i])) == 0){return "Error ingrese parametros de Timer LF";}
+                    if(!is_numeric($soplado[$i])){return "Error solo numeros en parametros de Timer LF";}
+                    if(c_produccion::cantidigito($soplado[$i])){return "Error maximo solo 5 digitos en Timer LF";}
+                }
+            }
+
+            if($estilomolde == "I"){
+                for ($i=0; $i < count($inyeccion) ; $i++) { 
+                    if(strlen(trim($inyeccion[$i])) == 0){return "Error ingrese parametros de producción";}
+                    if(!is_numeric($inyeccion[$i])){return "Error solo numeros en parametros de producción";}
+                    if(c_produccion::cantidigito($inyeccion[$i])){return "Error maximo solo 5 digitos en parametros de producción";}
+                }
+            }
+       
             $cadena = "COD_FORMULACION = '$codform' AND EST_FORMULACION = '1'";
             $c_itemformula = $m_produccion->m_buscar("T_FORMULACION_ITEM",$cadena);
             $cadena2 = "formula = '$codform'";
@@ -364,24 +534,21 @@ require_once("m_produccion.php");
                 $total = 0;
             
                 foreach ($items->tds as $dato){
-                    $cadenstock = "COD_PRODUCTO = '$dato[0]'";
+                    $cadenstock = "COD_PRODUCTO = '$dato[1]'";
                     $stock = $m_produccion->m_buscar("T_ALMACEN_INSUMOS",$cadenstock);
                     if($dato[2] > $stock[0][4] && $dato[3] != 'E'){
-                        return "Error stock insuficiente";
+                        return "Error stock insuficiente ";
                         break;
                     }
-                  
-                    if($c_itemformula[$i][1] == $dato[0]){
+                    if($c_itemformula[$i][1] == $dato[1]){
                         $total += $dato[2];
                     }
                 }
-                
-                if($total != number_format((($procant * $c_itemformula[$i][2]) / $c_cabecera[0][4]), 3, '.', '')){
-                   return "Error las cantidades no son iguales";
+                if($total != number_format((($procant * $c_itemformula[$i][2]) / $c_cabecera[0][4]), 2, '.', '')){
+                    return "Error las cantidades no son iguales";
                    break;
                 }
             }
-            
             return '';
         }
         
@@ -406,13 +573,23 @@ require_once("m_produccion.php");
             print_r($c_produccion);
        }
 
-       static function c_pasadas($insumo,$color)
+       static function c_pasadas($insumo)
        {
             $m_producto = new m_produccion();
-            $cadena = "producto = '$insumo' and color ='$color'";
+            $cadena = "producto = '$insumo'";
             $c_producto = $m_producto->m_buscar('V_INSUMOS_PASADAS',$cadena);
             $dato = array(
                 'dato' => $c_producto, 
+            );
+           
+       }
+
+       static function c_confirmacion($confirmacion){
+            $m_produccion = new m_produccion();
+            $c_produccion = $m_produccion->m_confirmacion($confirmacion);
+            $dato = array(
+                "d" => $c_produccion,
+                "b" =>  "D"
             );
             echo json_encode($dato,JSON_FORCE_OBJECT);
        }

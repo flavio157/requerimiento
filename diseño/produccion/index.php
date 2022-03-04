@@ -3,20 +3,19 @@
 if (session_status() == PHP_SESSION_NONE) {
     session_start();
 }
-$ofi = $_SESSION["ofi"];
+$fcha = date("Y-m-d");
+/*$ofi = $_SESSION["ofi"];
 $zon = $_SESSION["zon"];
-$cod = $_SESSION["cod"];
-
-require_once("./menu/index.php");
+$cod = $_SESSION["cod"];*/
+require_once("../menu/index.php");
 ?>
 
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <link rel="STYLESHEET" type="text/css" href="../fonts/style.css">
-	 <link rel="STYLESHEET" type="text/css" href="./css/responsive.css">
+    <link rel="STYLESHEET" type="text/css" href="./css/responsive.css">
 
-     <link rel="STYLESHEET" type="text/css" href="../fonts/style.css">
     <script src="../js/jquery-3.3.1.slim.min.js"></script>
     <script src="../js/ajquery.min.js"></script>
     <script src="./js/jsproduccion.js"></script>
@@ -29,11 +28,11 @@ require_once("./menu/index.php");
 </head>
 <style>
     .ui-autocomplete.ui-front {
-    max-height: 300px;
-    width: 100px;
+    max-height: 300px;  
+    width: 100px; 
     overflow-y: auto;   
     overflow-x: hidden; 
-    z-index:1100 !important;
+    z-index:1100 !important;  
 }
 
 .my-class-form-control-group{
@@ -49,13 +48,13 @@ require_once("./menu/index.php");
    <section>  
         <div class="ajax-loader">
           <img src="loading.gif" class="img-responsive" />
-        </div> 
+        </div>
         <div class="main"> 
             
           <form style="margin-bottom: 0px;" id="frmproduccion">
-                  <input type="text" id="vroficina" style="display: none;" value="<?php echo $ofi?>"/>
-                  <input type="text" id="vrzona" style="display: none;" value="<?php echo  $zon?>"/>
-                  <input type="text" id="vrcodpersonal" style="display: none;" value="<?php echo $cod?>"/>
+                  <input type="text" id="vroficina" style="display: none;" value="<?php echo ''//$ofi?>"/>
+                  <input type="text" id="vrzona" style="display: none;" value="<?php echo ''//$zon?>"/>
+                  <input type="text" id="vrcodpersonal" style="display: none;" value="<?php echo '0215'//$cod?>"/>
                 
               <div class="row mb-3">
                   <div class="col">
@@ -66,9 +65,7 @@ require_once("./menu/index.php");
                 <div class="col">
                 <input type="text" id="txtprod" name="txtprod" style="display: none;">
                 <input type="text" id="txtform" name="txtform" style="display: none;">
-                <input type="text" id="color" name="color" style="display: none;">
-                
-                    <label>Nombre de la formula</label>
+                    <label>Nombre formula</label>
                     <input type="text" id="txtbformula" name="txtbformula" class="form-control mayu"  placeholder="Buscar formula" autocomplete="off">
                 </div> 
                 <div class="col-auto">
@@ -104,8 +101,8 @@ require_once("./menu/index.php");
                 </div>
                 <div class="row mb-3"> 
                   <div class="col-auto">
-                    <label>Cavidades</label>
-                    <input type="text" id="txtcavidades" name="txtcavidades" class="form-control">
+                    <label>Maquina en producción</label>
+                    <input type="text" id="txtcavidades" name="txtcavidades" class="form-control" value="2">
                   </div>
                   <div class="col">
                     <label>Peso uni.</label>
@@ -117,30 +114,52 @@ require_once("./menu/index.php");
                     <input type="text" id="txtciclo" name="txtciclo" class="form-control">
                   </div>
                   <div class="col">
-                    <label>Prod X/H</label>
+                    <label>Producción</label>
                     <input type="text" id="txtprodcant" name="txtprodcant" class="form-control">
                   </div>
+                  
                 </div>  
-                <div class="row mb-5">
-                  <div class="col-auto">
-                      <select class="form-select"  id="slctipoalmacen"  name="slctipoalmacen" class="btn btn-primary mb-2 pull-left">
-                        <option value="" selected>Seleccion almacen</option>
+                <div class="row mb-4">  
+                   <div class="col-auto mb-3">
+                      <select class="form-select"  id="slcestimolde" disabled name="slctipoalmacen" class="btn btn-primary mb-2 pull-left">
+                        <option value="" selected>TIPO</option>
+                        <option value="I">INYECCIÓN</option>
+                        <option value="S">SOPLADO</option>
                       </select>
                   </div>
-                  
-                    <div class="col-auto" >
-                        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#mdparametros" style="float: right;">
-                          Parametros
-                        </button>
-                    </div>
-                </div>  
+                  <div class="col-auto mb-3">
+                   <button type="button" class="btn btn-primary" id="btnparametros"
+                    data-bs-toggle="modal" data-bs-target="#mdparametros" style="float: right;">
+                      Parametros
+                    </button>
+                  </div>
+                  <div class="col-auto mb-3">
+                    <button type="button" class="btn btn-primary" id="btntimelf" data-bs-toggle="modal" data-bs-target="#mdtimelf" >
+                      Timer LF
+                    </button>
+                  </div>
+                </div>
+                <Center><label><strong>Fecha tentativa de producción</strong></label></Center>
+                <div class="row mb-5">
+                  <div class="col">
+                    <label>Inicio</label>
+                    <input type="date" class="form-control" name="txtinicio" id="txtinicio" value="<?php echo $fcha;?>"
+                            min = "<?php echo date("Y-m-d");?>">
+                  </div>
+                  <div  class="col">
+                    <label>Fin</label>
+                    <input type="date" class="form-control" name="txtfin" id="txtfin" value="<?php echo $fcha;?>"
+                            min = "<?php echo date("Y-m-d");?>">
+                  </div>
+                </div>
+
                 <div class="table-responsive" style="overflow: scroll;height: 337px;">
                         <table class="table" id="tbmateriales">
                           <thead>
                               <tr>
                                 <th class="thtitulo" style="display: none;">Codigo</th>
                                 <th class="thtitulo">Insumo</th>
-                                <th class="thtitulo">Cantidad</th>
+                               <!-- <th class="thtitulo">Cantidad</th>-->
                                 <th class="thtitulo">Cantidad por usar</th>
                                 <th class="thtitulo">Acciones</th>
                               </tr>
@@ -199,7 +218,7 @@ require_once("./menu/index.php");
                   <button class="nav-link" id="profile-tab" data-bs-toggle="tab" data-bs-target="#profile" type="button" role="tab" aria-controls="profile" aria-selected="false">Carga</button>
                 </li>
                 <li class="nav-item" role="presentation">
-                  <button class="nav-link" id="contact-tab" data-bs-toggle="tab" data-bs-target="#contact" type="button" role="tab" aria-controls="contact" aria-selected="false">Presión</button>
+                  <button class="nav-link" id="contact-tab" data-bs-toggle="tab" data-bs-target="#contact" type="button" role="tab" aria-controls="contact" aria-selected="false" style="display: none;">Soplado</button>
                 </li>
               </ul>
               <div class="tab-content" id="myTabContent">
@@ -237,16 +256,28 @@ require_once("./menu/index.php");
                             <input type="number" id="txttemp5" name="txttemp5" class="form-control">
                           </td>
                         </tr>
+                        <tr id="tempSo">
+                          <td>
+                            <input type="number" id="txttemp6" name="txttemp6" class="form-control">
+                          </td>
+                          <td>
+                            <input type="number" id="txttemp7" name="txttemp7" class="form-control">
+                          </td>
+                          <td>
+                            <input type="number" id="txttemp8" name="txttemp8" class="form-control">
+                          </td>
+                          <td>
+                            <input type="number" id="txttemp9" name="txttemp9" class="form-control">
+                          </td>
+                        </tr>
                       </tbody>
                     </table>
-                  
-
                   <div class="row">
                       <div class="col g-1">
-                          <center><label class="titulos">Botadores Expul.</label></center>
+                          <center><label id="lblbotador" class="titulos">Botadores Expul.</label></center>
                       </div>
                   </div>
-                    <table class="table">
+                    <table class="table" id="tbbotadores">
                       <thead>
                         <tr>
                           <th class="thtitulo">#</th>
@@ -291,7 +322,7 @@ require_once("./menu/index.php");
                       </tbody>
                     </table>
 
-                  <div class="row">
+                  <!--<div class="row">
                       <div class="col g-1">
                           <center><label class="titulos">Botadores Contrac.</label></center>
                       </div>
@@ -323,7 +354,7 @@ require_once("./menu/index.php");
                             </td>
                           </tr>
                         </tbody>
-                    </table>
+                    </table>-->
 
 
                 </div>
@@ -536,39 +567,6 @@ require_once("./menu/index.php");
       </div>
     </div>
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    
-
     <div class="modal fade" id="mditemformula" tabindex="-1" data-bs-keyboard="false" data-bs-backdrop="static" aria-hidden="true">
       <div class="modal-dialog">
         <div class="modal-content">
@@ -607,7 +605,7 @@ require_once("./menu/index.php");
               </div>
             </div>
           </div>
-          <div class="row">
+          <!--<div class="row">
             <div class="col">
               <label >Insumo</label>
               <input type="text" id="txtnominsumo" class="form-control" disabled>
@@ -621,7 +619,7 @@ require_once("./menu/index.php");
                 </a>
               </div>
             </div>
-          </div>
+          </div>-->
 
           <div class="row">
             <div class="col">
@@ -633,7 +631,7 @@ require_once("./menu/index.php");
                           <th class="thtitulo">Insumo</th>
                           <th class="thtitulo">cantidad</th>
                           <th style="display: none;">tipo</th>
-                          <th class="thtitulo">acciones</th> 
+                          <!--<th class="thtitulo">acciones</th>-->
                         </tr>
                       </thead>
                       <tbody id="tbdmdinsumosa">
@@ -723,6 +721,295 @@ require_once("./menu/index.php");
           <div class="modal-footer">
             <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cerrar</button>
             <button type="button" class="btn btn-primary" id="btnmdgmolde">Guardar</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+
+
+
+
+    <div class="modal fade" id="mdtimelf" tabindex="-1"  data-bs-keyboard="false" data-bs-backdrop="static" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">Parametros de producción</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <form id="frmtimelf">
+              <ul class="nav nav-tabs" id="myTab" role="tablist">
+                <li class="nav-item" role="presentation">
+                  <button class="nav-link active" id="home-tab" data-bs-toggle="tab" data-bs-target="#uno" type="button" role="tab" aria-controls="home" aria-selected="true">1</button>
+                </li>
+                <li class="nav-item" role="presentation">
+                  <button class="nav-link" id="profile-tab" data-bs-toggle="tab" data-bs-target="#dos" type="button" role="tab" aria-controls="profile" aria-selected="false">2</button>
+                </li>
+                <li class="nav-item" role="presentation">
+                  <button class="nav-link" id="contact-tab" data-bs-toggle="tab" data-bs-target="#tres" type="button" role="tab" aria-controls="contact" aria-selected="false">3</button>
+                </li>
+              </ul>
+              <div class="tab-content" >
+                <div class="tab-pane fade show active" id="uno" role="tabpanel" aria-labelledby="home-tab">
+                  <table class="table">
+                        <tbody>
+                          <tr>
+                            <td>
+                              <label>Carriageup delaytime</label>
+                            </td>
+                            <td>
+                              <input type="number" id="txtcarriage" name="txtcarriage" class="form-control">
+                            </td>
+                          </tr>
+                          <tr>
+                            <td>
+                              <label>Closedould delaytime</label>
+                            </td>
+                            <td>
+                              <input type="number" id="txtclosedd" name="txtclosedd" class="form-control">
+                            </td>
+                          </tr>
+                          <tr>
+                            <td>
+                              <label>Cuter delay time</label>
+                            </td>
+                            <td>
+                              <input type="number" id="txtcuter" name="txtcuter" class="form-control">
+                            </td>
+                          </tr>
+                          <tr>
+                            <td>
+                              <label>Head up delay time</label>
+                            </td>
+                            <td>
+                              <input type="number" id="txthead" name="txthead" class="form-control">
+                            </td>
+                          </tr>
+                          <tr>
+                            <td>
+                              <label>BlowpingDown delay time</label>
+                            </td>
+                            <td>
+                              <input type="number" id="txtblow" name="txtblow" class="form-control">
+                            </td>
+                          </tr>
+                          <tr>
+                            <td>
+                              <label>Total blow delay time</label>
+                            </td>
+                            <td>
+                              <input type="number" id="txttotalblo" name="txttotalblo" class="form-control">
+                            </td>
+                          </tr>
+                          <tr>
+                            <td>
+                              <label>Blow time</label>
+                            </td>
+                            <td>
+                              <input type="number" id="txtblow1" name="txtblow1" class="form-control">
+                            </td>
+                          </tr>
+                          <tr>
+                            <td>
+                              <label>Lf to RG time</label>
+                            </td>
+                            <td>
+                              <input type="number" id="txtlf" name="txtlf" class="form-control">
+                            </td>
+                          </tr>
+                          <tr>
+                            <td>
+                              <label>Deflation delay time</label>
+                            </td>
+                            <td>
+                              <input type="number" id="txtdefla" name="txtdefla" class="form-control">
+                            </td>
+                          </tr>
+                          <tr>
+                            <td>
+                              <label>Undercuting delay </label>
+                            </td>
+                            <td>
+                              <input type="number" id="txtunde" name="txtunde" class="form-control">
+                            </td>
+                          </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="tab-pane fade" id="dos" role="tabpanel" aria-labelledby="profile-tab">
+                <table class="table">
+                        <tbody>
+                          <tr>
+                            <td>
+                              <label>Cooling blow delay time</label>
+                            </td>
+                            <td>
+                              <input type="number" id="txtcoolin" name="txtcoolin" class="form-control">
+                            </td>
+                          </tr>
+                          <tr>
+                            <td>
+                              <label>Lock mould delay</label>
+                            </td>
+                            <td>
+                              <input type="number" id="txtlock" name="txtlock" class="form-control">
+                            </td>
+                          </tr>
+                          <tr>
+                            <td>
+                              <label>bottle cooling ET</label>
+                            </td>
+                            <td>
+                              <input type="number" id="txtbottle" name="txtbottle" class="form-control">
+                            </td>
+                          </tr>
+                          <tr>
+                            <td>
+                              <label>CarriageDown delay time</label>
+                            </td>
+                            <td>
+                              <input type="number" id="txtcarria" name="txtcarria" class="form-control">
+                            </td>
+                          </tr>
+                          <tr>
+                            <td>
+                              <label>Open mould delay time</label>
+                            </td>
+                            <td>
+                              <input type="number" id="txtopenmoul" name="txtopenmoul" class="form-control">
+                            </td>
+                          </tr>
+                          <tr>
+                            <td>
+                              <label>cuter time</label>
+                            </td>
+                            <td>
+                              <input type="number" id="txtcuter1" name="txtcuter1" class="form-control">
+                            </td>
+                          </tr>
+                          <tr>
+                            <td>
+                              <label>Head up time</label>
+                            </td>
+                            <td>
+                              <input type="number" id="txthead1" name="txthead1" class="form-control">
+                            </td>
+                          </tr>
+                          <tr>
+                            <td>
+                              <label>Blowpin dow time</label>
+                            </td>
+                            <td>
+                              <input type="number" id="txtblowpin" name="txtblowpin" class="form-control">
+                            </td>
+                          </tr>
+                          <tr>
+                            <td>
+                              <label>Total blow time</label>
+                            </td>
+                            <td>
+                              <input type="number" id="txttotalbl" name="txttotalbl" class="form-control">
+                            </td>
+                          </tr>
+                          <tr>
+                            <td>
+                              <label>Deflation Time</label>
+                            </td>
+                            <td>
+                              <input type="number" id="txtdeflati" name="txtdeflati" class="form-control">
+                            </td>
+                          </tr>
+                        </tbody>
+                    </table>   
+                </div>
+                <div class="tab-pane fade" id="tres" role="tabpanel" aria-labelledby="contact-tab">
+                  <table class="table">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <label>Blowpin ShortUp Time</label>
+                              </td>
+                              <td>
+                                <input type="number" id="txtblopinS" name="txtblopinS" class="form-control">
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <label>DeflationTime</label>
+                              </td>
+                              <td>
+                                <input type="number" id="txtdeflation" name="txtdeflation" class="form-control">
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <label>-</label>
+                              </td>
+                              <td>
+                                <input type="number" id="txtcamvaci1" name="txtcamvaci1" class="form-control">
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <label>Cooling blow Time</label>
+                              </td>
+                              <td>
+                                <input type="number" id="txtcooling" name="txtcooling" class="form-control">
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <label>-</label>
+                              </td>
+                              <td>
+                                <input type="number" id="txtcamvaci2" name="txtcamvaci2" class="form-control">
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <label>-</label>
+                              </td>
+                              <td>
+                                <input type="number" id="txtcamvaci3" name="txtcamvaci3" class="form-control">
+                              </td>
+                            </tr>
+                          </tbody>
+                  </table>
+                </div>
+              </div>
+            </form>
+          </div>
+          <div class="modal-footer">
+            <!--<button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cerrar</button>-->
+            <button type="button" class="btn btn-primary"  data-bs-dismiss="modal">Confirmar</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+
+    <div class="modal fade" id="mdconfirmacion" tabindex="-1"  data-bs-keyboard="false" data-bs-backdrop="static" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">Codigo de confirmación</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <label>Se modifico los parametros de producción ingrese codigo de confirmación o para cancelar vuelva a seleccionar la formula</label>
+              
+              <div class="row mb-2">
+                <div class="col-md">
+                <br>
+                  <label for="formpromocion"  class="form-label">codigo de confirmación</label>
+                  <input type="text" class="form-control mayu" name="txtconfirmacod" id="txtconfirmacod" autocomplete="off">
+                </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cerrar</button>
+            <button type="button" class="btn btn-primary" id="btnconfirmacion">Guardar</button>
           </div>
         </div>
       </div>

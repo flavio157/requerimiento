@@ -57,7 +57,7 @@ class m_produccion
              $result = $query->execute();   
              return array($result,$cliente);      
         } catch (Exception $e) {
-            return "Error al registrar cliente ".$e;
+            return array("Error al registrar cliente ".$e,'');  
         }
     }
     public function m_guardarmolde($nombre,$medidas,$usu,$codcliente){
@@ -69,23 +69,30 @@ class m_produccion
              $result = $query->execute();     
              return array($result,$molde);            
         } catch (Exception $e) {
-            return "Error al registrar molde ".$e;
+            return array("Error al registrar molde ".$e,'');
         }
     }
 
     public function m_guardarformulacion($codform,$produc,$sltipoprod,$cliente,$molde,$cavidades,$pesouni,$ciclo,$procant,
-        $almacen,$tempera1,$tempera2,$tempera3,$tempera4,$tempera5,$presexplu1,$presexplu2,$velexplu1,
-        $velexplu2,$pisiexplu1,$pisiexplu2,$contrac1,$contrac2,$contrac3,$contrac4,$cargapres1,$cargapres2,$cargapres3,
+        $tempera1,$tempera2,$tempera3,$tempera4,$tempera5,$presexplu1,$presexplu2,$velexplu1,
+        $velexplu2,$pisiexplu1,$pisiexplu2,$cargapres1,$cargapres2,$cargapres3,
         $cargapresucc,$cargavel1,$cargavel2,$cargavel3,$cargavelsucc,$cargapisi1,$cargapisi2,$cargapisi3,$cargapisisucci,
         $inyecpres4,$inyecpres3,$inyecpres2,$inyecpres1,$inyecvelo4,$inyecvelo3,$inyecvelo2,$inyecvelo1,$inyecposi4,
         $inyecposi3,$inyecposi2,$inyecposi1,$inyectiemp,$velocidad3,$velocidad2,$velocidad1,$posicion3,$posicion2,
-        $posicion1,$tiempo,$usu,$items,$cambios){
+        $posicion1,$tiempo,$usu,$items,$cambios,$inicio,$fin,$txttemp6,$txttemp7,$txttemp8,$txttemp9,
+
+        $txtcarriage,$txtclosedd,$txtcuter,$txthead,$txtblow,$txttotalblo,$txtblow1,$txtlf,$txtdefla,$txtunde,
+        $txtcoolin,$txtlock,$txtbottle,$txtcarria,$txtopenmoul,$txtcuter1,$txthead1,$txtblowpin,$txttotalbl,
+        $txtdeflati,$txtblopinS,$txtdeflation,$txtcamvaci1,$txtcooling,$txtcamvaci2,$txtcamvaci3,$modifiedLF)
+        {
+           
             $fechage = retunrFechaSqlphp(date("Y-m-d"));
-            $fecha_actual = date("d-m-Y",strtotime(date("d-m-Y")."+ 1 year"));
+            $fecha_actual = retunrFechaSqlphp(date("Y-m-d",strtotime(date("Y-m-d")."+ 1 year")));
+            $inicio = retunrFechaSqlphp($inicio);
+            $fin = retunrFechaSqlphp($fin);
             $hora = gethora();
             $maquina = os_info();
             $this->bd->beginTransaction();
-            $almacen = oficiona($almacen);
         try {
             $lote = $this->m_lote('lote','V_LISTAR_PRODUCCION',8,$produc);
             $produccion = $this->m_select_generarcodigo('COD_PRODUCCION','T_PRODUCCION',9);
@@ -93,22 +100,24 @@ class m_produccion
             if($sltipoprod == 'P'){$cliente = '000000';}
             $query = $this->bd->prepare("INSERT INTO T_PRODUCCION(COD_PRODUCCION,COD_PRODUCTO,COD_CLIENTE,
             ID_MOLDE,FEC_GENERADO,HOR_GENERADO,FEC_VENCIMIENTO,COD_CATEGORIA,NUM_PRODUCCION_LOTE,CAN_PRODUCCION,
-            CAVIDADES,PESO_UNI,CICLO,EST_PRODUCCION,USU_REGISTRO,MAQUINA,EXTERNO,COD_ALMACEN,N_PRODUCCION_G)
+            CAVIDADES,PESO_UNI,CICLO,EST_PRODUCCION,USU_REGISTRO,MAQUINA,EXTERNO,COD_ALMACEN,N_PRODUCCION_G,
+            FEC_INICIO,FEC_FIN,COD_FORMULACION)
             VALUES('$produccion','$produc','$cliente','$molde','$fechage','$hora','$fecha_actual','00002','$lote','$procant','$cavidades',
-            '$pesouni','$ciclo','0','$usu','$maquina','$sltipoprod','$almacen','$n_produ_g')");
-
+            '$pesouni','$ciclo','0','$usu','$maquina','$sltipoprod','00002 ','$n_produ_g','$inicio','$fin','$codform')");
+           
             $query->execute();
 
             $query2 = $this->bd->prepare("INSERT INTO T_TEMPERATURA(COD_PRODUCCION,TEMPERATURA_1,TEMPERATURA_2,
             TEMPERATURA_3,TEMPERATURA_4,TEMPERATURA_5,EXPUL_PRESION_1,EXPUL_PRESION_2,EXPUL_VELOCI_1,EXPUL_VELOCI_2,
             EXPUL_PISICION_1,EXPUL_PISICION_2,CONTRAC_1,CONTRAC_2,CONTRAC_3,CONTRAC_4,CARGA_PRESION_1,CARGA_PRESION_2,
             CARGA_PRESION_3,CARGA_PRESION_SUCCI,CARGA_VELOC_1,CARGA_VELOC_2,CARGA_VELOC_3,CARGA_VELOC_SUCCI,CARGA_POSIC_1,
-            CARGA_POSIC_2,CARGA_POSIC_3,CARGA_POSIC_SUCCI) VALUES('$produccion','$tempera1','$tempera2','$tempera3','$tempera4',
-            '$tempera5','$presexplu1','$presexplu2','$velexplu1','$velexplu2','$pisiexplu1','$pisiexplu2','$contrac1','$contrac2',
-            '$contrac3','$contrac4','$cargapres1','$cargapres2','$cargapres3','$cargapresucc','$cargavel1','$cargavel2','$cargavel3',
-            '$cargavelsucc','$cargapisi1','$cargapisi2','$cargapisi3','$cargapisisucci')");
-           
-            $query2->execute();
+            CARGA_POSIC_2,CARGA_POSIC_3,CARGA_POSIC_SUCCI,TEMPERATURA_6,TEMPERATURA_7,TEMPERATURA_8,TEMPERATURA_9) 
+            VALUES('$produccion','$tempera1','$tempera2','$tempera3','$tempera4',
+            '$tempera5','$presexplu1','$presexplu2','$velexplu1','$velexplu2','$pisiexplu1','$pisiexplu2','0','0',
+            '0','0','$cargapres1','$cargapres2','$cargapres3','$cargapresucc','$cargavel1','$cargavel2','$cargavel3',
+            '$cargavelsucc','$cargapisi1','$cargapisi2','$cargapisi3','$cargapisisucci','$txttemp6','$txttemp7','$txttemp8',
+            '$txttemp9')");
+             $query2->execute();
 
             $query3 = $this->bd->prepare("INSERT INTO T_INYECCION(COD_PRODUCCION,INYECC_PRESION_1,INYECC_PRESION_2,
             INYECC_PRESION_3,INYECC_PRESION_4,INYECC_VELOCIDAD_1,INYECC_VELOCIDAD_2,INYECC_VELOCIDAD_3,INYECC_VELOCIDAD_4,
@@ -117,19 +126,37 @@ class m_produccion
             ,'$inyecpres3','$inyecpres2','$inyecpres1','$inyecvelo4','$inyecvelo3','$inyecvelo2','$inyecvelo1','$inyecposi4',
             '$inyecposi3','$inyecposi2','$inyecposi1','$inyectiemp','$velocidad3','$velocidad2','$velocidad1','$posicion3','$posicion2',
             '$posicion1','$tiempo')");
-            $query3->execute();
+             $query3->execute();
 
-           
-            if($cambios == 1){
 
+             $query8 = $this->bd->prepare("INSERT INTO T_TIMER_LP(COD_PRODUCCION,CARRIAGEUP_DELAYTIME,CLOSEDWOULD_DELAYTIME
+             ,CUTER_DELAY_TUME,HEAD_UP_DELAY_TIME,
+             BLOWPINGDOWN_DELAYTIME,TOTAL_BLOW_DELAY_TIME,BLOW_TIME,LF_TO_RG_TIME,DEFLATIONDELAY_TIME,
+             UNDERCUTIN_DELAY,COOLING_BLOW_DELAY_TIME,LOCK_WOULD_DELAY,BOTTLE_COOLING_ET,CARRIAGEDOWN_DELAY_TIME
+             ,OPEN_MOULD_DELAY_TIME,CUTER_TIME,
+             HEAD_UP_TIME,BLOWPIN_DOWN_TIME,TOTAL_BLOW_TIME,DEFLATION_TIME,BLOWPIN_SHORTUP_TIME,
+             DEFLATIONTIME,CAMPO_SIN_NOMBRE1,COOLING_BLOW_TIME,CAMPO_SIN_NOMBRE2,CAMPO_SIN_NOMBRE3)
+
+             VALUES('$produccion','$txtcarriage','$txtclosedd'
+             ,'$txtcuter','$txthead','$txtblow','$txttotalblo','$txtblow1','$txtlf','$txtdefla','$txtunde',
+             '$txtcoolin','$txtlock','$txtbottle','$txtcarria','$txtopenmoul','$txtcuter1','$txthead1','$txtblowpin'
+             ,'$txttotalbl','$txtdeflati','$txtblopinS','$txtdeflation','$txtcamvaci1','$txtcooling','$txtcamvaci2',
+             '$txtcamvaci3')");
+
+             $query8->execute();
+
+
+            if($cambios == 1 ){
                 $query4 = $this->bd->prepare("INSERT INTO T_TEMPERATURA_TEMP(COD_FORMULACION,COD_PRODUCCION,TEMPERATURA_1,TEMPERATURA_2,
                 TEMPERATURA_3,TEMPERATURA_4,TEMPERATURA_5,EXPUL_PRESION_1,EXPUL_PRESION_2,EXPUL_VELOCI_1,EXPUL_VELOCI_2,
                 EXPUL_PISICION_1,EXPUL_PISICION_2,CONTRAC_1,CONTRAC_2,CONTRAC_3,CONTRAC_4,CARGA_PRESION_1,CARGA_PRESION_2,
                 CARGA_PRESION_3,CARGA_PRESION_SUCCI,CARGA_VELOC_1,CARGA_VELOC_2,CARGA_VELOC_3,CARGA_VELOC_SUCCI,CARGA_POSIC_1,
-                CARGA_POSIC_2,CARGA_POSIC_3,CARGA_POSIC_SUCCI,USU_REGISTRO) VALUES('$codform','$produccion','$tempera1','$tempera2','$tempera3','$tempera4',
-                '$tempera5','$presexplu1','$presexplu2','$velexplu1','$velexplu2','$pisiexplu1','$pisiexplu2','$contrac1','$contrac2',
-                '$contrac3','$contrac4','$cargapres1','$cargapres2','$cargapres3','$cargapresucc','$cargavel1','$cargavel2','$cargavel3',
-                '$cargavelsucc','$cargapisi1','$cargapisi2','$cargapisi3','$cargapisisucci','$usu')");
+                CARGA_POSIC_2,CARGA_POSIC_3,CARGA_POSIC_SUCCI,USU_REGISTRO,TEMPERATURA_6,TEMPERATURA_7,TEMPERATURA_8,TEMPERATURA_9)
+                 VALUES('$codform','$produccion','$tempera1','$tempera2','$tempera3','$tempera4',
+                '$tempera5','$presexplu1','$presexplu2','$velexplu1','$velexplu2','$pisiexplu1','$pisiexplu2','0','0',
+                '0','0','$cargapres1','$cargapres2','$cargapres3','$cargapresucc','$cargavel1','$cargavel2','$cargavel3',
+                '$cargavelsucc','$cargapisi1','$cargapisi2','$cargapisi3','$cargapisisucci','$usu',
+                '$txttemp6','$txttemp7','$txttemp8','$txttemp9')");
                
                 $query4->execute();
     
@@ -142,11 +169,23 @@ class m_produccion
                 '$posicion1','$tiempo','$usu')");
                 $query5->execute();
             }
+
+            if($modifiedLF == 1){
+                $query9 = $this->bd->prepare("INSERT INTO T_TIMER_LP_TEMPORAL(COD_FORMULACION,COD_PRODUCCION,CARRIAGEUP_DELAYTIME,CLOSEDWOULD_DELAYTIME
+                ,CUTER_DELAY_TUME,HEAD_UP_DELAY_TIME,
+                BLOWPINGDOWN_DELAYTIME,TOTAL_BLOW_DELAY_TIME,BLOW_TIME,LF_TO_RG_TIME,DEFLATIONDELAY_TIME,
+                UNDERCUTIN_DELAY,COOLING_BLOW_DELAY_TIME,LOCK_WOULD_DELAY,BOTTLE_COOLING_ET,CARRIAGEDOWN_DELAY_TIME
+                ,OPEN_MOULD_DELAY_TIME,CUTER_TIME,
+                HEAD_UP_TIME,BLOWPIN_DOWN_TIME,TOTAL_BLOW_TIME,DEFLATION_TIME,BLOWPIN_SHORTUP_TIME,
+                DEFLATIONTIME,CAMPO_SIN_NOMBRE1,COOLING_BLOW_TIME,CAMPO_SIN_NOMBRE2,CAMPO_SIN_NOMBRE3,USU_REGISTRO)
+                VALUES('$codform','$produccion','$txtcarriage','$txtclosedd'
+                ,'$txtcuter','$txthead','$txtblow','$txttotalblo','$txtblow1','$txtlf','$txtdefla','$txtunde',
+                '$txtcoolin','$txtlock','$txtbottle','$txtcarria','$txtopenmoul','$txtcuter1','$txthead1','$txtblowpin'
+                ,'$txttotalbl','$txtdeflati','$txtblopinS','$txtdeflation','$txtcamvaci1','$txtcooling','$txtcamvaci2',
+                '$txtcamvaci3','$usu')");
+                 $query9->execute();
+            }
            
-
-
-
-
             foreach ($items->tds as $dato){
                 if($dato != ''){
                     if($dato[3] == "P"){
@@ -155,19 +194,19 @@ class m_produccion
                         $stock =number_format(($c_propio[0][4] - $dato[2]),2, '.', '');
                         $query6 = $this->bd->prepare("UPDATE T_ALMACEN_INSUMOS SET STOCK_ACTUAL='$stock',
                         FEC_MODIFICO = '$fechage' WHERE COD_PRODUCTO ='$dato[1]'"); 
-                        $query6->execute();
+                       $query6->execute();
                     }else if($dato[3] == "E"){
-                        /*$cadena = "COD_PRODUCTO = '$dato[1]'";
-                        $c_propio = $this->m_buscar('T_ALMACEN_EXTERNOS',$cadena);
-                        $stock = intval($c_propio[0][4]) - intval($dato[2]);
-                        $query4 = $this->bd->prepare("UPDATE T_ALMACEN_EXTERNOS SET STOCK_ACTUAL='$stock' 
-                        WHERE COD_PRODUCTO ='$dato[1]'");*/
+                       //$cadena = "COD_PRODUCTO = '$dato[1]'";
+                       // $c_propio = $this->m_buscar('T_ALMACEN_EXTERNOS',$cadena);
+                       // $stock = intval($c_propio[0][4]) - intval($dato[2]);
+                       // $query4 = $this->bd->prepare("UPDATE T_ALMACEN_EXTERNOS SET STOCK_ACTUAL='$stock' 
+                       // WHERE COD_PRODUCTO ='$dato[1]'");
                     }
                     
                     $query7 = $this->bd->prepare("INSERT INTO T_PRODUCCION_ITEM(COD_PRODUCCION,COD_PRODUCTO,
                     CAN_FORMULACION,TIPO_INSUMOS,USU_REGISTRO,MAQUINA) 
                     VALUES('$produccion','$dato[1]',$dato[2],'$dato[3]','$usu','$maquina')");
-                     $query7->execute(); 
+                    $query7->execute(); 
                     if($query7->errorCode()>0){	
                         $this->bd->rollBack();
                         return 0;
@@ -175,8 +214,8 @@ class m_produccion
                     }
                 }
             }  
-            $guardado = $this->bd->commit();
-            return $guardado;
+           $guardado = $this->bd->commit();
+           return $guardado;
         } catch (Exception $e) {
             $this->bd->rollBack();
            print_r("Error al guardar la produccion " .$e); 
@@ -262,6 +301,36 @@ class m_produccion
             return $resul;
         } catch (Exception $e) {
             print_r("Error al seleccionar ultimos parametros " . $e);
+        }
+    }
+
+    public function m_confirmacion($confirmacion)
+    {
+        $consulta = "ID_PARAM = '2'";
+        $count1 = $this->m_buscar("T_PARAMETROS",$consulta);
+        $cod =  $count1[0][1] * 4;
+        if($cod != $confirmacion){
+            return "Error codigo de autorización invalido";
+        }else{
+            return 1;
+        }
+    }
+
+    public function generarxdiario()
+    {
+        $numero = rand(1,5000);
+        $fecha = retunrFechaSqlphp(date("Y-m-d"));
+        try {
+            $consulta = "ID_PARAM = '2' AND CONVERT(DATE,FEC_CREADO)  < '$fecha'";
+            $count1 = $this->m_buscar("T_PARAMETROS",$consulta);
+            if(count($count1) > 0){
+                $query = $this->bd->prepare("UPDATE T_PARAMETROS SET COD_BLOQUE = '$numero',
+                FEC_CREADO = '$fecha' WHERE ID_PARAM = '2'");
+                $resul = $query->execute();
+                return $resul;
+            }
+        } catch (Exception $e) {
+            print_r("Error al generar codigo" . $e);
         }
     }
 }
