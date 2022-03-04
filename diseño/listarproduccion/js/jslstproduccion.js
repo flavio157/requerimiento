@@ -1,12 +1,16 @@
 var usu = '';t = 'm';produccion='';cantxinsumo = ''; tipobtn = 'a';color = '';lstpersonal = [];
 var cab = 0;totalpaquete = 0;cantidad=0;var qrcode = '';faltacaja = 0 ;sobra=0;merma ='';
-var doc;tipofipd = 0;
+var doc;tipofipd = 0;ocuren = 0;control = 0;
+var counter;var hm; var ds; var bl;var hd;
 $(document).ready(function () {
-    usu = $("#vrcodpersonal").val();
-    lstitemsfor();
-    hora();
-    disabletab();
-    autocompletarpersonal();
+   usu = $("#vrcodpersonal").val();
+   lstitemsfor();hora();disabletab();
+   autocompletarpersonal();parametros()
+   modalcontrol();
+   controlcalidad();
+   setInterval(bxcontrol,1000);
+   
+ 
 
     $('#tbproduccion').on('click', 'tbody tr', function(event) {
         $(this).addClass('highlight').siblings().removeClass('highlight');
@@ -15,7 +19,11 @@ $(document).ready(function () {
     });
 
     $("#btngocurrencia").on('click',function(){
-        gocurrencia($("#txtocurrencias").val());   
+        if($("#mddetepro").is(':checked') && ocuren == 0){
+          confirmacion('Esta por detener la producción','¿Desea continuar?','warning')
+        }else{
+           gocurrencia($("#txtocurrencias").val(),$("#mddetepro").is(':checked'));
+        }
     });
 
     $("#btnnuevo").on('click',function() {
@@ -143,10 +151,36 @@ $(document).ready(function () {
         if (e.keyCode == 8) $('#mdcodmaquinista').val('');
     });
 
+    $("#mdbloque").on('click',function(){
+        controlcalidad();
+    });
+
+    $("#btninyeccion").on('click',function() {
+        guardarcalidad($("#txtIcolor").val(),$("#txtIpureza").val(),$("#chcIrebaba").is(":checked"),'',
+        '','',"i");
+    });
+
+    $("#btnsoplado").on('click',function() {
+        guardarcalidad($("#txtScolor").val(),'','',$("#txtSpeso").val(),$("#txtSobservac").val(),
+        $("#chcSestabilid").is(":checked"),"s");
+    });
+
+    $("#btndesbloq").on('click',function(){
+        coddesblo = $("#txtdesbloqueo").val();
+        desbloqueo(coddesblo);
+    });
+
+    $("#btncersopla").on('click',function () {
+        control = 1;
+    })
+
+    $("#btncerrainye").on('click',function(){
+        control = 1;
+    })
 });
 
 function autocompletarpersonal() {
-    buscarxformula();
+    buscarxpersonal();
     $("#mdmaquinista").autocomplete({
         source: lstpersonal,
         select: function (event, ui) {
@@ -155,13 +189,13 @@ function autocompletarpersonal() {
     });
 }
 
-function buscarxformula(){
+function buscarxpersonal(){
     $.ajax({
       dataType:'text',
       type: 'POST', 
       url:  'c_produccion.php',
       data:{
-          "accion" : 'buscarxformula',
+          "accion" : 'lstpersonal',
           "usu" : usu
       } ,
       success:  function(response){
@@ -175,9 +209,6 @@ function buscarxformula(){
     });
 }
 
-
-
-
 function lstocurrencia() {
     $.ajax({
       dataType:'text',
@@ -187,9 +218,16 @@ function lstocurrencia() {
       success: function(r) {
           obj = JSON.parse(r);
           $("#tbocurrencia > tbody").empty();
+          if(obj['o'] != '0'){
+            $("#txtocurrencias").val(obj['obs']); $("#mddetepro").prop('checked',true)
+            $("#txtocurrencias").attr("disabled","disabled");
+            $("#mdidocurrecia").val(obj['o']);
+            ocuren = 1
+          }
           $.each(obj['dato'], function(i, item) {
             fecha = item[4].split(' '); 
             var fila = '';
+            fila +="<td style='display:none'>"+item[8]+"</td>";
             fila +="<td class='tdcontent'>"+item[2]+"</td>";
             fila +="<td>"+fecha[0].replace(/^(\d{4})-(\d{2})-(\d{2})$/g,'$3/$2/$1')+"</td>";
             var btn = document.createElement("TR");
@@ -205,7 +243,7 @@ function lstitemsfor() {
       dataType:'text',
       type: 'POST', 
       url:  'c_produccion.php',
-      data:"accion=lstproduccion",
+      data:"accion=lstproduccion&usu="+usu,
       success: function(r) {
         obj = JSON.parse(r);createtable(obj['dato']);
       }
@@ -223,6 +261,8 @@ function createtable(obj) {
          "<i class='icon-list' title='Modificar residuos'></i></a>";
     $("#tbproduccion > tbody").empty();
     $.each(obj, function(i, item) {
+        $("#produ").val(item[0]);
+        $("#prod").val(item[1]);
         cliente = (item[3] == null) ? '' : item[3];
         var fila='';
         fila +="<td class='tdcontent' style=display:none>"+item[0]+"</td>";
@@ -239,20 +279,23 @@ function createtable(obj) {
     });
 }
 
-function gocurrencia(ocurrencia){
+function gocurrencia(ocurrencia,detepro){
+  //  console.log(detepro);
+    id = $("#mdidocurrecia").val();
     $.ajax({
         dataType:'text',
         type: 'POST', 
         url:  'c_produccion.php',
-        data:"accion=ocurrencia&produccion="+produccion+"&ocurrencia="+ocurrencia+"&usu="+usu
-        ,beforeSend: function () {
-            $('.ajax-loader').css("visibility", "visible");
-        },success: function(r) {
-            if(r==1){Mensaje1("Se registro la observación","success");
-            $("#txtocurrencias").val('');$("#mdocurrencia").modal('hide')}
+        data:"accion=ocurrencia&produccion="+produccion+"&ocurrencia="+ocurrencia+"&usu="+usu+
+        "&detepro="+detepro+"&ocu="+ocuren+"&id="+id
+        ,success: function(r) {
+            if(r==1){Mensaje1("Se registraron los datos","success");
+            $("#txtocurrencias").val('');$("#mdocurrencia").modal('hide')
+            ocuren = 0;
+            $("#txtocurrencias").removeAttr("disabled")
+            $("#mdidocurrecia").val('');
+            $("#txtocurrencias").val('')}
             else{ Mensaje1(r.trim(),"error");} 
-        },complete: function(){
-            $('.ajax-loader').css("visibility", "hidden");
         }
       }); 
 }
@@ -300,7 +343,7 @@ function guardar(fechincidencia,horaincidencia,observacion,tipomerma,cantidad,fa
         },beforeSend: function () {
             $('.ajax-loader').css("visibility", "visible");
         },success: function(e) {
-            console.log(e);
+           
             if(e==1){
                 mensaje = (t == 'm') ? "la merma" : (t == 'd') ? "el desecho" : " los sobrantes";
                 Mensaje1("Se registro correctamente "+mensaje,"success"); 
@@ -354,7 +397,7 @@ function verificarfinprod(produccion,cantidad,cantxpa,total){
                     guardaravances($("#frmavances").serialize());
                 }else if(cab == 1){
                     guardaravancesits($("#mdcodprod").val(),$("#mdcajasxsacar").val(),$("#mdproduc").val()
-                    ,$("#slcmdturno").val(),$("#mdcodmaquinista").val());
+                    ,$("#slcmdturno").val(),$("#mdcodmaquinista").val(),$("#mdtara").val());
                 } 
             }else{Mensaje1(e,"error");}
         }
@@ -384,6 +427,7 @@ function guardaravances(frm){
                     $("#btnregisproduc").attr('disabled',true);
                     $("#btngavances").removeAttr('disabled');
                 }
+                cab = 1;
             }else{
                 Mensaje1(obj['suc'],"error");
                 $('.ajax-loader').css("visibility", "hidden");
@@ -440,32 +484,35 @@ function v_avances($produccion,inavance){
       }); 
 }
 
-function guardaravancesits(produ,avance,producto,turno,maquinista){
+function guardaravancesits(produ,avance,producto,turno,maquinista,tara){
    $.ajax({
         dataType:'text',
         type: 'POST', 
         url:  'c_produccion.php',
         data:"accion=gavancesitems&avance="+avance+"&usu="+usu+"&produ="+produ+
-        "&mdproduc="+producto+"&faltante="+faltacaja+"&turno="+turno+"&maquinista="+maquinista
+        "&mdproduc="+producto+"&faltante="+faltacaja+"&turno="+turno+"&maquinista="+maquinista+
+        "&mtara="+tara
         ,beforeSend: function () {
             $('.ajax-loader').css("visibility", "visible");
         },
         success:function(res){
-            console.log(res);
             obj = JSON.parse(res);
-            if(obj['suc'] == 1){
+            if(obj['suc'] == true){
+               $("#lblmensaje").text('Paquetes restantes ' + (totalpaquete - $("#mdcajasxsacar").val()));
                if(obj['termi'] == 1){faltacaja = 0;}
                if(obj['termi'] == 1 && tipobtn == 'f'){faltacaja = 0;return;}
-                 $("#lblmensaje").text('Paquetes restantes ' + (totalpaquete - $("#mdcajasxsacar").val()));
-              Mensaje3("Se registron los datos" ,"success","Antes de cerrar la ventana imprima los tickes");
-              $("#btnregisproduc").attr('disabled',true);
-              $("#btngavances").removeAttr('disabled');
-            }else{Mensaje1(obj['suc'],"error");
-            $('.ajax-loader').css("visibility", "hidden");
-                t = 'm';
+               $("#btnregisproduc").attr('disabled',true);
+               $("#btngavances").removeAttr('disabled');
             }
         },complete: function(){
-            $('.ajax-loader').css("visibility", "hidden");
+            if(obj['suc'] != true){
+                Mensaje1(obj['suc'],"error");
+                $('.ajax-loader').css("visibility", "hidden");
+                t = 'm';
+            }else{
+                Mensaje3("Se registron los datos" ,"success","Antes de cerrar la ventana imprima los tickes");
+                $('.ajax-loader').css("visibility", "hidden");
+            }
         }
     });
 }  
@@ -493,8 +540,8 @@ function lstavance(produccion){
             tipofipd = 0;
             $.each(obj['dato'], function(i, item) {
               sum = (Number(i)+Number(1));
-              demoFromHTML(item[6],item[3],item[4],item[10],item[7],item[9],item[8],obj['tipo'],obj['id'],item[12],item[13],obj['fila'],sum)
-                //demoFromHTML(obj['cantidad'],item[3],obj['fecha'],item[10],item[7],item[9],item[8],obj['tipo'],obj['id'],item[12],item[13])
+              maquini = item[12].trim().split(" ");
+              demoFromHTML(item[6],item[3],item[4],item[10],item[7],item[9],item[8],obj['tipo'],obj['id'],maquini[0]+" "+maquini[1],item[13],obj['fila'],sum)
             }); 
            }else{
               Mensaje1("Error no hay datos que imprimir","error");
@@ -504,7 +551,7 @@ function lstavance(produccion){
 } 
 
 function demoFromHTML(cant,lote,fecha,peso,cantidad,tara,total,fin,avance,maquinista,turno,filas,sum) {
-    console.log(maquinista,turno);
+  
     turno = (turno.trim() == 'M') ? 'Mañana' : 'Tarde';
     pesoneto = 0;
     doc.setFontSize(14);doc.setFontType('normal'); doc.setFont(undefined,'bold')
@@ -515,7 +562,7 @@ function demoFromHTML(cant,lote,fecha,peso,cantidad,tara,total,fin,avance,maquin
         pesoneto = Number(peso * cantidad).toFixed(2);
         if(fin == 0 && (i+1) == cant && (total % cantidad) != 0 ){
         cantidad = total % cantidad; peso = (peso / cantidad)}
-        if(i % 2 == 0){x = 5; xr = 0; xx = 55 ; xqr = 32}else{x = 107 ;xr=105; xx = 57 * 2.78;xqr = 59 *2.30}
+        if(tipofipd % 2 == 0){x = 5; xr = 0; xx = 55 ; xqr = 32}else{x = 107 ;xr=105; xx = 57 * 2.78;xqr = 59 *2.30}
         if(tipofipd == 8){doc.addPage(); tipofipd = 0;}
         if(tipofipd == 0 || tipofipd == 1){
             doc.rect(xr, 74 * 0, 105, 74.20)
@@ -539,7 +586,6 @@ function demoFromHTML(cant,lote,fecha,peso,cantidad,tara,total,fin,avance,maquin
                 doc.text('TURNO: '+turno, x, 133);
                 doc.text('MAQUINISTA: '+maquinista, x, 143);
                 tipofipd++;
-
         }else if(tipofipd  == 4 || tipofipd == 5){
             doc.rect(xr, 74 * 2, 105, 74.20)
                 doc.text('FECHA: '+fecha, x, 157);
@@ -587,17 +633,6 @@ function lmp(){
     document.getElementById("mdregistroresi").reset();
 }
 
-/*function qr(fecha,lote){
-    new QRious({
-        element: document.querySelector("#codigo"),
-        value: "Lote: "+ lote + " Fecha: "+fecha, 
-        size: 200,
-        backgroundAlpha: 0, 
-        foreground: "#000", 
-        level: "H", 
-    }); 
-}*/
-
 function date(){
     n =  new Date();y = n.getFullYear();m = n.getMonth() + 1;d = n.getDate();
     if(m < 10) m = "0"+m;
@@ -644,6 +679,7 @@ function finproduccion(produccion){
 
 function perdida(produccion,cant,lote,fecha,peso,cantidad,tara,total,fin) {
     tur = $("#slcmdturno").val();maquinista = $("#mdcodmaquinista").val();
+    arraymaqui = $("#mdmaquinista").val().trim().split(" ");
     $.ajax({
         dataType:'text',
         type: 'POST', 
@@ -655,11 +691,12 @@ function perdida(produccion,cant,lote,fecha,peso,cantidad,tara,total,fin) {
             "turno" : tur,
             "maquinista" :maquinista
         },success:function(e){
+         
             obj = JSON.parse(e);
             if(obj['mensaje'] == 0){
                 doc = new jsPDF();tipofipd = 0;
                 total = (total - obj['e']);
-                demoFromHTML(cant,lote,obj['fecha'],peso,cantidad,tara,total,fin,'',$("#mdmaquinista").val(),tur);
+                demoFromHTML(cant,lote,obj['fecha'],peso,cantidad,tara,total,fin,'',arraymaqui[0] + " " +arraymaqui[1] ,tur);
             }else{
                 Mensaje1(obj['mensaje'],'error');
             }
@@ -672,6 +709,7 @@ function Mensaje2(title,icon,text) {
     Swal.fire({title: title,icon: icon,text: text,confirmButtonText: 'Aceptar',
     }).then((result) => {
         if (result.isConfirmed) {
+            return true;
         }
     })
 }
@@ -730,4 +768,175 @@ function actualizaresiduos() {
           }
         }
     });
+}
+function controlcalidad() {
+    $.ajax({
+        dataType:'text',
+        type: 'POST', 
+        url:  'c_produccion.php',
+        data:{
+            "accion":"controlcali","usu":usu
+        }
+        ,success:function(e){
+            fec = [];dato = "";
+            o = JSON.parse(e);
+            if(o['c'] > 0){
+                $.each(o['blo'], function(i, item) {
+                    if(fec.indexOf(item[0]) == -1 ){
+                      if(dato != ""){dato +="<br>"}  
+                      dato = dato +     item[0] +": " + item[1];
+                      fec.push(item[0]);
+                    }else{dato += item[1] ;
+                    }
+                });
+                $("#fecblo").html(dato);
+                if(o['cl'] == ""){
+                    $("#mdbloqueo").modal("show");
+                }
+            }
+            control = 1;
+            $("#mdcontcalInyeccion").modal("hide");
+            $("#mdcontcalsoplado").modal("hide");
+            $("#btnsoplado").css("display","none");
+            $("#btninyecci").css("display","none");
+        }
+    });
+}
+
+function modalcontrol(){
+    $.ajax({
+        dataType:'text',
+        type: 'POST', 
+        url:  'c_produccion.php',
+        data:{
+            "accion":"modalcontrol","usu":usu
+        }
+        ,success:function(e){
+            b = JSON.parse(e);
+            hm = b['hm'];
+            if(hm != ""){
+                ds = b['d'][0]['6'];
+                bl = b['h'];
+                hd = b['hd'];
+            }
+            
+        }
+    });
+}
+
+function bxcontrol() {
+    if(hm != ""){
+        g = hm.split(":");
+        f = bl.split(":");
+        dh = hd.split(":");    
+        var hoy = new Date();
+        var hora = hoy.getHours();
+        var minuto = hoy.getMinutes();
+        if (minuto < 10) {
+            minuto = "0" + minuto
+        };
+        if (hora < 10) {
+            hora = "0" + hora
+        };
+       // console.log(hora +"=="+ f[0] +"///"+ minuto +"=="+ f[1]);
+       //igualar a la hora que trae 
+       if(hora == f[0] && minuto == f[1]){
+            modalcontrol();
+       }
+       if(hora ==  dh[0] && minuto ==  dh[1]){
+           controlcalidad();
+       }
+       //console.log(hora +"=="+ g[0] +"///"+ minuto +"=="+ g[1]);
+        if(hora == g[0] && minuto == '40' && control == 0){
+            if(ds == 'I'){
+                $("#btninyecci").css("display","block");
+                $("#mdcontcalInyeccion").modal("show");
+                control = 1;
+            }else if(ds == 'S'){
+                $("#btnsoplado").css("display","block");
+                $("#mdcontcalsoplado").modal("show");
+                control = 1;
+            };
+        }
+    }
+}
+
+function confirmacion(title,text,icon){
+    Swal.fire({
+        title: title,
+        text: text,
+        icon: icon,
+        showCancelButton: true,
+        cancelButtonColor: '#d33',
+        cancelButtonText: 'Cancelar',
+        confirmButtonText: 'Confirmar'
+      }).then((result) => {
+        if (result.isConfirmed) {
+            gocurrencia($("#txtocurrencias").val(),$("#mddetepro").is(':checked'));   
+        }else{
+            $("#mddetepro").prop("checked",false);
+        }
+    })
+}
+
+function guardarcalidad(color,pureza,rebaba,peso,observacion,estabilidad,tcalid){
+    txtpro = $("#produ").val();
+    txtprodu = $("#prod").val();
+    $.ajax({
+        dataType:'text',
+        type: 'POST', 
+        url:  'c_produccion.php',
+        data:{
+            "accion":"gcontrol","color":color,"pureza":pureza,
+            "rebaba":rebaba,"peso":peso,"observacion":observacion,
+            "establidad":estabilidad,"usu":usu,"tcalid":tcalid,"txtpro":txtpro,
+            "txtprodu":txtprodu
+        }
+        ,success:function(e){
+            if(e == 1){
+                Mensaje1("Se registro el control de calidad","success");
+                $("#btnsoplado").css("display","none");
+                $("#btninyecci").css("display","none");
+                $("#mdcontcalInyeccion").modal("hide");
+                $("#mdcontcalsoplado").modal("hide");
+                control = 1;
+            }else{
+                Mensaje1(e,"error");
+            }
+        }
+    }); 
+}
+
+function parametros() {
+    $.ajax({
+        dataType:'text',
+        type: 'POST', 
+        url:  'c_produccion.php',
+        data:{
+           "accion":"params"
+        }
+        ,success:function(e){
+            console.log(e);
+        }    
+    })
+}
+
+function desbloqueo(coddesblo) {
+    $.ajax({
+        dataType:'text',
+        type: 'POST', 
+        url:  'c_produccion.php',
+        data:{
+           "accion":"desbloq",
+           "codigo" : coddesblo
+        }
+        ,success:function(e){
+            if(e != 1){
+                Mensaje1(e,"error");
+            }else{
+                $("#mdbloqueo").modal("hide")
+                control = 0;
+            }
+        }    
+    })
 }

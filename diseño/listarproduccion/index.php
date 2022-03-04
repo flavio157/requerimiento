@@ -1,14 +1,11 @@
 <?php
-
-header('Content-Type: text/html; charset=UTF-8');
-
 if (session_status() == PHP_SESSION_NONE) {
     session_start();
 }
-$ofi = $_SESSION["ofi"];
+/*$ofi = $_SESSION["ofi"];
 $zon = $_SESSION["zon"];
-$cod = $_SESSION["cod"];
-require_once("./menu/index.php");
+$cod = $_SESSION["cod"];*/
+require_once("../menu/index.php");
 ?>  
 
 <!DOCTYPE html>
@@ -20,13 +17,10 @@ require_once("./menu/index.php");
     <script src="../js/bootstrap5.bundel.min.js"></script>
     <script src="../js/sweetalert2@11.js"></script>
     <script src="../js/jquery-ui-autocompletar.js"></script>
-
     <link rel="stylesheet" href="//code.jquery.com/ui/1.13.0/themes/base/jquery-ui.css">
-    
     <script src="./js/jslstproduccion.js"></script>
     <link rel="stylesheet" type="text/css" href="../fonts/style.css">
     <link rel="stylesheet" type="text/css" href="./css/responsive.css">
-
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
 <style>
@@ -53,14 +47,16 @@ require_once("./menu/index.php");
         </div> 
         <div class="main"> 
             <form id="frmfabricacion">
-                <input type="text" id="vroficina" style="display: none;" value="<?php echo $ofi?>"/>
-                <input type="text" id="vrzona" style="display: none;" value="<?php echo  $zon?>"/>
-                <input type="text" id="vrcodpersonal" style="display: none;" value="<?php echo $cod?>"/>
+                <input type="text" id="vroficina" style="display: none;" value="<?php echo ''//$ofi?>"/>
+                <input type="text" id="vrzona" style="display: none;" value="<?php echo ''//$zon?>"/>
+                <input type="text" id="vrcodpersonal" style="display: none;" value="<?php echo ''//$cod?>"/>
                    <div class="row">
-                        <div class="col mb-3">
-                            <center><label class="titulos">Producción</label></center>
-                        </div>    
+                      <div class="col mb-3">
+                        <center><label class="titulos">Producción</label></center>
+                      </div>    
                     </div>
+                    <input style="display: none;" id="produ"></input>
+                    <input style="display: none;" id="prod"></input>
                     <div  class="row mb-3">
                         <div class="col">
                             <div class="table-responsive-sm" style="overflow: scroll;height: 500px;">  
@@ -76,21 +72,20 @@ require_once("./menu/index.php");
                                         </tr>
                                     </thead>
                                     <tbody id="tbdproduccion">
-                                  
                                     </tbody>
                                 </table>
                             </div>  
                         </div>     
                     </div> 
-                    
-                     <!-- <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#mdmerma">Merma</button>
-                      <button type="button" id="btnsobras" class="btn btn-success" >Sobras</button>
+          <button type="button" class="btn btn-primary" id="btninyecci" data-bs-toggle="modal" data-bs-target="#mdcontcalInyeccion" style="display:none">inyección</button>
+          <button type="button" class="btn btn-primary" id="btnsoplado" data-bs-toggle="modal" data-bs-target="#mdcontcalsoplado" style="display:none">Soplado</button>
+          <!--<button type="button" id="mdbloque" class="btn btn-primary" >bloqueo</button>-->
+          <!--  data-bs-toggle="modal" data-bs-target="#mdbloqueo"
+            <button type="button" id="btnsobras" class="btn btn-success" >Sobras</button>
                       <button type="button" id="btnresiduos" class="btn btn-secondary">Residuos</button>
                       <button type="button" id="btndesecho" class="btn btn-danger" >Desechos</button>-->
-
-             
-                    <!--<img alt="Código QR" id="codigo" style="display: none;">-->
-            </form>
+                    <!--<img alt="Código QR" id="codigo" style="display: none;">--> 
+          </form>
 
         <div class="modal fade" id="mdregisavances" data-bs-keyboard="false" data-bs-backdrop="static" tabindex="-1"   aria-hidden="true">
           <div class="modal-dialog">
@@ -119,7 +114,7 @@ require_once("./menu/index.php");
                             <label for="formcantidad" class="form-label">Tara</label>
                             <div class="input-group mb-3">
                               <input type="number" class="form-control form-control-sm"  name="mdtara" id="mdtara" autocomplete="off">
-                              <span class="input-group-text" id="basic-addon1">Kg</span>
+                              <span class="input-group-text" id="basic-addon1">g</span>
                             </div>
                         </div>
                         <div class="col">
@@ -188,8 +183,17 @@ require_once("./menu/index.php");
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
               </div>
               <div class="modal-body">
+                <div class="mb-4">
+                  <input style="display: none;" id="mdidocurrecia">
+                  <div class="form-check" style="float: right;">
+                    <input class="form-check-input" type="checkbox" value="" id="mddetepro">
+                    <label class="form-check-label" for="mddetepro">
+                      Detener la producción
+                    </label>
+                  </div>
+                </div>
                 <div class="mb-3">
-                  <label for="exampleFormControlTextarea1" class="form-label">Descripciòn</label>
+                  <label for="exampleFormControlTextarea1" class="form-label">Descripción</label>
                   <textarea class="form-control" id="txtocurrencias" rows="3"></textarea>
                 </div>
                 <div class="row">
@@ -381,15 +385,120 @@ require_once("./menu/index.php");
 
 
 
+      <div class="modal fade " id="mdcontcalInyeccion" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="staticBackdropLabel">Control de calidad </h5>
+            </div>
+            <div class="modal-body">
+            <form>
+              <div class="row">
+                <div class="col-md-6">
+                  <label class="form-label">Tipo color</label>
+                  <input type="text" class="form-control" id="txtIcolor" name="txtIcolor" autocomplete="off">
+                </div>
+                <div class="col-md-6">
+                  <label class="form-label">Pureza</label>
+                  <input type="text" class="form-control" id="txtIpureza" name="txtIpureza" autocomplete="off">
+                </div>      
+                <div class="col-md-6 g-4">
+                  <div class="form-check">
+                    <label class="form-check-label" for="chcIrebaba">
+                    REBABA
+                    </label>
+                    <input class="form-check-input" type="checkbox" id="chcIrebaba">
+                  </div>
+                </div>
+              </div>
+            </form>
+            </div>
+            <div class="modal-footer">
+            <button type="button" class="btn btn-danger" id="btncerrainye" data-bs-dismiss="modal">cerrar</button>
+              <button type="button" id="btninyeccion" class="btn btn-primary">Confirmar</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="modal fade " id="mdcontcalsoplado" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="staticBackdropLabel">Control de calidad </h5>
+            </div>
+            <div class="modal-body">
+              <form>
+                <div class="row mb-3">
+                  <div class="col-md-6">
+                    <label class="form-label">Color</label>
+                    <input type="text" class="form-control" name="txtScolor" id="txtScolor" autocomplete="off">
+                  </div>
+                  <div class="col-md-6">
+                    <label for="inputPassword4" class="form-label">Peso</label>
+                    <div class="input-group mb-3">
+                      <input type="text" class="form-control" name="txtSpeso" id="txtSpeso" autocomplete="off">
+                      <span class="input-group-text" id="basic-addon1">Kg</span>
+                    </div>
+                  </div>  
+                </div>
+                <div class="row mb-3">
+                  <div class="col-md">
+                    <label class="form-label">Observación</label>
+                    <textarea class="form-control" id="txtSobservac" rows="3" autocomplete="off"></textarea>
+                  </div>
+                </div>
+                <div class="col-md-6 ">
+                    <div class="form-check">
+                      <label class="form-check-label" for="chcSestabilid">
+                      Estabilidad
+                      </label>
+                      <input class="form-check-input" type="checkbox" id="chcSestabilid">
+                    </div>
+                  </div>
+              </form>
+            </div>
+            <div class="modal-footer">
+             <button type="button" class="btn btn-danger" id="btncersopla"  data-bs-dismiss="modal">cerrar</button>
+              <button type="button" id="btnsoplado" class="btn btn-primary" >Confirmar</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+      <div class="modal fade " id="mdbloqueo" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="staticBackdropLabel">Bloqueo por control de calidad</h5>
+            </div>
+            <div class="modal-body">
+              <form>
+                  <label>No registro el control de calidad los dias y las horas:</label>
+                  <br><span id="fecblo">
+                   
+                  </span>
+                  <div class="col-md">
+                    <label for="inputEmail4" class="form-label">
+                      Ingrese codigo de desbloqueo
+                    </label>
+                  </div>
+                  <div class="col-md">
+                    <input type="text" id="txtdesbloqueo" class="form-control">
+                  </div> 
+              </form>
+            </div>
+            <div class="modal-footer">
+              <button type="button" id="btndesbloq" class="btn btn-primary" >Confirmar</button>
+            </div>
+          </div>
+        </div>
+      </div>
 
 
     </div>    
 </body>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.3.2/jspdf.debug.js"></script>
-  <script src="https://unpkg.com/qrious@4.0.2/dist/qrious.js"></script>
 </html>
-<script>
-	
 
-    
-	</script>

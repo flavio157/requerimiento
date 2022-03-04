@@ -25,24 +25,39 @@ class m_produccion
     public function m_select_generarcodigo($campo,$tabla,$cantidad)
     {
             try {
-            $query = $this->bd->prepare("SELECT MAX($campo)+1 as codigo FROM $tabla");
-            $query->execute();
-            $results = $query->fetch();
-            if($results[0] == NULL) $results[0] = '1';
-            $res = str_pad($results[0],$cantidad, '0', STR_PAD_LEFT);
-            return $res;
+                $query = $this->bd->prepare("SELECT MAX($campo)+1 as codigo FROM $tabla");
+                $query->execute();
+                $results = $query->fetch();
+                if($results[0] == NULL) $results[0] = '1';
+                $res = str_pad($results[0],$cantidad, '0', STR_PAD_LEFT);
+                return $res;
             } catch (Exception $e) {
                 print_r("Error al generar codigo " . $e);
             }
     }
     
-    public function m_guardarocurrencia($produccion,$observacion,$usu)
+    public function m_guardarocurrencia($produccion,$observacion,$usu,$detepro)
     {
+        if($detepro == "false"){$detepro = "0";}else{$detepro = "1";}
         try {
             $hora = gethora();
             $query = $this->bd->prepare("INSERT INTO T_OCURRENCIAS(COD_PRODUCCION,HOR_OCURRENCIA,OBS_OCURRENCIA,
-            USU_REGISTRO) 
-            VALUES('$produccion','$hora','$observacion','$usu')");
+            USU_REGISTRO,PRODU_DETENIDO) 
+            VALUES('$produccion','$hora','$observacion','$usu','$detepro')");
+            $datos = $query->execute();
+            return $datos;
+        } catch (Exception $e) {
+            print_r("Error en la consulta buscar ".$e);
+        } 
+    }
+
+    public function m_actualizaocurencia($usu,$id)
+    {
+        $fecha = retunrFechaSqlphp(date("Y-m-d"));
+        try {
+            $query = $this->bd->prepare("UPDATE T_OCURRENCIAS SET PRODU_DETENIDO = '0',FEC_MODIFICO = '$fecha',
+            USU_MODIFICO = '$usu' WHERE 
+            ID_OCURRENCIAS = '$id'");
             $datos = $query->execute();
             return $datos;
         } catch (Exception $e) {
@@ -65,14 +80,14 @@ class m_produccion
             $query->execute();
                         $query2 = $this->bd->prepare("INSERT INTO T_MERMAS_ITEM(COD_MERMA,COD_PRODUCTO,CAN_PRODUCTO
                         ,TIPO_MERMA,CANT_PROD_MALOG) 
-                        VALUES('$codmerma','000046','$canmerma','$tipomer','$falla')");
+                        VALUES('$codmerma','000055','$canmerma','$tipomer','$falla')");
                          $query2->execute();
                         if($tipomer == 'R'){
-                            $cadena = "COD_PRODUCTO = '000046'";//    000055   cambia el codigo del producto solo es prueba
+                            $cadena = "COD_PRODUCTO = '000055'";//    000055   cambia el codigo del producto solo es prueba
                             $c_propio = $this->m_buscar('T_ALMACEN_INSUMOS',$cadena);
                             $stock =number_format(($c_propio[0][4] + $canmerma),2, '.', '');
                             $query3 = $this->bd->prepare("UPDATE T_ALMACEN_INSUMOS SET STOCK_ACTUAL='$stock',
-                            FEC_MODIFICO = '$fecha' WHERE COD_PRODUCTO ='000046'"); 
+                            FEC_MODIFICO = '$fecha' WHERE COD_PRODUCTO ='000055'"); 
                             $query3->execute();
                         }
             $guardado = $this->bd->commit();
@@ -85,6 +100,7 @@ class m_produccion
 
     public function m_guardarresiduos($codproduccion,
     $observacion,$usu,$cantidad,$color){
+       
         $insumoar = array();
         $maquina = os_info();
         $this->bd->beginTransaction();$fecha = retunrFechaSqlphp(date("Y-m-d"));
@@ -122,7 +138,6 @@ class m_produccion
                         }
                     }
                 }
-
                   
                     for ($j=0; $j < count($insumoar); $j++) { 
                         $codinsumo = $insumoar[$j][0];
@@ -137,9 +152,10 @@ class m_produccion
                         $pasada =  ((int)$insumoar[0][2] + (int)1);
                       
                         if($pasada < 5)
+                        
                         $cadena = "COD_PRODUCTO = '$codinsumo' AND TIPO_PASADA = '$pasada' AND COLOR_INSUMO = '$color'";
                         $pasadas = $this->m_buscar('T_INSUMOS_PASADAS',$cadena);
-                     
+             
                         $prod = $pasadas[0][1];
                         
                         $cadena = "COD_PRODUCTO = '$prod'";
@@ -175,14 +191,14 @@ class m_produccion
             ,USU_REGISTRO,MAQUINA)VALUES('$coddesechos','$codproduccion','$observacion','$usu','$maquina')");
             $query->execute();
             $query2 = $this->bd->prepare("INSERT INTO T_DESECHOS_ITEM(COD_DESECHOS,COD_PRODUCTO,CAN_PRODUCTO) 
-                      VALUES('$coddesechos','000047',$cantidad)");
+                      VALUES('$coddesechos','000056',$cantidad)");
             $query2->execute(); 
 
-            $cadena = "COD_PRODUCTO = '000047'";//    000055   cambia el codigo del producto solo es prueba
+            $cadena = "COD_PRODUCTO = '000056'";//    000056   cambia el codigo del producto solo es prueba
             $c_propio = $this->m_buscar('T_ALMACEN_INSUMOS',$cadena);
             $stock =number_format(($c_propio[0][4] + $cantidad),2, '.', '');
             $query3 = $this->bd->prepare("UPDATE T_ALMACEN_INSUMOS SET STOCK_ACTUAL='$stock',
-            FEC_MODIFICO = '$fecha' WHERE COD_PRODUCTO ='000047'"); 
+            FEC_MODIFICO = '$fecha' WHERE COD_PRODUCTO ='000056'"); 
             $query3->execute();
 
             $guardado = $this->bd->commit();
@@ -199,7 +215,7 @@ class m_produccion
         $maquina = os_info();
         $fecha = retunrFechaSqlphp(date("Y-m-d"));
         $this->bd->beginTransaction();
-        $cantalm = 0;
+
         try {
             $codavance = $this->m_select_generarcodigo('COD_AVANCE','T_AVANCE_PRODUCCION',9);
             $query = $this->bd->prepare("INSERT INTO T_AVANCE_PRODUCCION(COD_PRODUCCION,COD_AVANCE,TARA
@@ -208,56 +224,64 @@ class m_produccion
             $query->execute();
             
             $query2 = $this->bd->prepare("INSERT INTO T_AVANCE_PRODUCCION_ITEM(COD_AVANCE,CANT_PAQUETE,OPERARIO,
-            USU_REGISTRO,IMPRESO,TURNO)VALUES('$codavance','$paquexsacar','$maquinista','$usu','0','$turno')");
+            USU_REGISTRO,IMPRESO,TURNO,DERIVO_AVANCE)VALUES('$codavance','$paquexsacar','$maquinista','$usu','0','$turno','0')");
             $query2->execute();
 
-            if($fin == 1){
-                if($totalproduc % $cantxbolsa != 0 ){$total = $cantxbolsa * ($paquexsacar - 1);}
-                else{$total = $cantxbolsa * ($paquexsacar);}    
-                $cantalm = $total + ($totalproduc % $cantxbolsa);
-            }else{ 
-                $cantalm =  $cantxbolsa * $paquexsacar ;
-            }
-
-            $r = $this->m_actualmacen($producto,$cantalm,$fecha);
-            if($r != 1){	
+            $consul = "COD_PRODUCTO = '000086'";  //000086 importante cambiar
+            $almacen = $this->m_buscar("T_ALMACEN_INSUMOS",$consul);
+            $tara = intval($tara * $paquexsacar);
+            $tara = number_format($tara / 1000,2,'.', ' ');
+            $stockal = number_format($almacen[0][4],2,'.', ' ');
+            if($tara > $stockal){
                 $this->bd->rollBack();
-                print_r("Error al actualizar almacen");
-                return;
-            }   
+                return "Error no hay suficiente insumo plastico para registrar el avance";
+            }
+            $stock = number_format(($stockal - $tara),2, '.', '');
+           
+            $query4 = $this->bd->prepare("UPDATE T_ALMACEN_INSUMOS SET STOCK_ACTUAL='$stock',
+            FEC_MODIFICO = '$fecha' WHERE COD_PRODUCTO ='000086'"); 
+            $query4->execute();
 
+           
             $guardado = $this->bd->commit();
+
+
             return $guardado;
         } catch (Exception $e) {
             $this->bd->rollBack();
            return "Error al guardar avances de la formulación" .$e;
         }
+
+
     }
 
-    public function m_itemavance($cantavance,$usu,$prod,$fin,$producto,$turno,$maquinista){
+    public function m_itemavance($cantavance,$usu,$prod,$fin,$producto,$turno,$maquinista,$tara){
         $this->bd->beginTransaction();
         $fecha = retunrFechaSqlphp(date("Y-m-d"));
-        $cantalm = 0;
         try {
             $consulta = "COD_PRODUCCION = '$prod'";
             $avance = $this->m_buscar('T_AVANCE_PRODUCCION',$consulta);
             $codavace = $avance[0][1]; $produccion = $avance[0][0];
             $query1 = $this->bd->prepare("INSERT INTO T_AVANCE_PRODUCCION_ITEM(COD_AVANCE,CANT_PAQUETE,OPERARIO,
-            USU_REGISTRO,IMPRESO,TURNO)VALUES('$codavace','$cantavance','$maquinista','$usu','0','$turno')");
+            USU_REGISTRO,IMPRESO,TURNO,DERIVO_AVANCE)VALUES('$codavace','$cantavance','$maquinista','$usu','0','$turno','0')");
             $query1->execute();
 
-            if($fin == 1){
-                $cantalm = $this->m_verificaralmac($prod,$cantavance);
-            }else{
-                $cantalm =  $avance[0][5] * $cantavance;
-            }
-            $r = $this->m_actualmacen($producto,$cantalm,$fecha);
-            if($r != 1){	
+            $consul = "COD_PRODUCTO = '000086'";  //000086 importante cambiar
+            $almacen = $this->m_buscar("T_ALMACEN_INSUMOS",$consul);
+            $tara = intval($tara * $cantavance);
+            $tara = number_format($tara / 1000,2,'.', ' ');
+            $stockal = number_format($almacen[0][4],2,'.', ' ');
+            if($tara > $almacen[0][4]){
                 $this->bd->rollBack();
-                print_r("Error al actualizar almacen");
-                return;
-            }      
+                return "Error no hay suficiente insumo plastico para registrar el avance";
+            }
+            $stock = number_format(($almacen[0][4] - $tara),2, '.', '');
+            $query4 = $this->bd->prepare("UPDATE T_ALMACEN_INSUMOS SET STOCK_ACTUAL='$stock',
+            FEC_MODIFICO = '$fecha' WHERE COD_PRODUCTO ='000086'"); 
+            $result = $query4->execute();
 
+
+            
             $guardado = $this->bd->commit();
             return $guardado;
         } catch (Exception $e) {
@@ -289,21 +313,6 @@ class m_produccion
         }
     }
 
-    public function m_actualmacen($producto,$cantalm,$fecha){
-        try {
-            $cadena = "COD_PRODUCTO = '$producto'";
-            $c_propio = $this->m_buscar('T_ALMACEN_INSUMOS',$cadena);
-            $stock =number_format(($c_propio[0][4] + $cantalm),2, '.', '');
-            $query4 = $this->bd->prepare("UPDATE T_ALMACEN_INSUMOS SET STOCK_ACTUAL='$stock',
-            FEC_MODIFICO = '$fecha' WHERE COD_PRODUCTO ='$producto'"); 
-            $result = $query4->execute();
-            return $result;
-        } catch (Exception $e) {
-            return $e;
-        }
-       
-    }
-
     public function m_finalizarproduccion($produccion,$usu){
         try {
             $fecha = retunrFechaSqlphp(date("Y-m-d"));
@@ -315,7 +324,6 @@ class m_produccion
            print_r("Error al terminar produccion  " . $e);
         }
     }
-
 
     public function m_actualizarmerma($cantmerma,$descripcion,$usu,$merma,$cantidadAnter,$cantidadnueva,$cantfalla,$slcmdtipoAnt,$slcmdtipomodi)
     {  
@@ -421,29 +429,81 @@ class m_produccion
         }
     }
 
-    public function regresaStock($columna,$dato,$cantidadAnter,$tabla,$cantidadnueva)
+
+    public function m_controlInyeccion($color,$pureza,$rebaba,$usu,$txtpro,$txtprodu)
+    {
+      $hora = gethora();
+      $fecha = retunrFechaSqlphp(date("Y-m-d"));
+      $rebaba = ($rebaba == "false") ? 0 : 1;
+      try {
+        $query1 = $this->bd->prepare("INSERT INTO T_CONTROL_CALIDAD(COLOR,PUREZA,REBABA,PESO,ESTABILIDAD,
+        OBSERVACION,HORA,USU_REGISTRO,FEC_REGISTRO,COD_PRODUCCION,COD_PRODUCTO
+        )VALUES('$color','$pureza','$rebaba','-','-','-','$hora','$usu','$fecha','$txtpro','$txtprodu')");
+        $resul = $query1->execute();
+        return $resul;
+      } catch (Exception $e) {
+         print_r("Error al registrar el control de calidad por inyeccion " . $e);
+      }
+    }
+
+    public function m_controlSoplado($color,$peso,$establidad,$observacion,$usu,$txtpro,$txtprodu)
+    {
+        $hora = gethora();
+        $fecha = retunrFechaSqlphp(date("Y-m-d"));
+        $establidad = ($establidad == "false") ? 0 : 1;
+        try {
+            $query1 = $this->bd->prepare("INSERT INTO T_CONTROL_CALIDAD(COLOR,PUREZA,REBABA,PESO,ESTABILIDAD,
+            OBSERVACION,HORA,USU_REGISTRO,FEC_REGISTRO,COD_PRODUCCION,COD_PRODUCTO)
+            VALUES('$color','-','-','$peso','$establidad','$observacion','$hora','$usu','$fecha'
+            ,'$txtpro','$txtprodu')");
+            $resul = $query1->execute();
+            return $resul;
+        } catch (Exception $e) {
+            print_r("Error al registrar el control de calidad por soplado " . $e);
+        }
+    }
+
+    public function m_bloqueo()
     {
         try {
             $fecha = retunrFechaSqlphp(date("Y-m-d"));
-            $consul = "$columna = '$dato'";
-            $result = $this->m_buscar("$tabla",$consul);
-            $producto = $result[0][1];
-            $consul = "COD_PRODUCTO = '$producto'";
-            $almacen = $this->m_buscar("T_ALMACEN_INSUMOS",$consul);
-
             
-            $stock = number_format(($almacen[0][4] - $cantidadAnter),2, '.', '');
-            
-            $stock = number_format(($stock + $cantidadnueva),2, '.', '');
-            
-            $query4 = $this->bd->prepare("UPDATE T_ALMACEN_INSUMOS SET STOCK_ACTUAL='$stock',
-            FEC_MODIFICO = '$fecha' WHERE COD_PRODUCTO ='$producto'"); 
-            $result = $query4->execute();
-            return $result;
+            $numero = rand(1,5000);
+            $consulta = "TIPO = 'P'";
+            $count = $this->m_buscar("T_PARAMETROS",$consulta);
+            if(count($count) == 0){
+                $query1 = $this->bd->prepare("INSERT INTO T_PARAMETROS(COD_BLOQUE,TIPO) 
+                VALUES('$numero','P')");
+                $resul = $query1->execute();
+                return $resul;
+            }else{
+                $consulta = "TIPO = 'P' AND CONVERT(DATE,FEC_CREADO)  < '$fecha'";
+                $count1 = $this->m_buscar("T_PARAMETROS",$consulta);
+                if(count($count1) > 0){
+                    $fecha = retunrFechaSqlphp(date("Y-m-d"));
+                    $query = $this->bd->prepare("UPDATE T_PARAMETROS SET COD_BLOQUE = '$numero',
+                    FEC_CREADO = '$fecha' WHERE TIPO = 'P'");
+                    $resul = $query->execute();
+                    return $resul;
+                }
+            }
         } catch (Exception $e) {
-           print_r("Error al cambiar el almacen ". $e);
+            print_r("Error al generar numero");
         }
-        
+       
+    }
+
+    public function m_desbloque($coddesbloqu)
+    {
+        $consulta = "TIPO = 'P'";
+        $count1 = $this->m_buscar("T_PARAMETROS",$consulta);
+        $cod =  $count1[0][1] * 5 + 7;
+        if($cod != $coddesbloqu){
+            return "Error codigo de desbloqueo invalido";
+        }else{
+            setcookie("clave",$coddesbloqu);
+            return 1;
+        }
     }
 }
 ?>
