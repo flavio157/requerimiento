@@ -527,52 +527,57 @@ require_once("m_produccion.php");
             $cadena = "estado = '0' AND Convert(DATE, fec_inicio) <= '$fecha' AND detenido = '0'";
             $control = $m_produccion->m_buscar('V_CONTROL_CALIDAD',$cadena);
             if(count($control) > 0){
-                $codprod = $control[0][0];
-                $cadn = "COD_PRODUCCION ='$codprod' AND PRODU_DETENIDO = '1'";
-                $ocur = $m_produccion->m_buscar('T_OCURRENCIAS',$cadn);
-                if(Count($ocur) == 0){
+                    $horini = explode(':',$control[0][5]);
                     $horas = $m_produccion->m_buscar("T_HRA_CONTROL",$cons);
                     if(count($control) > 0){
                         $dir = diferenciaFechas($control[0][4],$fecha);
                         for ($i=0; $i <= $dir ; $i++) {
                            $f = restarfecha($fecha,$i); 
+                           $fecpro1 = retunrFechaSql($f);
+                           $fecact1 = retunrFechaSqlphp($control[0][4]);
+                           $hd = date('H:i', strtotime($control[0][5] .'+ 1 hours + 00 minutes'));
+                           
                            if($f != ""){
-                                for ($l=0; $l <count($horas); $l++) { 
-                                    $exh = explode(":",$control[0][5]);
-                                    $exh2 = explode(":", $horas[$l][1]);
-                                    $hora = $horas[$l][1];
-                                    $fecpro1 = retunrFechaSql($f);
-                                    $fecact = retunrFechaSqlphp($fecha);
-                                    $fecact1 = retunrFechaSqlphp($control[0][4]);
-                                   if($fecpro1 == $fecact1){
-                                        $horac = explode(":", date('H'));
-                                        if($exh2[0] >= $exh[0]){
-                                            if($horac[0] > $exh2[0]  && $fecact == $fecact1){
-                                                $consul = "FEC_REGISTRO = '$f' AND HORA_CONTROL = '$hora'";
+                                if($fecpro1 == $fecact1){
+                                    $hor = date('H');
+                                    if(date('H:i') >= $hd){
+                                        $cadena = "SUBSTRING(HORA,1,2) ='$hor' AND FEC_REGISTRO ='$fecpro1'";
+                                        $controlca = $m_produccion->m_buscar('T_CONTROL_CALIDAD',$cadena);
+                                        if(count($controlca) == 0){
+                                            for ($l=0; $l <count($horas); $l++) {
+                                                $hora = $horas[$l][1];
+                                                $consul = "FEC_REGISTRO = '$fecpro1' AND HORA_CONTROL = '$hora'";
                                                 $g = $m_produccion->m_buscar('V_HRA_CONTROL',$consul);
-                                                if(count($g) == 0){
-                                                    array_push($arrda,array($f,$hora));
-                                                }
-                                            }else if($fecact != $fecact1){
-                                                $consul = "FEC_REGISTRO = '$f' AND HORA_CONTROL = '$hora'";
-                                                $g = $m_produccion->m_buscar('V_HRA_CONTROL',$consul);
-                                                if(count($g) == 0){
-                                                    array_push($arrda,array($f,$hora));
+                                                if(count($g) == 0 && $dir == 0){
+                                                    if(date('H') > $hora && $hora >= $horini[0].":00"){
+                                                        $g = explode(':',$horas[$l][1]);
+                                                        //var_dump(date('i') .">". $horini[1] ."&&". $hor ."!=". $g[0]);
+                                                        if(date('i') > $horini[1] && $hor != $g[0]){
+                                                            array_push($arrda,array($f,$hora));
+                                                        }
+                                                        if($hor != $g[0]){
+                                                            //var_dump($hor);
+                                                            array_push($arrda,array($f,$hora));
+                                                        }
+                                                    }
+                                                }else if($dir > 0 ){
+                                                    /*if($hora >= $horini[0].":00"){
+                                                        array_push($arrda,array($f,$hora));
+                                                    }*/
                                                 }
                                             }
-                                        }
+                                        }  
+                                    }
                                     }else if($fecpro1 != $fecact1){
-                                        $consul = "FEC_REGISTRO = '$f' AND HORA_CONTROL = '$hora'";
-                                        $g = $m_produccion->m_buscar('V_HRA_CONTROL',$consul);
-                                        if(count($g) == 0){
-                                            if($fecpro1 == $fecact && $hora > date('H')){
-                                               // array_push($arrda,array($f , $hora));
-                                            }else{
-                                                array_push($arrda,array($f,$hora));
-                                            }
+                                        for ($l=0; $l <count($horas); $l++) {
+                                            $hora = $horas[$l][1];
+                                            $consul = "FEC_REGISTRO = '$fecha' AND HORA_CONTROL = '$hora'";
+                                            $g = $m_produccion->m_buscar('V_HRA_CONTROL',$consul);
+                                            if(count($g) == 0 && date('H') > $hora){
+                                                array_push($arrda,array($fecha,$hora));
+                                            } 
                                         }
                                     }
-                                }
                            }
                         }
                     }
@@ -583,13 +588,13 @@ require_once("m_produccion.php");
                         "cl" => $clav
                     );
                    echo json_encode($datos,JSON_FORCE_OBJECT);
-                }else{
-                    echo json_encode("",JSON_FORCE_OBJECT);
-                }
             }else{
                 echo json_encode("",JSON_FORCE_OBJECT);
             }
         }
+
+      
+
 
         static function c_controlcalidad()
         {

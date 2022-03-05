@@ -7,7 +7,7 @@ $(document).ready(function () {
    lstitemsfor();hora();disabletab();
    autocompletarpersonal();parametros()
    modalcontrol();
-   controlcalidad();
+    controlcalidad();
    setInterval(bxcontrol,1000);
    
  
@@ -778,6 +778,7 @@ function controlcalidad() {
             "accion":"controlcali","usu":usu
         }
         ,success:function(e){
+            console.log(e);
             fec = [];dato = "";
             o = JSON.parse(e);
             if(o['c'] > 0){
@@ -813,6 +814,7 @@ function modalcontrol(){
         }
         ,success:function(e){
             b = JSON.parse(e);
+            console.log(b)
             hm = b['hm'];
             if(hm != ""){
                 ds = b['d'][0]['6'];
@@ -838,15 +840,16 @@ function bxcontrol() {
         if (hora < 10) {
             hora = "0" + hora
         };
-       // console.log(hora +"=="+ f[0] +"///"+ minuto +"=="+ f[1]);
+        //console.log(hora +"=="+ f[0] +"///"+ minuto +"=="+ f[1]);
        //igualar a la hora que trae 
        if(hora == f[0] && minuto == f[1]){
             modalcontrol();
        }
+       console.log(hora +"=="+ dh[0] +"///"+ minuto +"=="+ dh[1])
        if(hora ==  dh[0] && minuto ==  dh[1]){
            controlcalidad();
        }
-       //console.log(hora +"=="+ g[0] +"///"+ minuto +"=="+ g[1]);
+       console.log(hora +"=="+ g[0] +"///"+ minuto +"=="+ g[1]);
         if(hora == g[0] && minuto == '40' && control == 0){
             if(ds == 'I'){
                 $("#btninyecci").css("display","block");

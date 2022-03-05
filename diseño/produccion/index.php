@@ -52,8 +52,8 @@ require_once("../menu/index.php");
         <div class="main"> 
             
           <form style="margin-bottom: 0px;" id="frmproduccion">
-                  <input type="text" id="vroficina" style="display: none;" value="<?php echo ''//$ofi?>"/>
-                  <input type="text" id="vrzona" style="display: none;" value="<?php echo ''//$zon?>"/>
+                  <input type="text" id="vroficina" style="display: none;" value="<?php echo 'SMP2'//$ofi?>"/>
+                  <input type="text" id="vrzona" style="display: none;" value="<?php echo '1'//$zon?>"/>
                   <input type="text" id="vrcodpersonal" style="display: none;" value="<?php echo '0215'//$cod?>"/>
                 
               <div class="row mb-3">

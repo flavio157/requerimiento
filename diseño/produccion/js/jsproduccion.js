@@ -1,20 +1,23 @@
 var sugxformula =[]; canform = '';celda = '';codproitem = '';celdatipo =''; codprodsele ='';
 var sugxmolde = []; sugxcli= [];usu=''; tbinsumos =[]; total = 0.000;nuedatos = [];modified = 0;
+var modifidLF = 0; var estilomolde = 0;  var tds = [];
 $(document).ready(function () {
-    autocompletarformula();lstalmacen();
+    autocompletarformula();
     autocompletamolde('P','');autocompletarcli();
     usu = $("#vrcodpersonal").val();
     disabled();
+    $("#tempSo").css('display','none');
+    $("#contact-tab").css("display",'none');
     $("#txtprodcant").blur(function(){
         $("#tbpasadas > tbody").empty();
         var td =  $("#tbdmateiales tr");
         for (let l = 0; l < td.length; l++) {
             $(this).val(Number($(this).val()).toFixed(2));
-            cant = $(td[l]).find("td")[4].innerHTML;
+            cant = $(td[l]).find("td")[3].innerHTML;
             /*110*16/120*/
             reglatres = parseFloat(Number($(this).val()) * Number(cant) /Number(canform)).toFixed(2)
             $(td[l]).find("td")[2].innerHTML = reglatres;
-            $(td[l]).find("td")[3].innerHTML = reglatres;
+            //$(td[l]).find("td")[3].innerHTML = reglatres;
             createparams($(td[l]).find("td")[0].innerHTML,$(td[l]).find("td")[1].innerHTML,reglatres);
         }
     });
@@ -58,7 +61,7 @@ $(document).ready(function () {
         fila +="<td >"+tbinsumos[0][1]+"</td>";
         fila +="<td >"+parseFloat($("#mdcantxusar").val()).toFixed(2)+"</td>";
         fila +="<td  style=display:none>"+$("#slcmdtipo").val()+"</td>";
-        fila +="<td>"+b+"</td>";
+        //fila +="<td>"+b+"</td>";
         var btn = document.createElement("TR");
         btn.innerHTML=fila;
         document.getElementById("tbdmdinsumosa").appendChild(btn);
@@ -87,12 +90,11 @@ $(document).ready(function () {
         filas = $("#tbdpasadas tr");
         $("#mdcant").val('');
         celda = $(this).parents('tr').find('td:nth-child(4)');
-        celdatipo = $(this).parents('tr').find('td:nth-child(6)');
+        celdatipo = $(this).parents('tr').find('td:nth-child(5)');
         codproitem = $(this).parents('tr').find('td:nth-child(1)').text().trim();
         insumo = $(this).parents('tr').find('td:nth-child(2)').text().trim();
         $("#mdcant").val($(this).parents('tr').find('td:nth-child(3)').text().trim());
-        $("#slcmdtipo").val($(this).parents('tr').find('td:nth-child(6)').text().trim());
-        if($("#slcmdtipo").val() == 'P')
+        $("#slcmdtipo").val($(this).parents('tr').find('td:nth-child(5)').text().trim());
         stock($(this).parents('tr').find('td:nth-child(1)').text().trim(),insumo);
 
         for (let i = 0; i < filas.length; i++) {
@@ -104,7 +106,7 @@ $(document).ready(function () {
                 fila +="<td >"+$(filas[i]).find("td")[2].innerHTML+"</td>";
                 fila +="<td >"+$(filas[i]).find("td")[3].innerHTML+"</td>";
                 fila +="<td  style=display:none>"+$(filas[i]).find("td")[4].innerHTML+"</td>";
-                fila +="<td>"+b+"</td>";
+                //fila +="<td>"+b+"</td>";
                 var btn = document.createElement("TR");
                 btn.innerHTML=fila;
                 document.getElementById("tbdmdinsumosa").appendChild(btn);
@@ -140,18 +142,18 @@ $(document).ready(function () {
             }
         }
         $.data(this, 'current', $(this).val()); 
-        if($(this).val() == 'P'){disabled();autocompletamolde($(this).val(),'');}
+        if($(this).val() == 'P'){lmp();autocompletamolde($(this).val(),'');}
         else enabled();
     });
 
     $("#btngproduccion").on('click',function() {
         var td =  $("#tbdpasadas tr");
-        var tds = [];
         for (let l = 0; l < td.length; l++) {
             tds[l] =[$(td[l]).find("td")[0].innerHTML,$(td[l]).find("td")[1].innerHTML,
             $(td[l]).find("td")[3].innerHTML,$(td[l]).find("td")[4].innerHTML]
         }
-        guardarprod(tds);
+        var removebloq = ""
+        guardarprod(removebloq);
     })
 
     $('#txtbuscli').keydown(function(e) {
@@ -169,6 +171,16 @@ $(document).ready(function () {
     $("#frmparametros input").change(function () {   
 		modified = 1;  
 	}); 
+
+    $("#frmtimelf input").change(function () {   
+		modifidLF = 1;  
+	}); 
+
+    $("#btnconfirmacion").on('click',function() {
+        codconfirma = $("#txtconfirmacod").val();
+        confirmacion(codconfirma);
+    })
+
 });
 
 function autocompletarformula() {
@@ -180,29 +192,59 @@ function autocompletarformula() {
           $("#txtform").val(ui.item.code);
           $("#txtprod").val(ui.item.prod);
           lstitemsfor(ui.item.code)
+          var firstTabEl = document.querySelector('#myTab li:first-child button')
+          var firstTab = new bootstrap.Tab(firstTabEl)
+          firstTab.show()
           parametros(ui.item.code);
           $("#txtprodcant").val(ui.item.cant);
           $("#txtbformula").val(ui.item.label);
-          $("#color").val(ui.item.color);
+          $("#txtbusmolde").val(ui.item.molde);
+          $("#txtcodmolde").val(ui.item.idmolde)
+          $("#slcestimolde").val(ui.item.estiM);
+          estilomolde = ui.item.estiM;
+          if(ui.item.estiM == "I"){
+            $("#tempSo").css('display','none')
+            $("#contact-tab").css("display",'none');
+            $("#btntimelf").css('display','none');
+            $("#profile-tab").css('display','revert')
+            $("#contact-tab").css('display','revert')
+            $("#tbbotadores").css('display','revert')
+            $("#lblbotador").css('display','revert');
+          }else if(ui.item.estiM == "S"){
+            $("#tempSo").css('display','revert')
+            $("#contact-tab").css("display",'revert');
+            $("#btntimelf").css('display','revert');
+            $("#profile-tab").css('display','none')
+            $("#contact-tab").css('display','none')
+            $("#tbbotadores").css('display','none')
+            $("#lblbotador").css('display','none');
+          }
+          modifidLF = 0; modified = 0;
         }
     });
 }
 
 
-function parametros(formula) {
+function parametros(formulacod) {
+    document.getElementById("frmparametros").reset();
+    document.getElementById("frmtimelf").reset();
     $.ajax({
         dataType:'text',
         type: 'POST', 
         url:  'c_produccion.php',
         data:{
-            "accion" : 'parametros',"produccion":formula
+            "accion" : 'parametros',"produccion":formulacod
         } ,
-        success:  function(r){
+        success: function(r){
             obj = JSON.parse(r);
+           if(obj['para'] == 1){
             $.each(obj['dato'], function(i, item) {
                 $("#txttemp1").val(item[5]);$("#txttemp2").val(item[6]);
                 $("#txttemp3").val(item[7]);$("#txttemp4").val(item[8]);
-                $("#txttemp5").val(item[9]);$("#presexplu1").val(item[10]);
+                $("#txttemp5").val(item[9]);$("#txttemp6").val(item[34]);
+                $("#txttemp7").val(item[35]);$("#txttemp8").val(item[36]);
+                $("#txttemp9").val(item[37]);
+                $("#presexplu1").val(item[10]);
                 $("#presexplu2").val(item[11]);$("#velexplu1").val(item[12]);
                 $("#velexplu2").val(item[13]);$("#pisiexplu1").val(item[14]);
                 $("#pisiexplu2").val(item[15]);$("#contrac1").val(item[16]);
@@ -213,19 +255,32 @@ function parametros(formula) {
                 $("#cargavel2").val(item[25]);$("#cargavel3").val(item[26])
                 $("#cargavelsucc").val(item[27]);$("#cargapisi1").val(item[28]);
                 $("#cargapisi2").val(item[29]);$("#cargapisi3").val(item[30])
-                $("#cargapisisucci").val(item[31]);$("#inyecpres4").val(item[34])
-                $("#inyecpres3").val(item[35]);$("#inyecpres2").val(item[36])
-                $("#inyecpres1").val(item[37]);$("#inyecvelo4").val(item[38])
-                $("#inyecvelo3").val(item[39]);$("#inyecvelo2").val(item[40])
-                $("#inyecvelo1").val(item[41]);$("#inyecposi4").val(item[42]);
-                $("#inyecposi3").val(item[43]);$("#inyecposi2").val(item[44])
-                $("#inyecposi1").val(item[45]);$("#inyectiemp").val(item[46])
-                $("#velocidad3").val(item[47]);$("#velocidad2").val(item[48])
-                $("#velocidad1").val(item[49]);$("#posicion3").val(item[50])
-                $("#posicion2").val(item[51]);$("#posicion1").val(item[52])
-                $("#tiempo").val(item[53])
+                $("#cargapisisucci").val(item[31]);$("#inyecpres4").val(item[38])
+                $("#inyecpres3").val(item[39]);$("#inyecpres2").val(item[40])
+                $("#inyecpres1").val(item[41]);$("#inyecvelo4").val(item[42])
+                $("#inyecvelo3").val(item[43]);$("#inyecvelo2").val(item[44])
+                $("#inyecvelo1").val(item[45]);$("#inyecposi4").val(item[46]);
+                $("#inyecposi3").val(item[47]);$("#inyecposi2").val(item[48])
+                $("#inyecposi1").val(item[49]);$("#inyectiemp").val(item[50])
+                $("#velocidad3").val(item[51]);$("#velocidad2").val(item[52])
+                $("#velocidad1").val(item[53]);$("#posicion3").val(item[54])
+                $("#posicion2").val(item[55]);$("#posicion1").val(item[56])
+                $("#tiempo").val(item[57])
+                $("#txtcarriage").val(item[58]);$("#txtclosedd").val(item[59]);
+                $("#txtcuter").val(item[60]);$("#txthead").val(item[61]);
+                $("#txtblow").val(item[62]);$("#txttotalblo").val(item[63]);
+                $("#txtblow1").val(item[64]);$("#txtlf").val(item[65]);
+                $("#txtdefla").val(item[66]);$("#txtunde").val(item[67]);
+                $("#txtcoolin").val(item[68]);$("#txtlock").val(item[69]);
+                $("#txtbottle").val(item[70]);$("#txtcarria").val(item[71]);
+                $("#txtopenmoul").val(item[72]);$("#txtcuter1").val(item[73]);
+                $("#txthead1").val(item[74]);$("#txtblowpin").val(item[75]);
+                $("#txttotalbl").val(item[76]);$("#txtdeflati").val(item[77]);
+                $("#txtblopinS").val(item[78]);$("#txtdeflation").val(item[79]);
+                $("#txtcamvaci1").val(item[80]);$("#txtcooling").val(item[81]);
+                $("#txtcamvaci2").val(item[82]);$("#txtcamvaci3").val(item[83]);
             });
-        
+           } 
         }
     });    
 }
@@ -242,7 +297,14 @@ function stock(stock,insumo) {
         success:  function(r){
             obj = JSON.parse(r)
             $("#mdstock").val(obj['stock']);
-            buscarpasadas(stock,insumo,obj['stock']);
+            $("#tbmdinsumos").find("tr:gt(0)").remove();
+            fila = '';
+            fila +="<td class='tdcontent' style=display:none>"+stock+"</td>";
+            fila +="<td >"+insumo+"</td>";
+            fila +="<td >"+obj['stock']+"</td>";
+            var btn = document.createElement("TR");
+            btn.innerHTML=fila;
+            document.getElementById("tbdmdinsumos").appendChild(btn);
         }
     });   
 }
@@ -287,7 +349,7 @@ function createtable(obj) {
         fila +="<td class='tdcontent' style=display:none>"+item[1]+"</td>";
         fila +="<td >"+item[2]+"</td>";
         fila +="<td >"+Number(item[3]).toFixed(2)+"</td>";
-        fila +="<td class='tdcontent'>"+Number(item[3]).toFixed(2)+"</td>";
+        /*fila +="<td class='tdcontent'>"+Number(item[3]).toFixed(2)+"</td>";*/
         fila +="<td style=display:none>"+item[3]+"</td>";
         fila +="<td style=display:none>P</td>";
         fila +="<td class='tdcontent'>"+b2+"</td>";
@@ -312,7 +374,7 @@ function veristock(txtcant,cantxusar,codpro,tipo) {
         success: function(r) {
             obj = JSON.parse(r);
             if(obj['tipo'] == 1){
-                Mensaje1(obj['dato'],"error");
+                Mensaje1(obj['dato'].trim(),"error");
             }else{
                 $(celda).text(Number.parseFloat(obj['dato']).toFixed(3));
                 $(celdatipo).text(tipo);
@@ -345,7 +407,7 @@ function autocompletamolde(t,code) {
           $("#txtbusmolde").val(ui.item.label);
         }
     });
-}
+}//buscarmolde
 
 function buscarxmolde(t,code){
     $.ajax({
@@ -392,15 +454,15 @@ function guardarmolde(cli,molde,t) {
             $('.ajax-loader').css("visibility", "visible");
         },
         success:  function(r){
-           
             obj = JSON.parse(r);
             if(obj['e'] == true){
+                Mensaje1("Se registro el molde","success");
                 $("#txtcodmolde").val(obj['c']);autocompletamolde(t,cli);
                 $("#txtbusmolde").val(molde);
                 $("#mdmolde").modal('hide');
                 document.getElementById("frmmdmolde").reset();
             }
-            else  Mensaje1(obj['e'],"error");
+            else  Mensaje1(obj['e'].trim(),"error");
         },complete: function(){
             $('.ajax-loader').css("visibility", "hidden");
         }
@@ -419,6 +481,7 @@ function guardarclie(nomcli) {
         },
         success:  function(e){
             obj = JSON.parse(e);
+            
             if(obj['e'] == true){
                 Mensaje1("Se registro el cliente","success");
                 $("#txtcodclie").val(obj['c']);autocompletarcli();
@@ -427,7 +490,7 @@ function guardarclie(nomcli) {
                 document.getElementById("frmmdcliente").reset();
             }
             else{
-                Mensaje1(obj['e'],"error")
+                Mensaje1(obj['e'].trim(),"error")
                 $('.ajax-loader').css("visibility", "hidden");
             } 
         },complete: function(){
@@ -442,6 +505,7 @@ function disabled() {
     $("#btnmdcliente").addClass('disabled');
     $("#btnmdmolde").addClass('disabled');
     $("#slcmdtipo").attr('disabled','true');
+    $("#txtbusmolde").attr("disabled","disabled")
 }
 
 function enabled() {
@@ -449,27 +513,36 @@ function enabled() {
     $("#btnmdcliente").removeClass('disabled');
     $("#btnmdmolde").removeClass('disabled');
     $("#slcmdtipo").removeAttr('disabled','true');
+    $("#txtbusmolde").removeAttr("disabled");
+    $("#txtcodmolde").val('');
+    $("#txtbusmolde").val('');
 }
 
-function guardarprod(tds) {
+function guardarprod(removebloq) {
     var frmprod = $("#frmproduccion").serialize();
+    var frmtimelf = $("#frmtimelf").serialize();
     var materiales = {tds};
-   var frmparame = $("#frmparametros").serialize();
+    var frmparame = $("#frmparametros").serialize();
     $.ajax({
         dataType:'text',
         type: 'POST', 
         url:  'c_produccion.php',
         data:frmprod+"&"+frmparame+"&accion=guardaprod&usu="+usu+"&items="+JSON.stringify(materiales)+
-        "&modified="+modified,
+        "&modified="+modified+"&"+frmtimelf+"&modifiedLF="+modifidLF+"&estilomolde="+estilomolde+"&r="+removebloq,
         beforeSend: function () {
             $('.ajax-loader').css("visibility", "visible");
         },
         success:  function(e){
+            console.log(e);
             if(e == 1){
                 Mensaje1("Se registro la fabricacion del plastico","success");
                 lmp();
                 para = 0;
-            }else{Mensaje1(e,"error")}
+                $("#mdconfirmacion").modal("hide");
+            }else if(e.trim() == "b"){
+                $("#mdconfirmacion").modal("show");
+            }else{Mensaje1(e.trim(),"error")}
+           
         },complete: function(){
             $('.ajax-loader').css("visibility", "hidden");
         }
@@ -480,8 +553,10 @@ function lmp() {
     disabled();
     document.getElementById("frmproduccion").reset();
     document.getElementById("frmparametros").reset();
+    document.getElementById("frmtimelf").reset();
     $('#tbmateriales').find("tr:gt(0)").remove();    
     $('#tbpasadas').find("tr:gt(0)").remove(); 
+    modified = 0; modifidLF = 0;  
 }
 
 function insertexter(insumo,stocks,tipo) {
@@ -497,38 +572,6 @@ function insertexter(insumo,stocks,tipo) {
         success:  function(e){ 
         }
     });       
-}
-
-function buscarpasadas(insumo,material,cantidad) {
-    color = $("#color").val()
-    $.ajax({
-        dataType:'text',
-        type: 'POST', 
-        url:  'c_produccion.php',
-        data:{
-            "accion" :"pasadas","insumo" : insumo,"color":color
-        },
-        success:  function(e){
-            var fila=''; obj = JSON.parse(e);
-            $("#tbmdinsumos").find("tr:gt(0)").remove(); 
-            fila +="<td class='tdcontent' style=display:none>"+insumo+"</td>";
-            fila +="<td >"+material+"</td>";
-            fila +="<td >"+cantidad+"</td>";
-            var btn = document.createElement("TR");
-            btn.innerHTML=fila;
-            document.getElementById("tbdmdinsumos").appendChild(btn);
-            $.each(obj['dato'], function(i, item) {
-                var fila='';
-                fila +="<td class='tdcontent' style=display:none>"+item[1]+"</td>";
-                fila +="<td >"+item[2]+"</td>";
-                fila +="<td >"+item[3]+"</td>";
-                var btn = document.createElement("TR");
-                btn.innerHTML=fila;
-                document.getElementById("tbdmdinsumos").appendChild(btn);
-            })    
-            
-        }
-    });  
 }
 
 function datosrepetidos(tabla,dato,tipo) {
@@ -555,18 +598,19 @@ function lppasadas() {
         if(!ret){Mensaje1("Error la cantidad total de insumo no es igual a la requerida","error"); return}
        
         for (let i = 0; i < filas.length; i++) {
-             $(filas[i]).remove();
+            $(filas[i]).remove();
             var fila = '';
             fila +="<td>"+codproitem+"</td>";
             fila +="<td>"+$(filas[i]).find("td")[0].innerHTML+"</td>";
             fila +="<td>"+$(filas[i]).find("td")[1].innerHTML+"</td>";
             fila +="<td>"+$(filas[i]).find("td")[2].innerHTML+"</td>";
-            fila +="<td>"+$(filas[i]).find("td")[3].innerHTML+"</td>";
+            fila +="<td>"+$("#slcmdtipo").val()+"</td>";
             var btn = document.createElement("TR");
             btn.innerHTML=fila;
             document.getElementById("tbdpasadas").appendChild(btn);
         }
         celda.text(total.toFixed(2));
+        celdatipo.text($("#slcmdtipo").val());
         $('#tbmdinsumosa').find("tr:gt(0)").remove();
         $('#mditemformula').modal('hide');
         $('#txtnominsumo').val('');$("#mdcantxusar").val('')
@@ -594,20 +638,22 @@ function createparams(codigo,item2,item3) {
     document.getElementById("tbdpasadas").appendChild(btn);
 }
 
-function lstalmacen() {
+function confirmacion(codconfirma) {
     $.ajax({
         dataType:'text',
         type: 'POST', 
         url:  'c_produccion.php',
         data:{
-            "accion" :"lstalmacen",
+            "accion" :"confirmar",
+            "codconfirmar" : codconfirma,
         },
         success:  function(e){ 
-            obj = JSON.parse(e);
-            $.each(obj['dato'],function(i,item) {
-                $('#slctipoalmacen').append($("<option value="+item[0]+">"+item[1]+"</option>" ));  
-            });
+           o = JSON.parse(e);
+           if(o['d'].trim() == 1){
+               guardarprod(o['b'].trim());
+           }else{Mensaje1(o['d'].trim(),"error")}
         }
     });  
 }
+
 
