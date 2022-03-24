@@ -521,6 +521,36 @@ require_once("m_produccion.php");
 
         static function bloqueox($usu)
         {
+
+            $m_produccion = new m_produccion();
+            $cadena = "estado = '0' and detenido = '0'";
+            $control = $m_produccion->m_buscar('V_CONTROL_CALIDAD',$cadena);
+            if(count($control) > 0){
+                $horfabri = explode(":", $control[0][5]);
+                $cons = "HORA_CONTROL > '$horfabri[0]'";
+                $horas = $m_produccion->m_buscar("T_HRA_CONTROL",$cons);
+                for ($i=0; $i < count($horas); $i++) { 
+                    $horacont = explode(":",$horas[$i][1]);
+                    if(date('H') == $horacont[0]){
+                        $ho2 = date('H:i', strtotime($horacont[0].':'.$horfabri[1] .'+ 1 hours + 20 minutes'));
+                        if(date('H:i') == $ho2){
+                            
+                        }else{
+                            $ho1 = date('H:i', strtotime($horacont[0].':'.$horfabri[1] .'+ 1 hours - 20 minutes'));     
+                            //var_dump(date('H:i') >= $ho1 && date('H:i') <= $ho2);
+                            if($ho1 >= date('H:i') && $ho2 <= date('H:i')){
+                                //var_dump($ho1,$ho2,"me");
+                            }else{
+                                var_dump($ho1,$ho2);
+                            }
+                        }
+                        break;
+                    }
+                    
+                }
+            }
+
+            
             $cons = "''=''"; $arrda = [];
             $fecha = date("Y-m-d");
             $m_produccion = new m_produccion();
