@@ -134,8 +134,6 @@ require_once("m_produccion.php");
         $txtpro = $_POST['txtpro'];
         $txtprodu = $_POST['txtprodu'];
         c_produccion::c_gcontrol($color,$pureza,$rebaba,$peso,$observacion,$establidad,$usu,$tcalid,$txtpro,$txtprodu);
-    }else if($accion == 'modalcontrol'){
-        c_produccion::c_controlcalidad();
     }else if($accion == 'params'){
         c_produccion::c_bloqueo();
     }else if($accion == 'desbloq'){
@@ -169,7 +167,7 @@ require_once("m_produccion.php");
         static function c_itemsformula($usu)
         {
             $m_formula = new m_produccion();
-            $cadena = "estado = '0'";
+            $cadena = "estado = '0' and usuario = '$usu'";
             $c_formula = $m_formula->m_buscar('V_LISTAR_PRODUCCION',$cadena);
             $dato = array('dato' => $c_formula);
             echo json_encode($dato,JSON_FORCE_OBJECT);
@@ -547,144 +545,137 @@ require_once("m_produccion.php");
 
         static function bloqueox($usu)
         {
+            $modal = '';$datos = '';
             $m_produccion = new m_produccion();
-            $cadena = "estado = '0' and detenido = '0'";
+            $cadena = "estado = '0' and detenido = '0' and completado = '0' and usuario = '$usu'";
             $control = $m_produccion->m_buscar('V_CONTROL_CALIDAD',$cadena);
             if(count($control) > 0){
-                $horfabri = explode(":", $control[0][5]);
-                $cons = "HORA_CONTROL > '$horfabri[0]'";
-                $horas = $m_produccion->m_buscar("T_HRA_CONTROL",$cons);
-                for ($i=0; $i < count($horas); $i++) { 
-                    $horacont = explode(":",$horas[$i][1]);
-                    if($horacont[0] == date('H')){
-                       
-                    }
+                $codpro = $control[0][0];
+                $cadena = "COD_PRODUCCION = '$codpro'";
+                $controlh = $m_produccion->m_buscar('T_PRODUCCION_BLOQUEO',$cadena);
+                if($controlh > 0){
+                    if(trim(date('H:i')) >= $controlh[0][1] && date('H:i') <= trim($controlh[0][2])){
+                        //print_r("panel para ingresar control");
+                        $modal = "m";
+                    }else{$modal = '';} 
+                    if(trim(date('H:i')) >= $controlh[0][1] && date('H:i') >= trim($controlh[0][2])){
+                        $datos = c_produccion::hora_sin_registro($controlh);
+                        if(count($datos) > 0){
+                            c_produccion::c_controlcalidad($usu,$control);
+                        }   
+                    }else{
+                        $datos = c_produccion::hora_sin_registro($controlh);
+                    }   
                 }
             }
+            $d = array(
+                'modal' => $modal,
+                'horas' => $datos,
+                'estilo' => $control[0][6]
+            );
+            echo json_encode($d,JSON_FORCE_OBJECT);
+        }
 
-            /*$cons = "''=''"; $arrda = [];
-            $fecha = date("Y-m-d");
+        static function hora_sin_registro($controlh){
+            $sincontrol = [];
             $m_produccion = new m_produccion();
-            $cadena = "estado = '0' AND Convert(DATE, fec_inicio) <= '$fecha' AND detenido = '0'";
+            $cadena = " ID_HORARIO = '1'";
+            $horainici = $m_produccion->m_buscar('T_HRA_CONTROL',$cadena);
+            $horaini = explode(":", $horainici[0][1]);
+            $horasi = date('H').':00';
+            
+            if(date('H:i') > trim($controlh[0][2])){
+                $cadena = "HORA_CONTROL >= '$horaini[0]:00' AND  HORA_CONTROL < '$horasi'";
+            }else{
+                if(date('H:i') > trim($controlh[0][2])){
+                   $horass = date('H:i', strtotime($horasi.'- 1 hours'));
+                }else{
+                   $horfinsiste = explode(":", $controlh[0][2]);
+                   $horass =  date('H:i', strtotime($horfinsiste[0].':00'.'- 2 hours'));
+                }
+                $cadena = "HORA_CONTROL >= '$horaini[0]:00' AND  HORA_CONTROL <= '$horass'";
+            }
+           
+            $control = $m_produccion->m_buscar('T_HRA_CONTROL',$cadena);
+            for ($i=0; $i < count($control) ; $i++) {
+                $h =  explode(":",$control[$i][1]);
+                $caden = "SUBSTRING(HORA,0, 3) = '$h[0]'";
+                $contcalidad = $m_produccion->m_buscar('T_CONTROL_CALIDAD',$caden);
+                if(count($contcalidad) == 0){
+                   array_push($sincontrol,array(convFecSistema(date("Y-m-d")),$h[0].':00'));     
+                }
+            }
+            $cadena = "estado = '0' and detenido = '0' and completado = '0'";
             $control = $m_produccion->m_buscar('V_CONTROL_CALIDAD',$cadena);
-            if(count($control) > 0){
-                $codprod = $control[0][0];
-                $cadn = "COD_PRODUCCION ='$codprod' AND PRODU_DETENIDO = '1'";
-                $ocur = $m_produccion->m_buscar('T_OCURRENCIAS',$cadn);
-                if(Count($ocur) == 0){
-                    $horas = $m_produccion->m_buscar("T_HRA_CONTROL",$cons);
-                    if(count($control) > 0){
-                        $dir = diferenciaFechas($control[0][4],$fecha);
-                        for ($i=0; $i <= $dir ; $i++) {
-                           $f = restarfecha($fecha,$i); 
-                           if($f != ""){
-                                for ($l=0; $l <count($horas); $l++) { 
-                                    $exh = explode(":",$control[0][5]);
-                                    $exh2 = explode(":",$horas[$l][1]);
-                                    $hora = $horas[$l][1];
-                                    $fecpro1 = retunrFechaSql($f);
-                                    $fecact = retunrFechaSqlphp($fecha);
-                                    $fecact1 = retunrFechaSqlphp($control[0][4]);
-                                   if($fecpro1 == $fecact1){
-                                        $horac = explode(":", date('H'));
-                                        if($exh2[0] >= $exh[0]){
-                                            if($horac[0] > $exh2[0]  && $fecact == $fecact1){
-                                                $consul = "FEC_REGISTRO = '$f' AND HORA_CONTROL = '$hora'";
-                                                $g = $m_produccion->m_buscar('V_HRA_CONTROL',$consul);
-                                                print_r($g);
-                                                if(count($g) == 0){
-                                                    array_push($arrda,array($f,$hora));
-                                                }
-                                            }else if($fecact != $fecact1){
-                                                $consul = "FEC_REGISTRO = '$f' AND HORA_CONTROL = '$hora'";
-                                                $g = $m_produccion->m_buscar('V_HRA_CONTROL',$consul);
-                                                if(count($g) == 0){
-                                                    array_push($arrda,array($f,$hora));
-                                                }
-                                            }
-                                        }
-                                    }else if($fecpro1 != $fecact1){
-                                        $consul = "FEC_REGISTRO = '$f' AND HORA_CONTROL = '$hora'";
-                                        $g = $m_produccion->m_buscar('V_HRA_CONTROL',$consul);
-                                        if(count($g) == 0){
-                                            if($fecpro1 == $fecact && $hora > date('H')){
-                                               // array_push($arrda,array($f , $hora));
-                                            }else{
-                                                array_push($arrda,array($f,$hora));
-                                            }
-                                        }
-                                    }
-                                }
-                           }
+            $fecpro = retunrFechaSqlphp($control[0][4]);
+            $fechact = retunrFechaSqlphp(date("Y-m-d"));
+            $dife = diferenciaFechas($fecpro,$fechact);
+            for ($i=0; $i < $dife ; $i++) { 
+                    $domingo = restarfecha(date("Y-m-d"),$i+1);
+                   if($domingo != ""  ){
+                        $horfabri = explode(":", $control[0][5]);
+                        if($fecpro != retunrFechaSql($domingo)){
+                            $cons = "'' >= ''";
+                        }else{
+                            $cons = "HORA_CONTROL >= '$horfabri[0]'";
+                        }
+                        $horas = $m_produccion->m_buscar("T_HRA_CONTROL",$cons);
+                        for ($l=0; $l <count($horas); $l++){
+                            $hora = $horas[$l][1];
+                            $consul = "FEC_REGISTRO = '$domingo' AND HORA = '$hora'";
+                            $g = $m_produccion->m_buscar('T_CONTROL_CALIDAD',$consul);
+                            if(count($g) == 0 ){
+                                array_push($sincontrol,array($domingo,$hora));
+                            } 
                         }
                     }
-                    $clav = (!isset($_COOKIE['clave'])) ? "": $_COOKIE['clave'];
-                    $datos = array(
-                        "blo" => $arrda,
-                        "c" => count($arrda),
-                        "cl" => $clav
-                    );
-                   echo json_encode($datos,JSON_FORCE_OBJECT);
-                }else{
-                    echo json_encode("",JSON_FORCE_OBJECT);
-                }
-            }else{
-                echo json_encode("",JSON_FORCE_OBJECT);
-            }*/
+            }
+            return $sincontrol;
         }
 
-        static function c_controlcalidad()
+
+        static function c_controlcalidad($usu,$control)
         {
-            /*$horacom = date('H').':00';
-            $fecha = date("Y-m-d");
+            $respuesta = 1;
             $m_produccion = new m_produccion();
-            $cadena = "estado = '0' AND Convert(DATE, fec_inicio) <= '$fecha'";
-            $control = $m_produccion->m_buscar('V_CONTROL_CALIDAD',$cadena);
-            $caden = "HORA_CONTROL='$horacom'";
-            $hora = $m_produccion->m_buscar('T_HRA_CONTROL',$caden);
-            $feactu = retunrFechaSqlphp($fecha);
-            if(count($control) > 0){
-                $feinici = retunrFechaSqlphp($control[0][4]);
-                $horini = explode(':',$control[0][5]);
-                $hora2 = explode(':',$hora[0][1]);
-               if($feactu == $feinici){
-                    //si la fecha es igual buscar la hora que estamos y sumarle los minutos de la hora de registro;
-                    if($hora2[0] == "14"){
-                        $ho = date('H:i', strtotime($hora[0][1] .'+ 1 hours +'.$horini[1] .'minutes'));
-                        $hm = date('H:i', strtotime($ho.'+ 0 hours - 20 minutes'));
-                        $hd = date('H:i', strtotime($hora[0][1] .'+ 1 hours + 20 minutes'));
+                if(count($control) > 0){
+                    $horfabri = explode(":", $control[0][5]);
+                    $fecpro = retunrFechaSqlphp($control[0][4]);
+                    $fechact = retunrFechaSqlphp(date("Y-m-d"));
+                    if($fechact == $fecpro){
+                        $cons = "HORA_CONTROL = '$horfabri[0]:00'";
                     }else{
-                        $ho = date('H:i', strtotime($hora[0][1] .'+ 0 hours +'.$horini[1] .'minutes'));
-                        $hm = date('H:i', strtotime($ho.'+ 1 hours - 20 minutes'));
-                        $hd = date('H:i', strtotime($hora[0][1] .'+ 0 hours + 20 minutes'));
+                        $hora = date('H').':00';
+                        $cons = "HORA_CONTROL = '$hora' OR ID_HORARIO = '1'";
+                        $horfabri[1] = '00';
                     }
-                   
-                }else if($feactu > $feinici){
-                   //si la fecha es mayor buscar la hora en la que estamos y sumar 40 minutos
-                    if($hora2[0] == "14"){
-                        $ho = date('H:i', strtotime($hora[0][1] .'+ 1 hours + 00 minutes'));
-                        $hm = date('H:i', strtotime($hora[0][1] .'+ 0 hours + 40 minutes'));
-                        $hd = date('H:i', strtotime($hora[0][1] .'+ 1 hours + 20 minutes'));
+                    $horas = $m_produccion->m_buscar("T_HRA_CONTROL",$cons);
+                    if(count($horas) > 1){
+                       $horacont = explode(":",$horas[1][1]);
                     }else{
-                        $ho = date('H:i', strtotime($hora[0][1] .'+ 1 hours + 00 minutes'));
-                        $hm = date('H:i', strtotime($hora[0][1] .'+ 0 hours + 40 minutes'));
-                        $hd = date('H:i', strtotime($hora[0][1] .'+ 0 hours + 20 minutes'));
+                       $horacont = explode(":",$horas[0][1]);
                     }
-                   
-               }
-               $dato = array(
-                "d" => $control,
-                "h" => $ho,
-                "hm" => $hm,
-                "hd" => $hd
-               ); 
-            }else{
-                $dato = array(
-                    "hm" => "",
-                   ); 
-            }
-           echo json_encode($dato,JSON_FORCE_OBJECT);*/
+                      $ho1 = date('H:i', strtotime($horacont[0].':'.$horfabri[1].'+ 1 hours - 20 minutes'));
+                      $ho2 = date('H:i', strtotime($horacont[0].':'.$horfabri[1].'+ 1 hours + 20 minutes'));
+                      $codpro = $control[0][0];
+                      $problo = "COD_PRODUCCION = '$codpro'";
+                      $prodblo = $m_produccion->m_buscar("T_PRODUCCION_BLOQUEO",$problo);
+                      if(count($prodblo) > 0){
+                        $fecpro = retunrFechaSqlphp($prodblo[0][3]);
+                        $hora1 = strtotime(date('Y-m-d H:i'));
+                        $f = explode(" ", $prodblo[0][3]);
+                        $hora2 = strtotime(trim($f[0])." ".trim($prodblo[0][2]));
+                        if(($fechact == $fecpro || $fechact != $fecpro) && $hora1 > $hora2){
+                          $respuesta = $m_produccion->m_actualizar_horas($codpro,$ho1,$ho2,$fechact);
+                        } 
+                      }else{
+                        $respuesta = $m_produccion->m_insert_horas($codpro,$ho1,$ho2,$fechact);
+                      }  
+                }
+           // print_r($respuesta);
         }
+
+
         static function c_gcontrol($color,$pureza,$rebaba,$peso,$observacion,$establidad,$usu,$tcalid,
         $txtpro,$txtprodu){
             $m_produccion = new m_produccion();

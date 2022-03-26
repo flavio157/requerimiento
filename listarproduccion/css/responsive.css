@@ -56,13 +56,13 @@ input[type=number]::-webkit-outer-spin-button {
     position: absolute;
     z-index: +1070;
     width:100%; height:100%;
+    top: 0px;
   }
   
   .ajax-loader img {
     position: relative;
     top:45%;
     left:45%;
-   
   }
 
 
