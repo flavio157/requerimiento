@@ -9,8 +9,7 @@ $(function() {
           return false;
         }
     });
-   
-  
+
 
     $("#btncancelar").on('click',function () {
         tipo = 1;  
@@ -125,7 +124,7 @@ function Mensaje1(texto,icono){
 
 function _lcform() {
     document.getElementById("frmgudarpers").reset();
-  
+    autocompletarpersonal();
 }
 
 function _guardarpers(personal) {
@@ -135,13 +134,15 @@ function _guardarpers(personal) {
         type: 'POST', 
         url:  'c_guardarpersonal.php',
         data:personal+"&accion=guardarperso&usuario="+usu,
-        success:  function(response){
-            if(response == 1){
+        success:  function(e){
+           obj = JSON.parse(e);
+            if(obj['dato'] == 1){
                 Mensaje1("Se registro el personal","success");
                 _lcform();
+                $("#txtcodigoper").val(obj['codigo']);
                 autocompletarpersonal();
             }else{
-                Mensaje1(response,"error");
+                Mensaje1(obj['codigo'],"error");
             }
         }
     }); 
@@ -155,15 +156,17 @@ function _actualizar(personal) {
         type: 'POST', 
         url:  'c_guardarpersonal.php',
         data:personal+"&accion=actualizar&usuario="+usu+"&codpersonal="+codpersonal,
-        success:  function(response){
-            if(response == 1){
+        success:  function(e){
+            console.log(e);
+            obj = JSON.parse(e);
+            if(obj['dato'] == 1){
                 sugepersonal = [];
                 Mensaje1("Se actualizo el registro","success");
                 _lcform();
                 tipo = 1;
                 autocompletarpersonal();
             }else{
-                Mensaje1(response,"error");
+                Mensaje1(obj['dato'],"error");
             }
         }
     }); 
@@ -272,8 +275,9 @@ function lstpersonal(){
         data:{
             "accion" : 'lstpersonal',
         } ,
-        success:  function(response){
+        success: function(response){
             obj = JSON.parse(response);
+            $("#txtcodigoper").val(obj['codper']);
             $.each(obj['dato'], function(i, item) {
                 sugepersonal.push(item); 
             });
@@ -291,6 +295,7 @@ function buscarpersonal(personal) {
             "personal":personal
         } ,
         success:  function(response){
+            console.log(response);
             obj = JSON.parse(response);
             $.each(obj['personal'], function(i, item) {
                 dato = formato(item[14]).split(" ");
@@ -306,10 +311,6 @@ function buscarpersonal(personal) {
                 $("#sldistpers").val(item[10]);
                 $("#mtxttelpers").val(item[11]);
                 $("#mtxtcelpers").val(item[12]);
-                if(item[19] == 'NULL'){item[19] = ''}
-                $("#mtxtcuenpers").val(item[19]);
-                if(item[20] == 'NULL'){item[20] = ''}
-                $("#mtxttitulpers").val(item[20]);
                 $("#slcestado").val(item[13]);
                 tipo = 0;
                 $("#mdpersonal").modal('hide');   
@@ -323,6 +324,7 @@ function formato(texto){
 }
 
 function autocompletarpersonal() {
+   sugepersonal = [];
     lstpersonal();
     $("#txtpersonal").autocomplete({
         source: sugepersonal,
@@ -331,7 +333,7 @@ function autocompletarpersonal() {
             _lstprovi(ui.item.prov);
             _lstdistri(ui.item.dist);
           }
-      });
+    });
 }
 
 

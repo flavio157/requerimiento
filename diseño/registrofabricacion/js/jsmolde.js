@@ -132,6 +132,7 @@ $(function() {
 
   $(document).on('click',"#btnagregarserie",function name(params) {
     $("#txtmnuserie").val($(this).parents('tr').find('td:nth-child(3)').text());
+    $(this).parents('tr').find('td:nth-child(3)').text('');
     celda = $(this).parents('tr').find('td:nth-child(3)');
     $("#modalserie").modal('show');
   })
@@ -159,7 +160,6 @@ $(function() {
   });
 
 });
-
 
 function verificarserie(serie) {
   $.ajax({
@@ -227,9 +227,7 @@ function lstmateriales(dato) {
     } ,
     success:  function(response){
       obj = JSON.parse(response);
-      //console.log(obj['dato']);
-      
-      
+
       $.each(obj['dato'], function(i, item) {
         if(item[6] != '00001' || item[6] == ''){
             var fila="<tr>";
@@ -242,8 +240,7 @@ function lstmateriales(dato) {
             fila +="<td class='tdcontent' style='display:none'>00002</td>";
             fila +="<td class='tdcontent'>"+
             "<a id='btnagregarserie' class='btn btn-primary btn-sm disabled'  style='margin-right: 1px;"+
-            "margin-bottom: 1px;'><i class='icon-edit'></i></a>"+
-            "<a id='btneliminarmate' class='btn btn-danger btn-sm' style='margin-bottom: 1px;'><i class='icon-trash'></i></a></td>";
+            "margin-bottom: 1px;'><i class='icon-edit'></i></a></td>";
             fila +="</tr>";
             var btn = document.createElement("TR");
             btn.innerHTML=fila;
@@ -257,15 +254,13 @@ function lstmateriales(dato) {
             fila +="<td class='tdcontent'>"+''+"</td>";
             cant = '1.000';
             stock = parseFloat(Number(item[5])  - Number(i)).toFixed(3);
-            console.log(stock);
             fila +="<td class='tdcontent'>"+cant+"</td>";
             fila +="<td class='tdcontent'  style='display:none'>"+item[4]+"</td>";
             fila +="<td class='tdcontent'>"+stock+"</td>";
             fila +="<td class='tdcontent' style='display:none'>00001</td>";
             fila +="<td class='tdcontent'>"+
             "<a id='btnagregarserie' class='btn btn-primary btn-sm' style='margin-right: 1px;"+
-            "margin-bottom: 1px;'><i class='icon-edit'></i></a>"+
-            "<a id='btneliminarmate' class='btn btn-danger btn-sm' style='margin-bottom: 1px;'><i class='icon-trash'></i></a></td>";
+            "margin-bottom: 1px;'><i class='icon-edit'></i></a></td>";
             fila +="</tr>";
             var btn = document.createElement("TR");
             btn.innerHTML=fila;
@@ -392,7 +387,6 @@ function resetpersonal(){
   $("#txthortrab").val('');
   $("#txtcosthora").val('');
 }
-
 
 
 function Mensaje3(molde,material,tabla,clase) {
@@ -523,7 +517,7 @@ function actualcantmaterial(material,cantidad) {
         limpiarmaterial();
         lstmateriales(molde);
       }else{
-        Mensaje1("e","error");
+        Mensaje1(e,"error");
       }
     }
   });

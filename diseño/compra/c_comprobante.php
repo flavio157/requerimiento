@@ -192,6 +192,7 @@ require_once("../funciones/f_funcion.php");
             $material = new m_comprobante();
             $cadena = "COD_PRODUCTO = '$codpro'";
             $c_verificarcod = $material->m_buscar('T_PRODUCTO',$cadena);
+            
             if(count($c_verificarcod) > 0){print_r("Error el codigo del producto ya existe");return;}
             $pattern = "/^[a-zA-Z\sñáéíóúÁÉÍÓÚ.,;]+$/";
             if(strlen($codpro) > 6 || strlen($codpro) < 6){print_r("Codigo producto debe tener 6 caracteres");return;}
@@ -233,7 +234,7 @@ require_once("../funciones/f_funcion.php");
 
             $prec = explode(".", $prepro);
             if(strlen($prec[0]) > 4){print_r("Error campo precio, maximo 4 digitos con 3 decimales");return;}
-            if($c_producto[0][16] == '00001'){
+            if($c_producto[0][16] == '00001' || $c_producto[0][16] == '00004'){
                 if(strlen($seriepro) > 20){print_r("Error nro de serie solo 20 caracteres");return;}
                 if(strlen($seriepro) < 6){print_r("Error nro de serie nimimo 6 caracteres");return;}
                 if(count(count_chars($seriepro, 1)) < 4){print_r("Error numero de serie del producto invalido");return;}
@@ -284,6 +285,7 @@ require_once("../funciones/f_funcion.php");
             $m_producto = new m_comprobante();        
             $total = 0.00;
             $nrocompro = strtoupper($nrocompro);
+           
             if(strlen($observacio) > 500){print_r("Error campo observacion sobrepaso el limite de caracteres"); return;}
             if(count($productos->tds)==0){print_r("Error ingrese productos"); return;}
             if(strlen($proveedor) == 0){print_r("Error seleccione proveedor");return;}
@@ -313,6 +315,7 @@ require_once("../funciones/f_funcion.php");
             $cantnombre = explode(" ", $nombre);
             $cantdireccion = explode(" ", $direccion);
             $titularar = explode(" ",$titular);
+            
             if($fechaingreso == ""){print_r("Error seleccione fecha de ingreso"); return;}
             if(preg_match($numero,$dni) == 0){print_r("Error DNI solo numeros"); return;}
             if(strlen($dni) > 8 ||strlen($dni) < 8 ){print_r("Error DNI solo 8 digitos"); return;}
@@ -387,8 +390,9 @@ require_once("../funciones/f_funcion.php");
         }
 
         static function c_guardarproveedor($proveedor,$direccion,$ruc,$dni,$usu){
-            if(strlen($proveedor) > 50){print_r("Error nombre del proveerod maxino 50 caracteres"); return;}
-            if(strlen($direccion) > 100){print_r("Error nombre del proveerod maxino 100 caracteres"); return;}
+           
+            if(strlen($proveedor) > 50){print_r("Error nombre del proveedor maximo 50 caracteres"); return;}
+            if(strlen($direccion) > 100){print_r("Error nombre del proveedor maximo 100 caracteres"); return;}
             if(strlen($ruc) == 0 && strlen($dni) == 0){print_r("Error ingrese RUC o DNI del proveedor"); return;}
             if(strlen($ruc) != 0){
                 if(strlen($ruc) > 11 || strlen($ruc) < 11){print_r("Error RUC minimo 11 caracteres"); return;}

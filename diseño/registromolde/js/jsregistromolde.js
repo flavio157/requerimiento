@@ -1,7 +1,7 @@
 var usuario = '';
 var b1 = "<a id='btnactualizar' style='margin-right: 2px;margin-bottom: 1px;' class='btn btn-primary  btn-sm'>"+
 "<i class='icon-pencil' title='Modificar material'></i>"+
-"</a><a id='btneliminar' style='margin-bottom: 1px;' class='btn btn-danger  btn-sm'>"+
+"</a></a><a id='btneliminar' style='margin-bottom: 1px;' class='btn btn-danger  btn-sm'>"+
 "<i class='icon-trash' title='Eliminar material'></i>"+
 "</a>";
 var tipo = 1;  /*1 save , 0 update*/
@@ -27,7 +27,6 @@ $(function() {
     }
   });
 
-
   $("#txtuniextern").keyup(function(e) {
     var input=  document.getElementById('txtuniextern');
         input.addEventListener('input',function(){
@@ -42,19 +41,20 @@ $(function() {
       unidad = $("#txtuniextern").val();
       cantxusar = $("#txtcanexterno").val();
       molde = $("#txtcodmolde").val();
+      cliente = $("#txtcodcliente").val();
       if(nombre.length == 0){Mensaje1("Error ingrese nombre del material","error");return;}
       if(unidad.length == 0){Mensaje1("Error ingrese unidad medida recibida","error");return;}
       if(cantxusar.length == 0){Mensaje1("Error ingrese cantidad por usar","error");return;}
-     
+      if(cantxusar > $("#txtcantidad").val()){Mensaje1("Error stock insuficiente","error");return;}
+
     if(clase == 'E'){
         cantirec = parseFloat(cantirec);
         cantxusar = parseFloat(cantxusar);
         if(cantirec.length == 0){Mensaje1("Error ingrese cantidad recibida","error");return;}
-        if(cantxusar > cantirec){Mensaje1("Error cantidad a usar no puede ser mayor a cantidad recibida","error");return;}
-
-   
+       
       if(tipo == 1){
-        guardar(codpro,nombre,cantirec,unidad,cantxusar,molde,clase);
+        if(cantxusar > cantirec){Mensaje1("Error cantidad a usar no puede ser mayor a cantidad recibida","error");return;}
+        guardar(codpro,nombre,cantirec,unidad,cantxusar,molde,clase,cliente);
       }
      
       if(tipo == 0){
@@ -73,7 +73,6 @@ $(function() {
       }
     }
     if(clase == 'P' || slctipomolde == 'P'){
-      console.log(clase);
       repetido = datosrepetidos('tbdmaterialmolde',codpro);
       if(molde.length != 0 && !repetido && tipo == 1){
         guardar_materialpropio(codpro,nombre,unidad,cantxusar,molde,clase)
@@ -103,7 +102,7 @@ $(function() {
   });
 
   $("#btng_molde").click(function() {
-    console.log(clasemolde);
+    
     if(clasemolde != 'P'){
       if($("#txtcodcliente").val().length == 0){Mensaje1("Error seleccione cliente","error");return;}
       if($("#txtcliente").val().length == 0){Mensaje1("Error seleccione cliente","error");return;}
@@ -126,6 +125,7 @@ $(function() {
             $(td[l]).find("td")[5].innerHTML.trim(),
         ]
     }
+    console.log(tipo , actuacli);
     if(tipo == 1 && actutipo == 1){
       guardarmoldecompleto(tds);
     }
@@ -137,7 +137,7 @@ $(function() {
   });
 
   $("#btnbuscarmoldes").click(function() {
-        buscarmolde($("#txtcodcliente").val());
+      buscarmolde('');
   })
 
   $("#btnbuscclien").click(function(params) {
@@ -153,6 +153,12 @@ $(function() {
       $("#txtnommolde").val($(this).parents('tr').find('td:nth-child(2)').text());
       $("#txtmedmolde").val($(this).parents('tr').find('td:nth-child(3)').text());
       $("#slctipomolde").val($(this).parents('tr').find('td:nth-child(5)').text().trim());
+      estilo = $(this).parents('tr').find('td:nth-child(7)').text().trim();
+      if(estilo == "null"){
+        estilo = "0";
+      }
+      $("#slcestilo").val(estilo);
+
       if($(this).parents('tr').find('td:nth-child(5)').text().trim() =='P'){
         moldep();
         clase = 'P';
@@ -165,6 +171,7 @@ $(function() {
       $("#txtcodmolde").val($(this).parents('tr').find('td:nth-child(1)').text());
       materialxmolde($(this).parents('tr').find('td:nth-child(1)').text(),$(this).parents('tr').find('td:nth-child(5)').text())
       buscarcliente($(this).parents('tr').find('td:nth-child(6)').text())
+      
       actutipo = 0;
   });
 
@@ -175,22 +182,22 @@ $(function() {
       $("#txtuniextern").val($(this).parents('tr').find('td:nth-child(4)').text().trim());
       $("#txtcanexternorec").val($(this).parents('tr').find('td:nth-child(5)').text());
       $("#txttipomat").val($(this).parents('tr').find('td:nth-child(6)').text());
-      console.log($(this).parents('tr').find('td:nth-child(6)').text().trim() == 'P');
+     
       if($(this).parents('tr').find('td:nth-child(6)').text().trim() == 'P'){
         clase = 'P'
-       $("#txtcanexternorec").val('0.000'); $("#txtcanexternorec").attr('disabled','true');
+       $("#txtcanexternorec").val(''); $("#txtcanexternorec").attr('disabled','true');
+       $("#btnlstmaterial").css('display','block');$("#slctipomaterial").val(clase);
       }else{
-        $("#txtcanexternorec").removeAttr('disabled');
-        clase = 'E'
+        $("#txtcanexternorec").removeAttr('disabled');$("#btnlstmaterial").css('display','none');
+        clase = 'E' ;$("#slctipomaterial").val(clase);
       }
       $(this).closest('tr').remove();
       tipo = 0;
-      console.log(clase);
   });
 
   $(document).on('click',"#btneliminar",function() {
-    eliminarmaterial($("#txtcodmolde").val(),$(this).parents('tr').find('td:nth-child(1)').text());
-    $(this).closest('tr').remove();
+    eliminarmaterial($("#txtcodmolde").val(),$(this).parents('tr').find('td:nth-child(1)').text(),this);
+   
   })
 
   $("#btngcliemodle").on('click',function() {
@@ -214,6 +221,7 @@ $(function() {
     actutipo = 1; 
     actuacli = 1;
     reset();
+    clase = 'P';
     $('#tbmaterialmolde').find("tr:gt(0)").remove();
     document.getElementById('frmclientemolde').reset();
     $("#slctipomolde").removeAttr('disabled');
@@ -265,13 +273,14 @@ $(function() {
       $("#txtcodmaterialexter").val($(this).parents('tr').find('td:nth-child(1)').text());
       $("#txtmaterialexter").val($(this).parents('tr').find('td:nth-child(2)').text());
       $("#txtuniextern").val($(this).parents('tr').find('td:nth-child(4)').text().trim());
+      $("#txtcantidad").val($(this).parents('tr').find('td:nth-child(3)').text().trim())
       $("#txtcanexternorec").attr('disabled','true');
       $('#mdmaterial').modal('hide');
   });
 });
 
 
-function guardar(codpro,nombre,cantirec,unidad,cantxusar,molde,tipo){
+function guardar(codpro,nombre,cantirec,unidad,cantxusar,molde,tipo,cliente){
   $.ajax({
     dataType:'text',
     type: 'POST', 
@@ -285,11 +294,11 @@ function guardar(codpro,nombre,cantirec,unidad,cantxusar,molde,tipo){
       'cantxusar': cantxusar,
       'usuario' : usuario,
       'molde' : molde,
-      'tipo': tipo
+      'tipo': tipo,
+      'cliente' : cliente
     },
     success:  function(e){
-      console.log(tipo);
-      console.log(e);
+      
         obj = JSON.parse(e);
         if(obj['dato'][0] == 1){
           array = [
@@ -313,12 +322,14 @@ function guardar(codpro,nombre,cantirec,unidad,cantxusar,molde,tipo){
 
 function actualizar(tds){
   datos = $("#frmregistromolde").serialize();
+  slctipo =$("#slctipomolde").val();
   var materiales = {tds};
   $.ajax({
     dataType:'text',
     type: 'POST', 
     url:  'c_registromolde.php',
-    data:datos+"&accion=actualizar&usuario="+usuario+"&material="+JSON.stringify(materiales),
+    data:datos+"&accion=actualizar&usuario="+usuario+"&material="+JSON.stringify(materiales)+
+    "&slctipomolde="+slctipo,
     success:  function(e){
       if(e == 1){
         Mensaje1("Se actualizaron los datos del molde","success");
@@ -416,6 +427,7 @@ function buscarmolde(dato){
         fila +="<td class='tdcontent' style=display:none>"+item[5]+"</td>";
         fila +="<td class='tdcontent'>"+item[6]+"</td>";
         fila +="<td class='tdcontent' style=display:none>"+item[7]+"</td>";
+        fila +="<td class='tdcontent' style=display:none>"+item[8]+"</td>";
         fila +="<td class='tdcontent'>"+b2+"</td>";
         var btn = document.createElement("TR");
         btn.innerHTML=fila;
@@ -437,6 +449,7 @@ function materialxmolde(molde,tipomolde){
     } ,
     success:  function(e){
       $('#tbmaterialmolde').find("tr:gt(0)").remove();
+     
       obj = JSON.parse(e);
       $.each(obj['dato'], function(i, item) {
             var fila='';
@@ -457,7 +470,7 @@ function materialxmolde(molde,tipomolde){
   });
 }
 
-function eliminarmaterial(molde,material){
+function eliminarmaterial(molde,material,dato){
   $.ajax({
     dataType:'text',
     type: 'POST', 
@@ -465,13 +478,14 @@ function eliminarmaterial(molde,material){
     data:{
         "accion" : 'elimimaterial',
         "material" : material,
-        "molde" :molde
+        "molde" :molde,
     } ,
     success:  function(e){
-      console.log(e);
-      /*if(e == 1){
-        Mensaje1('Se elimino el material','success');
-      }*/
+      if(e != 1){
+        Mensaje1(e,'error');
+      }else{
+        $(dato).closest('tr').remove();
+      }
     }
   });
 }
@@ -484,7 +498,7 @@ function guardarcliente() {
     url:  'c_registromolde.php',
     data:datos+"&accion=guarcliente&usuario="+usuario,
     success:  function(e){
-      console.log(e);
+     
         obj = JSON.parse(e);
         if(obj['dato'][0]){
           Mensaje1("Se registro el nuevo cliente","success");
@@ -570,11 +584,11 @@ function actualizarcliente() {
     data:datos+"&accion=actucliente&usuario="+usuario,
     success:  function(e){
         obj = JSON.parse(e);
-      
         if(obj['dato'] == 1){
-          Mensaje1("Se actualizo datos del cliente","success");
-          $("#txtcliente").val($("#txtnombcliente").val());
-          $("#txtidentificacion").val($("#txtidenticliente").val());
+          Mensaje1("Se actualizo datos del cliente","success"); 
+          $("#txtcliente").val('');
+          $("#txtcodcliente").val('');
+          $("#txtidentificacion").val('');
           $("#mdclientemolde").modal('hide');
           document.getElementById('frmclientemolde').reset();
           actuacli = 1;
@@ -605,7 +619,7 @@ function buscarcliente(cod) {
           $("#txtcliente").val(obj['dato'][0][1].trim());
           $("#txtidentificacion").val(obj['dato'][0][3].trim());
         }
-    }
+    } 
   });
 }
 
@@ -662,7 +676,6 @@ function moldep() {
   $("#txtcanexternorec").attr('disabled',true);
   $("#btnlstmaterial").css('display','block');
   $("#btnbuscclien").addClass("disabled");
-  $("#txtcodcliente").val('');
   $("#txtcliente").val('');$("#txtidentificacion").val('');
 }
 
@@ -705,7 +718,7 @@ function datosrepetidos(tabla,dato) {
         'tipo':tipo
       },
       success:  function(e){
-        console.log(e);
+      
           obj = JSON.parse(e);
           if(obj['dato'][0] == 1){
             array = [

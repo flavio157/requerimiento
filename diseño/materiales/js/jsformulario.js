@@ -1,6 +1,12 @@
 var sugepersonal = [];
 var sugematerial = [];
+var clase = '';
+var i = null; /// AQUI
+var c = 0;
+var usu;
 $(document).ready(function() {
+     usu = $("#vrcodpersonal").val();
+    c = document.getElementsByClassName("menupadre").length;
     buscarpersonal();
     $("#txtpersonal").autocomplete({
       source: sugepersonal,
@@ -24,7 +30,7 @@ $(document).ready(function() {
         filas = $("#tdmaterialentrega  tr");
             for (let l = 0; l <filas.length ; l++) {
                 if($(filas[l]).find("td")[2].innerHTML != ""){
-                    if($(filas[l]).find("td")[2].innerHTML == sre.toUpperCase().trim()){
+                    if($(filas[l]).find("td")[2].innerHTML.replace('-', '') == sre.toUpperCase().trim().replace('-', '').replace(' ', '')){
                         Mensaje1("Nro de serie ya registrado",'error');
                         return;    
                     }
@@ -71,32 +77,45 @@ $(document).ready(function() {
     });
 
     $(document).on('click','#btnupdatemat',function() {
-        codmaterial = $(this).closest('tr').find("td:nth-child(1)").text();
-        serie = $(this).closest('tr').find("td:nth-child(3)").text();
-       _update(codmaterial,serie,$(this));
+        $("#txtmodnombpro").val($(this).closest('tr').find("td:nth-child(2)").text());
+        $("#txtmodcodpro").val($(this).closest('tr').find("td:nth-child(1)").text());
+        $("#txtmodcanpro").val($(this).closest('tr').find("td:nth-child(4)").text());
+        $("#txtmodserie").val($(this).closest('tr').find("td:nth-child(3)").text())
+        $("#txtmodtipo").val($(this).closest('tr').find("td:nth-child(7)").text());
+        $("#codmatxdia").val($(this).closest('tr').find("td:nth-child(8)").text());
+        $("#txtmodsalida").val($(this).closest('tr').find("td:nth-child(9)").text());
+        $("#txtmodadescr").val('');
     });
 
     $("#btnguardar").on('click',function () {
         var td =  $("#tdmaterialentrega  tr");
         var tds = [];
+        var dxd = [];
         for (let l = 0; l < td.length; l++) {
-            tds[l] =[
-                $(td[l]).find("td")[0].innerHTML,
-                $(td[l]).find("td")[2].innerHTML,
-                $(td[l]).find("td")[3].innerHTML
-            ]
+                tds[l] =[
+                    $(td[l]).find("td")[0].innerHTML,
+                    $(td[l]).find("td")[2].innerHTML,
+                    $(td[l]).find("td")[3].innerHTML,
+                    $(td[l]).find("td")[4].innerHTML
+                ]
         }
-        _guardar(tds);
+
+        for (let i = 0; i < td.length; i++) {
+            if($(td[i]).find("td")[4].innerHTML == '00004' || $(td[i]).find("td")[4].innerHTML == '00005'){
+                dxd[i]=[
+                    $(td[i]).find("td")[0].innerHTML,
+                    $(td[i]).find("td")[2].innerHTML,
+                    $(td[i]).find("td")[3].innerHTML,
+                    $(td[i]).find("td")[4].innerHTML 
+                ] 
+            }
+        }
+        _guardar(tds,dxd);
     })
 
     $("#txtcanmaterial").bind('keypress', function(e) {
         return _numeros(e);
     });
-
-    $("#txtdescripcion").bind('keypress', function(e) {
-        return letras(e)    
-    });
-
 
     $("#txtdescripcion").keyup(function(e) {
         var input=  document.getElementById('txtdescripcion');
@@ -104,6 +123,60 @@ $(document).ready(function() {
                 this.value = this.value.slice(0,500); 
         })
     })
+
+    $("#modbtnguardar").on('click',function() {
+       motivo = $("#modslcmotivo").val();
+        if(motivo == 'R' || motivo == 'D'){
+            _devolucion($("#txtmodcodpro").val(),$("#txtmodserie").val(),$("#txtmodtipo").val(),
+            $("#codmatxdia").val(),$("#txtmodsalida").val(),$("#txtmodcanpro").val(),$("#txtmodadescr").val(),motivo);
+        }
+        if(motivo == 'P' || motivo == 'M'){
+            reportarMaterial($("#txtcodigoper").val(),$("#txtmodcodpro").val(),$("#txtmodcanpro").val(),
+            $("#txtmodadescr").val(),$("#txtmodsalida").val(),$("#codmatxdia").val(),$("#txtmodtipo").val(),motivo
+            ,$("#txtmodserie").val())
+        }
+        
+    })
+
+    $("#modslcmotivo").change(function (params) {
+        if($(this).val() != 'D')$("#txtmodadescr").removeAttr('disabled');
+        else $("#txtmodadescr").attr('disabled','disabled');
+        $("#txtmodadescr").val('');
+    })
+
+    $("#btnreingreso").on('click',function(){
+        if($("#txtcodigoper").val().length > 0){
+            document.getElementById('frmreingreso').reset();
+            lstperdidos($("#txtcodigoper").val());
+            $("#modalreingreso").modal('show');
+        }else{
+            Mensaje1("Error seleccione personal","error");
+        }
+        
+    });
+
+    $(document).on('click','#btnburperdido',function(){
+        $("#txtreincodmat").val($(this).closest('tr').find("td:nth-child(2)").text());
+        $("#txtreinmater").val($(this).closest('tr').find("td:nth-child(3)").text());
+        $("#txtreincanper").val($(this).closest('tr').find("td:nth-child(4)").text());
+        $("#txtreinserper").val($(this).closest('tr').find("td:nth-child(6)").text());
+        $("#txtreinsalida").val($(this).closest('tr').find("td:nth-child(5)").text());
+        $("#txtreintipo").val($(this).closest('tr').find("td:nth-child(7)").text())
+        if($(this).closest('tr').find("td:nth-child(6)").text().trim().length == 0)
+            $("#txtreinserie").attr('disabled','disabled')
+        else $("#txtreinserie").removeAttr('disabled');
+    });
+
+    $("#btngreingreso").on('click',function(){
+        mater = $('#txtreincodmat').val(); 
+        salida = $('#txtreinsalida').val();
+        cantida =  $('#txtreingcant').val(); 
+        serie = $('#txtreinserie').val();
+        observa=  $('#txtreinobservaion').val();
+        tipo = $('#txtreintipo').val();
+        serieperd = $('#txtreinserper').val();
+        g_reingreso(mater,salida,cantida,serie,observa,tipo,serieperd);
+    });
 
 });
 
@@ -147,18 +220,56 @@ function _sindevolver($campo) {
             "dato" : $campo,
         } ,
         success:  function(response){
-           obj = JSON.parse(response);
-            var btn = "<a id='btnupdatemat' class='btn btn-primary btn-sm btnsin'>"+
-                    "<i class='icon-check'></i>"+
-                  "</a>"
+           var count = 0;
+           var serie = '';
+            obj = JSON.parse(response);
+            var btn = "<a id='btnupdatemat' class='btn btn-primary btn-sm btnsin' data-bs-toggle='modal' data-bs-target='#modalrepor'>"+
+                        "<i class='icon-new-message'></i>"+
+                      "</a>";
+                    
             $.each(obj['dato'], function(i, item) {
-                var fila="<tr><td style='display: none;'>"+obj['dato'][i][2]+
-                "</td><td>"+obj['dato'][i][4]+ "</td><td>"+obj['dato'][i][3]+
-                "</td><td style='padding: .25rem 1.5rem;'>"+btn+"</td></tr>";
-                var elem = document.createElement("TR");
-                elem.innerHTML=fila;
-                document.getElementById("tbmaterial").appendChild(elem);
+                
+                if(obj['dato'][i][7] == '00003')
+                {serie = ''}else{serie = obj['dato'][i][3]}
+                    var fila="<tr><td style='display: none;'>"+obj['dato'][i][2]+
+                    "</td><td>"+obj['dato'][i][4]+ "</td><td>"+serie+
+                    "</td><td>"+obj['dato'][i][6]+ "</td>"+
+                    "<td style='padding: .25rem 1.5rem;'>"+btn+"</td>"+
+                    "<td style='display: none;'>"+obj['dato'][i][3]+
+                    "</td><td style='display: none;'>"+obj['dato'][i][7]+"</td>"+
+                    "<td style='display: none;'>"+''+"</td>"+
+                    "<td style='display: none;'>"+obj['dato'][i][8]+"</td></tr>";
+                    var elem = document.createElement("TR");
+                    elem.innerHTML=fila;
+                    document.getElementById("tbmaterial").appendChild(elem);
             });
+                $.each(obj['dxd'], function(i, item) {
+                        var fila="<tr><td style='display: none;'>"+obj['dxd'][i][8]+
+                        "</td><td>"+obj['dxd'][i][4]+ "</td><td>"+obj['dxd'][i][10]+
+                        "</td><td>"+obj['dxd'][i][5]+ "</td>"+
+                        "<td style='padding: .25rem 1.5rem;'>"+btn+"</td>"+
+                        "<td style='display: none;'>"+''+
+                        "</td><td style='display: none;'>"+obj['dxd'][i][7]+"</td>"+
+                        "<td style='display: none;'>"+obj['dxd'][i][3]+"</td>"+
+                        "<td style='display: none;'>"+obj['dxd'][i][9]+"</td></tr>";
+                        var elem = document.createElement("TR");
+                        elem.innerHTML=fila;
+                        document.getElementById("tbmaterial").appendChild(elem);  
+                        fech1 = obj['dxd'][0][2].split(' ');
+                        fech1 = fech1[0].replaceAll('-','/');
+                        var fecha = new Date();
+                        var diadelevento = new Date(fech1);
+                        if (fecha.toLocaleDateString() > diadelevento.toLocaleDateString()) {
+                            count++;
+                        }
+                });
+                if(count == 0){
+                    for (let i = 1; i < c ; i++) {
+                        document.getElementById(i).onclick = function(){return true}; 
+                    }
+                }
+           
+            
         }
     });    
 }
@@ -186,12 +297,11 @@ function _stock(cdmaterial,almacen) {
             "material" : nommaterial
         } ,
         success:  function(response){
-            console.log(response);
+            if(response == 3){lstmaterialxdia(); return;}
             v = response.split("/");
             c = 0;
             if(v[2] == 2){
                 c = datosrepetidos("tdmaterialentrega",v[3],v[1]);
-                autocompletarMaterial();
             }
             if(c != 1){
                 if(v[0] > 0.00) _entrega(v[3],v[1]);
@@ -218,7 +328,7 @@ function datosrepetidos(tabla,stock,cantidad) {
 
 
 function _entrega(stock,cantidad) {
-    b1 = "<a id='btneliminar' class='btn btn-danger  btn-sm' style='float: right;'>"+
+    b1 = "<a id='btneliminar' class='btn btn-danger  btn-sm' style='margin-bottom: 1px'>"+
         "<i class='icon-trash'></i>"+
         "</a>"+ "<a id='btnmodificar' class='btn btn-primary btn-sm'>"+
             "<i class='icon-pencil'></i>"+
@@ -228,9 +338,9 @@ function _entrega(stock,cantidad) {
         b = [$("#txtmaterial").val().toUpperCase(),''],
         c = [$("#txtseriematerial").val().toUpperCase(),''],
         d = [cantidad,''],
-        i = [b1,''],
+        i = [clase,'none'],
+        j = [b1,''],
      ]
-  
   _createtable(array,'tdmaterialentrega');
     $("#txtseriematerial").val('');
     
@@ -268,7 +378,6 @@ function buscarmaterial($accion,$campo) {
             "almacen" : oficina
         } ,
         success:  function(response){
-            console.log(response);
             obj = JSON.parse(response);
             $.each(obj['dato'], function(i, item) {
                 sugematerial.push(item); 
@@ -289,16 +398,13 @@ function _createtable(td,idtbttabla) {
     document.getElementById(idtbttabla).appendChild(btn);
 }
 
-function _guardar(tds) {
-   
-    if($("#txtdescripcion").val().trim().split(' ').length < 2){
-        Mensaje1('Campo descripcion debe tener almenos 2 palabras','error')
-        return;
-    };
+function _guardar(tds,dxd) {
+    
     var codig = $("#txtcodigoper").val();
     var descripcion = $("#txtdescripcion").val();
     var perregistro = $("#vrcodpersonal").val();
     var materiales = {tds};
+    var devolxdia = {dxd};
     $.ajax({
         dataType:'text',
         type: 'POST', 
@@ -308,9 +414,11 @@ function _guardar(tds) {
             "codigo" : codig,
             "descr" : descripcion,
             "perregistro" :perregistro,
-            "items" : JSON.stringify(materiales)
+            "items" : JSON.stringify(materiales),
+            "dxdia" : JSON.stringify(devolxdia)
             } ,
             success:  function(response){
+                if(response == 3){lstmaterialxdia(); return;}
                 if(response == 1){
                      Mensaje1("Se registro Correctamente",'success')
                         limpiar();
@@ -328,8 +436,10 @@ function limpiar() {
     document.getElementById("frmmatsalida").reset();
 }
 
-function _update(codigo,serie,tb) {
+function _devolucion(codigo,serie,tipodato,codmatxdia,salida,cantidad,descripcion,motivo) {
     var usumodifico = $("#vrcodpersonal").val();
+    var ofi = $("#vroficina").val();
+    var solicito = $("#txtcodigoper").val();
     $.ajax({
         dataType:'text',
         type: 'POST', 
@@ -339,17 +449,29 @@ function _update(codigo,serie,tb) {
             "usumodifico" : usumodifico,
             "codigo" : codigo,
             "serie" : serie,
-        } ,
+            "tipodato" : tipodato,
+            "codmatxdia":codmatxdia,
+            "ofi" : ofi,
+            "salida" : salida,
+            "cantidad" : cantidad,
+            "descripcion":descripcion,
+            "solicito" : solicito,
+            "motivo":motivo
+        },
         success:  function(response){
             if(response == 1){
-                tb.closest('tr').remove();
                 Mensaje1("Se registro la devolucion","success");
+                $("#modalrepor").modal('hide');
+            }else if(response == 2){
+                Mensaje1("Se reotorgo el material","success");
+                $("#modalrepor").modal('hide');
             }else{
-                Mensaje1("Error al registrar","error");
+                Mensaje1(response,"error");
             }
+            $('#tbmaterialsalida').find("tr:gt(0)").remove();
+            _sindevolver($("#txtcodpersonal").val()); 
         }
-    }); 
-  
+    });
 }
 
 function retornar() {
@@ -395,14 +517,16 @@ function _numeros(e) {
 
 function autocompletarMaterial() {
     buscarmaterial();
+  
     $("#txtmaterial").autocomplete({
         source: sugematerial,
           select: function (event, ui) {
             $("#txtcodmaterial").val(ui.item.code);
             consultastock(ui.item.code) 
-          
+            clase = ui.item.clase;
+            
            // $("#txtstckmaterial").val(ui.item.stock);
-            if(ui.item.clase == '00001'){
+            if(ui.item.clase == '00001' || ui.item.clase == '00004'){
                 $("#txtcanmaterial").attr('disabled','true');
                 $("#txtseriematerial").removeAttr('disabled');
             }else{
@@ -426,4 +550,147 @@ function consultastock(codpro) {
             $("#txtstckmaterial").val(response);
         }
     }); 
+}
+
+function reportarMaterial(personal,producto,cant,descripcion,codsalida,codmatxdia,tipo,motivo,serie) {
+    var usu = $("#vrcodpersonal").val();
+    $.ajax({
+        dataType:'text',
+        type: 'POST', 
+        url:  'c_materialesalida.php',
+        data:{
+            "personal":personal,
+            "producto":producto,
+            "cant":cant,
+            "descripcion":descripcion,
+            "codsalida":codsalida,
+            "motivo":motivo,
+            "usu":usu,
+            "codmatxdia" :codmatxdia,
+            "tipo" : tipo,
+            "serie" : serie,
+            "accion" : 'reportar',
+        },
+        success:  function(r){
+            if(r == 1){
+                Mensaje1("Se registro el material perdido","success");
+                $("#modalrepor").modal('hide');
+            }else{
+                Mensaje1(r,"error");
+            }
+            $('#tbmaterialsalida').find("tr:gt(0)").remove();
+            _sindevolver($("#txtcodpersonal").val());
+
+        }
+    }); 
+}
+
+
+//AQUI sujeta a cambios
+function lstmaterialxdia() {
+    $.ajax({
+        dataType:'text',
+        type: 'POST', 
+        url:  'c_materialesalida.php',
+        data: {
+            "accion": "lstmatexdia",
+            "oficina":''
+        },
+        success: function(response){
+            var mensaje = '';
+            obj = JSON.parse(response);
+            if(Object.keys(obj['dato']) != ''){
+                $.each(obj['dato'], function(i, f) {
+                    nombre = obj['dato'][i][1].split(' ');
+                    mensaje +='<tr>'+
+                                '<td class="font">'+nombre[0]+'</td>'+
+                                '<td class="font">'+obj['dato'][i][5]+'</td>'+
+                                '<td class="font">'+obj['dato'][i][4]+'</td>'+
+                              '</tr>';
+                });
+                Mensaje2("Materiales sin devolver \n",'info',mensaje)
+            }
+        }
+    });
+}
+
+function Mensaje2(texto,icono,tabla){
+    Swal.fire({
+     icon: icono,
+     title: texto,
+     html:  '<div class="table-responsive" style="overflow: scroll;height: 179px;">'+
+                '<table class="table table-sm">'+
+                    '<thead>'+
+                        '<tr>'+
+                            '<th class="thtitulo">Nombre</th>'+
+                            '<th  class="thtitulo">Cantidad</th>'+
+                            '<th  class="thtitulo" style="width: 31%;">Material</th>'+
+                        '</tr>'+
+                    '</thead>'+
+                    '<tbody>'+
+                        tabla+
+                    '</tbody>'+
+                '</table>'+
+            '</div>'
+     });
+}
+//AQUI
+
+function lstperdidos(personal){
+    $.ajax({
+        dataType:'text',
+        type: 'POST', 
+        url:  'c_materialesalida.php',
+        data: {
+            "accion": "lstperdidos",
+            "personal":personal
+        },
+        success: function(response){
+            $('#tbreingreso').find("tr:gt(0)").remove();
+            b1 = "<a id='btnburperdido' class='btn btn-primary  btn-sm' style='margin-bottom: 1px'>"+
+                    "<i class='icon-pencil'></i></a>";
+            obj = JSON.parse(response);
+            $.each(obj['r'], function(i, f) {
+                var fila="<tr><td style='display: none;'>"+f[0]+
+                "</td><td style='display: none;'>"+f[1]+"</td><td>"+f[2]+
+                "</td><td>"+f[3]+"</td>"+
+                "<td style='display: none;'>"+f[4]+ "</td>"+
+                "<td>"+f[5]+"</td><td style='display: none;'>"+f[6]+"</td><td>"+b1+"</td></tr>";
+                var elem = document.createElement("TR");
+                elem.innerHTML=fila;
+                document.getElementById("tdbreingreso").appendChild(elem);  
+            });
+           
+        }
+    });
+}
+
+function g_reingreso(mater,salida,cantida,serie,observa,tipo,serieperd){
+    oficina = $("#vroficina").val();
+    $.ajax({
+        dataType:'text',
+        type: 'POST', 
+        url:  'c_materialesalida.php',
+        data:{
+            "accion":'greingreso',
+            "material":mater, 
+            "salida":salida,
+            "cantidad":cantida,
+            "serie": serie,
+            "observacion":observa ,
+            "tipo" :tipo,
+            "seirper" :serieperd,
+            "oficina" : oficina,
+            "usu":usu,
+        },
+        success: function(e){
+            if(e!=1){
+                Mensaje1(e,"error");
+            }else{
+                Mensaje1("Se registro la entrega del material perdido","success");
+                document.getElementById('frmreingreso').reset();
+                lstperdidos($("#txtcodigoper").val());
+            }
+        }
+    })    
 }

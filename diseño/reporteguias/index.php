@@ -6,7 +6,7 @@ if (session_status() == PHP_SESSION_NONE) {
 $ofi = $_SESSION["ofi"];
 $zon = $_SESSION["zon"];
 $cod = $_SESSION["cod"];
-require_once("../menu/index.php"); 
+require_once("./menu/index.php"); 
 ?>
 
 <!DOCTYPE html>

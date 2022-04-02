@@ -3,6 +3,7 @@ date_default_timezone_set('America/Lima');
 require_once("../funciones/DataBasePlasticos.php");
 require_once("../funciones/cod_almacenes.php");
 require_once("../funciones/f_funcion.php");
+require_once("../funciones/maquina.php");
 class m_guardarmaterial
 {
     private $bd;
@@ -20,7 +21,6 @@ class m_guardarmaterial
         } catch (Exception $e) {
             print_r("Error en la consulta listar".$e);
         }
-       
     }
     
 
@@ -41,6 +41,7 @@ class m_guardarmaterial
     public function m_guardarprod($codpro,$codcateg,$despro,$unimedpro,$stockmin,$abre,
                                   $usuregi,$pesoneto,$codclase,$oficina)
     {        $this->bd->beginTransaction();
+             $maquina = os_info();
             try {
                 $producto = strtoupper($despro);
                 $abre = strtoupper($abre);
@@ -52,7 +53,7 @@ class m_guardarmaterial
                 ,DES_PRODUCTO,UNI_MEDIDA,STOCK_MINIMO,ABR_PRODUCTO,PRE_PRODUCTO,EST_PRODUCTO,USU_REGISTRO,
                 FEC_REGISTRO,MAQUINA,PESO_NETO,COD_CLASE) 
                 VALUES('$codpro','$codcateg','$producto','$unimedpro',
-                $stockmin,'$abre',0,'1','$usuregi','$fech_registro','','$pesoneto','$codclase')");
+                $stockmin,'$abre',0,'1','$usuregi','$fech_registro','$maquina','$pesoneto','$codclase')");
             
                 $query->execute();  
                 
@@ -79,6 +80,21 @@ class m_guardarmaterial
             return $results;
         } catch (Exception $e) {
             print_r("Error en listar producto".$e);
+        }
+    }
+
+    public function m_actulizarprod($codpro,$categoria,$nombre,$uni,$abre,$stock,$peso,$clas,$usu){
+        $fec_actual = retunrFechaSqlphp(date("Y-m-d"));
+        $maquina = os_info();
+        try {
+            $query = $this->bd->prepare("UPDATE T_PRODUCTO SET COD_CATEGORIA = '$categoria',DES_PRODUCTO = '$nombre',
+            UNI_MEDIDA = '$uni',STOCK_MINIMO = '$stock',ABR_PRODUCTO = '$abre', PESO_NETO = '$peso', COD_CLASE = '$clas',
+            USU_MODIFICO = '$usu',FEC_MODIFICO = '$fec_actual',MAQUINA = '$maquina'
+            WHERE COD_PRODUCTO = '$codpro'");
+            $result = $query->execute();
+            return $result;
+        } catch (Exception $e) {
+            print_r("Error al actualizar producto". $e);
         }
     }
 }

@@ -3,9 +3,10 @@
 if (session_status() == PHP_SESSION_NONE) {
     session_start();
 }
-$ofi = $_SESSION["ofi"];
+/*$ofi = $_SESSION["ofi"];
 $zon = $_SESSION["zon"];
-$cod = $_SESSION["cod"];
+$cod = $_SESSION["cod"];*/
+
 require_once("../menu/index.php");
 ?>
 
@@ -39,12 +40,18 @@ require_once("../menu/index.php");
    <section>  
         <div class="main"> 
             <form id="frmgudarpers" name="frmgudarpers">
-                <input type="text" id="vroficina" style="display: none;" value="<?php echo  $ofi?>"/>
-                <input type="text" id="vrzona" style="display: none;" value="<?php echo  $zon?>"/>
-                <input type="text" id="vrcodpersonal" style="display: none;" value="<?php echo  $cod?>"/>
+                <input type="text" id="vroficina" style="display: none;" value="<?php echo ''//$ofi?>"/>
+                <input type="text" id="vrzona" style="display: none;" value="<?php echo  ''//$zon?>"/>
+                <input type="text" id="vrcodpersonal" style="display: none;" value="<?php echo '0215'//$cod?>"/>
                 <div class="row">
                     <div class="col mb-2">
                     <center><label class="titulos">Registro de personal</label></center>
+                    </div>
+                </div>
+                <div class="row g-2">
+                    <div class="col-md-6">
+                        <label for="formfpago" class="form-label">Codigo</label>
+                        <input type="text"  class="form-control" name="txtcodigoper" id="txtcodigoper" disabled>
                     </div>
                 </div>
                 <div class="row g-2">
@@ -125,7 +132,9 @@ require_once("../menu/index.php");
                                 <input type="number" class="form-control mayu" name="mtxtcelpers" id="mtxtcelpers" autocomplete="off">    
                             </div>
                         </div>
-                        <div class="row g-2">
+
+
+                        <!--<div class="row g-2" >
                             <div class="col">
                                 <label for="formpromocion"  class="form-label">Nro Cuenta</label>
                                 <input type="number" class="form-control mayu" name="mtxtcuenpers" id="mtxtcuenpers" autocomplete="off">    
@@ -134,7 +143,7 @@ require_once("../menu/index.php");
                                 <label for="formpromocion"  class="form-label">Titular</label>
                                 <input type="text" class="form-control mayu" name="mtxttitulpers" id="mtxttitulpers" autocomplete="off">
                             </div>
-                        </div>
+                        </div>-->
                         <div class="row g-2">
                             <div class="col-auto">
                                 <label for="formfpago" class="form-label">Estado</label>
@@ -173,7 +182,7 @@ require_once("../menu/index.php");
                         <label>Nombre personal</label>
                         <input id="txtcodpersonal" class="form-control" style="display: none;">
                         <div class="col">
-                          <input type="text" id="txtpersonal" class="form-control" autocomplete="off">
+                          <input type="text" id="txtpersonal" class="form-control mayu" autocomplete="off">
                         </div>
                     </div>   
                   </div>

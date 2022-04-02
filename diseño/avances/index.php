@@ -8,7 +8,7 @@ $ofi = $_SESSION["ofi"];
 $zon = $_SESSION["zon"];
 $cod = $_SESSION["cod"];
 
-require_once("./menu/index.php");
+require_once("../menu/index.php");
 ?>
 
 <!DOCTYPE html>
@@ -29,7 +29,7 @@ require_once("./menu/index.php");
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
 <style>
-    .ui-autocomplete.ui-front {
+.ui-autocomplete.ui-front {
     max-height: 300px;
     width: 100px;
     overflow-y: auto;   
@@ -104,12 +104,8 @@ require_once("./menu/index.php");
                       <tbody id="tbdpasadas">
                       </tbody>  
                     </table> 
-                    
           </form>
-            
     </section>
-
-  
 </body>
   <script src="../js/abootstrap.min.js"></script>
 </html>

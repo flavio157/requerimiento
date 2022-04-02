@@ -17,13 +17,13 @@ require_once("m_guardarpersonal.php");
         $distrito = $_POST['sldistpers'];
         $telefono = $_POST['mtxttelpers'];
         $celular = $_POST['mtxtcelpers'];
-        $cuenta = $_POST['mtxtcuenpers'];
-        $titular =$_POST['mtxttitulpers'];
+        /*$cuenta = $_POST['mtxtcuenpers'];
+        $titular =$_POST['mtxttitulpers'];*/
         $usuario = $_POST['usuario'];
         $fechaingreso = $_POST['mtxtfecingreso'];
         $estado = $_POST['slcestado'];
         c_guardarpersonal::c_guardarpersol($nombre,$direccion,$dni,$cargo,$salario,$area,$departamento,$provincia
-        ,$distrito,$telefono,$celular,$cuenta,$titular,$usuario,$fechaingreso,$estado);
+        ,$distrito,$telefono,$celular,$usuario,$fechaingreso,$estado);
     }else if($accion == 'area'){
         c_guardarpersonal::c_lstarea('T_AREA','EST_AREA');
     }else if($accion == 'cargo'){
@@ -54,89 +54,100 @@ require_once("m_guardarpersonal.php");
         $distrito = $_POST['sldistpers'];
         $telefono = $_POST['mtxttelpers'];
         $celular = $_POST['mtxtcelpers'];
-        $cuenta = $_POST['mtxtcuenpers'];
-        $titular =$_POST['mtxttitulpers'];
         $usuario = $_POST['usuario'];
         $fechaingreso = $_POST['mtxtfecingreso'];
         $estado = $_POST['slcestado'];
         c_guardarpersonal::c_actualizar($codpersonal,$nombre,$direccion,$dni,$cargo,$salario,$area,$departamento,$provincia
-        ,$distrito,$telefono,$celular,$cuenta,$titular,$usuario,$fechaingreso,$estado);
+        ,$distrito,$telefono,$celular,$usuario,$fechaingreso,$estado);
     }
 
     class c_guardarpersonal
     {
        
         static function c_guardarpersol($nombre,$direccion,$dni,$cargo,$salario,$area,$departamento,$provincia
-        ,$distrito,$telefono,$celular,$cuenta,$titular,$usuario,$fechaingreso,$estado)
+        ,$distrito,$telefono,$celular,$usuario,$fechaingreso,$estado)
         {
-            if(c_guardarpersonal::validar($nombre,$direccion,$dni,$cargo,$salario,$area,$departamento,$provincia
-            ,$distrito,$telefono,$celular,$cuenta,$titular,$usuario,$fechaingreso) == 0){return;}
+            $mensaje = c_guardarpersonal::validar($nombre,$direccion,$dni,$cargo,$salario,$area,$departamento,$provincia
+            ,$distrito,$telefono,$celular,$usuario,$fechaingreso);
+           
             
             $m_personal = new m_guardarpersonal();
-            $c_personal = $m_personal->m_guardarpersonal(strtoupper($nombre),strtoupper($direccion),$dni,$cargo,$salario,$area,$departamento,$provincia
-            ,$distrito,$telefono,$celular,$cuenta,$titular,$usuario,$fechaingreso,$estado);
-            print_r(1);
+            if($mensaje == 1){
+                $c_personal = $m_personal->m_guardarpersonal(strtoupper($nombre),strtoupper($direccion),$dni,$cargo,$salario,$area,$departamento,$provincia
+                ,$distrito,$telefono,$celular,$usuario,$fechaingreso,$estado);
+                $dato = array(
+                    "dato" => $c_personal[0],
+                    "codigo" => $c_personal[1]
+                );
+            }else{
+                $dato = array(
+                    "dato" => "",
+                    "codigo" => $mensaje
+                );
+            }
+            echo json_encode($dato,JSON_FORCE_OBJECT);
+            //print_r(1);
         }
 
         
         static function validar($nombre,$direccion,$dni,$cargo,$salario,$area,$departamento,$provincia
-        ,$distrito,$telefono,$celular,$cuenta,$titular,$usuario,$fechaingreso){
+        ,$distrito,$telefono,$celular,$usuario,$fechaingreso){
             $numero = "/^[0-9]+$/";
             $letras = "/^[a-zA-Z\sñáéíóúÁÉÍÓÚ.,;]+$/";
             $moneda = "/^[0-9\.]+$/";
             
             $cantnombre = explode(" ", $nombre);
             $cantdireccion = explode(" ", $direccion);
-            $titularar = explode(" ",$titular);
+           
             
-            if($fechaingreso == ""){print_r("Error seleccione fecha de ingreso"); return 0;}
-            if(preg_match($numero,$dni) == 0){print_r("Error DNI solo numeros"); return 0;}
-            if(strlen($dni) > 8 ||strlen($dni) < 8 ){print_r("Error DNI solo 8 digitos"); return 0;}
-            if(count($cantnombre) < 3){print_r("Error minimo un nombre y dos apellidos"); return 0;}
-            if(strlen($nombre) > 60 ){print_r("Error nombre del personal sobrepaso limite de 60 caracteres"); return;}
-            if(count($cantdireccion) < 3){print_r("Error direccion invalido"); return 0;}
-            if(preg_match($letras,$nombre) == 0){print_r("Error solo letras en el nombre"); return 0;}
-            if(strlen($direccion) == 0){print_r("Error direccion invalido"); return 0;}
-            if(strlen($direccion) > 100){print_r("Error direccion del personal sobrepaso limite"); return 0;}
-            if(preg_match($moneda,$salario) == 0){print_r("Error salario solo numeros"); return 0;}
+            if($fechaingreso == ""){return "Error seleccione fecha de ingreso";}
+            if(preg_match($numero,$dni) == 0){return "Error DNI solo numeros";}
+            if(strlen($dni) > 8 ||strlen($dni) < 8 ){return "Error DNI solo 8 digitos";}
+            if(count($cantnombre) < 3){return "Error minimo un nombre y dos apellidos";}
+            if(strlen($nombre) > 60 ){return "Error nombre del personal sobrepaso limite de 60 caracteres";}
+            if(count($cantdireccion) < 3){return "Error direccion invalido";}
+            if(preg_match($letras,$nombre) == 0){return "Error solo letras en el nombre";}
+            if(strlen($direccion) == 0){return "Error direccion invalido";}
+            if(strlen($direccion) > 100){return "Error direccion del personal sobrepaso limite";}
+            if(preg_match($moneda,$salario) == 0){return "Error salario solo numeros";}
             
             $saldo = explode(".", $salario);
-            if(strlen($saldo[0]) > 7){print_r("Error campo cantidad, maximo 7 digitos con 2 decimales");return;}
+            if(strlen($saldo[0]) > 7){return "Error campo cantidad, maximo 7 digitos con 2 decimales";}
 
-            if($cargo == "00000"){print_r("Error seleccione cargo"); return 0;}
-            if($area == "00000"){print_r("Error seleccione area"); return 0;}
-            if($departamento == "00000"){print_r("Error seleccione departamento"); return 0;}
-            if($provincia == "00000"){print_r("Error seleccione provincia"); return 0;}
-            if($distrito == "00000"){print_r("Error seleccione distrito"); return 0;}
+            if($cargo == "00000"){return "Error seleccione cargo";}
+            if($area == "00000"){return "Error seleccione area";}
+            if($departamento == "00000"){return "Error seleccione departamento";}
+            if($provincia == "00000"){return "Error seleccione provincia";}
+            if($distrito == "00000"){return "Error seleccione distrito";}
             if($telefono != ""){
-                if(preg_match($numero,$telefono) == 0){print_r("Error telefono solo numeros"); return 0;}
+                if(preg_match($numero,$telefono) == 0){return "Error telefono solo numeros";}
             }else{
                 $telefono = 'NULL';
             }
             
-            if($cuenta == ""){$cuenta = 'NULL';}
-            if(preg_match($numero,$celular) == 0){print_r("Error celular solo numeros"); return;}
-            if(strlen($celular) > 9 || strlen($celular)  < 9){print_r("Error celular solo 9 digitos"); return;}
-            if($titular != ""){
-                if(count($titularar) < 3){print_r("Error minimo un nombre y dos apellidos en titular"); return;}
-                if(preg_match($letras,$titular) == 0){print_r("Error solo letras en titular"); return;}
-                if(strlen($titular) > 50 ){print_r("Error nombre del titular sobrepaso limite de 50 caracteres"); return;}
-            }else{
-                $titular = 'NULL';
-            }
-
+            if(preg_match($numero,$celular) == 0){return "Error celular solo numeros";}
+            if(strlen($celular) > 9 || strlen($celular)  < 9){return "Error celular solo 9 digitos";}
             return 1;
         }
 
         static function c_actualizar($codpersonal,$nombre,$direccion,$dni,$cargo,$salario,$area,$departamento,$provincia
-        ,$distrito,$telefono,$celular,$cuenta,$titular,$usuario,$fechaingreso,$estado)
+        ,$distrito,$telefono,$celular,$usuario,$fechaingreso,$estado)
         {
-            if(c_guardarpersonal::validar($nombre,$direccion,$dni,$cargo,$salario,$area,$departamento,$provincia
-            ,$distrito,$telefono,$celular,$cuenta,$titular,$usuario,$fechaingreso) == 0){return;}
-            $m_personal = new m_guardarpersonal();
-            $c_personal = $m_personal->m_actualizarpers($codpersonal,strtoupper($nombre),strtoupper($direccion),$dni,$cargo,$salario,$area,$departamento,$provincia
-            ,$distrito,$telefono,$celular,$cuenta,$titular,$usuario,$fechaingreso,$estado);
-            print_r(1);
+            $mensaje = c_guardarpersonal::validar($nombre,$direccion,$dni,$cargo,$salario,$area,$departamento,$provincia
+            ,$distrito,$telefono,$celular,$usuario,$fechaingreso);
+            if($mensaje == 1){
+                $m_personal = new m_guardarpersonal();
+                $c_personal = $m_personal->m_actualizarpers($codpersonal,strtoupper($nombre),strtoupper($direccion),$dni,$cargo,$salario,$area,$departamento,$provincia
+                ,$distrito,$telefono,$celular,$usuario,$fechaingreso,$estado);
+                $dato = array(
+                    "dato" => $c_personal,
+                );
+            }else{
+                $dato = array(
+                    "dato" => $mensaje,
+                );
+            }
+            echo json_encode($dato,JSON_FORCE_OBJECT);
         }
 
         static function c_lstarea($tabla,$campo)
@@ -165,6 +176,7 @@ require_once("m_guardarpersonal.php");
             $personal = array();
             $m_personal = new m_guardarpersonal();
             $c_lstpersonal = $m_personal->m_listarpersonal();
+            $codpersonal = $m_personal->m_generar_codpers('COD_PERSONAL','T_PERSONAL');
             for ($i=0; $i < count($c_lstpersonal) ; $i++) { 
                 array_push($personal,array(
                     "code" => $c_lstpersonal[$i][0],
@@ -173,7 +185,8 @@ require_once("m_guardarpersonal.php");
                     "dist" => $c_lstpersonal[$i][9]));
             }
             $dato = array(
-                'dato' => $personal
+                'dato' => $personal,
+                'codper' => $codpersonal
             );
             echo json_encode($dato,JSON_FORCE_OBJECT);
         }

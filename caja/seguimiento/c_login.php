@@ -1,7 +1,8 @@
 <?php
 date_default_timezone_set('America/Lima');
-require_once("../funciones/m_Login.php");
+
 require_once("../funciones/f_funcion.php");
+//require_once("../funciones/m_login.php");
 
 
    $cod_usuario = $_POST['usuario'];

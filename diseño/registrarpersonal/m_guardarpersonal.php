@@ -6,7 +6,8 @@ require_once("../funciones/f_funcion.php");
 class m_guardarpersonal
 {
     private $bd;
-    public function __construct() {
+    
+    public function __construct() { 
         $this->bd=DataBasePlasticos::Conectar();
     }
 
@@ -18,14 +19,14 @@ class m_guardarpersonal
             $datos = $query->fetchAll();
             return $datos;
         } catch (Exception $e) {
-            print_r("Error en la consulta listar".$e);
+            print_r("Error en la consulta listar ". $e);
         }
        
     }
 
 
     public function m_guardarpersonal($nombre,$direccion,$dni,$cargo,$salario,$area,$departamento,$provincia
-    ,$distrito,$telefono,$celular,$cuenta,$titular,$usuario,$fechaingreso,$estado)
+    ,$distrito,$telefono,$celular,$usuario,$fechaingreso,$estado)
     {
       try {
          $fechaingreso = retunrFechaSqlphp($fechaingreso);
@@ -33,14 +34,14 @@ class m_guardarpersonal
           $codpersonal = $this->m_generar_codpers('COD_PERSONAL','T_PERSONAL');
           $query = $this->bd->prepare("INSERT INTO T_PERSONAL(COD_PERSONAL,NOM_PERSONAL1,DIR_PERSONAL,DNI_PERSONAL,COD_CARGO,
           SAL_BASICO,COD_AREA,COD_DEPARTAMENTO,COD_PROVINCIA,COD_DISTRITO,TEL_PERSONAL,CEL_PERSONAL,EST_PERSONAL,
-          FEC_INGRESO,USU_REGISTRO,FEC_REGISTRO,N_CUENTA,TITULAR) VALUES('$codpersonal','$nombre','$direccion','$dni','$cargo','$salario','$area',
-          '$departamento','$provincia','$distrito',$telefono,$celular,'$estado','$fechaingreso','$usuario','$fech_registro','$cuenta','$titular')");
+          FEC_INGRESO,USU_REGISTRO,FEC_REGISTRO) VALUES('$codpersonal','$nombre','$direccion','$dni','$cargo','$salario','$area',
+          '$departamento','$provincia','$distrito',$telefono,$celular,'$estado','$fechaingreso','$usuario','$fech_registro')");
           $personal =  $query->execute();
-          return $personal;
-          $codpersonal = $this->m_generar_codpers('COD_PERSONAL','T_PERSONAL');
-          print_r($codpersonal);
+          $repuesta = array($personal,$codpersonal);
+          return $repuesta;
       } catch (Exception $e) {
-          print_r("Error al registrar nuevo personal ".$e);
+            $repuesta = array("-1","Error al registrar nuevo personal ".$e);
+            return $repuesta;
       }
     }
     
@@ -71,7 +72,7 @@ class m_guardarpersonal
 
 
     public function m_actualizarpers($codpersonal,$nombre,$direccion,$dni,$cargo,$salario,$area,$departamento,$provincia
-    ,$distrito,$telefono,$celular,$cuenta,$titular,$usuario,$fechaingreso, $estado)
+    ,$distrito,$telefono,$celular,$usuario,$fechaingreso, $estado)
     {
       try {
           $fechaingreso = retunrFechaSqlphp($fechaingreso);
@@ -81,7 +82,7 @@ class m_guardarpersonal
           DIR_PERSONAL = '$direccion',COD_DEPARTAMENTO = '$departamento', COD_PROVINCIA = '$provincia',
           COD_DISTRITO = '$distrito',TEL_PERSONAL = '$telefono',CEL_PERSONAL = '$celular',
           EST_PERSONAL = '$estado',FEC_INGRESO = '$fechaingreso',USU_MODIFICO = '$usuario',
-          FEC_MODIFICO = '$fech_registro',N_CUENTA = '$cuenta' , TITULAR = '$titular' 
+          FEC_MODIFICO = '$fech_registro'
           WHERE COD_PERSONAL = '$codpersonal'");
           $personal =  $query->execute();
           return $personal;

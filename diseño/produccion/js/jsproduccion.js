@@ -8,16 +8,17 @@ $(document).ready(function () {
     disabled();
     $("#tempSo").css('display','none');
     $("#contact-tab").css("display",'none');
+    $("#tempsopla").css('display','none');
+    $("#btntimelf").css('display','none');
     $("#txtprodcant").blur(function(){
         $("#tbpasadas > tbody").empty();
         var td =  $("#tbdmateiales tr");
         for (let l = 0; l < td.length; l++) {
-            $(this).val(Number($(this).val()).toFixed(2));
+            $(this).val(Number($(this).val()).toFixed(3));
             cant = $(td[l]).find("td")[3].innerHTML;
             /*110*16/120*/
-            reglatres = parseFloat(Number($(this).val()) * Number(cant) /Number(canform)).toFixed(2)
+            reglatres = parseFloat(Number($(this).val()) * Number(cant) /Number(canform)).toFixed(3)
             $(td[l]).find("td")[2].innerHTML = reglatres;
-            //$(td[l]).find("td")[3].innerHTML = reglatres;
             createparams($(td[l]).find("td")[0].innerHTML,$(td[l]).find("td")[1].innerHTML,reglatres);
         }
     });
@@ -59,7 +60,7 @@ $(document).ready(function () {
           "<i class='icon-trash' title='reiniciar cantidad'></i></a>";
         fila +="<td class='tdcontent' style=display:none>"+tbinsumos[0][0]+"</td>";
         fila +="<td >"+tbinsumos[0][1]+"</td>";
-        fila +="<td >"+parseFloat($("#mdcantxusar").val()).toFixed(2)+"</td>";
+        fila +="<td >"+parseFloat($("#mdcantxusar").val()).toFixed(3)+"</td>";
         fila +="<td  style=display:none>"+$("#slcmdtipo").val()+"</td>";
         //fila +="<td>"+b+"</td>";
         var btn = document.createElement("TR");
@@ -172,6 +173,10 @@ $(document).ready(function () {
 		modified = 1;  
 	}); 
 
+    $("#frmparametros select").change(function () {   
+		modified = 1;  
+	}); 
+
     $("#frmtimelf input").change(function () {   
 		modifidLF = 1;  
 	}); 
@@ -181,6 +186,30 @@ $(document).ready(function () {
         confirmacion(codconfirma);
     })
 
+    $("#txtciclo").keyup(function() {
+        aproxcan = (3600/$(this).val()*$("#txtcavidades").val()*$("#txthoras").val())
+        $("#txtcanturno").val(Math.round(aproxcan));     
+    })
+
+    $("#txtcavidades").keyup(function () {
+        aproxcan = (3600/$("#txtciclo").val()*$(this).val()*$("#txthoras").val())
+        $("#txtcanturno").val(Math.round(aproxcan));    
+    })
+
+    $("#txthoras").keyup(function() {
+        aproxcan = (3600/$("#txtciclo").val()*$("#txtcavidades").val()*$("#txthoras").val())
+        $("#txtcanturno").val(Math.round(aproxcan));     
+    });
+
+    $("#txtciclo").change(function(){
+        modified = 1;  
+    })
+    $("#txtcavidades").change(function(){
+        modified = 1;  
+    })
+    $("#txthoras").change(function(){
+        modified = 1;  
+    })
 });
 
 function autocompletarformula() {
@@ -191,6 +220,7 @@ function autocompletarformula() {
           canform = ui.item.cant;
           $("#txtform").val(ui.item.code);
           $("#txtprod").val(ui.item.prod);
+          $("#txtpesouni").val(ui.item.peso);
           lstitemsfor(ui.item.code)
           var firstTabEl = document.querySelector('#myTab li:first-child button')
           var firstTab = new bootstrap.Tab(firstTabEl)
@@ -203,21 +233,27 @@ function autocompletarformula() {
           $("#slcestimolde").val(ui.item.estiM);
           estilomolde = ui.item.estiM;
           if(ui.item.estiM == "I"){
-            $("#tempSo").css('display','none')
-            $("#contact-tab").css("display",'none');
-            $("#btntimelf").css('display','none');
-            $("#profile-tab").css('display','revert')
-            $("#contact-tab").css('display','revert')
-            $("#tbbotadores").css('display','revert')
-            $("#lblbotador").css('display','revert');
-          }else if(ui.item.estiM == "S"){
             $("#tempSo").css('display','revert')
             $("#contact-tab").css("display",'revert');
+            $("#btntimelf").css('display','none');
+            $("#profile-tab").css('display','revert')
+            $("#tempsopla").css('display','none')
+            $("#tbbotadores").css('display','revert')
+            $("#lblbotador").css('display','revert');
+            $("#tempsopla-tap").css('display','none');
+            $("#empuje-tab").css('display','revert');
+            $("#pres_cierre-tab").css('display','revert');
+          }else if(ui.item.estiM == "S"){
+            $("#tempSo").css('display','none')
             $("#btntimelf").css('display','revert');
             $("#profile-tab").css('display','none')
             $("#contact-tab").css('display','none')
             $("#tbbotadores").css('display','none')
             $("#lblbotador").css('display','none');
+            $("#tempsopla").css('display','revert');
+            $("#empuje-tab").css('display','none');
+            $("#pres_cierre-tab").css('display','none');
+            $("#tempsopla").css('display','revert')
           }
           modifidLF = 0; modified = 0;
         }
@@ -238,6 +274,7 @@ function parametros(formulacod) {
         success: function(r){
             obj = JSON.parse(r);
            if(obj['para'] == 1){
+               console.log(obj['dato']);
             $.each(obj['dato'], function(i, item) {
                 $("#txttemp1").val(item[5]);$("#txttemp2").val(item[6]);
                 $("#txttemp3").val(item[7]);$("#txttemp4").val(item[8]);
@@ -255,30 +292,74 @@ function parametros(formulacod) {
                 $("#cargavel2").val(item[25]);$("#cargavel3").val(item[26])
                 $("#cargavelsucc").val(item[27]);$("#cargapisi1").val(item[28]);
                 $("#cargapisi2").val(item[29]);$("#cargapisi3").val(item[30])
-                $("#cargapisisucci").val(item[31]);$("#inyecpres4").val(item[38])
-                $("#inyecpres3").val(item[39]);$("#inyecpres2").val(item[40])
-                $("#inyecpres1").val(item[41]);$("#inyecvelo4").val(item[42])
-                $("#inyecvelo3").val(item[43]);$("#inyecvelo2").val(item[44])
-                $("#inyecvelo1").val(item[45]);$("#inyecposi4").val(item[46]);
-                $("#inyecposi3").val(item[47]);$("#inyecposi2").val(item[48])
-                $("#inyecposi1").val(item[49]);$("#inyectiemp").val(item[50])
-                $("#velocidad3").val(item[51]);$("#velocidad2").val(item[52])
-                $("#velocidad1").val(item[53]);$("#posicion3").val(item[54])
-                $("#posicion2").val(item[55]);$("#posicion1").val(item[56])
-                $("#tiempo").val(item[57])
-                $("#txtcarriage").val(item[58]);$("#txtclosedd").val(item[59]);
-                $("#txtcuter").val(item[60]);$("#txthead").val(item[61]);
-                $("#txtblow").val(item[62]);$("#txttotalblo").val(item[63]);
-                $("#txtblow1").val(item[64]);$("#txtlf").val(item[65]);
-                $("#txtdefla").val(item[66]);$("#txtunde").val(item[67]);
-                $("#txtcoolin").val(item[68]);$("#txtlock").val(item[69]);
-                $("#txtbottle").val(item[70]);$("#txtcarria").val(item[71]);
-                $("#txtopenmoul").val(item[72]);$("#txtcuter1").val(item[73]);
-                $("#txthead1").val(item[74]);$("#txtblowpin").val(item[75]);
-                $("#txttotalbl").val(item[76]);$("#txtdeflati").val(item[77]);
-                $("#txtblopinS").val(item[78]);$("#txtdeflation").val(item[79]);
-                $("#txtcamvaci1").val(item[80]);$("#txtcooling").val(item[81]);
-                $("#txtcamvaci2").val(item[82]);$("#txtcamvaci3").val(item[83]);
+                $("#cargapisisucci").val(item[31]);
+
+                $("#slemodeexpul").val(item[38].trim());$("#botadocant").val(item[39])
+                $("#presexplu3").val(item[40]);$("#presexplu4").val(item[41]);
+                $("#velexplu3").val(item[42]);$("#velexplu4").val(item[43]);
+                $("#pisiexplu3").val(item[44]);$("#pisiexplu4").val(item[45]);
+                $("#txtTieRetar1").val(item[46]);$("#txtTieRetar2").val(item[47]);
+                $("#txtTiemActua1").val(item[48]);$("#txtairposi1").val(item[49]);
+                $("#txtairposi2").val(item[50]);$("#txtBTiemActua1").val(item[51]);
+                $("#txtBirposi1").val(item[52]);$("#txtBTieRetar1").val(item[53]);
+
+                $("#slcModoActSucci").val(item[54].trim()); $("#carSuckBackDist").val(item[55]);
+                $("#carSuckBackTime").val(item[56]);$("#carSKBkBefChg").val(item[57]);
+                $("#carTiemDesDEspC").val(item[58]);$("#carPosFlujoMold").val(item[59]);
+                $("#carTiempFlujoMo").val(item[60]);$("#carRetarEnfria").val(item[61]);
+                $("#carCoolTime").val(item[62]);
+
+
+                $("#inyecpres4").val(item[63])
+                $("#inyecpres3").val(item[64]);$("#inyecpres2").val(item[65])
+                $("#inyecpres1").val(item[66]);$("#inyecvelo4").val(item[67])
+                $("#inyecvelo3").val(item[68]);$("#inyecvelo2").val(item[69])
+                $("#inyecvelo1").val(item[70]);$("#inyecposi4").val(item[71]);
+                $("#inyecposi3").val(item[72]);$("#inyecposi2").val(item[73])
+                $("#inyecposi1").val(item[74]);$("#inyectiemp").val(item[75])
+                $("#velocidad3").val(item[76]);$("#velocidad2").val(item[77])
+                $("#velocidad1").val(item[78]);$("#posicion3").val(item[79])
+                $("#posicion2").val(item[80]);$("#posicion1").val(item[81])
+                $("#tiempo").val(item[82])
+
+                $("#txtempuPresi1").val(item[83]);$("#txtempuPresi2").val(item[84]);
+                $("#txtempuPresi3").val(item[85]);$("#txtempuPresi4").val(item[86]);
+                $("#txtempuveloc1").val(item[117]);$("#txtempuveloc2").val(item[118]);
+                $("#txtempuveloc3").val(item[119]);$("#txtempuveloc4").val(item[120]);
+                $("#txtempudelay1").val(item[87]);$("#txtemputiemp1").val(item[88]);
+                $("#txtemputiemp2").val(item[89]);$("#txtempupisici").val(item[90]);
+                $("#txtempucorreAtr").val(item[91].trim());
+
+                $("#txtprecieOpnStr").val(item[92]);$("#txtprescierr_presio1").val(item[93]);
+                $("#txtprescierr_presio2").val(item[94]);$("#txtprescierr_presio3").val(item[95]);
+                $("#txtprescierr_presio4").val(item[96]);$("#txtprescierr_velo1").val(item[97]);
+                $("#txtprescierr_velo2").val(item[98]);$("#txtprescierr_velo3").val(item[99]);
+                $("#txtprescierr_velo4").val(item[100]);$("#txtprescierr_posic1").val(item[101]);
+                $("#txtprescierr_posic2").val(item[102]);$("#txtprescierr_posic3").val(item[103]);
+                $("#txtprescierr_posic4").val(item[104]);$("#txtprescierr_presi5").val(item[105]);
+                $("#txtprescierr_presi6").val(item[106]);$("#txtprescierr_presi7").val(item[107]);
+                $("#txtprescierr_presi8").val(item[108]);$("#txtprescierr_veloc5").val(item[109]);
+                $("#txtprescierr_veloc6").val(item[110]);$("#txtprescierr_veloc7").val(item[111]);
+                $("#txtprescierr_veloc8").val(item[112]);$("#txtprescierr_posic5").val(item[113]);
+                $("#txtprescierr_posic6").val(item[114]);$("#txtprescierr_posic7").val(item[115]);
+                $("#txtprescierr_posic8").val(item[116]);
+                /*Timer lf */
+                $("#txtcarriage").val(item[121]);$("#txtclosedd").val(item[122]);
+                $("#txtcuter").val(item[123]);$("#txthead").val(item[124]);
+                $("#txtblow").val(item[125]);$("#txttotalblo").val(item[126]);
+                $("#txtblow1").val(item[127]);$("#txtlf").val(item[128]);
+                $("#txtdefla").val(item[129]);$("#txtunde").val(item[130]);
+                $("#txtcoolin").val(item[131]);$("#txtlock").val(item[132]);
+                $("#txtbottle").val(item[133]);$("#txtcarria").val(item[134]);
+                $("#txtopenmoul").val(item[135]);$("#txtcuter1").val(item[136]);
+                $("#txthead1").val(item[137]);$("#txtblowpin").val(item[138]);
+                $("#txttotalbl").val(item[139]);$("#txtdeflati").val(item[140]);
+                $("#txtblopinS").val(item[141]);$("#txtdeflation").val(item[142]);
+                $("#txtcamvaci1").val(item[143]);$("#txtcooling").val(item[144]);
+                $("#txtcamvaci2").val(item[145]);$("#txtcamvaci3").val(item[146]);
+                /*hasta aqui*/
+                $("#txtciclo").val(item[147]);$("#txtcavidades").val(Math.round(item[148]));
+                $("#txthoras").val(item[149].trim());$("#txtcanturno").val(item[150]);
             });
            } 
         }
@@ -348,7 +429,7 @@ function createtable(obj) {
         var fila='';
         fila +="<td class='tdcontent' style=display:none>"+item[1]+"</td>";
         fila +="<td >"+item[2]+"</td>";
-        fila +="<td >"+Number(item[3]).toFixed(2)+"</td>";
+        fila +="<td >"+Number(item[3]).toFixed(3)+"</td>";
         /*fila +="<td class='tdcontent'>"+Number(item[3]).toFixed(2)+"</td>";*/
         fila +="<td style=display:none>"+item[3]+"</td>";
         fila +="<td style=display:none>P</td>";
@@ -462,7 +543,7 @@ function guardarmolde(cli,molde,t) {
                 $("#mdmolde").modal('hide');
                 document.getElementById("frmmdmolde").reset();
             }
-            else  Mensaje1(obj['e'].trim(),"error");
+            else Mensaje1(obj['e'].trim(),"error");
         },complete: function(){
             $('.ajax-loader').css("visibility", "hidden");
         }
@@ -523,24 +604,25 @@ function guardarprod(removebloq) {
     var frmtimelf = $("#frmtimelf").serialize();
     var materiales = {tds};
     var frmparame = $("#frmparametros").serialize();
-    $.ajax({
+    var cantxturno = $("#txtcanturno").val();
+   $.ajax({
         dataType:'text',
         type: 'POST', 
         url:  'c_produccion.php',
         data:frmprod+"&"+frmparame+"&accion=guardaprod&usu="+usu+"&items="+JSON.stringify(materiales)+
-        "&modified="+modified+"&"+frmtimelf+"&modifiedLF="+modifidLF+"&estilomolde="+estilomolde+"&r="+removebloq,
+        "&modified="+modified+"&"+frmtimelf+"&modifiedLF="+modifidLF+"&estilomolde="+estilomolde+"&r="+removebloq+
+        "&canxtuno="+cantxturno,
         beforeSend: function () {
             $('.ajax-loader').css("visibility", "visible");
         },
         success:  function(e){
-            console.log(e);
             if(e == 1){
                 Mensaje1("Se registro la fabricacion del plastico","success");
                 lmp();
                 para = 0;
-                $("#mdconfirmacion").modal("hide");
+               // $("#mdconfirmacion").modal("hide");
             }else if(e.trim() == "b"){
-                $("#mdconfirmacion").modal("show");
+                //$("#mdconfirmacion").modal("show");
             }else{Mensaje1(e.trim(),"error")}
            
         },complete: function(){
@@ -556,7 +638,8 @@ function lmp() {
     document.getElementById("frmtimelf").reset();
     $('#tbmateriales').find("tr:gt(0)").remove();    
     $('#tbpasadas').find("tr:gt(0)").remove(); 
-    modified = 0; modifidLF = 0;  
+    modified = 0; modifidLF = 0; 
+    tds = []; 
 }
 
 function insertexter(insumo,stocks,tipo) {
@@ -609,7 +692,7 @@ function lppasadas() {
             btn.innerHTML=fila;
             document.getElementById("tbdpasadas").appendChild(btn);
         }
-        celda.text(total.toFixed(2));
+        celda.text(total.toFixed(3));
         celdatipo.text($("#slcmdtipo").val());
         $('#tbmdinsumosa').find("tr:gt(0)").remove();
         $('#mditemformula').modal('hide');
@@ -631,7 +714,7 @@ function createparams(codigo,item2,item3) {
     fila2 +="<td class='tdcontent'>"+codigo+"</td>";
     fila2 +="<td class='tdcontent'>"+codigo+"</td>";
     fila2 +="<td >"+item2+"</td>";
-    fila2 +="<td class='tdcontent'>"+Number(item3).toFixed(2)+"</td>";
+    fila2 +="<td class='tdcontent'>"+Number(item3).toFixed(3)+"</td>";
     fila2 +="<td class='tdcontent'>"+'P'+"</td>";
     var btn = document.createElement("TR");
     btn.innerHTML=fila2;
@@ -655,5 +738,4 @@ function confirmacion(codconfirma) {
         }
     });  
 }
-
 

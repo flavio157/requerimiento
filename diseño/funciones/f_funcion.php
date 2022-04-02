@@ -555,5 +555,18 @@ function f_Cuotas($promedioCuota,$cuotas,$dias){
         return $diff->days;
     }
 
+    function gethora(){
+        date_default_timezone_set('America/Lima');
+        $hora = date("H") .":". date("i");
+        return $hora;
+    }
 
+    function restarfecha($fechaactual,$i){
+        $date1 = new DateTime($fechaactual);
+        $retufch =  date("d-m-Y",strtotime($date1->format("d-m-Y")."-".$i."days")); 
+            if(date('l',strtotime($retufch)) != 'Sunday'){
+                return $retufch;   
+            }
+            return ""; 
+    }
   ?>

@@ -173,7 +173,7 @@
             }
             if(strlen(str_replace(" ", "", $obser)) < 10){print_r("Descripcion debe tener 10 caracteres"); return;}
             if(strlen($obser) > 200){print_r("Error campo observacion sobrepaso el limite de caracteres");return;}
-            $pattern = "/^[a-zA-Z0-9\sñáéíóúÁÉÍÓÚ.,;-]+$/";
+            $pattern = "/[a-zA-Z0-9\sñáéíóúÁÉÍÓÚ.,;-]+$/";
             if(preg_match($pattern,$obser) == 0){print_r("Error descripcion invalida"); return;}
             print_r(1);
         }
@@ -200,24 +200,45 @@
         }
 
 
-
-        
-
         static function c_agregamaterial($molde,$material,$unidad,$cantidad,$usuario){
-           
+            $m_material = new m_moldes(); 
+            $consulta = "molde = '$molde' and tipo = 'P'";
+            $c_moldes = $m_material->m_buscar('V_MOLDES_FABRICACION ',$consulta);
+            if(count($c_moldes)){print_r("Error un molde ya fabricado no se puede modificar"); return;}
+
+
+            $cadena = "molde = '$molde' AND fin_fabricacion = '0' and tipo = 'E'";
+            $c_buscar = $m_material->m_buscar('V_MOLDES_FABRICACION',$cadena);
+            if(count($c_buscar)>0){
+                    print_r("Error no se puede modificar un molde que se encuentra en fabricacion");
+                    return;
+            }
+
+
             if(strlen($molde) == 0){print_r("Error seleccione molde para agregar material"); return;}
             if(strlen($material) == 0){print_r("Error seleccione material"); return;}
             if(strlen($cantidad) == 0){print_r("Error ingrese cantidad del material"); return;}
             if(!is_numeric($cantidad)){print_r("Error solo numeros en cantidad por usar"); return;}
             $prec = explode(".", $cantidad);
             if(strlen($prec[0]) > 4){print_r("Error campo precio, maximo 4 digitos con 3 decimales");return;}
-            $m_material = new m_moldes(); 
+           
             $c_producto = $m_material->m_agregarmaterial($molde,$material,$unidad,$cantidad,$usuario);
             print_r($c_producto);   
         }
 
         static function eliminarmaterial($molde,$material,$clase,$usu){
             $m_material = new m_moldes();
+            $consulta = "molde = '$molde' and tipo = 'P'";
+            $c_moldes = $m_material->m_buscar('V_MOLDES_FABRICACION ',$consulta);
+            if(count($c_moldes)){print_r("Error un molde ya fabricado no se puede modificar"); return;}
+            
+            $cadena = "molde = '$molde' AND fin_fabricacion = '0' and tipo = 'E'";
+            $c_buscar = $m_material->m_buscar('V_MOLDES_FABRICACION',$cadena);
+            if(count($c_buscar)>0){
+                    print_r("Error no se puede modificar un molde que se encuentra en fabricacion");
+                    return;
+            }
+
             if($clase == '00002' || $clase == '00003'){
                 $c_eliminar = $m_material->m_eliminar($molde,$material);
                 print_r($c_eliminar);
@@ -232,6 +253,10 @@
 
         static function c_actualmaterial($molde,$material,$cantidad,$usu){
             $m_material = new m_moldes(); 
+            $consulta = "molde = '$molde' and tipo = 'P'";
+            $c_moldes = $m_material->m_buscar('V_MOLDES_FABRICACION ',$consulta);
+            if(count($c_moldes)){print_r("Error un molde ya fabricado no se puede modificar"); return;}
+
             $c_actualizar = $m_material->m_actualmaterial($molde,$material,$cantidad,$usu);
 
             print_r($c_actualizar);

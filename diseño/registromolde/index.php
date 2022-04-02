@@ -1,10 +1,13 @@
 <?php
+
+header('Content-Type: text/html; charset=UTF-8');
+
 if (session_status() == PHP_SESSION_NONE) {
     session_start();
 }
-$ofi = $_SESSION["ofi"];
+/*$ofi = $_SESSION["ofi"];
 $zon = $_SESSION["zon"];
-$cod = $_SESSION["cod"];
+$cod = $_SESSION["cod"];*/
 require_once("../menu/index.php");
 ?>
 
@@ -17,9 +20,7 @@ require_once("../menu/index.php");
     <script src="../js/bootstrap5.bundel.min.js"></script>
     <script src="../js/sweetalert2@11.js"></script>
     <script src="../js/jquery-ui-autocompletar.js"></script>
-
     <link rel="stylesheet" href="//code.jquery.com/ui/1.13.0/themes/base/jquery-ui.css">
-    
     <script src="./js/jsregistromolde.js"></script>
     <link rel="STYLESHEET" type="text/css" href="../fonts/style.css">
     <link rel="STYLESHEET" type="text/css" href="./css/responsive.css">
@@ -36,9 +37,9 @@ require_once("../menu/index.php");
    <section>  
         <div class="main"> 
             <form id="frmregistromolde">
-                <input type="text" id="vroficina" style="display: none;" value="<?php echo $ofi?>"/>
-                <input type="text" id="vrzona" style="display: none;" value="<?php echo $zon?>"/>
-                <input type="text" id="vrcodpersonal" style="display: none;" value="<?php echo $cod?>"/>
+                <input type="text" id="vroficina" style="display: none;" value="<?php echo 'SMP2'//$ofi?>"/>
+                <input type="text" id="vrzona" style="display: none;" value="<?php echo  $zon?>"/>
+                <input type="text" id="vrcodpersonal" style="display: none;" value="<?php echo '0215'//$cod?>"/>
                 
                 <div class="row mb-3">
                     <div class="col g-3">
@@ -98,6 +99,19 @@ require_once("../menu/index.php");
                         </select>
                     </div>
                 </div>
+                <div class="row mb-2">
+                    <div class="col-auto">
+                        <label class="form-label">Estilo de Molde</label>
+                        <select class="form-select" id="slcestilo" name="slcestilo">
+                            <option value="0" selected>Seleccionar Estilo</option>     
+                            <option value="I">Inyección</option>
+                            <option value="S">Soplado</option>
+                        </select>
+                    </div>
+                </div>    
+              
+              
+
                
                 <div class="row">
                     <div class="col">
@@ -122,6 +136,7 @@ require_once("../menu/index.php");
                         <div class="input-group">
                             <input type="text"  name="txtcodmaterialexter" id="txtcodmaterialexter" style="display: none;">        
                             <input type="text" name="txttipomat" id="txttipomat" style="display: none;">
+                            <input type="text" name="txtcantidad" id="txtcantidad" style="display: none;">
                             <input type="text" class="form-control mayu" name="txtmaterialexter" id="txtmaterialexter" autocomplete="off">
                             <a class="btn btn-success" id="btnlstmaterial" data-bs-toggle="modal" data-bs-target="#mdmaterial">
                                <i class="icon-magnifying-glass" title="Buscar Molde"></i>

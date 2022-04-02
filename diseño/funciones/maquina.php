@@ -1,8 +1,9 @@
 <?php
-
+os_info();
 function os_info()
 {
-    $uagent = $_SERVER['HTTP_USER_AGENT'];
+    $uagent = $_SERVER['HTTP_USER_AGENT'] . "<br/>";
+    //$sistema = '';
     global $uagent;
     $oses   = array(
         'Win311' => 'Win16',

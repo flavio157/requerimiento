@@ -107,6 +107,7 @@ class m_comprobante
                         return 0;
                         break;
                     }
+                    print_r($dato[2]);
                     $query3 = $this->bd->prepare("UPDATE T_ALMACEN_INSUMOS SET 
                     STOCK_ACTUAL = (STOCK_ACTUAL+$dato[2]) where COD_PRODUCTO = '$dato[0]'");
                      

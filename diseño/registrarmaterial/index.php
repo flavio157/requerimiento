@@ -3,9 +3,9 @@
 if (session_status() == PHP_SESSION_NONE) {
     session_start();
 }
-$ofi = $_SESSION["ofi"];
+/*$ofi = $_SESSION["ofi"];
 $zon = $_SESSION["zon"];
-$cod = $_SESSION["cod"];
+$cod = $_SESSION["cod"];*/
 require_once("../menu/index.php");
 ?>
 
@@ -20,15 +20,31 @@ require_once("../menu/index.php");
     <script src="../js/bootstrap5.bundel.min.js"></script>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6" crossorigin="anonymous">
     <script src="../js/sweetalert2@11.js"></script>
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.13.0/themes/base/jquery-ui.css">
+    <script src="../js/jquery-ui-autocompletar.js"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
+<style>
+    .ui-autocomplete.ui-front {
+    max-height: 300px;
+    width: 100px;
+    overflow-y: auto;   
+    overflow-x: hidden; 
+    z-index:1100 !important;
+}
+
+.my-class-form-control-group{
+  display:flex;
+  align-items:Center;
+}
+</style>
 <body style="background: #f5f5f5;">
    <section>  
         <div class="main"> 
         <form id="frmguardaprod" name="frmguardaprod">
-                <input type="text" id="vroficina" style="display: none;" value="<?php echo  $ofi?>"/>
-                <input type="text" id="vrzona" style="display: none;" value="<?php echo  $zon?>"/>
-                <input type="text" id="vrcodpersonal" style="display: none;" value="<?php echo  $cod?>"/>
+                <input type="text" id="vroficina" style="display: none;" value="<?php echo $ofi?>"/>
+                <input type="text" id="vrzona" style="display: none;" value="<?php echo $zon?>"/>
+                <input type="text" id="vrcodpersonal" style="display: none;" value="<?php echo '0215'//$cod?>"/>
                 <div class="row">
                     <div class="col mb-2">
                     <center><label class="titulos">Registro de material</label></center>
@@ -53,7 +69,7 @@ require_once("../menu/index.php");
                 <div class="row g-2">
                     <div class="col">
                         <label  for="formentrega" class="form-label">Categoria</label>
-                        <select class="form-select" id="slcategoria" aria-label="Default select example">
+                        <select class="form-select" id="slcategoria" name="slcategoria" aria-label="Default select example">
                             <option value="" selected>SELECCIONE CATEGORIA</option>
                         </select>
                     </div>
@@ -75,16 +91,32 @@ require_once("../menu/index.php");
                     </div>
                 <div class="col">
                     <label for="formfpago" class="form-label">Clase</label>
-                    <select class="form-select" id="slclase" aria-label="Default select example">
+                    <select class="form-select" id="slclase" name="slclase" aria-label="Default select example">
                         <option value="" selected>SELECCIONE CATEGORIA</option>
                     </select>
                 </div>
             </div>
         </form>
-        <div class="modal-footer">
+       <!-- <div class="modal-footer">
             <button type="button" id="btnguardarprod" class="btn btn-primary">Guardar</button>
-        </div>
-        </div>     
+        </div>-->
+
+        <div class="row">
+            <div class="col g-4 divbotones">
+               <button  type="button" id="btnnuevo"  class="btn btn-primary mb-2 pull-left ">
+                <i class="icon-eraser" title="Limpiar Formulario"></i>
+                Nuevo
+                </button>
+               </div>
+                <div class="col g-4 divbotones">
+                <button type="button" id="btnguardarprod"  class="btn btn-primary" style="float: right;">
+                <i class="icon-save" title="Guardar datos"></i>
+                    Guardar
+                    </button>
+                </div> 
+        </div>  
+        </div> 
+          
     </section>
 </body>
 </html>

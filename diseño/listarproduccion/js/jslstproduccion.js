@@ -1,17 +1,14 @@
 var usu = '';t = 'm';produccion='';cantxinsumo = ''; tipobtn = 'a';color = '';lstpersonal = [];
-var cab = 0;totalpaquete = 0;cantidad=0;var qrcode = '';faltacaja = 0 ;sobra=0;merma ='';
-var doc;tipofipd = 0;ocuren = 0;control = 0;
-var counter;var hm; var ds; var bl;var hd;
+var cab = 0;totalpaquete = 0;cantidad=0;faltacaja = 0 ;sobra=0;merma ='';
+var doc;tipofipd = 0;ocuren = 0;control = 0; sobras = 0;
+
 $(document).ready(function () {
    usu = $("#vrcodpersonal").val();
    lstitemsfor();hora();disabletab();
    autocompletarpersonal();parametros()
-   modalcontrol();
-    controlcalidad();
-   setInterval(bxcontrol,1000);
-   
- 
-
+   setInterval(controlcalidad,1000); 
+   updatehorabloq(); 
+   sessionStorage.removeItem('calidad');
     $('#tbproduccion').on('click', 'tbody tr', function(event) {
         $(this).addClass('highlight').siblings().removeClass('highlight');
         produccion = $(this).find("td:eq(0)").text(); 
@@ -32,6 +29,8 @@ $(document).ready(function () {
 
     $("#btncloseavan").on('click',function(){
         t = 'm'
+        $("#btnregisproduc").attr("disabled","disabled")
+        $("#btngavances").removeAttr("disabled")
     });
 
     $("#btnmodimerma").on('click',function() {
@@ -39,7 +38,8 @@ $(document).ready(function () {
     })
 
     $("#btnmodresiduos").on('click',function() {
-      t='r'; listresiduos('r'); disabled();
+        t='r'; listresiduos('r'); disabled();
+        
     });
 
     $("#btnmoddesecho").on('click',function() {
@@ -48,6 +48,14 @@ $(document).ready(function () {
 
     $(document).on('click','#btnmodificar',function() {
         t='m'; listresiduos('m'); enabled();
+    })
+
+    $("#mdcerraresidu").on('click',function () {
+        document.getElementById("frmdmresiduos").reset();
+    })
+
+    $("#cerrarmodamidome").on('click',function() {
+        document.getElementById("frmdmresiduos").reset();
     })
 
     $("#btnguardar").on('click',function(){
@@ -69,14 +77,19 @@ $(document).ready(function () {
         if(faltacaja == 0 && tipobtn == 'f'){finproduccion($("#mdcodprod").val()); return;}
         verificarfinprod($("#mdcodprod").val(),$("#mdcajasxsacar").val(),$("#mdcantxcaja").val(),
         $("#mdtotal").val());
+      
     })
 
     $(document).on('click','#btnfinalizar',function() {
+       
         inputavance(this,'t'); tipobtn = 'f';
+        $("#mdcajasxsacar").removeAttr("disabled")
     })
 
     $(document).on('click','#btnavances',function(){
         inputavance(this,'a'); tipobtn = 'a'
+        $("#mdcajasxsacar").removeAttr("disabled")
+        
     });
 
     $('#mdcantxcaja').keyup(function(e) {
@@ -109,13 +122,14 @@ $(document).ready(function () {
         tara = $("#mdtara").val();
         total = $("#mdtotal").val();
         topaqu = (cantidad * cant + sobra);
-        if(topaqu >= total){fin = 0}else{fin = 1}
-        
+        if(topaqu >= Math.trunc(total)){fin = 1}else{fin = 0}
+       
         if(tipobtn == 'f' && cant == 0){
+          
             lstavance($("#mdcodprod").val())
         }else if(tipobtn == 'f' && cant != 0){
             perdida($("#mdcodprod").val(),cant,lote,fecha,peso,cantidad,tara,total,fin)
-          }
+        }
 
         if(tipobtn == 'a'){
             if(cant > totalpaquete){Mensaje1("Error paquetes a sacar es mayor a lo indicado","error");return;}
@@ -148,7 +162,7 @@ $(document).ready(function () {
     })
 
     $("#mdmaquinista").keydown(function(e) {
-        if (e.keyCode == 8) $('#mdcodmaquinista').val('');
+        if(e.keyCode == 8) $('#mdcodmaquinista').val('');
     });
 
     $("#mdbloque").on('click',function(){
@@ -160,7 +174,7 @@ $(document).ready(function () {
         '','',"i");
     });
 
-    $("#btnsoplado").on('click',function() {
+    $(document).on('click',"#btnsoplado",function() {
         guardarcalidad($("#txtScolor").val(),'','',$("#txtSpeso").val(),$("#txtSobservac").val(),
         $("#chcSestabilid").is(":checked"),"s");
     });
@@ -170,13 +184,7 @@ $(document).ready(function () {
         desbloqueo(coddesblo);
     });
 
-    $("#btncersopla").on('click',function () {
-        control = 1;
-    })
-
-    $("#btncerrainye").on('click',function(){
-        control = 1;
-    })
+   
 });
 
 function autocompletarpersonal() {
@@ -200,8 +208,6 @@ function buscarxpersonal(){
       } ,
       success:  function(response){
           obj = JSON.parse(response);
-          $("#mdmaquinista").val(obj['nombre']);
-          $("#mdcodmaquinista").val(usu);
           $.each(obj['dato'], function(i, item) {
             lstpersonal.push(item);
           });
@@ -280,7 +286,6 @@ function createtable(obj) {
 }
 
 function gocurrencia(ocurrencia,detepro){
-  //  console.log(detepro);
     id = $("#mdidocurrecia").val();
     $.ajax({
         dataType:'text',
@@ -343,7 +348,6 @@ function guardar(fechincidencia,horaincidencia,observacion,tipomerma,cantidad,fa
         },beforeSend: function () {
             $('.ajax-loader').css("visibility", "visible");
         },success: function(e) {
-           
             if(e==1){
                 mensaje = (t == 'm') ? "la merma" : (t == 'd') ? "el desecho" : " los sobrantes";
                 Mensaje1("Se registro correctamente "+mensaje,"success"); 
@@ -411,7 +415,7 @@ function guardaravances(frm){
         type: 'POST', 
         url:  'c_produccion.php',
         data:frm+"&accion=gavances&usu="+usu+"&produccion="+produccion+
-            "&total="+totalpaquete+"&mdtotal="+mdtotal
+            "&total="+totalpaquete+"&mdtotal="+mdtotal+"&sobras="+sobras
         ,beforeSend: function () {
             $('.ajax-loader').css("visibility", "visible");
         },success:function(re){
@@ -427,6 +431,7 @@ function guardaravances(frm){
                     $("#btnregisproduc").attr('disabled',true);
                     $("#btngavances").removeAttr('disabled');
                 }
+                $("#mdcajasxsacar").attr("disabled","disabled")
                 cab = 1;
             }else{
                 Mensaje1(obj['suc'],"error");
@@ -456,7 +461,8 @@ function v_avances($produccion,inavance){
                 $("#mdcantxcaja").attr('disabled',true);
                 $("#mdcanxbolsa").attr('disabled',true);
                 $("#mdcajasxsacar").val(obj['falta']);
-                sobra = (obj['dato'][0][7] * obj['dato'][0][6]);
+                sobra = (obj['dato'][0][7] * obj['dato'][0][16]);
+                
                 totalpaquete = faltacaja = obj['falta']
                 $("#lblmensaje").text('Paquetes restantes ' + obj['falta']);
                 if(inavance == 't' && faltacaja == 0){$("#btngavances").attr('disabled',true);
@@ -485,13 +491,14 @@ function v_avances($produccion,inavance){
 }
 
 function guardaravancesits(produ,avance,producto,turno,maquinista,tara){
+   sobras1 = $("#mdtotal").val() %  $("#mdcantxcaja").val();
    $.ajax({
         dataType:'text',
         type: 'POST', 
         url:  'c_produccion.php',
         data:"accion=gavancesitems&avance="+avance+"&usu="+usu+"&produ="+produ+
         "&mdproduc="+producto+"&faltante="+faltacaja+"&turno="+turno+"&maquinista="+maquinista+
-        "&mtara="+tara
+        "&mtara="+tara+"&sobras1="+sobras1
         ,beforeSend: function () {
             $('.ajax-loader').css("visibility", "visible");
         },
@@ -503,6 +510,7 @@ function guardaravancesits(produ,avance,producto,turno,maquinista,tara){
                if(obj['termi'] == 1 && tipobtn == 'f'){faltacaja = 0;return;}
                $("#btnregisproduc").attr('disabled',true);
                $("#btngavances").removeAttr('disabled');
+               $("#mdcajasxsacar").attr("disabled","disabled")
             }
         },complete: function(){
             if(obj['suc'] != true){
@@ -541,7 +549,8 @@ function lstavance(produccion){
             $.each(obj['dato'], function(i, item) {
               sum = (Number(i)+Number(1));
               maquini = item[12].trim().split(" ");
-              demoFromHTML(item[6],item[3],item[4],item[10],item[7],item[9],item[8],obj['tipo'],obj['id'],maquini[0]+" "+maquini[1],item[13],obj['fila'],sum)
+              if(maquini[1] == undefined){maquini[1] = "";}
+              demoFromHTML(item[16],item[3],item[4],item[10],item[7],item[9],obj['malo'],obj['tipo'],obj['id'],maquini[0]+" "+maquini[1],item[13],obj['fila'],sum)
             }); 
            }else{
               Mensaje1("Error no hay datos que imprimir","error");
@@ -551,7 +560,8 @@ function lstavance(produccion){
 } 
 
 function demoFromHTML(cant,lote,fecha,peso,cantidad,tara,total,fin,avance,maquinista,turno,filas,sum) {
-  
+    if(maquinista ==  "undefined"){Mensaje1("Error seleccione maquinista","error"); return;}
+    sobras1 = $("#mdtotal").val() %  $("#mdcantxcaja").val();
     turno = (turno.trim() == 'M') ? 'Mañana' : 'Tarde';
     pesoneto = 0;
     doc.setFontSize(14);doc.setFontType('normal'); doc.setFont(undefined,'bold')
@@ -559,18 +569,23 @@ function demoFromHTML(cant,lote,fecha,peso,cantidad,tara,total,fin,avance,maquin
     if(Math.floor(cant / 8) == 0){hojas = 1}else{hojas = Math.floor(cant / 8)}
     if(cant % 8 != 0){hojas += 1}
     for (let i = 0; i < cant; i++) {
-        pesoneto = Number(peso * cantidad).toFixed(2);
-        if(fin == 0 && (i+1) == cant && (total % cantidad) != 0 ){
-        cantidad = total % cantidad; peso = (peso / cantidad)}
-        if(tipofipd % 2 == 0){x = 5; xr = 0; xx = 55 ; xqr = 32}else{x = 107 ;xr=105; xx = 57 * 2.78;xqr = 59 *2.30}
+        pesoneto = Number(peso * cantidad).toFixed(3);
+        console.log(fin == 1 , cant == (i+1) , sobras1 +">"+ 0)
+        if(fin == 1 && cant == (i+1) && sobras1 > 0){
+            cantidad = sobras1 ;
+            pesoneto = (cantidad * peso ).toFixed(3);
+            cantidad = cantidad
+        }
+       
+        if(tipofipd % 2 == 0){x = 5; xr = 0; xx = 52 ; xqr = 32}else{x = 107 ;xr=105; xx = 56 * 2.78;xqr = 59 *2.30}
         if(tipofipd == 8){doc.addPage(); tipofipd = 0;}
         if(tipofipd == 0 || tipofipd == 1){
             doc.rect(xr, 74 * 0, 105, 74.20)
                 doc.text('FECHA: '+fecha, x, 9); 
                 doc.text('CANTIDAD: '+cantidad + " Uds.",  xx, 9); 
                 doc.text('PESO NETO: ' + pesoneto +" Kg",x, 19); 
-                doc.text('TARA: '+ Number(tara).toFixed(2) +" Kg",x, 29); 
-                doc.text('PESO TOTAL: '+(Number(pesoneto)+ Number(tara)).toFixed(2) +" Kg",x, 39);
+                doc.text('TARA: '+ Number(tara).toFixed(3) +" Kg",x, 29); 
+                doc.text('PESO TOTAL: '+(Number(pesoneto)+ Number(tara)).toFixed(3) +" Kg",x, 39);
                 doc.text('LOTE: '+lote, x, 49);
                 doc.text('TURNO: '+turno, x, 59);
                 doc.text('MAQUINISTA: '+maquinista, x, 69);
@@ -580,8 +595,8 @@ function demoFromHTML(cant,lote,fecha,peso,cantidad,tara,total,fin,avance,maquin
                 doc.text('FECHA: '+fecha, x, 83);
                 doc.text('CANTIDAD: '+cantidad + " Uds.", xx, 83); 
                 doc.text('PESO NETO: '+ pesoneto +" Kg",x, 93);
-                doc.text('TARA: '+ Number(tara).toFixed(2) +" Kg", x, 103);
-                doc.text('PESO TOTAL: '+(Number(pesoneto)+ Number(tara)).toFixed(2) +" Kg", x, 113);
+                doc.text('TARA: '+ Number(tara).toFixed(3) +" Kg", x, 103);
+                doc.text('PESO TOTAL: '+(Number(pesoneto)+ Number(tara)).toFixed(3) +" Kg", x, 113);
                 doc.text('LOTE: '+lote, x, 123);
                 doc.text('TURNO: '+turno, x, 133);
                 doc.text('MAQUINISTA: '+maquinista, x, 143);
@@ -591,8 +606,8 @@ function demoFromHTML(cant,lote,fecha,peso,cantidad,tara,total,fin,avance,maquin
                 doc.text('FECHA: '+fecha, x, 157);
                 doc.text('CANTIDAD: '+cantidad + " Uds.", xx, 157);
                 doc.text('PESO NETO: '+ pesoneto +" Kg", x, 167);
-                doc.text('TARA: '+ Number(tara).toFixed(2) +" Kg", x, 177);
-                doc.text('PESO TOTAL: '+(Number(pesoneto)+ Number(tara)).toFixed(2) +" Kg", x, 187);
+                doc.text('TARA: '+ Number(tara).toFixed(3) +" Kg", x, 177);
+                doc.text('PESO TOTAL: '+(Number(pesoneto)+ Number(tara)).toFixed(3) +" Kg", x, 187);
                 doc.text('LOTE: '+lote, x, 197);
                 doc.text('TURNO: '+turno, x, 207);
                 doc.text('MAQUINISTA: '+maquinista,x, 217);
@@ -603,8 +618,8 @@ function demoFromHTML(cant,lote,fecha,peso,cantidad,tara,total,fin,avance,maquin
                 doc.text('FECHA: '+fecha, x, 231);
                 doc.text('CANTIDAD: '+cantidad + " Uds.",xx, 231);
                 doc.text('PESO NETO: '+pesoneto +" Kg", x, 241);
-                doc.text('TARA: '+ Number(tara).toFixed(2) +" Kg", x, 251);
-                doc.text('PESO TOTAL: '+(Number(pesoneto)+ Number(tara)).toFixed(2) +" Kg", x, 261);
+                doc.text('TARA: '+ Number(tara).toFixed(3) +" Kg", x, 251);
+                doc.text('PESO TOTAL: '+(Number(pesoneto)+ Number(tara)).toFixed(3) +" Kg", x, 261);
                 doc.text('LOTE: '+lote, x, 271);
                 doc.text('TURNO: '+turno, x, 281);
                 doc.text('MAQUINISTA: '+maquinista, x, 291);
@@ -661,6 +676,7 @@ function finproduccion(produccion){
             "accion" : 'finproduc',
             "produccion" : produccion,
             "usu" : usu,
+            "color":color
         },beforeSend: function () {
             $('.ajax-loader').css("visibility", "visible");
         },success:function(e){
@@ -689,14 +705,16 @@ function perdida(produccion,cant,lote,fecha,peso,cantidad,tara,total,fin) {
             "produccion" : produccion,
             "fecha" : fecha,
             "turno" : tur,
-            "maquinista" :maquinista
+            "maquinista" :maquinista,
+            "cant" : cant,
+            "fin1":fin
         },success:function(e){
-         
             obj = JSON.parse(e);
             if(obj['mensaje'] == 0){
                 doc = new jsPDF();tipofipd = 0;
                 total = (total - obj['e']);
-                demoFromHTML(cant,lote,obj['fecha'],peso,cantidad,tara,total,fin,'',arraymaqui[0] + " " +arraymaqui[1] ,tur);
+                if(arraymaqui[1] == undefined){arraymaqui[1] = "";}
+                demoFromHTML(cant,lote,obj['fecha'],peso,cantidad,tara,obj['e'],obj['fin'],'',arraymaqui[0] + " " +arraymaqui[1] ,tur);
             }else{
                 Mensaje1(obj['mensaje'],'error');
             }
@@ -769,100 +787,54 @@ function actualizaresiduos() {
         }
     });
 }
+
 function controlcalidad() {
-    $.ajax({
-        dataType:'text',
-        type: 'POST', 
-        url:  'c_produccion.php',
-        data:{
-            "accion":"controlcali","usu":usu
-        }
-        ,success:function(e){
-            console.log(e);
-            fec = [];dato = "";
-            o = JSON.parse(e);
-            if(o['c'] > 0){
-                $.each(o['blo'], function(i, item) {
-                    if(fec.indexOf(item[0]) == -1 ){
-                      if(dato != ""){dato +="<br>"}  
-                      dato = dato +     item[0] +": " + item[1];
-                      fec.push(item[0]);
-                    }else{dato += item[1] ;
+        $.ajax({
+            dataType:'text',
+            type: 'POST', 
+            url:  'c_produccion.php',
+            data:{
+                "accion":"controlcali","usu":usu
+            }
+            ,success:function(e){
+                console.log(e);
+                fec = [];dato = "";
+                obj = JSON.parse(e);
+                if(obj['modal'] == ''){
+                    sessionStorage.removeItem('calidad');
+                    $("#mdcontcalInyeccion").modal("hide");
+                    $("#mdcontcalsoplado").modal("hide");
+                } 
+
+                if(Object.keys(obj['horas']).length > 0 && sessionStorage.getItem('codpro') == null){
+                    $.each(obj['horas'], function(i, item) {
+                        if(fec.indexOf(item[0]) == -1 ){
+                          if(dato != ""){dato +="<br>"}  
+                          dato = dato.replaceAll('-', '/') +  item[0] +": " + item[1];
+                          fec.push(item[0]);
+                        }else{dato =dato.replaceAll('-', '/') + " " +item[1];}
+                    });
+                    if(sessionStorage.getItem('codpro') == null){
+                        $("#fecblo").html(dato);
+                        $("#mdbloqueo").modal("show");
                     }
-                });
-                $("#fecblo").html(dato);
-                if(o['cl'] == ""){
-                    $("#mdbloqueo").modal("show");
+                    return;
                 }
+              
+               if(obj['modal'] == 'm'
+               && sessionStorage.getItem('calidad') == null){
+                   if(obj['estilo'] == 'I'){
+                        $("#mdcontcalInyeccion").modal("show");
+                   }else if(obj['estilo'] == 'S'){
+                        $("#mdcontcalsoplado").modal("show");
+                   };
+               }
             }
-            control = 1;
-            $("#mdcontcalInyeccion").modal("hide");
-            $("#mdcontcalsoplado").modal("hide");
-            $("#btnsoplado").css("display","none");
-            $("#btninyecci").css("display","none");
-        }
-    });
+        });    
+   
+   
 }
 
-function modalcontrol(){
-    $.ajax({
-        dataType:'text',
-        type: 'POST', 
-        url:  'c_produccion.php',
-        data:{
-            "accion":"modalcontrol","usu":usu
-        }
-        ,success:function(e){
-            b = JSON.parse(e);
-            console.log(b)
-            hm = b['hm'];
-            if(hm != ""){
-                ds = b['d'][0]['6'];
-                bl = b['h'];
-                hd = b['hd'];
-            }
-            
-        }
-    });
-}
-
-function bxcontrol() {
-    if(hm != ""){
-        g = hm.split(":");
-        f = bl.split(":");
-        dh = hd.split(":");    
-        var hoy = new Date();
-        var hora = hoy.getHours();
-        var minuto = hoy.getMinutes();
-        if (minuto < 10) {
-            minuto = "0" + minuto
-        };
-        if (hora < 10) {
-            hora = "0" + hora
-        };
-        //console.log(hora +"=="+ f[0] +"///"+ minuto +"=="+ f[1]);
-       //igualar a la hora que trae 
-       if(hora == f[0] && minuto == f[1]){
-            modalcontrol();
-       }
-       console.log(hora +"=="+ dh[0] +"///"+ minuto +"=="+ dh[1])
-       if(hora ==  dh[0] && minuto ==  dh[1]){
-           controlcalidad();
-       }
-       console.log(hora +"=="+ g[0] +"///"+ minuto +"=="+ g[1]);
-        if(hora == g[0] && minuto == '40' && control == 0){
-            if(ds == 'I'){
-                $("#btninyecci").css("display","block");
-                $("#mdcontcalInyeccion").modal("show");
-                control = 1;
-            }else if(ds == 'S'){
-                $("#btnsoplado").css("display","block");
-                $("#mdcontcalsoplado").modal("show");
-                control = 1;
-            };
-        }
-    }
-}
 
 function confirmacion(title,text,icon){
     Swal.fire({
@@ -902,6 +874,7 @@ function guardarcalidad(color,pureza,rebaba,peso,observacion,estabilidad,tcalid)
                 $("#btninyecci").css("display","none");
                 $("#mdcontcalInyeccion").modal("hide");
                 $("#mdcontcalsoplado").modal("hide");
+                sessionStorage.setItem('calidad','registro')
                 control = 1;
             }else{
                 Mensaje1(e,"error");
@@ -909,7 +882,6 @@ function guardarcalidad(color,pureza,rebaba,peso,observacion,estabilidad,tcalid)
         }
     }); 
 }
-
 function parametros() {
     $.ajax({
         dataType:'text',
@@ -938,7 +910,26 @@ function desbloqueo(coddesblo) {
                 Mensaje1(e,"error");
             }else{
                 $("#mdbloqueo").modal("hide")
-                control = 0;
+                sessionStorage.removeItem('codpro');
+                sessionStorage.setItem('codpro',coddesblo)
+                
+            }
+        }    
+    })
+}
+
+function updatehorabloq(){
+    $.ajax({
+        dataType:'text',
+        type: 'POST', 
+        url:  'c_produccion.php',
+        data:{
+           "accion":"horbloq",
+           "usu" : usu
+        },success:function(e){
+            console.log(e);
+            if(e != 1){
+               //Mensaje1(e,"error");
             }
         }    
     })

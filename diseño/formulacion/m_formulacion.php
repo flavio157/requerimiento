@@ -49,16 +49,17 @@ class m_formulacion
     }
 
     public function m_guardarformulacion($nomfor,$codproducto,$cantxformula
-    ,$unidamedida,$items,$usu){
+    ,$unidamedida,$items,$usu,$idmolde,$manana,$tarde){
         $maquina = os_info();
         $hora = gethora();
         $this->bd->beginTransaction();
         try {
             $codform = $this->m_select_generarcodigo('COD_FORMULACION','T_FORMULACION',5);
             $query = $this->bd->prepare("INSERT INTO T_FORMULACION(COD_FORMULACION,NOM_FORMULACION,
-            COD_PRODUCTO,COD_CATEGORIA,HOR_GENERADO,CAN_FORMULACION,UNI_MEDIDA,USU_REGISTRO) 
+            COD_PRODUCTO,COD_CATEGORIA,HOR_GENERADO,CAN_FORMULACION,UNI_MEDIDA,USU_REGISTRO,ID_MOLDE,
+            TURNO_M,TURNO_T) 
             VALUES('$codform','$nomfor','$codproducto','00001','$hora','$cantxformula',
-            '$unidamedida','$usu')");
+            '$unidamedida','$usu','$idmolde',$manana,$tarde)");
             $query->execute();
             
             foreach ($items->tds as $dato){
@@ -123,17 +124,31 @@ class m_formulacion
         }
     }
 
-    public function m_modificar_formu($codform,$nombre,$codprod,$uni,$canformula,$usumodi)
+    public function m_modificar_formu($codform,$nombre,$codprod,$uni,$canformula,$usumodi,$molde,$manana,$tarde)
     {
         $fecha = retunrFechaSqlphp(date("Y-m-d"));
         try {
             $query = $this->bd->prepare("UPDATE T_FORMULACION SET NOM_FORMULACION = '$nombre', 
             COD_PRODUCTO ='$codprod',CAN_FORMULACION = '$canformula' ,UNI_MEDIDA = '$uni', USU_MODIFICO ='$usumodi',
-            FEC_MODIFICO = '$fecha' WHERE COD_FORMULACION = '$codform'");
+            FEC_MODIFICO = '$fecha',ID_MOLDE = '$molde',TURNO_M = $manana,TURNO_T = $tarde WHERE COD_FORMULACION = '$codform'");
             $result = $query->execute();
             return $result;
         } catch (Exception $e) {
             print_r("Error al actualizar la formula " . $e);
+        }
+    }
+
+    public function m_guardarmolde($nombre,$medidas,$usu){
+        try {
+            $cliente = "000000";
+            $idmolde = $this->m_select_generarcodigo('ID_MOLDE','T_MOLDE',6);
+            $query = $this->bd->prepare("INSERT INTO T_MOLDE(ID_MOLDE,NOM_MOLDE,
+            MEDIDAS,USU_REGISTRO,ESTADO,TIPO_MOLDE,COD_CLIENTE) 
+            VALUES('$idmolde','$nombre','$medidas','$usu','1','P','$cliente')");
+            $result = $query->execute(); 
+            return array($result,$idmolde);
+        } catch (Exception $e) {
+            return array("Error al registrar el molde " + $e);
         }
     }
 }

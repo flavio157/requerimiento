@@ -19,12 +19,12 @@
     <!--<h1 class="welcome text-center">Bienvenido a  <br>"Nombre"</h1>-->
         <div class="card card-container ">
            
-            <form class="form-signin" action="./menu/c_permisosmenu.php" method="POST">
+            <form class="form-signin" action="c_login.php" method="POST">
                 <span id="reauth-email" class="reauth-email"></span>
                 <p class="input_title">USUARIO</p>
                 <input type="text" id="usuario" name="usuario" class="form-control login_box" autofocus>
                 <p class="input_title">CONTRASEÑA</p>
-                <input type="password" id="inputPassword" class="form-control login_box" >
+                <input type="password" id="inputPassword" name="clave" class="form-control login_box" >
                 <div id="remember" class="checkbox">
                     <p class="input_title">PLATAFORMA</p>
                     <select class="form-select login_box" aria-label="Default select example">

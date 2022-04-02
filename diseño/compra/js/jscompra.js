@@ -76,9 +76,8 @@ $(function() {
     $("#btnatproduc").on('click',function() {
         var serie = $("#txtcomserie").val();
         tipo = _numeserie(serie);
-        console.log(tipo);
         if(!tipo){validatos();}
-        else{Mensaje1("Error numero de serie ya existe en la tabla");}
+        else{Mensaje1("Error numero de serie ya existe en la tabla","error");}
     })
 
     $(document).on('click','#btneliminar',function() {
@@ -255,7 +254,7 @@ function validatos() {
 function _numeserie(serie) {
     tabla = $("#tbdmaterialcompro tr");
     for (let i = 0; i < tabla.length ; i++) {
-        if($(tabla[i]).find("td")[2].innerHTML.replace(/-/g,"") == $.trim(serie).replace(/-/g, "")){
+        if($(tabla[i]).find("td")[2].innerHTML.replace(/-/g,"") == $.trim(serie).replace(/-/g, "") && $(tabla[i]).find("td")[2].innerHTML != ""){
             return true;
         }
     }
@@ -332,7 +331,8 @@ function _guardarProducto() {
                       codigo = $("#mtxtcodigopro").val();
                       $("#txtcompcodPro").val(codigo);
                       $("#txtcompprod").val(producto);
-                      if(clase == '00001' || clase == '00004'){$("#txtcomserie").removeAttr('disabled','disabled')}
+                      if(clase == '00001' || clase == '00004')
+                      {$("#txtcomserie").removeAttr('disabled','disabled')}
                       else{$("#txtcomserie").attr('disabled','disabled')} 
                       document.getElementById("frmguardaprod").reset();
                       $("#mdmaterial").modal('hide');
@@ -397,11 +397,11 @@ function autocompletarMaterial() {
         select: function (event, ui) {
           $("#txtcompcodPro").val(ui.item.code);
           $("#txtcompclase").val(ui.item.clase);
-          $("#txtcomserie").val('');
-          if(ui.item.clase != '00001'){
-                $("#txtcomserie").attr('disabled','true');
-            }else{
+          
+          if(ui.item.clase == '00001' || ui.item.clase == '00004'){
                 $("#txtcomserie").removeAttr('disabled');
+            }else{
+                $("#txtcomserie").attr('disabled','true');
             }
           $("#txtcomserie").val('');  
         }

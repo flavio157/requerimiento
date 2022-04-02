@@ -13,20 +13,30 @@
 
         public function m_buscar($tabla,$dato)
         {
-            $query = $this->bd->prepare("SELECT * FROM $tabla WHERE $dato");
-            $query->execute();
-            $datos = $query->fetchAll();
-            return $datos;  
+            try {
+                $query = $this->bd->prepare("SELECT * FROM $tabla WHERE $dato");
+                $query->execute();
+                $datos = $query->fetchAll();
+                return $datos;      
+            } catch (Exception $e) {
+                print_r("Error al buscar " . $e);
+            }
+           
         }
 
         public function m_select_generarcodigo($campo,$tabla,$cantidad)
         {
-            $query = $this->bd->prepare("SELECT MAX($campo)+1 as codigo FROM $tabla");
-            $query->execute();
-            $results = $query->fetch();
-            if($results[0] == NULL) $results[0] = '1';
-            $res = str_pad($results[0], $cantidad, '0', STR_PAD_LEFT);
-            return $res;
+            try {
+                $query = $this->bd->prepare("SELECT MAX($campo)+1 as codigo FROM $tabla");
+                $query->execute();
+                $results = $query->fetch();
+                if($results[0] == NULL) $results[0] = '1';
+                $res = str_pad($results[0], $cantidad, '0', STR_PAD_LEFT);
+                return $res;
+            } catch (Exception $e) {
+                print_r("Error al buscar " . $e);
+            }
+            
         }
 
 

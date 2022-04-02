@@ -7,7 +7,7 @@ if (session_status() == PHP_SESSION_NONE) {
 /*$ofi = $_SESSION["ofi"];
 $zon = $_SESSION["zon"];
 $cod = $_SESSION["cod"];*/
-require_once(".././menu/index.php");
+require_once("../menu/index.php");
 ?>
 
 <!DOCTYPE html>
@@ -44,9 +44,9 @@ require_once(".././menu/index.php");
    <section>  
         <div class="main"> 
             <form id="frmcomprobante">
-                <input type="text" id="vroficina" style="display: none;" value="<?php echo 'SMP2';//$ofi ?>"/>
-                <input type="text" id="vrzona" style="display: none;" value="<?php echo  $zon?>"/>
-                <input type="text" id="vrcodpersonal" style="display: none;" value="<?php echo '0215';//$cod;?>"/>
+                <input type="text" id="vroficina" style="display: none;" value="<?php echo ''//$ofi ?>"/>
+                <input type="text" id="vrzona" style="display: none;" value="<?php echo  ''//$zon?>"/>
+                <input type="text" id="vrcodpersonal" style="display: none;" value="<?php echo '0215'//$cod;?>"/>
                 <div class="row">
                     <div class="col g-4">
                     <center><label class="titulos">Registro Comprobante</label></center>
@@ -286,7 +286,7 @@ require_once(".././menu/index.php");
                         <div class="col">
                             <label for="formfpago" class="form-label">Clase</label>
                             <select class="form-select" id="slclase" aria-label="Default select example">
-                            <option value="">SELECCIONE CATEGORIA</option>
+                            <option value="">SELECCIONE CLASE</option>
                             </select>
                         </div>
                         </div>

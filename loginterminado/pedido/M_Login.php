@@ -13,7 +13,7 @@ class M_Login
     
     public function Login($cod_usuario)
     {   
-            $query=$this->db->prepare("SELECT * FROM T_USUARIO_CALL WHERE COD_PERSONAL = $cod_usuario AND EST_USUARIO != 'A'");
+            $query=$this->db->prepare("SELECT * FROM T_USUARIO_CALL WHERE COD_PERSONAL = $cod_usuario");
             $query->execute();
             $cod_usuario = $query->fetch(PDO::FETCH_ASSOC);
             f_regSession($cod_usuario['ANEXO_USUARIO'],$cod_usuario['COD_PERSONAL'],$cod_usuario['NOM_USUARIO'],$cod_usuario['OFICINA'],$cod_usuario['ZONA']);
@@ -22,6 +22,9 @@ class M_Login
     }
 
 
+
+
+    
 
     public function Administradores($cod_usuario){
         $query=$this->db->prepare("SELECT * FROM T_ADMINISTRADORES WHERE COD_PERSONAL = $cod_usuario");
@@ -33,14 +36,14 @@ class M_Login
     }
 
 
-    public function VerificarCallCenter($cod_vendedor,$diaseval,$fec_ingreso,$oficina,$inasistenticias,$cuotas)
+  /*  public function VerificarCallCenter($cod_vendedor,$diaseval,$fec_ingreso,$oficina,$inasistenticias,$cuotas)
     {   $arraydato = '';
         $diarestriccion = diasrestriccion($diaseval);
-       
+       var_dump($diarestriccion);
         if($diarestriccion != ''){
             $fec = explode(" ",$fec_ingreso);
             $fechas = nuevfech($diarestriccion,$fec[0]);
-           
+            
             if(!is_string($fechas[0])){
                 $fech1 =  $fechas[0]->format("d-m-Y");
             }else{
@@ -48,12 +51,9 @@ class M_Login
             }
             
             $fech2 = $fechas[1];
-            
+         
             $dias =  $diarestriccion - $inasistenticias;
-            //echo nl2br($fech1.".\n".$fech2);
-            //echo $dias;
-          //  print_r($inasistenticias);
-           $query=$this->db->prepare("SELECT * FROM V_CALL_CENTER  
+            $query=$this->db->prepare("SELECT * FROM V_CALL_CENTER  
             WHERE VENDEDOR = $cod_vendedor AND FECHA_GENERADO >= '$fech1'
             AND FECHA_GENERADO < '$fech2' AND OFICINA = '$oficina'");
             $query->execute();
@@ -72,10 +72,10 @@ class M_Login
 
           //echo $montoTotal ."   ". ($dias-1);
         }
+        var_dump($fech1,$fech2);
             //print_r($arraydato);
-           return $arraydato;
-      
-    }
+        //return $arraydato;
+    }*/
 
     public function verificar_couta($cod_vendedor,$oficina,$cuotas,$inasistenticias){
         $fechaActual = date("d")."-".date("m")."-".date("Y");
@@ -119,11 +119,7 @@ class M_Login
     }
 
 
-
-
-
-
-    public function Asistencia($cod_personal){
+  public function Asistencia($cod_personal){
         $fechaActual = date("d")."-".date("m")."-".date("Y");
         $fechaPriquin = '12'."-".date("m")."-".date("Y");
         $fechaSegquincena = CrearFechaSegQuin();
@@ -166,14 +162,57 @@ class M_Login
     }
 
     public function VerificarListado_Cuotabaja($hoy){
-        
         $nuevafecha = retunrFechaSql($hoy);
         $query=$this->db->prepare("SELECT * FROM T_PERSONAL_ENFALTA WHERE FECH_REGISTRO >= '$nuevafecha'");
         $query->execute();
         if ($query) {
             return $query->fetchAll();
         }
-       
     }
+
+  
+
+       public function VerificarCallCenter($personal,$fechaIni,$fechaFin,$oficina)
+    {   /*$arraydato = '';
+        $diarestriccion = diasrestriccion($diaseval);
+       var_dump($diarestriccion);
+        if($diarestriccion != ''){
+            $fec = explode(" ",$fec_ingreso);
+            $fechas = nuevfech($diarestriccion,$fec[0]);
+            
+            if(!is_string($fechas[0])){
+                $fech1 =  $fechas[0]->format("d-m-Y");
+            }else{
+                $fech1 = $fechas[0];
+            }
+            
+            $fech2 = $fechas[1];*/
+         
+            //$dias =  $diarestriccion - $inasistenticias;
+            $query=$this->db->prepare("SELECT * FROM V_CALL_CENTER  
+            WHERE VENDEDOR = $personal AND FECHA_GENERADO >= '$fechaIni'
+            AND FECHA_GENERADO < '$fechaFin' AND OFICINA = '$oficina'");
+            $query->execute();
+            $montoTotal=0;
+            
+            while ($result = $query->fetch()) {
+                if($result['MONTO'] != ""){
+                   $montoTotal += $result['MONTO'];
+                }
+            }
+            
+            /*$promedio = ($dias != 0 ) ? $promedio = round($montoTotal / ($dias-1),2) : 0; 
+            $cuota = (intval($cuotas) * intval($dias)) - $montoTotal;
+            $arraydato = array($fech1,$promedio,$diarestriccion,$cod_vendedor,$cuota);*/  
+           // echo (intval($cuotas) * intval($dias)) - $montoTotal;
+
+          //echo $montoTotal ."   ". ($dias-1);
+        //}
+       // var_dump($fech1,$fech2);
+            //print_r($arraydato);
+        return $montoTotal;
+    }
+
+
 }
 ?>

@@ -39,6 +39,7 @@ function _lstautocomplete(accion,array) {
             "oficina": $("#vroficina").val(),
         } ,
         success:  function(response){
+            console.log(response);
             obj = JSON.parse(response);
             $.each(obj['dato'], function(i, item) {
                 array.push(item); 
@@ -131,6 +132,7 @@ function filtrarkardex(fecini,fecfin,id){
                 });
             }else{
                 Mensaje1(obj['mensaje'],"error");
+                $('#tbkardex').find("tr:gt(0)").remove();
             }
             $("#tbkardex").removeAttr('style');
         }

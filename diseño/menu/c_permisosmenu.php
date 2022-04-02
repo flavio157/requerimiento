@@ -5,41 +5,34 @@ error_reporting(E_ALL);
 
 date_default_timezone_set('America/Lima');
 require_once("m_menu.php");
-require_once("../funciones/f_funcion.php");
+require_once("./funciones/f_funcion.php");
 
-
-    $anexo = '9001';
-    if ($anexo!="") {
-        $usu = new c_permisosmenu();
-        $usu->c_permisos($anexo);
-    }else{
-        return header("Location:  ../index.php");
-    }
-
+    /*$permisos = new c_permisosmenu();
+    session_start();
+    $permisos->c_permisos('9005');*/
 
 class c_permisosmenu
 {
     public function c_permisos($anexo){
-       
         $menu = array();
         $sub= array();
         $subSub = array();
         $contM = 0;
         $m_login = new m_menu();
-        //$datosUsuario = $m_login->Login($cod_usuario);
+       
         $contS = 0;
         $contS2 = 0;
         $Arrmenu = array();
         $ArrSubmenu = array();
         $ArrSubmenu2 = array();
-      // if(count($datosUsuario)){
             $permisos = $m_login->m_permisos($anexo);
+          
             if(count($permisos) > 0){
                 for ($i=0; $i < count($permisos) ; $i++) { 
                     if(!in_array($permisos[$i][2], $Arrmenu)){
                         array_push($Arrmenu,$permisos[$i][2]);
                         $cabmenu = $m_login->m_listarmenu($permisos[$i][2]);
-                        print_r($cabmenu);
+                        
                         for ($l=0; $l < count($cabmenu) ; $l++) {
                             $menu[$contM] = [$cabmenu[$l][0],$cabmenu[$l][1],$cabmenu[$l][2]];
                             $contM++;
@@ -67,21 +60,23 @@ class c_permisosmenu
                     }
     
                 }
-              
+               
                 session_start();
-               $_SESSION["menu"] = $menu;
-               $_SESSION["submenu"] = $sub;
-               $_SESSION["subsub"] = $subSub;
-              
-                header("Location: index.php");
-                die();
+                $_SESSION["menu"] = $menu;
+                $_SESSION["submenu"] = $sub;
+                $_SESSION["subsub"] = $subSub;
+             
+               // echo "<script>location.href='menu/index.php';</script>";
+                header('Location: menu/index.php');
+                exit;
             }else{
-            print_r("Error");
+            print_r("error");
+            
         }
             
     }
 
-
+    
 }
 
 ?>

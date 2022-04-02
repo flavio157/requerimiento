@@ -11,9 +11,8 @@ class M_VerificarCuota
         $this->db=DatabaseDinamica::Conectarbd($basedatos);
     }
 
-    public function VerificandoQuincena($cod_vendedor,$diasrestriccion,$fec_ingreso,$inasistenticias,$cuotas)
+  /*  public function VerificandoQuincena($cod_vendedor,$diasrestriccion,$fec_ingreso,$inasistenticias,$cuotas)
     {  
-        
         
         $fec = explode(" ",$fec_ingreso);
        
@@ -28,8 +27,8 @@ class M_VerificarCuota
        
         $fech2 = $fechas[1];
         $dias =  $fechas[2] - $inasistenticias ;
-
-
+       
+        var_dump($fech1,$fech2);
         
          $query=$this->db->prepare("SELECT * FROM V_PEDIDO_MONTO WHERE VENDEDOR =$cod_vendedor AND
          FECHA >= '$fech1' and FECHA < '$fech2'");
@@ -40,19 +39,20 @@ class M_VerificarCuota
                 $montoTotal += $result['CANTIDAD'];
              }
         }
-
-        $promedio = ($dias != 0 ) ? $promedio = round($montoTotal / ($dias-1),2) : 0; 
+        if($dias > 1 ){ $dias = ($dias - 1);}
+        
+        $promedio = ($dias != 0 ) ? $promedio = round($montoTotal / ($dias),2) : 0; 
         $cuota = (intval($cuotas) * intval($dias)) - $montoTotal;
         $arraydato = array($fech1,$promedio,$diasrestriccion,$cod_vendedor,$cuota); 
         
       if($query){
-          return $arraydato;
-       } 
-    }
+        //  return $arraydato;
+       }
+    }*/
 
 
     
-    public function CuotaPersonal($cod_usuario){
+   /* public function CuotaPersonal($cod_usuario){
         try {
             $query=$this->db->prepare("SELECT * FROM T_PERSONAL WHERE COD_PERSONAL =$cod_usuario");
             $query->execute();
@@ -62,7 +62,7 @@ class M_VerificarCuota
             print_r("El codigo de usuario no esxiste");
         }
        
-    }
+    }*/
 
 
     public function personalfaltacouta()
@@ -73,6 +73,59 @@ class M_VerificarCuota
         return $d_usuario;
     }
 
+
+    public function CuotaPersonal($personal){
+        try
+        { 
+         $stm = $this->db->prepare("SELECT CUOTA,FEC_INGRESO FROM T_PERSONAL WHERE COD_PERSONAL='$personal'");
+         $stm->execute();
+         $resul=$stm->fetchAll(); 
+         return $resul;
+        }
+        catch(Exception $e)
+        {
+          die($e->getMessage());
+        } 
+    }
+
+    public function VerificandoQuincena($personal,$fechaIni,$fechaFin)
+    {  
+        
+       /* $fec = explode(" ",$fec_ingreso);
+       
+        $fechas = nuevfech($diasrestriccion,$fec[0]);
+        if($fechas[0] != ""){
+            if(!is_string($fechas[0])){
+                $fech1 = $fechas[0]->format("d-m-Y");
+            }else{
+                $fech1 = $fechas[0];
+            }
+        }
+       
+        $fech2 = $fechas[1];
+        $dias =  $fechas[2] - $inasistenticias ;
+       
+        var_dump($fech1,$fech2);*/
+        
+         $query=$this->db->prepare("SELECT * FROM V_PEDIDO_MONTO WHERE VENDEDOR =$personal AND
+         FECHA >= '$fechaIni' and FECHA < '$fechaFin'");
+         $query->execute();
+         $montoTotal= 0;
+         while ($result = $query->fetch()) {
+             if($result['CANTIDAD'] != ""){
+                $montoTotal += $result['CANTIDAD'];
+             }
+        }
+       /* if($dias > 1 ){ $dias = ($dias - 1);}
+        
+        $promedio = ($dias != 0 ) ? $promedio = round($montoTotal / ($dias),2) : 0; 
+        $cuota = (intval($cuotas) * intval($dias)) - $montoTotal;
+        $arraydato = array($fech1,$promedio,$diasrestriccion,$cod_vendedor,$cuota); */
+        
+      if($query){
+          return $montoTotal;
+       }
+    }
 
 }
 

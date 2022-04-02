@@ -8,9 +8,8 @@ if (session_status() == PHP_SESSION_NONE) {
 $ofi = $_SESSION["ofi"];
 $zon = $_SESSION["zon"];
 $cod = $_SESSION["cod"];
-require_once("../menu/index.php");
+require_once("./menu/index.php");
 ?>
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -38,7 +37,7 @@ require_once("../menu/index.php");
             <form id="frmfabricacion">
                 <input type="text" id="vroficina" style="display: none;" value="<?php echo $ofi?>"/>
                 <input type="text" id="vrzona" style="display: none;" value="<?php echo  $zon?>"/>
-                <input type="text" id="vrcodpersonal" style="display: none;" value="<?php echo  $cod?>"/>
+                <input type="text" id="vrcodpersonal" style="display: none;" value="<?php echo $cod?>"/>
                    <div class="row">
                         <div class="col mb-3">
                             <center><label class="titulos">Moldes en Fabricación</label></center>
@@ -246,7 +245,6 @@ require_once("../menu/index.php");
                         <div class="mb-3">
                             <label class="col-form-label">Numero de serie</label>
                             <input type="text" class="form-control mayu" id="txtmnuserie" autocomplete="off">
-                           
                         </div>
                     </form>    
                     </div>

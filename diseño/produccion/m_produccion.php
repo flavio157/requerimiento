@@ -83,7 +83,25 @@ class m_produccion
 
         $txtcarriage,$txtclosedd,$txtcuter,$txthead,$txtblow,$txttotalblo,$txtblow1,$txtlf,$txtdefla,$txtunde,
         $txtcoolin,$txtlock,$txtbottle,$txtcarria,$txtopenmoul,$txtcuter1,$txthead1,$txtblowpin,$txttotalbl,
-        $txtdeflati,$txtblopinS,$txtdeflation,$txtcamvaci1,$txtcooling,$txtcamvaci2,$txtcamvaci3,$modifiedLF)
+        $txtdeflati,$txtblopinS,$txtdeflation,$txtcamvaci1,$txtcooling,$txtcamvaci2,$txtcamvaci3,$modifiedLF,
+        
+        $slemodeexpul,$botadocant,$presexplu3,$presexplu4,$velexplu3,$velexplu4,
+        $pisiexplu3,$pisiexplu4,$txtTieRetar1,$txtTieRetar2,$txtTiemActua1,$txtairposi1,$txtairposi2,$txtBTiemActua1,
+        $txtBirposi1,$txtBTieRetar1,
+
+        $slcModoActSucci,$carSuckBackDist,$carSuckBackTime,$carSKBkBefChg,$carTiemDesDEspC,$carPosFlujoMold,
+        $carTiempFlujoMo,$carRetarEnfria,$carCoolTime,
+        
+        $txtempuPresi1,$txtempuPresi2,$txtempuPresi3,$txtempuPresi4,$txtempudelay1,$txtemputiemp1,$txtemputiemp2,$txtempupisici,
+        $txtempucorreAtr,$txtempuveloc1,$txtempuveloc2,$txtempuveloc3,$txtempuveloc4,
+
+        
+        $txtprecieOpnStr,$txtprescierr_presio1 ,$txtprescierr_presio2 ,$txtprescierr_presio3 ,$txtprescierr_presio4 ,
+        $txtprescierr_velo1 ,$txtprescierr_velo2 ,$txtprescierr_velo3,$txtprescierr_velo5 , $txtprescierr_posic1 ,
+        $txtprescierr_posic2 ,$txtprescierr_posic3 ,$txtprescierr_posic4 ,$txtprescierr_presi5 ,$txtprescierr_presi6 ,
+        $txtprescierr_presi7 ,$txtprescierr_presi8 ,$txtprescierr_veloc5 ,$txtprescierr_veloc6 ,$txtprescierr_veloc7 ,
+        $txtprescierr_veloc8,$txtprescierr_posic5,$txtprescierr_posic6 ,
+        $txtprescierr_posic7 ,$txtprescierr_posic8,$horas,$canxturno)
         {
            
             $fechage = retunrFechaSqlphp(date("Y-m-d"));
@@ -101,9 +119,10 @@ class m_produccion
             $query = $this->bd->prepare("INSERT INTO T_PRODUCCION(COD_PRODUCCION,COD_PRODUCTO,COD_CLIENTE,
             ID_MOLDE,FEC_GENERADO,HOR_GENERADO,FEC_VENCIMIENTO,COD_CATEGORIA,NUM_PRODUCCION_LOTE,CAN_PRODUCCION,
             CAVIDADES,PESO_UNI,CICLO,EST_PRODUCCION,USU_REGISTRO,MAQUINA,EXTERNO,COD_ALMACEN,N_PRODUCCION_G,
-            FEC_INICIO,FEC_FIN,COD_FORMULACION)
+            FEC_INICIO,FEC_FIN,COD_FORMULACION,HORAS,CANT_TURNO)
             VALUES('$produccion','$produc','$cliente','$molde','$fechage','$hora','$fecha_actual','00002','$lote','$procant','$cavidades',
-            '$pesouni','$ciclo','0','$usu','$maquina','$sltipoprod','00002 ','$n_produ_g','$inicio','$fin','$codform')");
+            '$pesouni','$ciclo','0','$usu','$maquina','$sltipoprod','00002 ','$n_produ_g','$inicio','$fin','$codform',
+            '$horas','$canxturno')");
            
             $query->execute();
 
@@ -111,22 +130,58 @@ class m_produccion
             TEMPERATURA_3,TEMPERATURA_4,TEMPERATURA_5,EXPUL_PRESION_1,EXPUL_PRESION_2,EXPUL_VELOCI_1,EXPUL_VELOCI_2,
             EXPUL_PISICION_1,EXPUL_PISICION_2,CONTRAC_1,CONTRAC_2,CONTRAC_3,CONTRAC_4,CARGA_PRESION_1,CARGA_PRESION_2,
             CARGA_PRESION_3,CARGA_PRESION_SUCCI,CARGA_VELOC_1,CARGA_VELOC_2,CARGA_VELOC_3,CARGA_VELOC_SUCCI,CARGA_POSIC_1,
-            CARGA_POSIC_2,CARGA_POSIC_3,CARGA_POSIC_SUCCI,TEMPERATURA_6,TEMPERATURA_7,TEMPERATURA_8,TEMPERATURA_9) 
+            CARGA_POSIC_2,CARGA_POSIC_3,CARGA_POSIC_SUCCI,TEMPERATURA_6,TEMPERATURA_7,TEMPERATURA_8,TEMPERATURA_9,
+            
+            MOD_EXPULSION,CAN_EXPULSION,EXPUL_PRESION_3,EXPUL_PRESION_4,EXPUL_VELOCI_3,EXPUL_VELOCI_4,
+            EXPUL_PISICION_3,EXPUL_PISICION_4,EXPUL_TIERETAR_1,EXPUL_TIERETAR_2,EXPUL_A_TIEMACT,EXPUL_A_POSICION ,
+            EXPUL_A_TIERETAR,EXPUL_B_TIEMACT,EXPUL_B_POSICION,EXPUL_B_TIERETAR,
+            CARGA_MODOACT,CARGA_SUCKBACKDIS,CARGA_SUCKBATIME,CARGA_SKBKBEF,CARGA_TIEMDESDESP,CARGA_POSFLUJOMOL,
+            CARGA_TEMPFLUJOM,CARGA_RETARENFRIA,CARGA_COOLTIME
+            ) 
             VALUES('$produccion','$tempera1','$tempera2','$tempera3','$tempera4',
             '$tempera5','$presexplu1','$presexplu2','$velexplu1','$velexplu2','$pisiexplu1','$pisiexplu2','0','0',
             '0','0','$cargapres1','$cargapres2','$cargapres3','$cargapresucc','$cargavel1','$cargavel2','$cargavel3',
             '$cargavelsucc','$cargapisi1','$cargapisi2','$cargapisi3','$cargapisisucci','$txttemp6','$txttemp7','$txttemp8',
-            '$txttemp9')");
-             $query2->execute();
+            '$txttemp9',
+            '$slemodeexpul','$botadocant','$presexplu3','$presexplu4','$velexplu3','$velexplu4',
+            '$pisiexplu3','$pisiexplu4','$txtTieRetar1','$txtTieRetar2','$txtTiemActua1','$txtairposi1','$txtairposi2','$txtBTiemActua1',
+            '$txtBirposi1','$txtBTieRetar1','$slcModoActSucci','$carSuckBackDist','$carSuckBackTime','$carSKBkBefChg','$carTiemDesDEspC',
+            '$carPosFlujoMold',
+            '$carTiempFlujoMo','$carRetarEnfria','$carCoolTime')");
+
+            $query2->execute();
 
             $query3 = $this->bd->prepare("INSERT INTO T_INYECCION(COD_PRODUCCION,INYECC_PRESION_1,INYECC_PRESION_2,
             INYECC_PRESION_3,INYECC_PRESION_4,INYECC_VELOCIDAD_1,INYECC_VELOCIDAD_2,INYECC_VELOCIDAD_3,INYECC_VELOCIDAD_4,
             INYECC_POSICION_1,INYECC_POSICION_2,INYECC_POSICION_3,INYECC_POSICION_4,INYECC_TIEMPO,PRES_VELOCIDAD_1,PRES_VELOCIDAD_2,
-            PRES_VELOCIDAD_3,PRES_POSICION_1,PRES_POSICION_2,PRES_POSICION_3,PRES_TIEMPO) VALUES('$produccion','$inyecpres4'
+            PRES_VELOCIDAD_3,PRES_POSICION_1,PRES_POSICION_2,PRES_POSICION_3,PRES_TIEMPO,
+            
+            EMPUJE_PRESION_1,EMPUJE_PRESION_2,EMPUJE_PRESION_3,EMPUJE_PRESION_4,EMPUJE_DELEY_2,EMPUJE_TIEMPO_2,
+            EMPUJE_TIEMPO_3,EMPUJE_PISICI_2,EMPUJE_CORRER_ATRA, 
+            EMPUJE_VELOCIDAD_1,EMPUJE_VELOCIDAD_2,EMPUJE_VELOCIDAD_3,EMPUJE_VELOCIDAD_4,
+            
+            PRECIE_OPNSTROKE,PRECIE_PRESION_1,PRECIE_PRESION_2,PRECIE_PRESION_B,PRECIE_PRESION_A,PRECIE_VELO_1, 
+            PRECIE_VELO_2,PRECIE_VELO_A,PRECIE_VELO_B,PRECIE_POSICI_1,PRECIE_POSICI_2,PRECIE_POSICI_A,PRECIE_POSICI_B,
+            PRECIE_PRESION_4,PRECIE_PRESION_3,PRECIE_PRESION_2_1,PRECIE_PRESION_1_1,PRECIE_VELO_4,PRECIE_VELO_3,PRECIE_VELO_2_1,
+            PRECIE_VELO_1_1,PRECIE_POSICI_4,PRECIE_POSICI_3,PRECIE_POSICI_2_1,PRECIE_POSICI_1_1 
+            ) VALUES('$produccion','$inyecpres4'
             ,'$inyecpres3','$inyecpres2','$inyecpres1','$inyecvelo4','$inyecvelo3','$inyecvelo2','$inyecvelo1','$inyecposi4',
             '$inyecposi3','$inyecposi2','$inyecposi1','$inyectiemp','$velocidad3','$velocidad2','$velocidad1','$posicion3','$posicion2',
-            '$posicion1','$tiempo')");
-             $query3->execute();
+            '$posicion1','$tiempo',
+
+
+            '$txtempuPresi1','$txtempuPresi2','$txtempuPresi3','$txtempuPresi4','$txtempudelay1','$txtemputiemp1',
+            '$txtemputiemp2','$txtempupisici','$txtempucorreAtr','$txtempuveloc1','$txtempuveloc2','$txtempuveloc3', 
+            '$txtempuveloc4',
+
+            '$txtprecieOpnStr','$txtprescierr_presio1','$txtprescierr_presio2','$txtprescierr_presio3','$txtprescierr_presio4',
+            '$txtprescierr_velo1','$txtprescierr_velo2','$txtprescierr_velo3','$txtprescierr_velo5','$txtprescierr_posic1',
+            '$txtprescierr_posic2','$txtprescierr_posic3','$txtprescierr_posic4','$txtprescierr_presi5','$txtprescierr_presi6',
+            '$txtprescierr_presi7' ,'$txtprescierr_presi8' ,'$txtprescierr_veloc5' ,'$txtprescierr_veloc6' ,'$txtprescierr_veloc7' ,
+            '$txtprescierr_veloc8','$txtprescierr_posic5','$txtprescierr_posic6',
+            '$txtprescierr_posic7' ,'$txtprescierr_posic8')");
+
+            $query3->execute();
 
 
              $query8 = $this->bd->prepare("INSERT INTO T_TIMER_LP(COD_PRODUCCION,CARRIAGEUP_DELAYTIME,CLOSEDWOULD_DELAYTIME
@@ -144,33 +199,66 @@ class m_produccion
              '$txtcamvaci3')");
 
              $query8->execute();
-
-
-            if($cambios == 1 ){
+            
+            if($cambios == 1){
                 $query4 = $this->bd->prepare("INSERT INTO T_TEMPERATURA_TEMP(COD_FORMULACION,COD_PRODUCCION,TEMPERATURA_1,TEMPERATURA_2,
                 TEMPERATURA_3,TEMPERATURA_4,TEMPERATURA_5,EXPUL_PRESION_1,EXPUL_PRESION_2,EXPUL_VELOCI_1,EXPUL_VELOCI_2,
                 EXPUL_PISICION_1,EXPUL_PISICION_2,CONTRAC_1,CONTRAC_2,CONTRAC_3,CONTRAC_4,CARGA_PRESION_1,CARGA_PRESION_2,
                 CARGA_PRESION_3,CARGA_PRESION_SUCCI,CARGA_VELOC_1,CARGA_VELOC_2,CARGA_VELOC_3,CARGA_VELOC_SUCCI,CARGA_POSIC_1,
-                CARGA_POSIC_2,CARGA_POSIC_3,CARGA_POSIC_SUCCI,USU_REGISTRO,TEMPERATURA_6,TEMPERATURA_7,TEMPERATURA_8,TEMPERATURA_9)
+                CARGA_POSIC_2,CARGA_POSIC_3,CARGA_POSIC_SUCCI,USU_REGISTRO,TEMPERATURA_6,TEMPERATURA_7,TEMPERATURA_8,TEMPERATURA_9,
+                
+                MOD_EXPULSION,CAN_EXPULSION,EXPUL_PRESION_3,EXPUL_PRESION_4,EXPUL_VELOCI_3,EXPUL_VELOCI_4,
+                EXPUL_PISICION_3,EXPUL_PISICION_4,EXPUL_TIERETAR_1,EXPUL_TIERETAR_2,EXPUL_A_TIEMACT,EXPUL_A_POSICION,
+                EXPUL_A_TIERETAR,EXPUL_B_TIEMACT,EXPUL_B_POSICION,EXPUL_B_TIERETAR,
+                CARGA_MODOACT,CARGA_SUCKBACKDIS,CARGA_SUCKBATIME,CARGA_SKBKBEF,CARGA_TIEMDESDESP,CARGA_POSFLUJOMOL, 
+                CARGA_TEMPFLUJOM,CARGA_RETARENFRIA,CARGA_COOLTIME,CICLOS,CAVIDADES,HORAS,CANT_TURNO)
                  VALUES('$codform','$produccion','$tempera1','$tempera2','$tempera3','$tempera4',
                 '$tempera5','$presexplu1','$presexplu2','$velexplu1','$velexplu2','$pisiexplu1','$pisiexplu2','0','0',
                 '0','0','$cargapres1','$cargapres2','$cargapres3','$cargapresucc','$cargavel1','$cargavel2','$cargavel3',
                 '$cargavelsucc','$cargapisi1','$cargapisi2','$cargapisi3','$cargapisisucci','$usu',
-                '$txttemp6','$txttemp7','$txttemp8','$txttemp9')");
+                '$txttemp6','$txttemp7','$txttemp8','$txttemp9',
+                
+                '$slemodeexpul','$botadocant','$presexplu3','$presexplu4','$velexplu3','$velexplu4',
+                '$pisiexplu3','$pisiexplu4','$txtTieRetar1','$txtTieRetar2','$txtTiemActua1','$txtairposi1','$txtairposi2','$txtBTiemActua1',
+                '$txtBirposi1','$txtBTieRetar1','$slcModoActSucci','$carSuckBackDist','$carSuckBackTime','$carSKBkBefChg','$carTiemDesDEspC','$carPosFlujoMold',
+                '$carTiempFlujoMo','$carRetarEnfria','$carCoolTime','$ciclo','$cavidades','$horas','$canxturno')");
                
                 $query4->execute();
     
                 $query5 = $this->bd->prepare("INSERT INTO T_INYECCION_TEMP(COD_FORMULACION,COD_PRODUCCION,INYECC_PRESION_1,INYECC_PRESION_2,
                 INYECC_PRESION_3,INYECC_PRESION_4,INYECC_VELOCIDAD_1,INYECC_VELOCIDAD_2,INYECC_VELOCIDAD_3,INYECC_VELOCIDAD_4,
                 INYECC_POSICION_1,INYECC_POSICION_2,INYECC_POSICION_3,INYECC_POSICION_4,INYECC_TIEMPO,PRES_VELOCIDAD_1,PRES_VELOCIDAD_2,
-                PRES_VELOCIDAD_3,PRES_POSICION_1,PRES_POSICION_2,PRES_POSICION_3,PRES_TIEMPO,USU_REGISTRO) VALUES('$codform','$produccion','$inyecpres4'
+                PRES_VELOCIDAD_3,PRES_POSICION_1,PRES_POSICION_2,PRES_POSICION_3,PRES_TIEMPO,USU_REGISTRO,
+                
+                EMPUJE_PRESION_1,EMPUJE_PRESION_2,EMPUJE_PRESION_3,EMPUJE_PRESION_4,EMPUJE_DELEY_2,EMPUJE_TIEMPO_2,
+                EMPUJE_TIEMPO_3,EMPUJE_PISICI_2,EMPUJE_CORRER_ATRA, 
+                EMPUJE_VELOCIDAD_1,EMPUJE_VELOCIDAD_2,EMPUJE_VELOCIDAD_3, EMPUJE_VELOCIDAD_4,
+
+                PRECIE_OPNSTROKE,PRECIE_PRESION_1,PRECIE_PRESION_2,PRECIE_PRESION_B,PRECIE_PRESION_A,PRECIE_VELO_1, 
+                PRECIE_VELO_2,PRECIE_VELO_A,PRECIE_VELO_B,PRECIE_POSICI_1,PRECIE_POSICI_2,PRECIE_POSICI_A,PRECIE_POSICI_B, 
+                PRECIE_PRESION_4,PRECIE_PRESION_3,PRECIE_PRESION_2_1,PRECIE_PRESION_1_1,PRECIE_VELO_4,PRECIE_VELO_3,PRECIE_VELO_2_1,
+                PRECIE_VELO_1_1,PRECIE_POSICI_4,PRECIE_POSICI_3,PRECIE_POSICI_2_1,PRECIE_POSICI_1_1 
+
+                ) VALUES('$codform','$produccion','$inyecpres4'
                 ,'$inyecpres3','$inyecpres2','$inyecpres1','$inyecvelo4','$inyecvelo3','$inyecvelo2','$inyecvelo1','$inyecposi4',
                 '$inyecposi3','$inyecposi2','$inyecposi1','$inyectiemp','$velocidad3','$velocidad2','$velocidad1','$posicion3','$posicion2',
-                '$posicion1','$tiempo','$usu')");
+                '$posicion1','$tiempo','$usu',
+                
+                '$txtempuPresi1','$txtempuPresi2','$txtempuPresi3','$txtempuPresi4','$txtempudelay1','$txtemputiemp1',
+                '$txtemputiemp2','$txtempupisici','$txtempucorreAtr','$txtempuveloc1','$txtempuveloc2','$txtempuveloc3', 
+                '$txtempuveloc4',
+
+                '$txtprecieOpnStr','$txtprescierr_presio1','$txtprescierr_presio2','$txtprescierr_presio3','$txtprescierr_presio4',
+                '$txtprescierr_velo1','$txtprescierr_velo2','$txtprescierr_velo3','$txtprescierr_velo5','$txtprescierr_posic1',
+                '$txtprescierr_posic2','$txtprescierr_posic3','$txtprescierr_posic4','$txtprescierr_presi5','$txtprescierr_presi6',
+                '$txtprescierr_presi7' ,'$txtprescierr_presi8' ,'$txtprescierr_veloc5' ,'$txtprescierr_veloc6' ,'$txtprescierr_veloc7' ,
+                '$txtprescierr_veloc8','$txtprescierr_posic5','$txtprescierr_posic6' ,
+                '$txtprescierr_posic7' ,'$txtprescierr_posic8'
+                )");
                 $query5->execute();
             }
 
-            if($modifiedLF == 1){
+            if($modifiedLF == 1 || $cambios == 1){
                 $query9 = $this->bd->prepare("INSERT INTO T_TIMER_LP_TEMPORAL(COD_FORMULACION,COD_PRODUCCION,CARRIAGEUP_DELAYTIME,CLOSEDWOULD_DELAYTIME
                 ,CUTER_DELAY_TUME,HEAD_UP_DELAY_TIME,
                 BLOWPINGDOWN_DELAYTIME,TOTAL_BLOW_DELAY_TIME,BLOW_TIME,LF_TO_RG_TIME,DEFLATIONDELAY_TIME,
@@ -191,8 +279,11 @@ class m_produccion
                     if($dato[3] == "P"){
                         $cadena = "COD_PRODUCTO = '$dato[1]'";
                         $c_propio = $this->m_buscar('T_ALMACEN_INSUMOS',$cadena);
-                        $stock =number_format(($c_propio[0][4] - $dato[2]),2, '.', '');
-                        $query6 = $this->bd->prepare("UPDATE T_ALMACEN_INSUMOS SET STOCK_ACTUAL='$stock',
+                        $stockin = sprintf("%0.3f", $c_propio[0][4]);
+                        $valodato = sprintf("%0.3f",  $dato[2]);
+                        $stock =$stockin - $valodato;
+                        $valodato = sprintf("%0.3f",$stock);
+                        $query6 = $this->bd->prepare("UPDATE T_ALMACEN_INSUMOS SET STOCK_ACTUAL='$valodato',
                         FEC_MODIFICO = '$fechage' WHERE COD_PRODUCTO ='$dato[1]'"); 
                        $query6->execute();
                     }else if($dato[3] == "E"){
@@ -295,7 +386,7 @@ class m_produccion
     {
         try {
             $query = $this->bd->prepare("SELECT TOP 1 * FROM V_PARAMETROS_PRODUCCION WHERE 
-            COD_FORMULACION = '$formula' ORDER BY COD_PRODUCCION DESC");
+            COD_FORMULACION = '$formula' ORDER BY FEC_REGISTRO DESC");
             $query->execute();
             $resul = $query->fetchAll(PDO::FETCH_NUM);
             return $resul;
@@ -321,7 +412,7 @@ class m_produccion
         $numero = rand(1,5000);
         $fecha = retunrFechaSqlphp(date("Y-m-d"));
         try {
-            $consulta = "ID_PARAM = '2' AND CONVERT(DATE,FEC_CREADO)  < '$fecha'";
+            $consulta = "ID_PARAM = '2' AND CONVERT(DATE,FEC_CREADO) <> '$fecha'";
             $count1 = $this->m_buscar("T_PARAMETROS",$consulta);
             if(count($count1) > 0){
                 $query = $this->bd->prepare("UPDATE T_PARAMETROS SET COD_BLOQUE = '$numero',

@@ -3,19 +3,16 @@
 if (session_status() == PHP_SESSION_NONE) {
     session_start();
 }
-$ofi = $_SESSION["ofi"];
+/*$ofi = $_SESSION["ofi"];
 $zon = $_SESSION["zon"];
-$cod = $_SESSION["cod"];
-require_once("./menu/index.php");
+$cod = $_SESSION["cod"];*/
+require_once("../menu/index.php");
 ?>
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <link rel="STYLESHEET" type="text/css" href="../fonts/style.css">
 	 <link rel="STYLESHEET" type="text/css" href="./css/responsive.css">
-
-     <link rel="STYLESHEET" type="text/css" href="../fonts/style.css">
     <script src="../js/jquery-3.3.1.slim.min.js"></script>
     <script src="../js/ajquery.min.js"></script>
     <script src="./js/jsformulacion.js"></script>
@@ -48,9 +45,9 @@ require_once("./menu/index.php");
    <section>  
         <div class="main"> 
           <form style="margin-bottom: 0px;" id="frmformulacion">
-                  <input type="text" id="vroficina" style="display: none;" value="<?php echo $ofi?>"/>
-                  <input type="text" id="vrzona" style="display: none;" value="<?php echo  $zon?>"/>
-                  <input type="text" id="vrcodpersonal" style="display: none;" value="<?php echo $cod?>"/>
+                  <input type="text" id="vroficina" style="display: none;" value="<?php $ofi?>"/>
+                  <input type="text" id="vrzona" style="display: none;" value="<?php $zon?>"/>
+                  <input type="text" id="vrcodpersonal" style="display: none;" value="<?php $cod?>"/>
               <div class="row mb-3">
                   <div class="col">
                       <center><label class="titulos">Registro de formulacion</label></center>
@@ -67,26 +64,58 @@ require_once("./menu/index.php");
               </div>-->
               <div class="row">
                 <div class="col">
-                <label>Nombre producto</label>
-                  <div class="input-group">
-                    <input type="text" id="txtproducto" name='txtproducto' class="form-control mayu"  placeholder="Buscar producto">    
-                    <input type="text" id="txtnombformula" name="txtnombformula"  style="display: none;"> 
-                    <a class="btn btn-success" id="btnlstformula" data-bs-toggle="modal" data-bs-target="#mdformula">
-                      <i class="icon-magnifying-glass" title="Buscar cliente"></i>
-                    </a>
-                  </div>
+                  <label>Nombre producto</label>
+                    <div class="input-group">
+                    <input id="idprod" name="idprod" style="display: none;"> 
+                      <input type="text" id="txtproducto" name='txtproducto' class="form-control mayu"  placeholder="Buscar producto">    
+                      <input type="text" id="txtnombformula" name="txtnombformula"  style="display: none;"> 
+                      <a class="btn btn-success" id="btnlstformula" data-bs-toggle="modal" data-bs-target="#mdformula">
+                        <i class="icon-magnifying-glass" title="Buscar formulación de producto"></i>
+                      </a>
+                    </div>
                 </div>  
-                <div class="row"> 
+                <div class="col-md">
+                    <label>Molde</label>
+                    <div class="input-group">
+                      <input id="txtidmolde" name="txtidmolde"  style="display: none;"> 
+                      <input type="text" id="txtbuscarmolde" name="txtbuscarmolde" class="form-control mayu">
+                      <!--<a class="btn btn-success" >
+                        <i class="icon-add-to-list" title="Buscar formulación de producto"></i>
+                      </a>-->
+                    </div>
+                  </div> 
+              </div>
+
+              <div class="row"> 
                   <div class="col">
-                    <label for="inputPassword2">U. medida</label>
+                    <label>U. medida</label>
                     <input type="text" id="txtunimedida" name="txtunimedida" class="form-control mayu" disabled>
                   </div>
                   <div class="col">
-                      <label for="inputPassword2">Cantidad</label>
+                      <label>Cantidad</label>
                       <input type="text" id="txtformulacion" name="txtformulacion" class="form-control">
-                    </div>
-                </div>
+                  </div>             
               </div>
+                <div class="row">
+                  <div class="col g-4">
+                      <center><label class="titulos">Producción estimada por turno</label></center>
+                  </div>
+                </div>
+
+                <div class="row  mb-1"> 
+                  <div class="col">
+                    <label>Mañana</label>
+                    <div class="input-group mb-3">
+                      <input type="number" id="txtmanana" name="txtmanana" class="form-control">
+                    </div>
+                  </div>
+                  <div class="col">
+                    <label>Tarde</label>
+                    <div class="input-group mb-3">
+                      <input type="number" id="txttarde" name="txttarde" class="form-control">
+                    </div>
+                  </div>
+                </div>
 
                 <div class="row">
                   <div class="col g-4">
@@ -102,14 +131,17 @@ require_once("./menu/index.php");
                     </div>
                   </div>
                   <div class="col">
-                    <label >Cantidad por usar</label>
+                    <label >Cantidad del insumo</label>
+                    <div class="input-group mb-3">
                     <input type="number" id="txtcantxusar" name="txtcantxusar" class="form-control">
+                      <span class="input-group-text" id="basic-addon2">Kg</span>
+                    </div>
                   </div>
                 </div>
                 <div class="row ">
                    <div class="col g-3 ">
                       <a class="btn btn-primary" type="button" id="btnagregarmater" style="float: right;">
-                          <i class='icon-add-to-list' title='Agregar molde'></i>
+                          <i class='icon-add-to-list' title='Agregar insumos'></i>
                       </a>
                    </div>
                 </div>
@@ -207,6 +239,34 @@ require_once("./menu/index.php");
       </div>
     </div>
 
+    <div class="modal fade" id="mdmolde" tabindex="-1"  data-bs-keyboard="false" data-bs-backdrop="static" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">Registrar molde externo</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <form id="frmmdmolde">
+              <div class="row mb-2">
+                <div class="col-md">
+                  <label for="formpromocion"  class="form-label">Nombre</label>
+                  <input type="text" class="form-control mayu" name="txtnommolde" id="txtnommolde" autocomplete="off">
+                </div>
+                <div class="col-md">
+                  <label class="form-label">Medidas molde</label>
+                  <input type="text" class="form-control" name="txtmedmolde" id="txtmedmolde" autocomplete="off">    
+                </div>
+              </div>
+            </form>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cerrar</button>
+            <button type="button" class="btn btn-primary" id="btnmdgmolde">Guardar</button>
+          </div>
+        </div>
+      </div>
+    </div>
 </body>
   <script src="../js/abootstrap.min.js"></script>
 </html>

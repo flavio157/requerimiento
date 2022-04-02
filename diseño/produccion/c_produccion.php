@@ -54,6 +54,9 @@ require_once("../funciones/f_funcion.php");
         $fin = $_POST['txtfin'];
         $estilomolde = $_POST['estilomolde'];
 
+        $horas = $_POST['txthoras'];
+        $canxturno = $_POST['canxtuno'];
+        
         $tempera1 = $_POST['txttemp1'];
         $tempera2 = $_POST['txttemp2'];
         $tempera3 = $_POST['txttemp3']; 
@@ -106,7 +109,94 @@ require_once("../funciones/f_funcion.php");
         $txttemp8 = $_POST['txttemp7'];
         $txttemp9 = $_POST['txttemp9'];
 
+        if(!isset($_POST['slemodeexpul'])){
+            $slemodeexpul = "0";
+        }else{
+            $slemodeexpul = $_POST['slemodeexpul'];
+        }
+
+        $botadocant = $_POST['botadocant'];
+        $presexplu3 = $_POST['presexplu3'];
+        $presexplu4 = $_POST['presexplu4'];
+        $velexplu3 = $_POST['velexplu3'];
+        $velexplu4 = $_POST['velexplu4'];
+        $pisiexplu3 = $_POST['pisiexplu3'];
+        $pisiexplu4 = $_POST['pisiexplu4'];
+        $txtTieRetar1 = $_POST['txtTieRetar1'];
+        $txtTieRetar2 = $_POST['txtTieRetar2'];
+        $txtTiemActua1 = $_POST['txtTiemActua1'];
+        $txtairposi1 = $_POST['txtairposi1'];
+        $txtairposi2 = $_POST['txtairposi2'];
+        $txtBTiemActua1 = $_POST['txtBTiemActua1'];
+        $txtBirposi1 = $_POST['txtBirposi1'];
+        $txtBTieRetar1 = $_POST['txtBTieRetar1'];
+       
+        if(!isset($_POST['slcModoActSucci'])){
+            $slcModoActSucci = "0";
+        }else{
+            $slcModoActSucci = $_POST['slcModoActSucci'];
+        }
+
+        $carSuckBackDist = $_POST['carSuckBackDist'];
+        $carSuckBackTime = $_POST['carSuckBackTime'];
+        $carSKBkBefChg = $_POST['carSKBkBefChg'];
+        $carTiemDesDEspC = $_POST['carTiemDesDEspC'];
+        $carPosFlujoMold = $_POST['carPosFlujoMold'];
+        $carTiempFlujoMo = $_POST['carTiempFlujoMo'];
+        $carRetarEnfria = $_POST['carRetarEnfria'];
+        $carCoolTime = $_POST['carCoolTime'];    
         
+
+       
+        $txtempuPresi1 = $_POST['txtempuPresi1'];
+        $txtempuPresi2 = $_POST['txtempuPresi2'];
+        $txtempuPresi3 = $_POST['txtempuPresi3'];
+        $txtempuPresi4 = $_POST['txtempuPresi4'];
+      
+        $txtempudelay1 = $_POST['txtempudelay1'];
+        $txtemputiemp1 = $_POST['txtemputiemp1'];
+        $txtemputiemp2 = $_POST['txtemputiemp2'];
+        $txtempupisici = $_POST['txtempupisici'];
+        
+        if(!isset($_POST['txtempucorreAtr'])){
+            $txtempucorreAtr = "0";
+        }else{
+            $txtempucorreAtr = $_POST['txtempucorreAtr'];
+        }
+        
+        $txtempuveloc1 = $_POST['txtempuveloc1'];
+        $txtempuveloc2 = $_POST['txtempuveloc2'];
+        $txtempuveloc3 = $_POST['txtempuveloc3'];
+        $txtempuveloc4 = $_POST['txtempuveloc4'];
+
+        
+    
+        $txtprecieOpnStr = $_POST['txtprecieOpnStr'];
+        $txtprescierr_presio1 = $_POST['txtprescierr_presio1'];
+        $txtprescierr_presio2 = $_POST['txtprescierr_presio2'];
+        $txtprescierr_presio3 = $_POST['txtprescierr_presio3'];
+        $txtprescierr_presio4 = $_POST['txtprescierr_presio4'];
+        $txtprescierr_velo1 = $_POST['txtprescierr_velo1'];
+        $txtprescierr_velo2 = $_POST['txtprescierr_velo2'];
+        $txtprescierr_velo3 = $_POST['txtprescierr_velo3'];
+        $txtprescierr_velo5 = $_POST['txtprescierr_velo5'];
+        $txtprescierr_posic1 = $_POST['txtprescierr_posic1'];
+        $txtprescierr_posic2 = $_POST['txtprescierr_posic2'];
+        $txtprescierr_posic3 = $_POST['txtprescierr_posic3'];
+        $txtprescierr_posic4 = $_POST['txtprescierr_posic4'];
+        $txtprescierr_presi5 = $_POST['txtprescierr_presi5'];
+        $txtprescierr_presi6 = $_POST['txtprescierr_presi6'];
+        $txtprescierr_presi7 = $_POST['txtprescierr_presi7'];
+        $txtprescierr_presi8 = $_POST['txtprescierr_presi8'];
+        $txtprescierr_veloc5 = $_POST['txtprescierr_veloc5'];
+        $txtprescierr_veloc6 = $_POST['txtprescierr_veloc6'];
+        $txtprescierr_veloc7 = $_POST['txtprescierr_veloc7'];
+        $txtprescierr_veloc8 = $_POST['txtprescierr_veloc8'];
+        $txtprescierr_posic5 = $_POST['txtprescierr_posic5'];
+        $txtprescierr_posic6 = $_POST['txtprescierr_posic6'];
+        $txtprescierr_posic7 = $_POST['txtprescierr_posic7'];
+        $txtprescierr_posic8 = $_POST['txtprescierr_posic8'];
+
         $txtcarriage = $_POST['txtcarriage'];
         $txtclosedd = $_POST['txtclosedd'];
         $txtcuter = $_POST['txtcuter'];
@@ -146,7 +236,24 @@ require_once("../funciones/f_funcion.php");
         $txtcarriage,$txtclosedd,$txtcuter,$txthead,$txtblow,$txttotalblo,$txtblow1,$txtlf,$txtdefla,$txtunde,
         $txtcoolin,$txtlock,$txtbottle,$txtcarria,$txtopenmoul,$txtcuter1,$txthead1,$txtblowpin,$txttotalbl,
         $txtdeflati,$txtblopinS,$txtdeflation,$txtcamvaci1,$txtcooling,$txtcamvaci2,$txtcamvaci3,$modifiedLF
-        ,$estilomolde,$removebloq);
+        ,$estilomolde,$removebloq  ,$slemodeexpul,$botadocant,$presexplu3,$presexplu4,$velexplu3,$velexplu4,
+        $pisiexplu3,$pisiexplu4,$txtTieRetar1,$txtTieRetar2,$txtTiemActua1,$txtairposi1,$txtairposi2,$txtBTiemActua1,
+        $txtBirposi1,$txtBTieRetar1
+        ,$slcModoActSucci,$carSuckBackDist,$carSuckBackTime,$carSKBkBefChg,$carTiemDesDEspC,$carPosFlujoMold,
+        $carTiempFlujoMo,$carRetarEnfria,$carCoolTime,
+    
+        $txtempuPresi1,$txtempuPresi2,$txtempuPresi3,$txtempuPresi4,$txtempudelay1,$txtemputiemp1,$txtemputiemp2,$txtempupisici,
+        $txtempucorreAtr,$txtempuveloc1,$txtempuveloc2,$txtempuveloc3,$txtempuveloc4,
+
+        $txtprecieOpnStr,$txtprescierr_presio1 ,$txtprescierr_presio2 ,$txtprescierr_presio3 ,$txtprescierr_presio4 ,
+        $txtprescierr_velo1 ,$txtprescierr_velo2 ,$txtprescierr_velo3,$txtprescierr_velo5 , $txtprescierr_posic1 ,
+        $txtprescierr_posic2 ,$txtprescierr_posic3 ,$txtprescierr_posic4 ,$txtprescierr_presi5 ,$txtprescierr_presi6 ,
+        $txtprescierr_presi7 ,$txtprescierr_presi8 ,$txtprescierr_veloc5 ,$txtprescierr_veloc6 ,$txtprescierr_veloc7 ,
+        $txtprescierr_veloc8,$txtprescierr_posic5,$txtprescierr_posic6 ,
+        $txtprescierr_posic7 ,$txtprescierr_posic8 ,
+        $horas,$canxturno 
+    );
+
     }else if($accion == 'externo'){
         $producto = $_POST['insumo'];
         $cantidad = $_POST['stocks'];
@@ -196,6 +303,7 @@ require_once("../funciones/f_funcion.php");
                     "idmolde" => $c_producto[$i][7],
                     "molde" => $c_producto[$i][8],
                     "estiM" => $c_producto[$i][11],
+                    "peso" => $c_producto[$i][12],
                     "label" => trim($c_producto[$i][1]) ));
             }
             $dato = array('dato' => $producto);
@@ -328,7 +436,6 @@ require_once("../funciones/f_funcion.php");
                     $mensaje = $c_molde[0]; $codigo = $c_molde[1];
                 }
             }
-            
             $dato = array('e' =>  $mensaje,'c' =>  $codigo);
             echo json_encode($dato,JSON_FORCE_OBJECT);
         }
@@ -343,21 +450,53 @@ require_once("../funciones/f_funcion.php");
         $posicion1,$tiempo,$usu,$items,$cambios,$inicio,$fin,$txttemp6,$txttemp7,$txttemp8,$txttemp9,
         $txtcarriage,$txtclosedd,$txtcuter,$txthead,$txtblow,$txttotalblo,$txtblow1,$txtlf,$txtdefla,$txtunde,
         $txtcoolin,$txtlock,$txtbottle,$txtcarria,$txtopenmoul,$txtcuter1,$txthead1,$txtblowpin,$txttotalbl,
-        $txtdeflati,$txtblopinS,$txtdeflation,$txtcamvaci1,$txtcooling,$txtcamvaci2,$txtcamvaci3,$modifiedLF,$estilomolde,$removebloq)
+        $txtdeflati,$txtblopinS,$txtdeflation,$txtcamvaci1,$txtcooling,$txtcamvaci2,$txtcamvaci3,$modifiedLF,$estilomolde,$removebloq
+        
+        ,$slemodeexpul,$botadocant,$presexplu3,$presexplu4,$velexplu3,$velexplu4,
+        $pisiexplu3,$pisiexplu4,$txtTieRetar1,$txtTieRetar2,$txtTiemActua1,$txtairposi1,$txtairposi2,$txtBTiemActua1,
+        $txtBirposi1,$txtBTieRetar1,
+        $slcModoActSucci,$carSuckBackDist,$carSuckBackTime,$carSKBkBefChg,$carTiemDesDEspC,$carPosFlujoMold,
+        $carTiempFlujoMo,$carRetarEnfria,$carCoolTime,
+        
+        $txtempuPresi1,$txtempuPresi2,$txtempuPresi3,$txtempuPresi4,$txtempudelay1,$txtemputiemp1,$txtemputiemp2,$txtempupisici,
+        $txtempucorreAtr,$txtempuveloc1,$txtempuveloc2,$txtempuveloc3,$txtempuveloc4,
+
+        
+        $txtprecieOpnStr,$txtprescierr_presio1 ,$txtprescierr_presio2 ,$txtprescierr_presio3 ,$txtprescierr_presio4 ,
+        $txtprescierr_velo1 ,$txtprescierr_velo2 ,$txtprescierr_velo3,$txtprescierr_velo5 , $txtprescierr_posic1 ,
+        $txtprescierr_posic2 ,$txtprescierr_posic3 ,$txtprescierr_posic4 ,$txtprescierr_presi5 ,$txtprescierr_presi6 ,
+        $txtprescierr_presi7 ,$txtprescierr_presi8 ,$txtprescierr_veloc5 ,$txtprescierr_veloc6 ,$txtprescierr_veloc7 ,
+        $txtprescierr_veloc8,$txtprescierr_posic5,$txtprescierr_posic6 ,
+        $txtprescierr_posic7 ,$txtprescierr_posic8,$horas,$canxturno)
         { 
             $m_produccion = new m_produccion();
-            if(strlen(trim($removebloq)) == 0){ $removebloq = "B";}
+
+            $cadena = "estado = '0' and detenido = '0' and usuario = '$usu'";
+            $control = $m_produccion->m_buscar('V_CONTROL_CALIDAD',$cadena);
+            if(count($control) > 0){
+                print_r("Error cierre la produccion pendiente antes de registrar otra");
+                return;
+            }
+            //if(strlen(trim($removebloq)) == 0){ $removebloq = "B";}
            
 
-            $parametros = $m_produccion->m_ultimoregistro($codform);
-            if(count($parametros) > 0 && $removebloq == "B" && ($modifiedLF == 1 || $cambios == 1)){print_r("b"); return;}
+            //$parametros = $m_produccion->m_ultimoregistro($codform);
+            //if(count($parametros) > 0 && $removebloq == "B" && ($modifiedLF == 1 || $cambios == 1)){print_r("b"); return;}
 
             $inyeccion = array($presexplu1,$presexplu2,$velexplu1,
             $velexplu2,$pisiexplu1,$pisiexplu2,$cargapres1,$cargapres2,$cargapres3,
             $cargapresucc,$cargavel1,$cargavel2,$cargavel3,$cargavelsucc,$cargapisi1,$cargapisi2,$cargapisi3,$cargapisisucci,
             $inyecpres4,$inyecpres3,$inyecpres2,$inyecpres1,$inyecvelo4,$inyecvelo3,$inyecvelo2,$inyecvelo1,$inyecposi4,
             $inyecposi3,$inyecposi2,$inyecposi1,$inyectiemp,$velocidad3,$velocidad2,$velocidad1,$posicion3,$posicion2,
-            $posicion1,$tiempo);
+            $posicion1,$tiempo,$botadocant,$presexplu3,$presexplu4,$velexplu3,$velexplu4,
+            $pisiexplu3,$pisiexplu4,$txtTieRetar1,$txtTieRetar2,$txtTiemActua1,$txtairposi1,$txtairposi2,$txtBTiemActua1,
+            $txtBirposi1,$txtBTieRetar1,$carSuckBackDist,$carSuckBackTime,$carSKBkBefChg,$carTiemDesDEspC,$carPosFlujoMold,
+            $carTiempFlujoMo,$carRetarEnfria,$carCoolTime, $txtprecieOpnStr,$txtprescierr_presio1 ,$txtprescierr_presio2 ,$txtprescierr_presio3 ,$txtprescierr_presio4 ,
+            $txtprescierr_velo1 ,$txtprescierr_velo2 ,$txtprescierr_velo3,$txtprescierr_velo5 , $txtprescierr_posic1 ,
+            $txtprescierr_posic2 ,$txtprescierr_posic3 ,$txtprescierr_posic4 ,$txtprescierr_presi5 ,$txtprescierr_presi6 ,
+            $txtprescierr_presi7 ,$txtprescierr_presi8 ,$txtprescierr_veloc5 ,$txtprescierr_veloc6 ,$txtprescierr_veloc7 ,
+            $txtprescierr_veloc8,$txtprescierr_posic5,$txtprescierr_posic6 ,
+            $txtprescierr_posic7 ,$txtprescierr_posic8);
 
             $soplado = array($txtcarriage,$txtclosedd,$txtcuter,$txthead,$txtblow,$txttotalblo,$txtblow1,$txtlf,$txtdefla,$txtunde,
             $txtcoolin,$txtlock,$txtbottle,$txtcarria,$txtopenmoul,$txtcuter1,$txthead1,$txtblowpin,$txttotalbl,
@@ -368,7 +507,7 @@ require_once("../funciones/f_funcion.php");
             $inicio,$fin,
             $tempera1,$tempera2,$tempera3,$tempera4,$tempera5,$txttemp6,$txttemp7,$txttemp8,$txttemp9,
             $inyeccion, $soplado ,
-            $estilomolde,$items);
+            $estilomolde,$items,$horas,$canxturno);
         
             if($return == ''){
                 $txttemp6 = (strlen(trim($txttemp6))== 0 ) ? 0.00 : $txttemp6;
@@ -444,6 +583,71 @@ require_once("../funciones/f_funcion.php");
                     $txtcamvaci2 = (strlen(trim($txtcamvaci2))== 0 ) ? 0.00 : $txtcamvaci2;
                     $txtcamvaci3 = (strlen(trim($txtcamvaci3))== 0 ) ? 0.00 : $txtcamvaci3;
 
+                    $botadocant = (strlen(trim($botadocant))== 0 ) ? 0.00 : $botadocant;
+                    $presexplu3 = (strlen(trim($presexplu3))== 0 ) ? 0.00 : $presexplu3;
+                    $presexplu4 = (strlen(trim($presexplu4))== 0 ) ? 0.00 : $presexplu4;
+                    $velexplu3 = (strlen(trim($velexplu3))== 0 ) ? 0.00 : $velexplu3;
+                    $velexplu4 = (strlen(trim($velexplu4))== 0 ) ? 0.00 : $velexplu4;
+                    $pisiexplu3 = (strlen(trim($pisiexplu3))== 0 ) ? 0.00 : $pisiexplu3;
+                    $pisiexplu4 = (strlen(trim($pisiexplu4))== 0 ) ? 0.00 : $pisiexplu4;
+                    $txtTieRetar1 = (strlen(trim($txtTieRetar1))== 0 ) ? 0.00 : $txtTieRetar1;
+                    $txtTieRetar2 = (strlen(trim($txtTieRetar2))== 0 ) ? 0.00 : $txtTieRetar2;
+                    $txtTiemActua1 = (strlen(trim($txtTiemActua1))== 0 ) ? 0.00 : $txtTiemActua1;
+                    $txtairposi1 = (strlen(trim($txtairposi1))== 0 ) ? 0.00 : $txtairposi1;
+                    $txtairposi2 = (strlen(trim($txtairposi2))== 0 ) ? 0.00 : $txtairposi2;  
+                    $txtBTiemActua1 = (strlen(trim($txtBTiemActua1))== 0 ) ? 0.00 : $txtBTiemActua1;  
+                    $txtBirposi1 = (strlen(trim($txtBirposi1))== 0 ) ? 0.00 : $txtBirposi1;  
+                    $txtBTieRetar1 = (strlen(trim($txtBTieRetar1))== 0 ) ? 0.00 : $txtBTieRetar1;  
+                    $carSuckBackDist = (strlen(trim($carSuckBackDist))== 0 ) ? 0.00 : $carSuckBackDist;  
+                    $carSuckBackTime = (strlen(trim($carSuckBackTime))== 0 ) ? 0.00 : $carSuckBackTime;
+                    $carSKBkBefChg = (strlen(trim($carSKBkBefChg))== 0 ) ? 0.00 : $carSKBkBefChg;  
+                    $carTiemDesDEspC = (strlen(trim($carTiemDesDEspC))== 0 ) ? 0.00 : $carTiemDesDEspC;  
+                    $carPosFlujoMold = (strlen(trim($carPosFlujoMold))== 0 ) ? 0.00 : $carPosFlujoMold;
+                    $carTiempFlujoMo = (strlen(trim($carTiempFlujoMo))== 0 ) ? 0.00 : $carTiempFlujoMo;    
+                    $carRetarEnfria = (strlen(trim($carRetarEnfria))== 0 ) ? 0.00 : $carRetarEnfria;      
+                    $carCoolTime = (strlen(trim($carCoolTime))== 0 ) ? 0.00 : $carCoolTime;
+
+                    $txtempuPresi1 = (strlen(trim($txtempuPresi1))== 0 ) ? 0.00 : $txtempuPresi1; 
+                    $txtempuPresi2 = (strlen(trim($txtempuPresi2))== 0 ) ? 0.00 : $txtempuPresi2;   
+                    $txtempuPresi3 = (strlen(trim($txtempuPresi3))== 0 ) ? 0.00 : $txtempuPresi3;
+                    $txtempuPresi4 = (strlen(trim($txtempuPresi4))== 0 ) ? 0.00 : $txtempuPresi4;
+                    $txtempudelay1 = (strlen(trim($txtempudelay1))== 0 ) ? 0.00 : $txtempudelay1;
+                    $txtemputiemp1 = (strlen(trim($txtemputiemp1))== 0 ) ? 0.00 : $txtemputiemp1;
+                    $txtemputiemp2 = (strlen(trim($txtemputiemp2))== 0 ) ? 0.00 : $txtemputiemp2;
+                    $txtempupisici = (strlen(trim($txtempupisici))== 0 ) ? 0.00 : $txtempupisici;
+                    $txtempucorreAtr = (strlen(trim($txtempucorreAtr))== 0 ) ? 0.00 : $txtempucorreAtr;
+                    $txtempuveloc1 = (strlen(trim($txtempuveloc1))== 0 ) ? 0.00 : $txtempuveloc1;
+                    $txtempuveloc2 = (strlen(trim($txtempuveloc2))== 0 ) ? 0.00 : $txtempuveloc2;
+                    $txtempuveloc3 = (strlen(trim($txtempuveloc3))== 0 ) ? 0.00 : $txtempuveloc3;
+                    $txtempuveloc4 = (strlen(trim($txtempuveloc4))== 0 ) ? 0.00 : $txtempuveloc4;
+
+                    $txtprecieOpnStr = (strlen(trim($txtprecieOpnStr))== 0 ) ? 0.00 : $txtprecieOpnStr;
+                    $txtprescierr_presio1 = (strlen(trim($txtprescierr_presio1))== 0 ) ? 0.00 : $txtprescierr_presio1;
+                    $txtprescierr_presio2 = (strlen(trim($txtprescierr_presio2))== 0 ) ? 0.00 : $txtprescierr_presio2;
+                    $txtprescierr_presio3 = (strlen(trim($txtprescierr_presio3))== 0 ) ? 0.00 : $txtprescierr_presio3;
+                    $txtprescierr_presio4 = (strlen(trim($txtprescierr_presio4))== 0 ) ? 0.00 : $txtprescierr_presio4;
+                    $txtprescierr_velo1 = (strlen(trim($txtprescierr_velo1))== 0 ) ? 0.00 : $txtprescierr_velo1;
+                    $txtprescierr_velo2 = (strlen(trim($txtprescierr_velo2))== 0 ) ? 0.00 : $txtprescierr_velo2;
+                    $txtprescierr_velo3 = (strlen(trim($txtprescierr_velo3))== 0 ) ? 0.00 : $txtprescierr_velo3;
+                    $txtprescierr_velo5 = (strlen(trim($txtprescierr_velo5))== 0 ) ? 0.00 : $txtprescierr_velo5;
+                    $txtprescierr_posic1 = (strlen(trim($txtprescierr_posic1))== 0 ) ? 0.00 : $txtprescierr_posic1;
+                    $txtprescierr_posic2 = (strlen(trim($txtprescierr_posic2))== 0 ) ? 0.00 : $txtprescierr_posic2;
+                    $txtprescierr_posic3 = (strlen(trim($txtprescierr_posic3))== 0 ) ? 0.00 : $txtprescierr_posic3;
+                    $txtprescierr_posic4 = (strlen(trim($txtprescierr_posic4))== 0 ) ? 0.00 : $txtprescierr_posic4;
+                    $txtprescierr_presi5 = (strlen(trim($txtprescierr_presi5))== 0 ) ? 0.00 : $txtprescierr_presi5;
+                    $txtprescierr_presi6 = (strlen(trim($txtprescierr_presi6))== 0 ) ? 0.00 : $txtprescierr_presi6;
+                    $txtprescierr_presi7 = (strlen(trim($txtprescierr_presi7))== 0 ) ? 0.00 : $txtprescierr_presi7;
+                    $txtprescierr_presi8 = (strlen(trim($txtprescierr_presi8))== 0 ) ? 0.00 : $txtprescierr_presi8;
+                    $txtprescierr_veloc5 = (strlen(trim($txtprescierr_veloc5))== 0 ) ? 0.00 : $txtprescierr_veloc5;
+                    $txtprescierr_veloc6 = (strlen(trim($txtprescierr_veloc6))== 0 ) ? 0.00 : $txtprescierr_veloc6;
+                    $txtprescierr_veloc7 = (strlen(trim($txtprescierr_veloc7))== 0 ) ? 0.00 : $txtprescierr_veloc7;
+                    $txtprescierr_veloc8 = (strlen(trim($txtprescierr_veloc8))== 0 ) ? 0.00 : $txtprescierr_veloc8;
+                    $txtprescierr_posic5 = (strlen(trim($txtprescierr_posic5))== 0 ) ? 0.00 : $txtprescierr_posic5;
+                    $txtprescierr_posic6 = (strlen(trim($txtprescierr_posic6))== 0 ) ? 0.00 : $txtprescierr_posic6;
+                    $txtprescierr_posic7 = (strlen(trim($txtprescierr_posic7))== 0 ) ? 0.00 : $txtprescierr_posic7;
+                    $txtprescierr_posic8 = (strlen(trim($txtprescierr_posic8))== 0 ) ? 0.00 : $txtprescierr_posic8;
+                    
+
                 $c_formulacion = $m_produccion->m_guardarformulacion($codform,$produc,$sltipoprod,$cliente,$molde,$cavidades,$pesouni,$ciclo,$procant,
                 $tempera1,$tempera2,$tempera3,$tempera4,$tempera5,$presexplu1,$presexplu2,$velexplu1,
                 $velexplu2,$pisiexplu1,$pisiexplu2,$cargapres1,$cargapres2,$cargapres3,
@@ -453,7 +657,24 @@ require_once("../funciones/f_funcion.php");
                 $posicion1,$tiempo,$usu,$items,$cambios,$inicio,$fin,$txttemp6,$txttemp7,$txttemp8,$txttemp9,
                 $txtcarriage,$txtclosedd,$txtcuter,$txthead,$txtblow,$txttotalblo,$txtblow1,$txtlf,$txtdefla,$txtunde,
                 $txtcoolin,$txtlock,$txtbottle,$txtcarria,$txtopenmoul,$txtcuter1,$txthead1,$txtblowpin,$txttotalbl,
-                $txtdeflati,$txtblopinS,$txtdeflation,$txtcamvaci1,$txtcooling,$txtcamvaci2,$txtcamvaci3,$modifiedLF);
+                $txtdeflati,$txtblopinS,$txtdeflation,$txtcamvaci1,$txtcooling,$txtcamvaci2,$txtcamvaci3,$modifiedLF
+
+                ,$slemodeexpul,$botadocant,$presexplu3,$presexplu4,$velexplu3,$velexplu4,
+                $pisiexplu3,$pisiexplu4,$txtTieRetar1,$txtTieRetar2,$txtTiemActua1,$txtairposi1,$txtairposi2,$txtBTiemActua1,
+                $txtBirposi1,$txtBTieRetar1,
+                $slcModoActSucci,$carSuckBackDist,$carSuckBackTime,$carSKBkBefChg,$carTiemDesDEspC,$carPosFlujoMold,
+                $carTiempFlujoMo,$carRetarEnfria,$carCoolTime,
+                
+                $txtempuPresi1,$txtempuPresi2,$txtempuPresi3,$txtempuPresi4,$txtempudelay1,$txtemputiemp1,$txtemputiemp2,$txtempupisici,
+                $txtempucorreAtr,$txtempuveloc1,$txtempuveloc2,$txtempuveloc3,$txtempuveloc4,
+                
+                $txtprecieOpnStr,$txtprescierr_presio1 ,$txtprescierr_presio2 ,$txtprescierr_presio3 ,$txtprescierr_presio4 ,
+                $txtprescierr_velo1 ,$txtprescierr_velo2 ,$txtprescierr_velo3,$txtprescierr_velo5 , $txtprescierr_posic1 ,
+                $txtprescierr_posic2 ,$txtprescierr_posic3 ,$txtprescierr_posic4 ,$txtprescierr_presi5 ,$txtprescierr_presi6 ,
+                $txtprescierr_presi7 ,$txtprescierr_presi8 ,$txtprescierr_veloc5 ,$txtprescierr_veloc6 ,$txtprescierr_veloc7 ,
+                $txtprescierr_veloc8,$txtprescierr_posic5,$txtprescierr_posic6 ,
+                $txtprescierr_posic7 ,$txtprescierr_posic8,$horas,$canxturno
+            );
                 print_r($c_formulacion);
             }else{print_r($return);}
            
@@ -463,7 +684,7 @@ require_once("../funciones/f_funcion.php");
         static function validardatosfor($codform,$produc,$sltipoprod,$cliente,$molde,$cavidades,$pesouni,$ciclo,$procant,
         $inicio,$fin,
         $tempera1,$tempera2,$tempera3,$tempera4,$tempera5,$txttemp6,$txttemp7,$txttemp8,$txttemp9,
-        $inyeccion,$soplado,$estilomolde,$items)
+        $inyeccion,$soplado,$estilomolde,$items,$horas)
         {
             $m_produccion = new m_produccion();
             if(strlen(trim($produc)) == 0){return "Error seleccione formula";}
@@ -478,6 +699,10 @@ require_once("../funciones/f_funcion.php");
             if(strlen(trim($pesouni)) == 0){return "Error ingrese peso unitario del material";}
             if(strlen($pesouni) > 20){return "Error peso unitario no puede se mayor a 20 caracteres";}
             $cantidad = explode(".", $procant);
+
+            if(strlen(trim($horas)) == 0){return "Error horas por turno";}
+            if(!is_numeric($horas)){return "Error solo numero en horas por turno";}
+
             if($inicio == ""){return "Error ingrese fecha de inicion";}
             if($fin == ""){return  "Error ingrese fecha fin";}
 
@@ -532,7 +757,6 @@ require_once("../funciones/f_funcion.php");
             $c_cabecera = $m_produccion->m_buscar("V_CABECERA_FORMULACION",$cadena2);
             for ($i=0; $i < count($c_itemformula); $i++) { 
                 $total = 0;
-            
                 foreach ($items->tds as $dato){
                     $cadenstock = "COD_PRODUCTO = '$dato[1]'";
                     $stock = $m_produccion->m_buscar("T_ALMACEN_INSUMOS",$cadenstock);
@@ -544,7 +768,12 @@ require_once("../funciones/f_funcion.php");
                         $total += $dato[2];
                     }
                 }
-                if($total != number_format((($procant * $c_itemformula[$i][2]) / $c_cabecera[0][4]), 2, '.', '')){
+                $procant1 = $procant * $c_itemformula[$i][2];
+                $procant1  = $procant1 / $c_cabecera[0][4];
+              
+                $procant1 = sprintf("%0.3f",$procant1);
+                $total = sprintf("%0.3f",$total);  
+                if($total != $procant1){
                     return "Error las cantidades no son iguales";
                    break;
                 }

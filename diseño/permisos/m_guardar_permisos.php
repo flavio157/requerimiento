@@ -60,7 +60,8 @@
             try {
                 $query = $this->bd->prepare("SELECT * FROM T_CAB_MENU WHERE ESTADO = '1'");
                 $query->execute();
-                return $query->fetchAll();
+                $resulta = $query->fetchAll();
+                return $resulta;
             } catch (Exception $e) {
                 print_r("Error al consultar menus three" . $e);
              }
@@ -71,7 +72,8 @@
             try {
                 $query = $this->bd->prepare("SELECT * FROM T_SUB_MENUS WHERE ID_MENU = '$idmenu' AND ESTADO1 = '1'");
                 $query->execute();
-                return $query->fetchAll();
+                $resulta = $query->fetchAll();
+                return $resulta;
             } catch (Exception $e) {
                 print_r("Error al consultar sub menus three" . $e);
             }
@@ -81,7 +83,8 @@
             try {
                 $query = $this->bd->prepare("SELECT * FROM T_SUB_MENUS WHERE IDSUBMENU1 = '$idsubmenu' AND ESTADO2 = '1' ");
                 $query->execute();
-                return $query->fetchAll();
+                $resulta = $query->fetchAll();
+                return $resulta;
             } catch (Exception $e) {
                 print_r("Error al consultar sub sub menus three" . $e);
             }
@@ -95,7 +98,8 @@
             try {
                 $query = $this->bd->prepare("SELECT * FROM T_CAB_MENU");
                 $query->execute();
-                return $query->fetchAll();
+                $resulta = $query->fetchAll();
+                return $resulta;
             } catch (Exception $e) {   
                 print_r("Error al consultar menus" . $e);             
             }
@@ -105,7 +109,8 @@
             try {
                 $query = $this->bd->prepare("SELECT * FROM T_SUB_MENUS WHERE ID_MENU = '$idmenu'");
                 $query->execute();
-                return $query->fetchAll();
+                $resulta = $query->fetchAll();
+                return $resulta;
             } catch (Exception $e) {
                 print_r("Error al consultar sub menus" . $e);
             }
@@ -115,7 +120,8 @@
             try {
                 $query = $this->bd->prepare("SELECT * FROM T_SUB_MENUS WHERE ID_MENU = '$idmenu' AND IDSUBMENU1 = '$idsubmenu'");
                 $query->execute();
-                return $query->fetchAll();
+                $resulta = $query->fetchAll();
+                return $resulta;
             } catch (Exception $e) {
                 print_r("Error al consultar sub sub menus" . $e);
             }
@@ -128,7 +134,8 @@
             try {
                 $query = $this->bd->prepare("SELECT * FROM T_CAB_MENU WHERE ID_MENU = '$idmenu'");
                 $query->execute();
-                return $query->fetchAll();
+                $resulta = $query->fetchAll();
+                return $resulta;
             } catch (Exception $e) {   
                 print_r("Error al buscar menu" . $e);             
             }
@@ -140,7 +147,8 @@
                 $query = $this->bd->prepare("SELECT * FROM T_SUB_MENUS WHERE 
                 ID_MENU = '$idmenu' AND ID_SUBMENU1 = '$idsubmenu'");
                 $query->execute();
-                return $query->fetchAll();
+                $resulta = $query->fetchAll();
+                return $resulta;
             } catch (Exception $e) {   
                 print_r("Error al buscar submenu" . $e);             
             }
@@ -152,7 +160,8 @@
                 $query = $this->bd->prepare("SELECT * FROM T_SUB_MENUS WHERE 
                 ID_MENU = '$idmenu' AND IDSUBMENU1 = '$idsubmenu' AND IDSUBMENU2 = '$disubmenu2'");
                 $query->execute();
-                return $query->fetchAll();
+                $resulta = $query->fetchAll();
+                return $resulta;
             } catch (Exception $e) {   
                 print_r("Error al buscar submenu2" . $e);             
             }

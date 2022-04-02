@@ -1,5 +1,7 @@
-var sugematerial = [];
+var sugematerial = []; actu = 0; /*0 save*/ var corpro = '';
+
 $(function() {
+    autocompletarproducto();
     $("#mtxtcodigopro").attr('disabled','disabled');
     corprod();
     
@@ -14,8 +16,14 @@ $(function() {
     _categoria('lstclase','slclase');
 
     $("#btnguardarprod").on('click',function() {
-        _guardarProducto();
+        if(actu == 0){
+            _guardarProducto(); 
+        }else{ actualizarprod()}
     })
+
+    $("#slcategoria").change(function(){
+        desabilitar($(this).val(),'00001','00002');
+    });
 
     $("#mtxtstockmin").bind('keypress',function(e) {
         return _numeros(e);
@@ -37,6 +45,10 @@ $(function() {
     
     $("#btnatproduc").on('click',function() {
         validatos();
+    })
+
+    $("#btnnuevo").on('click',function() {
+        reset();
     })
 
 });
@@ -129,7 +141,8 @@ function _guardarProducto() {
                  if(response == 1){
                       Mensaje1("Se registro Correctamente",'success');
                       _lcform();
-                      corprod()
+                      corprod();
+                      autocompletarproducto();
                  }else{
                      Mensaje1(response,'error')
                  }
@@ -171,14 +184,8 @@ function Mensaje1(texto,icono){
 
 function _lcform() {
     document.getElementById("frmguardaprod").reset();
+    $("#slclase").removeAttr("disabled");
 }
-
-
-function _lcform() {
-    document.getElementById("frmguardaprod").reset();
-}
-
-
 
 function corprod(){
     $.ajax({
@@ -192,4 +199,94 @@ function corprod(){
            $("#mtxtcodigopro").val(e)
         }
     });   
+}
+
+function autocompletarproducto() {
+    sugematerial = []
+    buscarproducto();
+    $("#mtxtnombreproducto").autocomplete({
+      source: sugematerial,
+        select: function (event, ui) {
+          corpro = ui.item.code;
+          $("#mtxtnombreproducto").val(ui.item.label);
+          $("#mtxtunimedida").val(ui.item.uni)
+          $("#slcategoria").val(ui.item.cat);
+          $("#mtxtabreviatura").val(ui.item.abr);
+          $("#mtxtstockmin").val(Math.round(ui.item.mini));
+          $("#mtxtneto").val(ui.item.peso);
+          $("#slclase").val(ui.item.clase);
+          desabilitar(ui.item.cat,'00001','00002');
+          actu = 1;
+        }
+    });
+}
+
+
+function buscarproducto(){
+    $.ajax({
+      dataType:'text',
+      type: 'POST', 
+      url:  'c_guardarmaterial.php',
+      data:{
+          "accion" : 'lstmaterial',
+      } ,
+      success:  function(response){
+          obj = JSON.parse(response);
+          $.each(obj['dato'], function(i, item) {
+            sugematerial.push(item);
+          });
+      }
+    });
+}
+
+
+function reset() {
+    document.getElementById("frmguardaprod").reset();
+    corprod();
+    actu = 0;
+    corpro = '';
+    $("#slclase").removeAttr("disabled");
+}
+
+function actualizarprod() {
+    var producto = $("#mtxtnombreproducto").val();
+    var codigopro = $("#mtxtcodigopro").val();
+    var categoria =$("#slcategoria").val();
+    var unidad = $("#mtxtunimedida").val();
+    var sctockmin = $("#mtxtstockmin").val();
+    var usuregis = $("#vrcodpersonal").val();
+    var abre = $("#mtxtabreviatura").val();
+    var neto = $("#mtxtneto").val();
+    var clase = $("#slclase").val();
+    $.ajax({
+        dataType:'text',
+        type: 'POST', 
+        url:  'c_guardarmaterial.php',
+        data:{
+            'accion':"updatematerial",
+            'codpro': corpro,
+             "nomprod" : producto,
+             "codigopro" :codigopro,
+             "categoria" : categoria,
+             "unidad" : unidad,
+             "sctockmin":sctockmin,
+             "abre" : abre,
+             "neto" : neto,
+             "clase" : clase,
+             "usuregis" : usuregis,
+        },
+        success:  function(e){
+            if(e == 1){
+                Mensaje1("Se actualizo el material","success");
+                autocompletarproducto();reset();
+            }else{Mensaje1(e,"error");} 
+        }
+    });
+}
+
+function desabilitar(comparacion,dato1,dato2){
+    if(comparacion == dato1 || comparacion == dato2){
+        $("#slclase").attr('disabled','disabled');
+        $('#slclase').prop('selectedIndex',0);
+    }else{$("#slclase").removeAttr('disabled')}
 }

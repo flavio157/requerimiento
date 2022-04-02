@@ -2,9 +2,9 @@
 if (session_status() == PHP_SESSION_NONE) {
     session_start();
 }
-/*$ofi = $_SESSION["ofi"];
+$ofi = $_SESSION["ofi"];
 $zon = $_SESSION["zon"];
-$cod = $_SESSION["cod"];*/
+$cod = $_SESSION["cod"];
 require_once("../menu/index.php");
 ?>  
 
@@ -31,7 +31,6 @@ require_once("../menu/index.php");
       overflow-x: hidden; 
       z-index:1100 !important;
   }
-
   .my-class-form-control-group{
     display:flex;
     align-items:Center;
@@ -47,9 +46,9 @@ require_once("../menu/index.php");
         </div> 
         <div class="main"> 
             <form id="frmfabricacion">
-                <input type="text" id="vroficina" style="display: none;" value="<?php echo ''//$ofi?>"/>
-                <input type="text" id="vrzona" style="display: none;" value="<?php echo ''//$zon?>"/>
-                <input type="text" id="vrcodpersonal" style="display: none;" value="<?php echo ''//$cod?>"/>
+                <input type="text" id="vroficina" style="display: none;" value="<?php echo $ofi?>"/>
+                <input type="text" id="vrzona" style="display: none;" value="<?php echo $zon?>"/>
+                <input type="text" id="vrcodpersonal" style="display: none;" value="<?php echo $cod?>"/>
                    <div class="row">
                       <div class="col mb-3">
                         <center><label class="titulos">Producción</label></center>
@@ -114,7 +113,7 @@ require_once("../menu/index.php");
                             <label for="formcantidad" class="form-label">Tara</label>
                             <div class="input-group mb-3">
                               <input type="number" class="form-control form-control-sm"  name="mdtara" id="mdtara" autocomplete="off">
-                              <span class="input-group-text" id="basic-addon1">g</span>
+                              <span class="input-group-text" id="basic-addon1">Kg</span>
                             </div>
                         </div>
                         <div class="col">
@@ -183,8 +182,8 @@ require_once("../menu/index.php");
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
               </div>
               <div class="modal-body">
-                <div class="mb-4">
-                  <input style="display: none;" id="mdidocurrecia">
+                <div class="mb-4" style="display: none;">
+                  <input style="display: none;" id="mdidocurrecia" >
                   <div class="form-check" style="float: right;">
                     <input class="form-check-input" type="checkbox" value="" id="mddetepro">
                     <label class="form-check-label" for="mddetepro">
@@ -275,7 +274,7 @@ require_once("../menu/index.php");
                           <label class="form-label">Peso</label>
                           <div class="input-group mb-3">
                             <input type="text" class="form-control" id="txtcantidad" autocomplete="off">    
-                            <span class="input-group-text" id="basic-addon1">g</span>
+                            <span class="input-group-text" id="basic-addon1">Kg</span>
                           </div>
                         </div>
                       </div>
@@ -305,22 +304,23 @@ require_once("../menu/index.php");
           <div class="modal-content">
             <div class="modal-header">
               <h5 class="modal-title" id="exampleModalLabel">Registrar residuos</h5>
-              <button type="button" class="btn-close"  data-bs-dismiss="modal"></button>
+              <button type="button" class="btn-close" id="mdcerraresidu" data-bs-dismiss="modal"></button>
             </div>
             <div class="modal-body">
+              <form id="frmdmresiduos">
                   <div class="row">
                       <div class="col mb-3">
                         <div class="btn-group" role="group" aria-label="Basic radio toggle button group">
-                          <input type="radio"  class="btn-check" name="btnradio" id="btnmodimerma" autocomplete="off" checked>
-                          <label class="btn btn-outline-primary" for="btnmodimerma">Merma</label>
-                          <input type="radio" class="btn-check" name="btnradio" id="btnmoddesecho" autocomplete="off">
-                          <label class="btn btn-outline-primary" for="btnmoddesecho">Desechos</label>
-                          <input type="radio" class="btn-check" name="btnradio" id="btnmodresiduos" autocomplete="off">
-                          <label class="btn btn-outline-primary" for="btnmodresiduos">Sobrantes</label>
+                          <input type="radio"  class="btn-check " name="btnradio" id="btnmodimerma" autocomplete="off" checked>
+                          <label class="btn btn-outline-primary mdmermamod" for="btnmodimerma">Merma</label>
+                          <input type="radio" class="btn-check " name="btnradio" id="btnmoddesecho" autocomplete="off">
+                          <label class="btn btn-outline-primary mddesemodif" for="btnmoddesecho">Desechos</label>
+                          <input type="radio" class="btn-check " name="btnradio" id="btnmodresiduos" autocomplete="off">
+                          <label class="btn btn-outline-primary mdresiduos" for="btnmodresiduos">Sobrantes</label>
                         </div>
                       </div>
                     </div>
-            <form id="frmdmresiduos">
+            
                     <div class="row">
                         <div class="col">
                         <label class="form-label">Observación</label>
@@ -340,7 +340,7 @@ require_once("../menu/index.php");
                           <div class="input-group mb-3">
                             <input type="text" id="txtmdpeso" name="txtmdpeso" style="display: none;"> 
                             <input type="text" class="form-control" name="txtmdcantidad" id="txtmdcantidad" autocomplete="off">    
-                            <span class="input-group-text" id="basic-addon1">g</span>
+                            <span class="input-group-text" id="basic-addon1">Kg</span>
                           </div>
                         </div>
                       </div>
@@ -375,7 +375,7 @@ require_once("../menu/index.php");
                   </form>        
             </div>
             <div class="modal-footer">
-              <button type="button" class="btn btn-danger"  data-bs-dismiss="modal">Cerrar</button>
+              <button type="button" class="btn btn-danger" id="cerrarmodamidome"  data-bs-dismiss="modal">Cerrar</button>
               <button type="button" class="btn btn-primary" id="btnmodificaresi">Confirmar</button>
             </div>
           </div>
@@ -485,7 +485,7 @@ require_once("../menu/index.php");
                     </label>
                   </div>
                   <div class="col-md">
-                    <input type="text" id="txtdesbloqueo" class="form-control">
+                    <input type="text" id="txtdesbloqueo" class="form-control" autocomplete="off">
                   </div> 
               </form>
             </div>

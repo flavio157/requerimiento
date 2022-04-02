@@ -1,7 +1,6 @@
 <?php
-    require_once(".././menu/index.php");
+    require_once("../menu/index.php");
 ?>
-
 
 <!DOCTYPE html>
 <html lang="en">
@@ -78,7 +77,7 @@
                                     </div>
                                     <div class="form-check form-check-inline">
                                         <input class="form-check-input" type="radio" name="inlineRadioOptions" id="rddescmenu" value="option2">
-                                        <label class="form-check-label" for="inlineRadio2">Desactivo</label>
+                                        <label class="form-check-label" for="inlineRadio2">Inactivo</label>
                                     </div>
                                 </div>
                                 <div class="col-auto">
@@ -126,7 +125,7 @@
                                     </div>
                                     <div class="form-check form-check-inline">
                                         <input class="form-check-input" type="radio" name="inlineRadioOptions" id="rddescsubmenu" value="option2">
-                                        <label class="form-check-label" for="inlineRadio2">Desactivo</label>
+                                        <label class="form-check-label" for="inlineRadio2">Inactivo</label>
                                     </div>
                                 </div>
                                 <div class="col-auto">
@@ -171,7 +170,7 @@
                                     </div>
                                     <div class="form-check form-check-inline">
                                         <input class="form-check-input" type="radio" name="inlineRadioOptions" id="rddescsubsubmenu" value="option2">
-                                        <label class="form-check-label" for="inlineRadio2">Desactivo</label>
+                                        <label class="form-check-label" for="inlineRadio2">Inactivo</label>
                                     </div>
                                 </div>
                                 <div class="col-auto">
@@ -226,7 +225,7 @@
                                     </div>
                                     <div class="form-check form-check-inline">
                                         <input class="form-check-input" type="radio" name="inlineRadioOptions" id="rdmddescmenu" value="option2">
-                                        <label class="form-check-label" for="inlineRadio2">Desactivo</label>
+                                        <label class="form-check-label" for="inlineRadio2">Inactivo</label>
                                     </div>
                                 </div>
                             </div>    
@@ -271,7 +270,7 @@
                                     </div>
                                     <div class="form-check form-check-inline">
                                         <input class="form-check-input" type="radio" name="inlineRadioOptions" id="rdmddescsubmenu" value="option2">
-                                        <label class="form-check-label" for="inlineRadio2">Desactivo</label>
+                                        <label class="form-check-label" for="inlineRadio2">Inactivo</label>
                                     </div>
                                 </div>
                             </div>    
@@ -320,7 +319,7 @@
                                     </div>
                                     <div class="form-check form-check-inline">
                                         <input class="form-check-input" type="radio" name="inlineRadioOptions" id="rdmddescsubsubmenu" value="option2">
-                                        <label class="form-check-label" for="inlineRadio2">Desactivo</label>
+                                        <label class="form-check-label" for="inlineRadio2">Inactivo</label>
                                     </div>
                             </div>
                         </div>    

@@ -1,8 +1,8 @@
-var sugexnombre = [];  sugexmaterial = [];cod='';select = 0 //not select;
+var sugexnombre = [];  sugexmaterial = [];cod='';select = 0;sugexmolde = [];//not select;
 var usu = ''; tipo = ''; codpro = '';codfor ='';celda1 = ''; estado = 0;//0 save 
 
 $(document).ready(function () {
-  autocompletarproducto();
+  autocompletarproducto();autocompletarmolde();
   autocompletarinsumo();
   usu = $("#vrcodpersonal").val();
   $("#btnagregarmater").on('click',function(){
@@ -11,7 +11,8 @@ $(document).ready(function () {
     }else{
       var t = datosrepetidos('tbdmateiales',cod);
       if(t){
-        additems(codfor,cod,$("#txtcantxusar").val(),$("#slcestadomater").val(),$("#txtmaterial").val())
+        var tds = tablalist();
+        additems(codfor,cod,$("#txtcantxusar").val(),$("#slcestadomater").val(),$("#txtmaterial").val(),tds)
       }else{Mensaje1("Error ya se agrego el material","error");}
     }
   });
@@ -28,11 +29,7 @@ $(document).ready(function () {
     if(select == 0){Mensaje1("Error no selecciono el producto","error"); return;}
     if(estado == 0){
       formulario = $("#frmformulacion").serialize();
-      var td =  $("#tbdmateiales tr");
-      var tds = [];
-        for (let l = 0; l < td.length; l++) {
-          tds[l] =[$(td[l]).find("td")[0].innerHTML,$(td[l]).find("td")[2].innerHTML]
-        }
+      var tds = tablalist();
       guardarfor(formulario,tds);
     }else{
       actuaformula($("#txtnombformula").val(),$("#txtunimedida").val(),$("#txtformulacion").val())
@@ -46,7 +43,13 @@ $(document).ready(function () {
     $("#txtproducto").val($(this).parents('tr').find('td:nth-child(5)').text().trim());
     $("#txtformulacion").val($(this).parents('tr').find('td:nth-child(3)').text().trim());
     $("#txtunimedida").val($(this).parents('tr').find('td:nth-child(7)').text().trim());
+    $("#idprod").val($(this).parents('tr').find('td:nth-child(6)').text().trim());
+    $("#txtidmolde").val($(this).parents('tr').find('td:nth-child(8)').text().trim());
+    $("#txtbuscarmolde").val($(this).parents('tr').find('td:nth-child(9)').text().trim());
+    $("#txtmanana").val($(this).parents('tr').find('td:nth-child(10)').text().trim())
+    $("#txttarde").val($(this).parents('tr').find('td:nth-child(11)').text().trim())
     codpro = $(this).parents('tr').find('td:nth-child(6)').text().trim();
+    $("#txtproducto").attr('disabled','disabled')
     lstitemsfor(codfor);
   })
 
@@ -84,7 +87,7 @@ $(document).ready(function () {
 
   $('#btnnuevo').on('click',function() {
       limpiar();
-     
+      $("#txtproducto").removeAttr('disabled','disabled');
   });
 
   $('#txtproducto').keydown(function(e) {
@@ -92,6 +95,11 @@ $(document).ready(function () {
       select = 0;
     }
   });
+
+  $("#btnmdgmolde").on('click',function (e) {
+      guardarmolde();
+  })
+
 }); 
 
 function buscarxnombreprod(){
@@ -248,6 +256,10 @@ function lstformula() {
         fila +="<td class='tdcontent' style=display:none>"+item[3]+"</td>";
         fila +="<td class='tdcontent' style=display:none>"+item[2]+"</td>";
         fila +="<td class='tdcontent' style=display:none>"+item[5]+"</td>";
+        fila +="<td class='tdcontent' style=display:none>"+item[7]+"</td>";
+        fila +="<td class='tdcontent' style=display:none>"+item[8]+"</td>";
+        fila +="<td class='tdcontent' style=display:none>"+item[9]+"</td>";
+        fila +="<td class='tdcontent' style=display:none>"+item[10]+"</td>";
         var btn = document.createElement("TR");
         btn.innerHTML=fila;
         document.getElementById("tbdformula").appendChild(btn);
@@ -288,13 +300,16 @@ function lstitemsfor(form) {
 });
 }
 
-function additems(form,codpro,cant,estmat,nom) {
+function additems(form,codpro,cant,estmat,nom,tds) {
+  idprod = $("#idprod").val();
+  var materiales = {tds};
   $.ajax({
     dataType:'text',
     type: 'POST', 
     url:  'c_formulacion.php',
     data:{
-      "accion":'additems',"form":form,"cod":codpro,"cantxusar":cant,"estmat":estmat,"usu" :usu
+      "accion":'additems',"form":form,"cod":codpro,"cantxusar":cant,"estmat":estmat,"usu" :usu,
+      "items":JSON.stringify(materiales),"idpro":idprod
     },
     success:  function(r){
       obj = JSON.parse(r);
@@ -302,10 +317,9 @@ function additems(form,codpro,cant,estmat,nom) {
         generar(obj,codpro,nom,cant)
       }else{
         Mensaje1(obj['dato'],"error")
-      }
-      
+      } 
     }
-  });
+  })
 }
 
 function generar(obj,codprod,nom,cant) {
@@ -317,7 +331,7 @@ function generar(obj,codprod,nom,cant) {
     r = datosrepetidos('tbdmateiales',cod);
     if(r){
       array = [
-        a = [codprod,'none',''],b = [nom,'',''],c = [Number.parseFloat(cant).toFixed(3),'',''],
+        a = [codprod,'none',''],b = [nom,'',''],c = [Number.parseFloat(cant).toFixed(2),'',''],
         d = [$("#slcestadomater").val(),'none',''],e = [b1,'','']
       ]
       _createtable(array,'tbdmateiales');cod = '';
@@ -383,24 +397,91 @@ function Mensaje2(form,codpro) {
     })
 }
 
+function tablalist() {
+  var td =  $("#tbdmateiales tr");
+  var tds = [];
+    for (let l = 0; l < td.length; l++) {
+      tds[l] =[$(td[l]).find("td")[0].innerHTML,$(td[l]).find("td")[2].innerHTML]
+    }
+  return tds;  
+}
+
 function actuaformula(nombre,uni,cant) {
   producto = $("#txtproducto").val();
+  molde = $("#txtidmolde").val();
+  manana = $("#txtmanana").val();
+  tarde = $("#txttarde").val();
   $.ajax({
     dataType:'text',
     type: 'POST', 
     url:  'c_formulacion.php',
     data:{
       "accion":'updateform',"formu":codfor,"cod":codpro,
-      "nomb":nombre,"uni":uni,"cantfor":cant,"usu":usu,"produ":producto
+      "nomb":nombre,"uni":uni,"cantfor":cant,"usu":usu,"produ":producto,"molde":molde,
+      "manana":manana,"tarde":tarde
     },
     success:  function(r){
       if(r == 1){
         Mensaje1("Se actualizo el registro","success");
         limpiar();
-        
+        $("#txtproducto").removeAttr('disabled');
       }else{
         Mensaje1(r,"error");
       }
     }
+  });
+}
+
+function guardarmolde() {
+  molde = $("#txtnommolde").val();
+  medidas = $("#txtmedmolde").val();
+  $.ajax({
+    dataType:'text',
+    type: 'POST', 
+    url:  'c_formulacion.php',
+    data:{
+      "accion":'guardarmolde',"molde":molde,"medidas":medidas,"usu":usu
+    },
+    success:  function(e){
+      obj = JSON.parse(e);
+      if(obj['succ'] == 1){
+        $("#txtidmolde").val(obj['molde']);
+        $("#txtbuscarmolde").val($("#txtnommolde").val());
+        $("#mdmolde").modal("hide");
+        $("#txtnommolde").val('');$("#txtmedmolde").val(''); 
+        Mensaje1("Se registraron los datos correctamente","success")
+        autocompletarmolde();
+      }else{
+        Mensaje1("Error al registrar los datos","error")
+      }
+    }
+  });
+}
+
+function buscarmolde(){
+  $.ajax({
+    dataType:'text',
+    type: 'POST', 
+    url:  'c_formulacion.php',
+    data:{
+        "accion" : 'buscarxmolde',
+    } ,
+    success:  function(response){
+      obj = JSON.parse(response);
+      $.each(obj['dato'], function(i, item) {
+        sugexmolde.push(item);
+      });
+    }
+  });
+}
+
+function autocompletarmolde(){
+  sugexmolde = [];
+  buscarmolde();
+  $("#txtbuscarmolde").autocomplete({
+    source: sugexmolde,
+      select: function (event, ui) {
+        $("#txtidmolde").val(ui.item.code);$("#txtbuscarmolde").val(ui.item.label);
+      }
   });
 }

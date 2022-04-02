@@ -1,8 +1,7 @@
 <?php
 if (session_status() == PHP_SESSION_NONE) {
 	session_start();
-  }
-  
+}
 $menu = $_SESSION["menu"];
 $submenu = $_SESSION["submenu"];
 $submenu2 = $_SESSION["subsub"];
@@ -15,8 +14,10 @@ $submenu2 = $_SESSION["subsub"];
 	<title>Menu</title>
 	<script src="../js/jquery-3.3.1.slim.min.js"></script>
 	<script src="../js/jquery-latest.js"></script>
+	<script src="../js/sweetalert2@11.js"></script>
 	<link rel="STYLESHEET" type="text/css" href="../fonts/style.css">
 	<link rel='STYLESHEET' type='text/css' href="../css/menu.css">
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6" crossorigin="anonymous">
 	<script  src="../js/menu.js"></script>
 	<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
 </head>
@@ -30,7 +31,6 @@ $submenu2 = $_SESSION["subsub"];
 		<nav>
 			<ul class="menulateral"> 
 				<?php 
-				
 					for ($i=0; $i < count($menu); $i++) {
 						if($menu[$i][2] == ''){
 							echo "<li class='menupadre' id='$i'><a class='font'><span class='icon-house' ></span>".$menu[$i][1]."</a>";
@@ -61,12 +61,12 @@ $submenu2 = $_SESSION["subsub"];
 							echo "</li>";	
 						}		
 					}
+					
 				?>
 			</ul>
 		</nav>
 	</header>
 	<div id="central">
-	
 
 	</div>
 </body>
