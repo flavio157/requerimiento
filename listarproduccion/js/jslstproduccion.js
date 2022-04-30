@@ -1,14 +1,14 @@
 var usu = '';t = 'm';produccion='';cantxinsumo = ''; tipobtn = 'a';color = '';lstpersonal = [];
-var cab = 0;totalpaquete = 0;cantidad=0;faltacaja = 0 ;sobra=0;merma ='';
-var doc;tipofipd = 0;ocuren = 0;control = 0; sobras = 0;
+var cab = 0;totalpaquete = 0;cantidad=0;faltacaja = 0;sobra=0;merma ='';detenepro = 0;
+var doc;tipofipd = 0;control = 0; sobras = 0;detenepro5 = 0;tpregreso = 'S'
 
 $(document).ready(function () {
    usu = $("#vrcodpersonal").val();
    lstitemsfor();hora();disabletab();
-   autocompletarpersonal();parametros()
-   sessionStorage.concalida = '';
-   setInterval(controlcalidad,1000); /**/
-
+   autocompletarpersonal();
+    setInterval(controlcalidad,1000); 
+    updatehorabloq();/**/ 
+   sessionStorage.removeItem('calidad');
     $('#tbproduccion').on('click', 'tbody tr', function(event) {
         $(this).addClass('highlight').siblings().removeClass('highlight');
         produccion = $(this).find("td:eq(0)").text(); 
@@ -16,12 +16,19 @@ $(document).ready(function () {
     });
 
     $("#btngocurrencia").on('click',function(){
-        if($("#mddetepro").is(':checked') && ocuren == 0){
-          confirmacion('Esta por detener la producción','¿Desea continuar?','warning')
-        }else{
-           gocurrencia($("#txtocurrencias").val(),$("#mddetepro").is(':checked'));
-        }
+        gocurrencia($("#txtocurrencias").val(),0);
     });
+
+    $("#mddetenerprod").on('click',function() {
+        if($('#rdbseparado').prop('checked')) {
+            tpregreso = 'S';
+        }else if($('#rdbmezclado').prop('checked')){
+            tpregreso = 'M';
+        }
+        if($("#txtmdocurrencias").val().trim().length == 0){Mensaje1("Error ingrese observacion","error");return;}
+        confirmacion("Esta por detener la producción","Se regresaran los insumos que sobran al almacen"+
+        "¿Desea continuar?",'warning'); 
+    })
 
     $("#btnnuevo").on('click',function() {
         lmp();
@@ -31,6 +38,8 @@ $(document).ready(function () {
         t = 'm'
         $("#btnregisproduc").attr("disabled","disabled")
         $("#btngavances").removeAttr("disabled")
+        detenepro = 0;
+        $("#btncanceldetener").css('display','none')
     });
 
     $("#btnmodimerma").on('click',function() {
@@ -69,27 +78,41 @@ $(document).ready(function () {
     });
 
     $("#btngavances").on('click',function() {
+        console.log(t +'!='+ 'r' +'&&'+ faltacaja +'!='+ 0);
         if(faltacaja == 0 && tipobtn == 'a'){Mensaje1("Error no ya no hay avances que registrar","error");return;}
         if(t != 'r' && faltacaja != 0){$("#mdregiresiduo").modal('show');}
     });
 
-    $("#btnregisproduc").on('click',function() {
-        if(faltacaja == 0 && tipobtn == 'f'){finproduccion($("#mdcodprod").val()); return;}
-        verificarfinprod($("#mdcodprod").val(),$("#mdcajasxsacar").val(),$("#mdcantxcaja").val(),
-        $("#mdtotal").val());
-      
+    $("#btnregisproduc").on('click',function(){
+       
+        if(detenepro5 == 1 && tipobtn == 'f'){finproduccion($("#mdcodprod").val()); return;}
+        if(detenepro == 0){
+            if(faltacaja == 0 && tipobtn == 'f'){finproduccion($("#mdcodprod").val()); return;}
+            verificarfinprod($("#mdcodprod").val(),$("#mdcajasxsacar").val(),$("#mdcantxcaja").val(),
+            $("#mdtotal").val(),'','');  
+        }else{
+            if($("#mdtotal").val() == 0){Mensaje1("Error el total de producción no puede ser cero","error");return}
+            $("#mddetenrprod").modal('show');
+        }
     })
 
     $(document).on('click','#btnfinalizar',function() {
-       
         inputavance(this,'t'); tipobtn = 'f';
         $("#mdcajasxsacar").removeAttr("disabled")
+        $("#mdtotal").attr("disabled","disabled")
+        if(detenepro == 1){
+            $("#btncanceldetener").css('display','none')
+        }
     })
 
     $(document).on('click','#btnavances',function(){
         inputavance(this,'a'); tipobtn = 'a'
         $("#mdcajasxsacar").removeAttr("disabled")
-        
+        $("#mdtotal").attr("disabled","disabled")
+        if(detenepro == 1){
+           $("#btncanceldetener").css('display','none')
+           $("#btnregisproduc").attr('disabled','disabled')
+        }
     });
 
     $('#mdcantxcaja').keyup(function(e) {
@@ -109,6 +132,22 @@ $(document).ready(function () {
         }else{ $("#mdcajasxsacar").val('')}
     });
 
+    $('#mdtotal').keyup(function(e) {
+            sobras = $(this).val() %  $("#mdcantxcaja").val();
+            paquete = Math.trunc($(this).val() / $("#mdcantxcaja").val()) + 1;
+            if($("#mdcantxcaja").val().trim().length != 0 && $("#mdcantxcaja").val() != 0){
+                if(sobras > 0){
+                    $("#mdcajasxsacar").val(paquete);
+                    $("#lblmensaje").text("De los "+paquete+" paquete(s) uno contendra solo "+ sobras +" unidades");
+                }else{
+                    $("#mdcajasxsacar").val(paquete - 1);
+                    $("#lblmensaje").text('Paquetes por sacar ' + (paquete - 1));
+                }
+            }
+    });
+
+
+
     $(document).on('click',"#btnocurencia",function(){
         lstocurrencia();
     });
@@ -123,9 +162,7 @@ $(document).ready(function () {
         total = $("#mdtotal").val();
         topaqu = (cantidad * cant + sobra);
         if(topaqu >= Math.trunc(total)){fin = 1}else{fin = 0}
-       
         if(tipobtn == 'f' && cant == 0){
-          
             lstavance($("#mdcodprod").val())
         }else if(tipobtn == 'f' && cant != 0){
             perdida($("#mdcodprod").val(),cant,lote,fecha,peso,cantidad,tara,total,fin)
@@ -162,7 +199,7 @@ $(document).ready(function () {
     })
 
     $("#mdmaquinista").keydown(function(e) {
-        if (e.keyCode == 8) $('#mdcodmaquinista').val('');
+        if(e.keyCode == 8) $('#mdcodmaquinista').val('');
     });
 
     $("#mdbloque").on('click',function(){
@@ -174,7 +211,7 @@ $(document).ready(function () {
         '','',"i");
     });
 
-    $("#btnsoplado").on('click',function() {
+    $(document).on('click',"#btnsoplado",function() {
         guardarcalidad($("#txtScolor").val(),'','',$("#txtSpeso").val(),$("#txtSobservac").val(),
         $("#chcSestabilid").is(":checked"),"s");
     });
@@ -184,13 +221,30 @@ $(document).ready(function () {
         desbloqueo(coddesblo);
     });
 
-    $("#btncersopla").on('click',function () {
-        control = 1;
+    $("#btndetenerprod").on('click',function () {
+       if(faltacaja == 0){Mensaje1("Error ya no se puede detener la produccion","error");return;}
+       if($("#mdtotal").val().length == 0){Mensaje1("Error ingrese total de producción","error"); return}
+       if($("#mdtara").val().length == 0){Mensaje1("Error ingrese tara","error");return}
+       if($("#mdpesoneto").val().length == 0){Mensaje1("Error ingrese peso neto","error");return}
+       if($("#mdcantxcaja").val().length == 0){Mensaje1("Error ingrese cantidad por paquete","error");return}
+       if($("#slcmdturno").val().length == 0){Mensaje1("Error seleccione turno","error");return}
+       if($("#mdmaquinista").val().length == 0){Mensaje1("Error seleccione maquinista","error");return}
+       $("#mdcajasxsacar").attr('disabled','disabled');
+       $("#mdtotal").removeAttr('disabled');
+       $("#mdtotal").val(0);
+       $("#btncanceldetener").css('display','block');
+       detenepro = 1;
     })
 
-    $("#btncerrainye").on('click',function(){
-        control = 1;
-    })
+    $("#btncanceldetener").on('click',function(){
+        $("#btnregisproduc").attr("disabled","disabled")
+        $("#btngavances").removeAttr("disabled")
+        $("#mdregisavances").modal('hide');
+        detenepro = 0;
+        $(this).css('display','none');
+        t = 'm';
+    });
+   
 });
 
 function autocompletarpersonal() {
@@ -230,12 +284,6 @@ function lstocurrencia() {
       success: function(r) {
           obj = JSON.parse(r);
           $("#tbocurrencia > tbody").empty();
-          if(obj['o'] != '0'){
-            $("#txtocurrencias").val(obj['obs']); $("#mddetepro").prop('checked',true)
-            $("#txtocurrencias").attr("disabled","disabled");
-            $("#mdidocurrecia").val(obj['o']);
-            ocuren = 1
-          }
           $.each(obj['dato'], function(i, item) {
             fecha = item[4].split(' '); 
             var fila = '';
@@ -258,6 +306,7 @@ function lstitemsfor() {
       data:"accion=lstproduccion&usu="+usu,
       success: function(r) {
         obj = JSON.parse(r);createtable(obj['dato']);
+        detenepro5 = obj['dete'];
       }
     });
 }
@@ -291,22 +340,19 @@ function createtable(obj) {
     });
 }
 
-function gocurrencia(ocurrencia,detepro){
-    id = $("#mdidocurrecia").val();
+function gocurrencia(ocurrencia,tipo){
     $.ajax({
         dataType:'text',
         type: 'POST', 
         url:  'c_produccion.php',
         data:"accion=ocurrencia&produccion="+produccion+"&ocurrencia="+ocurrencia+"&usu="+usu+
-        "&detepro="+detepro+"&ocu="+ocuren+"&id="+id
+        "&tipo="+tipo
         ,success: function(r) {
             if(r==1){Mensaje1("Se registraron los datos","success");
             $("#txtocurrencias").val('');$("#mdocurrencia").modal('hide')
-            ocuren = 0;
             $("#txtocurrencias").removeAttr("disabled")
-            $("#mdidocurrecia").val('');
             $("#txtocurrencias").val('')}
-            else{ Mensaje1(r.trim(),"error");} 
+            else{Mensaje1(r.trim(),"error");} 
         }
       }); 
 }
@@ -360,7 +406,7 @@ function guardar(fechincidencia,horaincidencia,observacion,tipomerma,cantidad,fa
                 if(t == 'm'){$("#btndesecho").removeAttr('disabled');$(".merma").removeClass('active');
                 $(".desechos").addClass('active');disabled(); $("#btnmerma").removeAttr('checked');
                 $("#btnmerma").attr('disabled',true); t='d'; 
-                lmp();hora(); lstitemsfor(); return;}
+                lmp();hora();  return;}
 
                 if(t == 'd'){$("#btnresiduos").removeAttr('disabled');
                 $(".sobra").addClass('active');disabled();$("#btndesecho").removeAttr('checked');
@@ -371,6 +417,7 @@ function guardar(fechincidencia,horaincidencia,observacion,tipomerma,cantidad,fa
                 $("#btngavances").attr('disabled',true);
                 disabletab(); enabled(); $("#btnmerma").removeAttr("disabled");lmp();hora()
                 $(".sobra").removeClass('active');$(".merma").addClass('active');$("#btnmerma").attr('checked');}
+                
             }else{
                 Mensaje1(e,"error");
                 $('.ajax-loader').css("visibility", "hidden");
@@ -390,7 +437,7 @@ function hora(){
     document.getElementById('horincidencia').value = horario+":"+minutero
 } 
 
-function verificarfinprod(produccion,cantidad,cantxpa,total){
+function verificarfinprod(produccion,cantidad,cantxpa,total,ocurr,tip){
     $.ajax({
         dataType:'text',
         type: 'POST', 
@@ -404,27 +451,30 @@ function verificarfinprod(produccion,cantidad,cantxpa,total){
         success:function(e){
             if(e == 1){
                 if(cab == 0){ 
-                    guardaravances($("#frmavances").serialize());
+                    guardaravances($("#frmavances").serialize(),ocurr,tip);
                 }else if(cab == 1){
                     guardaravancesits($("#mdcodprod").val(),$("#mdcajasxsacar").val(),$("#mdproduc").val()
-                    ,$("#slcmdturno").val(),$("#mdcodmaquinista").val(),$("#mdtara").val());
+                    ,$("#slcmdturno").val(),$("#mdcodmaquinista").val(),$("#mdtara").val(),
+                    ocurr,tip);
                 } 
             }else{Mensaje1(e,"error");}
         }
       });
 }
 
-function guardaravances(frm){
+function guardaravances(frm,ocurr,tip){
     mdtotal = $("#mdtotal").val();
     $.ajax({
         dataType:'text',
         type: 'POST', 
         url:  'c_produccion.php',
         data:frm+"&accion=gavances&usu="+usu+"&produccion="+produccion+
-            "&total="+totalpaquete+"&mdtotal="+mdtotal+"&sobras="+sobras
+            "&total="+totalpaquete+"&mdtotal="+mdtotal+"&sobras="+sobras+
+            "&ocurrencia="+ocurr+"&tipo="+tip+"&color="+color+"&tpdevulto="+tpregreso
         ,beforeSend: function () {
             $('.ajax-loader').css("visibility", "visible");
         },success:function(re){
+            console.log(re);
             obj = JSON.parse(re);
             if(obj['suc'] == 1){
                 if(obj['termi'] == 1){faltacaja = 0}
@@ -439,6 +489,7 @@ function guardaravances(frm){
                 }
                 $("#mdcajasxsacar").attr("disabled","disabled")
                 cab = 1;
+
             }else{
                 Mensaje1(obj['suc'],"error");
                 $('.ajax-loader').css("visibility", "hidden");
@@ -466,17 +517,36 @@ function v_avances($produccion,inavance){
                 $("#mdpesoneto").attr('disabled',true);
                 $("#mdcantxcaja").attr('disabled',true);
                 $("#mdcanxbolsa").attr('disabled',true);
-                $("#mdcajasxsacar").val(obj['falta']);
+               
                 sobra = (obj['dato'][0][7] * obj['dato'][0][16]);
                 
+                if(obj['dete'] == 1){
+                    $("#mdmaquinista").val(obj['dato'][0][12]);
+                    $("#slcmdturno").val(obj['dato'][0][18].trim())
+                    $("#mdcajasxsacar").attr('disabled',true);
+                    $("#slcmdturno").attr('disabled',true);
+                    $("#mdmaquinista").attr('disabled',true);
+                    $("#btngavances").attr('disabled',true);
+                    $("#btndetenerprod").attr('disabled',true);
+                    $("#mdcodmaquinista").val(obj['dato'][0][17]);
+                    $("#mdtotal").val(obj['cant']);
+                    $("#mdcajasxsacar").val('');
+                    $("#lblmensaje").text('solo se hizo ' + obj['cant'] +" de los " +obj['dato'][0][8]);
+                }else{
+                    $("#mdcajasxsacar").val(obj['falta']);
+                    $("#lblmensaje").text('Paquetes restantes ' + obj['falta']);
+                }
+                if(inavance == 't' && obj['dete'] == 1){$("#btnregisproduc").removeAttr('disabled')}
                 totalpaquete = faltacaja = obj['falta']
-                $("#lblmensaje").text('Paquetes restantes ' + obj['falta']);
+                
                 if(inavance == 't' && faltacaja == 0){$("#btngavances").attr('disabled',true);
                 $("#btnregisproduc").removeAttr('disabled')
                     $("#mdcajasxsacar").attr('disabled',true);}
-                else{$("#btngavances").removeAttr('disabled');
+                else if(inavance == 't' && faltacaja == 0 && obj['dete'] != 1){    
+                    //$("#btngavances").removeAttr('disabled');
                     $("#btnregisproduc").attr('disabled',true);
-                    $("#mdcajasxsacar").removeAttr('disabled')}
+                    //$("#mdcajasxsacar").removeAttr('disabled')
+                }
                 cab = 1;
             }else{
                 $("#mdtara").val('');
@@ -488,6 +558,8 @@ function v_avances($produccion,inavance){
                 $("#mdcantxcaja").removeAttr('disabled');
                 $("#mdcanxbolsa").removeAttr('disabled');
                 $("#mdcajasxsacar").removeAttr('disabled');
+                $("#slcmdturno").removeAttr('disabled');
+                $("#mdmaquinista").removeAttr('disabled');
                 faltacaja = 1;
                 cab = 0;
                 $("#lblmensaje").text('');
@@ -504,7 +576,8 @@ function guardaravancesits(produ,avance,producto,turno,maquinista,tara){
         url:  'c_produccion.php',
         data:"accion=gavancesitems&avance="+avance+"&usu="+usu+"&produ="+produ+
         "&mdproduc="+producto+"&faltante="+faltacaja+"&turno="+turno+"&maquinista="+maquinista+
-        "&mtara="+tara+"&sobras1="+sobras1
+        "&mtara="+tara+"&sobras1="+sobras1+
+        "&ocurrencia="+''+"&tipo="+''+"&color="+color+"&tpdevulto="+tpregreso
         ,beforeSend: function () {
             $('.ajax-loader').css("visibility", "visible");
         },
@@ -576,11 +649,10 @@ function demoFromHTML(cant,lote,fecha,peso,cantidad,tara,total,fin,avance,maquin
     if(cant % 8 != 0){hojas += 1}
     for (let i = 0; i < cant; i++) {
         pesoneto = Number(peso * cantidad).toFixed(3);
-        console.log(fin == 1 , cant == (i+1) , sobras1 +">"+ 0)
+      
         if(fin == 1 && cant == (i+1) && sobras1 > 0){
             cantidad = sobras1 ;
             pesoneto = (cantidad * peso ).toFixed(3);
-            cantidad = cantidad
         }
        
         if(tipofipd % 2 == 0){x = 5; xr = 0; xx = 52 ; xqr = 32}else{x = 107 ;xr=105; xx = 56 * 2.78;xqr = 59 *2.30}
@@ -715,11 +787,13 @@ function perdida(produccion,cant,lote,fecha,peso,cantidad,tara,total,fin) {
             "cant" : cant,
             "fin1":fin
         },success:function(e){
+            console.log(e);
             obj = JSON.parse(e);
             if(obj['mensaje'] == 0){
                 doc = new jsPDF();tipofipd = 0;
                 total = (total - obj['e']);
-                demoFromHTML(cant,lote,obj['fecha'],peso,cantidad,tara,obj['e'],obj['fin'],'',arraymaqui[0] + " " +arraymaqui[1] ,tur);
+                if(arraymaqui[1] == undefined){arraymaqui[1] = "";}
+                demoFromHTML(obj['cant'],lote,obj['fecha'],peso,cantidad,tara,obj['e'],obj['fin'],'',arraymaqui[0] + " " +arraymaqui[1] ,tur);
             }else{
                 Mensaje1(obj['mensaje'],'error');
             }
@@ -794,62 +868,48 @@ function actualizaresiduos() {
 }
 
 function controlcalidad() {
-    $.ajax({
-        dataType:'text',
-        type: 'POST', 
-        url:  'c_produccion.php',
-        data:{
-            "accion":"controlcali","usu":usu
-        }
-        ,success:function(e){
-            console.log(e);
-            fec = [];dato = "";
-           obj = JSON.parse(e);
-           //sessionStorage.removeItem('concalida')
-           if(Object.keys(obj['horas']).length == 0 && obj['modal'] == 'm'
-           && sessionStorage.concalida == ''){
-               if(obj['estilo'] == 'I'){
-                    $("#btninyecci").css("display","block");
-                    $("#mdcontcalInyeccion").modal("show");
-               }else if(obj['estilo'] == 'S'){
-                    $("#btnsoplado").css("display","block");
-                    $("#mdcontcalsoplado").modal("show");
-                };
-           }else if(Object.keys(obj['horas']).length > 0){
-            $.each(obj['horas'], function(i, item) {
-                if(fec.indexOf(item[0]) == -1 ){
-                  if(dato != ""){dato +="<br>"}  
-                  dato = dato.replaceAll('-', '/') +  item[0] +": " + item[1];
-                  fec.push(item[0]);
-                }else{dato =dato.replaceAll('-', '/') + " " +item[1];}
-            });
-            $("#fecblo").html(dato);
-              $("#mdbloqueo").modal("show");
-           }
-           
-          /*  fec = [];dato = "";
-            o = JSON.parse(e);
-            if(o['c'] > 0){
-                $.each(o['blo'], function(i, item) {
-                    if(fec.indexOf(item[0]) == -1 ){
-                      if(dato != ""){dato +="<br>"}  
-                      dato = dato +     item[0] +": " + item[1];
-                      fec.push(item[0]);
-                    }else{dato += item[1] ;
-                    }
-                });
-                $("#fecblo").html(dato);
-                if(o['cl'] == ""){
-                    $("#mdbloqueo").modal("show");
-                }
+        $.ajax({
+            dataType:'text',
+            type: 'POST', 
+            url:  'c_produccion.php',
+            data:{
+                "accion":"controlcali","usu":usu
             }
-            //control = 1;
-            $("#mdcontcalInyeccion").modal("hide");
-            $("#mdcontcalsoplado").modal("hide");
-            $("#btnsoplado").css("display","none");
-            $("#btninyecci").css("display","none");*/
-        }
-    });
+            ,success:function(e){
+                console.log(e);
+                fec = [];dato = "";
+                obj = JSON.parse(e);
+                if(obj['modal'] == ''){
+                    sessionStorage.removeItem('calidad');
+                    $("#mdcontcalInyeccion").modal("hide");
+                    $("#mdcontcalsoplado").modal("hide");
+                } 
+
+                if(Object.keys(obj['horas']).length > 0 && sessionStorage.getItem('codpro') == null){
+                    $.each(obj['horas'], function(i, item) {
+                        if(fec.indexOf(item[0]) == -1 ){
+                          if(dato != ""){dato +="<br>"}  
+                          dato = dato.replaceAll('-', '/') +  item[0] +": " + item[1];
+                          fec.push(item[0]);
+                        }else{dato =dato.replaceAll('-', '/') + " " +item[1];}
+                    });
+                    if(sessionStorage.getItem('codpro') == null){
+                        $("#fecblo").html(dato);
+                        $("#mdbloqueo").modal("show");
+                    }
+                    return;
+                }
+              
+               if(obj['modal'] == 'm'
+               && sessionStorage.getItem('calidad') == null){
+                   if(obj['estilo'] == 'I'){
+                        $("#mdcontcalInyeccion").modal("show");
+                   }else if(obj['estilo'] == 'S'){
+                        $("#mdcontcalsoplado").modal("show");
+                   };
+               }
+            }
+        });   
 }
 
 
@@ -864,9 +924,10 @@ function confirmacion(title,text,icon){
         confirmButtonText: 'Confirmar'
       }).then((result) => {
         if (result.isConfirmed) {
-            gocurrencia($("#txtocurrencias").val(),$("#mddetepro").is(':checked'));   
+            detenerproduc($("#mdcodprod").val(),$("#mdcajasxsacar").val(),$("#mdcantxcaja").val(),
+            $("#mdtotal").val(),$("#txtmdocurrencias").val(),1);  
         }else{
-            $("#mddetepro").prop("checked",false);
+           //
         }
     })
 }
@@ -891,6 +952,7 @@ function guardarcalidad(color,pureza,rebaba,peso,observacion,estabilidad,tcalid)
                 $("#btninyecci").css("display","none");
                 $("#mdcontcalInyeccion").modal("hide");
                 $("#mdcontcalsoplado").modal("hide");
+                sessionStorage.setItem('calidad','registro')
                 control = 1;
             }else{
                 Mensaje1(e,"error");
@@ -899,19 +961,6 @@ function guardarcalidad(color,pureza,rebaba,peso,observacion,estabilidad,tcalid)
     }); 
 }
 
-function parametros() {
-    $.ajax({
-        dataType:'text',
-        type: 'POST', 
-        url:  'c_produccion.php',
-        data:{
-           "accion":"params"
-        }
-        ,success:function(e){
-            console.log(e);
-        }    
-    })
-}
 
 function desbloqueo(coddesblo) {
     $.ajax({
@@ -927,8 +976,118 @@ function desbloqueo(coddesblo) {
                 Mensaje1(e,"error");
             }else{
                 $("#mdbloqueo").modal("hide")
-                control = 0;
+                sessionStorage.removeItem('codpro');
+                sessionStorage.setItem('codpro',coddesblo)
+                
             }
         }    
     })
 }
+
+function updatehorabloq(){
+    $.ajax({
+        dataType:'text',
+        type: 'POST', 
+        url:  'c_produccion.php',
+        data:{
+           "accion":"horbloq",
+           "usu" : usu
+        },success:function(e){
+          
+            if(e != 1){
+               //Mensaje1(e,"error");
+            }
+        }    
+    })
+}
+
+function detenerproduc(produccion,cantidad,cantxpa,total,ocurr,tip){
+    $.ajax({
+        dataType:'text',
+        type: 'POST', 
+        url:  'c_produccion.php',
+        data:{
+            "accion" : 'validafinpro',
+            "produccion" : produccion,
+            "cantidad" : cantidad,
+            "cantxpa" :cantxpa,"total":total,
+        } ,
+        success:function(e){
+           
+           if(e == 1){
+                if(cab == 0){ 
+                    avances_detener($("#frmavances").serialize(),ocurr,tip);
+                }else if(cab == 1){
+                    avancsitem_detener($("#mdcodprod").val(),$("#mdcajasxsacar").val(),$("#mdproduc").val()
+                    ,$("#slcmdturno").val(),$("#mdcodmaquinista").val(),$("#mdtara").val(),
+                    ocurr,tip);
+                } 
+               
+            }else{Mensaje1(e,"error");}
+        }
+      });
+}
+
+
+function avances_detener(frm,ocurr,tip){
+    mdtotal = $("#mdtotal").val();
+    mdcajasxsacar = $('#mdcajasxsacar').val();
+    $.ajax({
+        dataType:'text',
+        type: 'POST', 
+        url:  'c_produccion.php',
+        data:frm+"&accion=gavances&usu="+usu+"&produccion="+produccion+
+            "&total="+mdcajasxsacar+"&mdtotal="+mdtotal+"&sobras="+sobras+"&mdcajasxsacar="+mdcajasxsacar+
+            "&ocurrencia="+ocurr+"&tipo="+tip+"&color="+color+"&tpdevulto="+tpregreso
+        ,beforeSend: function () {
+            $('.ajax-loader').css("visibility", "visible");
+        },success:function(re){
+            console.log(re);
+            obj = JSON.parse(re);
+            if(obj['suc'] == 1){
+                $("#mddetenrprod").modal('hide');
+                $("#mdregisavances").modal('hide');
+                Mensaje1("Se detuvo la produccion","success")
+                lstitemsfor();
+                //detenepro = 0;
+            }else{
+                Mensaje1(obj['suc'],"error");
+                $('.ajax-loader').css("visibility", "hidden");
+            }
+        },complete: function(){
+            $('.ajax-loader').css("visibility", "hidden");
+        }
+    });
+}  
+
+function avancsitem_detener(produ,avance,producto,turno,maquinista,tara,ocurr,tip){
+    sobras1 = $("#mdtotal").val() %  $("#mdcantxcaja").val();
+    $.ajax({
+         dataType:'text',
+         type: 'POST', 
+         url:  'c_produccion.php',
+         data:"accion=gavancesitems&avance="+avance+"&usu="+usu+"&produ="+produ+
+         "&mdproduc="+producto+"&faltante="+faltacaja+"&turno="+turno+"&maquinista="+maquinista+
+         "&mtara="+tara+"&sobras1="+sobras1+
+         "&ocurrencia="+ocurr+"&tipo="+tip+"&color="+color+"&tpdevulto="+tpregreso
+         ,beforeSend: function () {
+             $('.ajax-loader').css("visibility", "visible");
+         },
+         success:function(res){
+             console.log(res);
+             obj = JSON.parse(res);
+             if(obj['suc'] == true){
+                $("#mddetenrprod").modal('hide');
+                $("#mdregisavances").modal('hide');
+                Mensaje1("Se detuvo la produccion","success")
+                lstitemsfor();
+                //detenepro = 0
+             }
+         },complete: function(){
+             if(obj['suc'] != true){
+                 Mensaje1(obj['suc'],"error");
+             }
+             $('.ajax-loader').css("visibility", "hidden");
+         }
+     });
+ }  
